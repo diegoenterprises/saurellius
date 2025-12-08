@@ -1,38 +1,40 @@
-# 🚀 SAURELLIUS CLOUD PAYROLL MANAGEMENT
+# SAURELLIUS
+
+### Cloud Payroll Management
 
 <div align="center">
 
-![Saurellius](https://img.shields.io/badge/Saurellius-Cloud%20Payroll-1473FF?style=for-the-badge&logo=cloud&logoColor=white)
-![Version](https://img.shields.io/badge/Version-1.0.0-BE01FF?style=for-the-badge)
-![License](https://img.shields.io/badge/License-Proprietary-10B981?style=for-the-badge)
+![Saurellius](https://img.shields.io/badge/Saurellius-1473FF?style=flat-square)
+![Version](https://img.shields.io/badge/v1.0.0-333333?style=flat-square)
+![Platform](https://img.shields.io/badge/iOS%20%7C%20Android%20%7C%20Web-666666?style=flat-square)
 
-**The Complete Enterprise Payroll & Workforce Management Platform**
+The complete enterprise payroll and workforce management platform.
 
-[Features](#-features) • [Tech Stack](#-tech-stack) • [Getting Started](#-getting-started) • [API Reference](#-api-reference) • [Documentation](#-documentation)
+[Features](#features) | [Tech Stack](#tech-stack) | [Getting Started](#getting-started) | [API](#api-reference) | [Documentation](#documentation)
 
 </div>
 
 ---
 
-## 🎯 Overview
+## Overview
 
-**Saurellius Cloud Payroll Management** is a next-generation enterprise platform that combines payroll processing, workforce monitoring, and team communication into one powerful solution.
+Saurellius Cloud Payroll Management is a next-generation enterprise platform that combines payroll processing, workforce monitoring, and team communication into one unified solution.
 
-### Key Highlights
+### Highlights
 
-- 🎨 **25 Professional Paystub Themes** with bank-grade security
-- 🤖 **AI-Powered Assistant** (Google Gemini)
-- 🇺🇸 **50-State Tax Compliance** + Washington D.C.
-- 👁️ **WORKFORCE** - Real-time employee monitoring
-- 🔄 **SWIPE** - Schedule swap with manager approval
-- 💬 **Communications Hub** - Messaging, channels, kudos
-- 💳 **Stripe Billing** - 3-tier subscription model
+- **25 Professional Paystub Themes** — Bank-grade security features
+- **AI-Powered Assistant** — Google Gemini integration
+- **50-State Tax Compliance** — Including Washington D.C.
+- **WORKFORCE** — Real-time employee monitoring dashboard
+- **SWIPE** — Schedule swap with manager approval workflow
+- **Communications Hub** — Messaging, channels, recognition
+- **Stripe Billing** — Three-tier subscription model
 
 ---
 
-## ✨ Features
+## Features
 
-### 📄 Paystub Generator
+### Paystub Generator
 | Feature | Description |
 |---------|-------------|
 | **25 Themes** | Professional color schemes from "Diego's Original" to "Carbon Black" |
@@ -40,53 +42,53 @@
 | **Security Features** | Document hash, holographic seal, watermarks |
 | **PDF Export** | Playwright-powered high-quality PDF generation |
 
-### 🤖 Saurellius AI
+### Saurellius AI
 - Powered by Google Gemini Pro
 - Payroll questions & tax guidance
 - State compliance advice
 - Plan recommendations
 
-### 🏛️ State Compliance Engine
+### State Compliance Engine
 - All 50 U.S. states + D.C.
 - State income tax brackets
 - SUTA/SDI/PFL calculations
 - Overtime rules by state
 
-### 💬 Communications Hub
+### Communications Hub
 - **Direct Messages** - 1:1 employee chat
 - **Channels** - Team/department groups
-- **Kudos System** - 10 recognition badges (👏⭐🏆🚀💎)
+- **Recognition System** — 10 badges for employee appreciation
 - **Announcements** - Company-wide broadcasts
 - **Notifications** - Real-time alerts
 
-### 🔄 SWIPE - Schedule Swap
+### SWIPE — Schedule Swap
 ```
-Employee A (Tue 1-9p) ⟷ Employee B (Fri 1-9p)
+Employee A (Tue 1-9p)  <->  Employee B (Fri 1-9p)
          ↓
    Target Accepts
          ↓
    Manager Approves
          ↓
-     Swap Complete ✓
+     Swap Complete
 ```
 
-### 👁️ WORKFORCE - Real-Time Monitoring
+### WORKFORCE — Real-Time Monitoring
 - Weekly schedule grid (employees × days)
 - Pastel color-coded positions
 - Live status (clocked in/break/out)
 - Overtime tracking & alerts
 - Publish & notify schedules
 
-### 💳 Subscription Tiers
+### Subscription Tiers
 | Tier | Price | Employees | AI | SWIPE | WORKFORCE |
 |------|-------|-----------|----|----|-----------|
-| Starter | $29/mo | 10 | ❌ | ❌ | ❌ |
-| Professional | $79/mo | 50 | ✅ | ✅ | ✅ |
-| Business | $199/mo | Unlimited | ✅ | ✅ | ✅ |
+| Starter | $29/mo | 10 | — | — | — |
+| Professional | $79/mo | 50 | Yes | Yes | Yes |
+| Business | $199/mo | Unlimited | Yes | Yes | Yes |
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |-------|------------|
@@ -101,78 +103,78 @@ Employee A (Tue 1-9p) ⟷ Employee B (Fri 1-9p)
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │
-├── 📂 backend/
+├── backend/
 │   ├── app.py                          # Flask application
 │   ├── config.py                       # Configuration
 │   ├── models.py                       # SQLAlchemy models
 │   ├── .env                            # Environment variables
 │   │
-│   ├── 📂 routes/                      # API Routes (13 files)
+│   ├── routes/                      # API Routes (13 files)
 │   │   ├── auth_routes.py              # Authentication
 │   │   ├── stripe_routes.py            # Billing
 │   │   ├── ai_routes.py                # Saurellius AI
 │   │   ├── paystub_generator_routes.py # PDF generation
 │   │   ├── state_rules_routes.py       # State compliance
 │   │   ├── messaging_routes.py         # Communications
-│   │   ├── swipe_routes.py             # 🔄 SWIPE
-│   │   ├── workforce_routes.py         # 👁️ WORKFORCE
+│   │   ├── swipe_routes.py             # SWIPE
+│   │   ├── workforce_routes.py         # WORKFORCE
 │   │   └── ...                         # + 5 more
 │   │
-│   └── 📂 services/                    # Business Logic (9 files)
-│       ├── gemini_service.py           # 🤖 Saurellius AI
-│       ├── paystub_generator.py        # 🎨 25 themes + PDF
-│       ├── state_payroll_rules.py      # 🏛️ 50 states
-│       ├── messaging_service.py        # 💬 Communications Hub
-│       ├── swipe_service.py            # 🔄 SWIPE
-│       ├── workforce_service.py        # 👁️ WORKFORCE
+│   └── services/                       # Business Logic (9 files)
+│       ├── gemini_service.py           # Saurellius AI
+│       ├── paystub_generator.py        # 25 themes + PDF
+│       ├── state_payroll_rules.py      # 50 states
+│       ├── messaging_service.py        # Communications Hub
+│       ├── swipe_service.py            # SWIPE
+│       ├── workforce_service.py        # WORKFORCE
 │       └── ...                         # + 3 more
 │
-├── 📂 frontend/
+├── frontend/
 │   ├── App.tsx                         # Entry point
 │   ├── package.json
 │   │
-│   └── 📂 src/
-│       ├── 📂 screens/                 # UI Screens (19 files)
-│       │   ├── 📂 auth/
+│   └── src/
+│       ├── screens/                 # UI Screens (19 files)
+│       │   ├── auth/
 │       │   │   ├── LoginScreen.tsx
 │       │   │   ├── SignUpScreen.tsx
 │       │   │   └── ForgotPasswordScreen.tsx
-│       │   ├── 📂 dashboard/
+│       │   ├── dashboard/
 │       │   │   └── DashboardScreen.tsx
-│       │   ├── 📂 employees/
+│       │   ├── employees/
 │       │   │   ├── EmployeesScreen.tsx
 │       │   │   ├── EmployeeDetailScreen.tsx
 │       │   │   └── AddEmployeeScreen.tsx
-│       │   ├── 📂 paystubs/
+│       │   ├── paystubs/
 │       │   │   ├── PaystubsScreen.tsx
 │       │   │   ├── GeneratePaystubScreen.tsx
 │       │   │   └── ...
-│       │   ├── 📂 messaging/
+│       │   ├── messaging/
 │       │   │   └── MessagesScreen.tsx
-│       │   ├── 📂 swipe/
-│       │   │   └── SwipeScreen.tsx      # 🔄 SWIPE UI
-│       │   ├── 📂 workforce/
-│       │   │   └── WorkforceScreen.tsx  # 👁️ WORKFORCE UI
+│       │   ├── swipe/
+│       │   │   └── SwipeScreen.tsx      # SWIPE UI
+│       │   ├── workforce/
+│       │   │   └── WorkforceScreen.tsx  # WORKFORCE UI
 │       │   └── ...
 │       │
-│       └── 📂 services/                # API Clients (9 files)
+│       └── services/                   # API Clients (9 files)
 │           ├── api.ts                  # Base client
 │           ├── ai.ts                   # AI service
 │           ├── stateRules.ts           # State compliance
 │           ├── messaging.ts            # Communications
-│           ├── swipe.ts                # 🔄 SWIPE
-│           ├── workforce.ts            # 👁️ WORKFORCE
+│           ├── swipe.ts                # SWIPE
+│           ├── workforce.ts            # WORKFORCE
 │           └── ...
 │
-├── 📂 database/
+├── database/
 │   └── schema.sql                      # PostgreSQL schema
 │
-├── 📂 docs/
+├── docs/
 │   ├── credentials_template.md
 │   └── stripe_pricing_guide.md
 │
@@ -180,12 +182,12 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 ├── .env.example                        # Template
 ├── .gitignore
 ├── README.md                           # This file
-└── SAURELLIUS_MASTER_DOCUMENT.md       # 📖 Full documentation
+└── SAURELLIUS_MASTER_DOCUMENT.md       # Full documentation
 ```
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -237,7 +239,7 @@ npx expo start
 
 ---
 
-## 🔌 API Reference
+## API Reference
 
 **Base URL:** `http://localhost:5001` (dev) | `https://api.saurellius.drpaystub.com` (prod)
 
@@ -291,11 +293,11 @@ POST /api/workforce/schedule/publish     # Publish & notify
 
 ---
 
-## 📖 Documentation
+## Documentation
 
 For complete documentation, see:
 
-📄 **[SAURELLIUS_MASTER_DOCUMENT.md](./SAURELLIUS_MASTER_DOCUMENT.md)**
+**[SAURELLIUS_MASTER_DOCUMENT.md](./SAURELLIUS_MASTER_DOCUMENT.md)**
 
 Includes:
 - Full feature descriptions
@@ -307,7 +309,7 @@ Includes:
 
 ---
 
-## 🔐 Environment Variables
+## Environment Variables
 
 ```env
 # Application
@@ -333,7 +335,7 @@ RESEND_API_KEY=re_...
 
 ---
 
-## 📊 Feature Summary
+## Feature Summary
 
 | Category | Features |
 |----------|----------|
@@ -347,7 +349,7 @@ RESEND_API_KEY=re_...
 
 ---
 
-## 👥 Team
+## Team
 
 **Diego Enterprises, Inc.**
 
@@ -356,7 +358,7 @@ RESEND_API_KEY=re_...
 
 ---
 
-## 📄 License
+## License
 
 Proprietary - © 2025 Diego Enterprises, Inc. All rights reserved.
 
@@ -364,7 +366,7 @@ Proprietary - © 2025 Diego Enterprises, Inc. All rights reserved.
 
 <div align="center">
 
-**Built with ❤️ by Diego Enterprises**
+**Built by Diego Enterprises**
 
 *Saurellius Cloud Payroll Management - Enterprise Payroll, Simplified.*
 

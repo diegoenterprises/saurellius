@@ -315,18 +315,18 @@ Enterprise-grade internal communication system for workforce collaboration.
 
 #### Recognition Badges
 
-| Badge | Emoji | Points | Description |
-|-------|-------|--------|-------------|
-| Kudos | 👏 | 10 | General appreciation |
-| Praise | ⭐ | 15 | Outstanding work |
-| Thank You | 🙏 | 10 | Gratitude for help |
-| Great Work | 🏆 | 20 | Exceptional performance |
-| Team Player | 🤝 | 25 | Excellent collaboration |
-| Above & Beyond | 🚀 | 50 | Exceeded expectations |
-| Customer Hero | 💎 | 30 | Outstanding customer care |
-| Innovation | 💡 | 40 | Creative problem solving |
-| Leadership | 👑 | 35 | Inspiring leadership |
-| Milestone | 🎯 | 100 | Achievement unlocked |
+| Badge | Icon | Points | Description |
+|-------|------|--------|-------------|
+| Kudos | clap | 10 | General appreciation |
+| Praise | star | 15 | Outstanding work |
+| Thank You | hands | 10 | Gratitude for help |
+| Great Work | trophy | 20 | Exceptional performance |
+| Team Player | handshake | 25 | Excellent collaboration |
+| Above & Beyond | rocket | 50 | Exceeded expectations |
+| Customer Hero | gem | 30 | Outstanding customer care |
+| Innovation | lightbulb | 40 | Creative problem solving |
+| Leadership | crown | 35 | Inspiring leadership |
+| Milestone | target | 100 | Achievement unlocked |
 
 #### API Endpoints
 
@@ -386,7 +386,7 @@ Employee-to-employee shift swapping with intelligent matching and manager approv
 │                    │                                        │
 │                    ▼                                        │
 │  ┌─────────────────────────────────────┐                   │
-│  │        4. Swap Executed ✓           │                   │
+│  │        4. Swap Executed             │                   │
 │  └─────────────────────────────────────┘                   │
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
@@ -480,26 +480,26 @@ The Captain's Observation Tower - bird's eye view of your entire workforce.
 ├──────────────────────────────────────────────────────────────────────┤
 │  Employee      │ Mon │ Tue │ Wed │ Thu │ Fri │ Sat │ Sun │           │
 ├──────────────────────────────────────────────────────────────────────┤
-│  👤 Ben S.     │10-7p│10-7p│10-7p│10-7p│10-7p│     │     │ 45h +5 OT│
+│  [*] Ben S.   │10-7p│10-7p│10-7p│10-7p│10-7p│     │     │ 45h +5 OT│
 │     Designer   │█████│█████│█████│█████│█████│     │     │           │
 ├──────────────────────────────────────────────────────────────────────┤
-│  👤 Elena S.   │10-7p│TIME │10-7p│10-7p│     │10-7p│     │ 36h      │
+│  [*] Elena S. │10-7p│TIME │10-7p│10-7p│     │10-7p│     │ 36h      │
 │     Designer   │█████│ OFF │█████│█████│     │█████│     │           │
 ├──────────────────────────────────────────────────────────────────────┤
-│  👤 Carmen L.  │9-6p │9-6p │9-6p │9-6p │9-6p │     │     │ 45h +5 OT│
+│  [*] Carmen L.│9-6p │9-6p │9-6p │9-6p │9-6p │     │     │ 45h +5 OT│
 │     Developer  │█████│█████│█████│█████│█████│     │     │           │
 └──────────────────────────────────────────────────────────────────────┘
 ```
 
 #### Real-Time Status Tracking
 
-| Status | Icon | Description |
-|--------|------|-------------|
-| Clocked In | 🟢 | Currently working |
-| On Break | 🟡 | Taking a break |
-| Clocked Out | ⚪ | Not working |
-| Time Off | 📅 | Approved time off |
-| Unavailable | 🔴 | Cannot work |
+| Status | Indicator | Description |
+|--------|-----------|-------------|
+| Clocked In | [active] | Currently working |
+| On Break | [break] | Taking a break |
+| Clocked Out | [off] | Not working |
+| Time Off | [pto] | Approved time off |
+| Unavailable | [unavail] | Cannot work |
 
 #### API Endpoints
 
@@ -925,14 +925,14 @@ npx expo start
 | **Price** | $29/mo | $79/mo | $199/mo |
 | **Employees** | 10 | 50 | Unlimited |
 | **Paystub Themes** | 5 | 25 | 25 |
-| **AI Assistant** | ❌ | ✅ | ✅ |
+| **AI Assistant** | — | Yes | Yes |
 | **State Compliance** | 1 state | All states | All states |
-| **SWIPE (Schedule Swap)** | ❌ | ✅ | ✅ |
-| **WORKFORCE Monitoring** | ❌ | ✅ | ✅ |
+| **SWIPE (Schedule Swap)** | — | Yes | Yes |
+| **WORKFORCE Monitoring** | — | Yes | Yes |
 | **Communications Hub** | Basic | Full | Full |
-| **API Access** | ❌ | Limited | Unlimited |
+| **API Access** | — | Limited | Unlimited |
 | **Support** | Email | Priority | Dedicated |
-| **Custom Branding** | ❌ | ❌ | ✅ |
+| **Custom Branding** | — | — | Yes |
 
 ---
 
