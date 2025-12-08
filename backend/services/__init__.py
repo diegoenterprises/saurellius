@@ -9,6 +9,8 @@ from .gemini_service import SaurelliusAI, saurellius_ai, gemini_ai
 from .state_payroll_rules import StatePayrollRules, state_payroll_rules
 from .paystub_generator import PaystubGenerator, paystub_generator, COLOR_THEMES, number_to_words
 from .messaging_service import SaurelliusCommunicationsHub, communications_hub, RECOGNITION_BADGES
+from .swipe_service import SaurelliusSwipe, swipe_service
+from .workforce_service import SaurelliusWorkforce, workforce_service
 
 __all__ = [
     'WeatherService',
@@ -26,5 +28,9 @@ __all__ = [
     'number_to_words',
     'SaurelliusCommunicationsHub',
     'communications_hub',
-    'RECOGNITION_BADGES'
+    'RECOGNITION_BADGES',
+    'SaurelliusSwipe',
+    'swipe_service',
+    'SaurelliusWorkforce',
+    'workforce_service'
 ]

@@ -52,6 +52,8 @@ def create_app(config_name='default'):
     from routes.ai_routes import ai_bp
     from routes.paystub_generator_routes import paystub_gen_bp
     from routes.messaging_routes import messaging_bp
+    from routes.swipe_routes import swipe_bp
+    from routes.workforce_routes import workforce_bp
     
     app.register_blueprint(auth_bp)
     app.register_blueprint(stripe_bp)
@@ -63,6 +65,8 @@ def create_app(config_name='default'):
     app.register_blueprint(ai_bp)
     app.register_blueprint(paystub_gen_bp)
     app.register_blueprint(messaging_bp)
+    app.register_blueprint(swipe_bp)
+    app.register_blueprint(workforce_bp)
     
     # Health check endpoint
     @app.route('/health')

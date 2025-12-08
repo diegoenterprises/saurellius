@@ -13,6 +13,8 @@ from .state_rules_routes import state_rules_bp
 from .ai_routes import ai_bp
 from .paystub_generator_routes import paystub_gen_bp
 from .messaging_routes import messaging_bp
+from .swipe_routes import swipe_bp
+from .workforce_routes import workforce_bp
 
 __all__ = [
     'auth_bp',
@@ -24,5 +26,7 @@ __all__ = [
     'state_rules_bp',
     'ai_bp',
     'paystub_gen_bp',
-    'messaging_bp'
+    'messaging_bp',
+    'swipe_bp',
+    'workforce_bp'
 ]
