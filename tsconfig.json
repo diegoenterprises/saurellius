@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-native",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["frontend/src/*"],
+      "@components/*": ["frontend/src/components/*"],
+      "@screens/*": ["frontend/src/screens/*"],
+      "@services/*": ["frontend/src/services/*"],
+      "@store/*": ["frontend/src/store/*"],
+      "@styles/*": ["frontend/src/styles/*"],
+      "@utils/*": ["frontend/src/utils/*"]
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "frontend/src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "backend",
+    "babel.config.js"
+  ]
+}
