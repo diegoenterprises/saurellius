@@ -69,18 +69,18 @@ class ChannelType(Enum):
     MANAGERS = "managers"
 
 
-# Recognition badges with emojis and point values
+# Recognition badges with icon identifiers and point values
 RECOGNITION_BADGES = {
-    "kudos": {"emoji": "👏", "points": 10, "name": "Kudos", "description": "General appreciation"},
-    "praise": {"emoji": "⭐", "points": 15, "name": "Praise", "description": "Outstanding work"},
-    "thank_you": {"emoji": "🙏", "points": 10, "name": "Thank You", "description": "Gratitude for help"},
-    "great_work": {"emoji": "🏆", "points": 20, "name": "Great Work", "description": "Exceptional performance"},
-    "team_player": {"emoji": "🤝", "points": 25, "name": "Team Player", "description": "Excellent collaboration"},
-    "above_and_beyond": {"emoji": "🚀", "points": 50, "name": "Above & Beyond", "description": "Exceeded expectations"},
-    "customer_service": {"emoji": "💎", "points": 30, "name": "Customer Hero", "description": "Outstanding customer care"},
-    "innovation": {"emoji": "💡", "points": 40, "name": "Innovator", "description": "Creative problem solving"},
-    "leadership": {"emoji": "👑", "points": 35, "name": "Leader", "description": "Inspiring leadership"},
-    "milestone": {"emoji": "🎯", "points": 100, "name": "Milestone", "description": "Achievement unlocked"},
+    "kudos": {"icon": "hands-clapping", "points": 10, "name": "Kudos", "description": "General appreciation"},
+    "praise": {"icon": "star", "points": 15, "name": "Praise", "description": "Outstanding work"},
+    "thank_you": {"icon": "hand-heart", "points": 10, "name": "Thank You", "description": "Gratitude for help"},
+    "great_work": {"icon": "trophy", "points": 20, "name": "Great Work", "description": "Exceptional performance"},
+    "team_player": {"icon": "handshake", "points": 25, "name": "Team Player", "description": "Excellent collaboration"},
+    "above_and_beyond": {"icon": "rocket", "points": 50, "name": "Above & Beyond", "description": "Exceeded expectations"},
+    "customer_service": {"icon": "gem", "points": 30, "name": "Customer Hero", "description": "Outstanding customer care"},
+    "innovation": {"icon": "lightbulb", "points": 40, "name": "Innovator", "description": "Creative problem solving"},
+    "leadership": {"icon": "crown", "points": 35, "name": "Leader", "description": "Inspiring leadership"},
+    "milestone": {"icon": "target", "points": 100, "name": "Milestone", "description": "Achievement unlocked"},
 }
 
 

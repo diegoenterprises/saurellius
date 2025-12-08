@@ -156,12 +156,33 @@ const MessagesScreen: React.FC = () => {
     </TouchableOpacity>
   );
 
+  // Map icon names to Ionicons
+  const getIconName = (iconName: string): string => {
+    const iconMap: Record<string, string> = {
+      'hands-clapping': 'thumbs-up',
+      'star': 'star',
+      'hand-heart': 'heart',
+      'trophy': 'trophy',
+      'handshake': 'people',
+      'rocket': 'rocket',
+      'gem': 'diamond',
+      'lightbulb': 'bulb',
+      'crown': 'ribbon',
+      'target': 'flag',
+    };
+    return iconMap[iconName] || 'ribbon';
+  };
+
   // Recognition item
   const RecognitionItem: React.FC<{ item: Recognition }> = ({ item }) => (
     <View style={styles.kudosCard}>
       <View style={styles.kudosHeader}>
         <View style={styles.kudosBadge}>
-          <Text style={styles.kudosEmoji}>{item.badge.emoji}</Text>
+          <Ionicons 
+            name={getIconName(item.badge.icon) as any} 
+            size={24} 
+            color="#1473FF" 
+          />
         </View>
         <View style={styles.kudosInfo}>
           <Text style={styles.kudosBadgeName}>{item.badge.name}</Text>
@@ -171,7 +192,7 @@ const MessagesScreen: React.FC = () => {
       <Text style={styles.kudosMessage}>{item.message}</Text>
       <View style={styles.kudosFooter}>
         <Text style={styles.kudosFrom}>
-          From User {item.sender_id} → User {item.recipient_id}
+          From User {item.sender_id} to User {item.recipient_id}
         </Text>
         <Text style={styles.kudosTime}>
           {new Date(item.created_at).toLocaleDateString()}

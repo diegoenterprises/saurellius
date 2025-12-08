@@ -68,7 +68,7 @@ export interface Recognition {
 }
 
 export interface RecognitionBadge {
-  emoji: string;
+  icon: string;
   points: number;
   name: string;
   description: string;

@@ -1,5 +1,5 @@
 /**
- * 🔄 SAURELLIUS SWIPE
+ * SAURELLIUS SWIPE
  * Schedule Swap Request & Approval System
  * Employees can request shift swaps, and managers can approve them
  */

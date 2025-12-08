@@ -1,5 +1,5 @@
 """
-👁️ SAURELLIUS WORKFORCE - Real-Time Workforce Monitoring & Management
+SAURELLIUS WORKFORCE - Real-Time Workforce Monitoring & Management
 Bird's eye view of your entire workforce - who is where, doing what, and when
 
 Features:

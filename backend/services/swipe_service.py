@@ -1,5 +1,5 @@
 """
-🔄 SAURELLIUS SWIPE - Schedule Matching & Swap System
+SAURELLIUS SWIPE - Schedule Matching & Swap System
 Employee-to-employee shift swapping with intelligent matching and manager approval workflow
 
 Features:

@@ -1,5 +1,5 @@
 /**
- * 👁️ SAURELLIUS WORKFORCE
+ * SAURELLIUS WORKFORCE
  * The Captain's Observation Tower - Bird's eye view of the entire workforce
  * Real-time monitoring of who is where, doing what, and when
  */
