@@ -1,249 +1,371 @@
-# 🏆 Saurellius Cloud Payroll Management
+# 🚀 SAURELLIUS CLOUD PAYROLL MANAGEMENT
 
-Enterprise-grade cloud payroll management platform built with React Native for Web, connecting to a Python backend with PostgreSQL database, deployed on AWS.
+<div align="center">
 
-## 📋 Table of Contents
+![Saurellius](https://img.shields.io/badge/Saurellius-Cloud%20Payroll-1473FF?style=for-the-badge&logo=cloud&logoColor=white)
+![Version](https://img.shields.io/badge/Version-1.0.0-BE01FF?style=for-the-badge)
+![License](https://img.shields.io/badge/License-Proprietary-10B981?style=for-the-badge)
 
-- [Overview](#overview)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [Development](#development)
-- [Deployment](#deployment)
-- [API Integration](#api-integration)
+**The Complete Enterprise Payroll & Workforce Management Platform**
+
+[Features](#-features) • [Tech Stack](#-tech-stack) • [Getting Started](#-getting-started) • [API Reference](#-api-reference) • [Documentation](#-documentation)
+
+</div>
+
+---
 
 ## 🎯 Overview
 
-Saurellius Cloud Payroll Management is a comprehensive payroll platform that enables businesses to:
+**Saurellius Cloud Payroll Management** is a next-generation enterprise platform that combines payroll processing, workforce monitoring, and team communication into one powerful solution.
 
-- Generate professional paystubs with 25+ themes
-- Manage employees and company information
-- Track time with clock in/out and break management
-- Handle shift swaps and schedule changes
-- Monitor PTO balances and requests
-- Earn rewards through a gamification system
+### Key Highlights
+
+- 🎨 **25 Professional Paystub Themes** with bank-grade security
+- 🤖 **AI-Powered Assistant** (Google Gemini)
+- 🇺🇸 **50-State Tax Compliance** + Washington D.C.
+- 👁️ **WORKFORCE** - Real-time employee monitoring
+- 🔄 **SWIPE** - Schedule swap with manager approval
+- 💬 **Communications Hub** - Messaging, channels, kudos
+- 💳 **Stripe Billing** - 3-tier subscription model
+
+---
 
 ## ✨ Features
 
-### 🔐 Authentication
-- Email/password login
-- Google OAuth integration
-- Multi-factor authentication
-- Password reset flow
+### 📄 Paystub Generator
+| Feature | Description |
+|---------|-------------|
+| **25 Themes** | Professional color schemes from "Diego's Original" to "Carbon Black" |
+| **QR Verification** | Unique verification ID embedded in scannable QR code |
+| **Security Features** | Document hash, holographic seal, watermarks |
+| **PDF Export** | Playwright-powered high-quality PDF generation |
 
-### 📊 Dashboard
-- Real-time statistics
-- Recent activity feed
-- Quick actions
-- Rewards progress tracker
+### 🤖 Saurellius AI
+- Powered by Google Gemini Pro
+- Payroll questions & tax guidance
+- State compliance advice
+- Plan recommendations
 
-### 👥 Employee Management
-- Full employee profiles
-- W-4 information
-- Direct deposit setup
-- Document management
+### 🏛️ State Compliance Engine
+- All 50 U.S. states + D.C.
+- State income tax brackets
+- SUTA/SDI/PFL calculations
+- Overtime rules by state
 
-### 📄 Paystub Generation
-- 25+ professional themes
-- Automatic tax calculations (all 50 states)
-- YTD tracking with continuation
-- PDF export with security features
-- QR code verification
+### 💬 Communications Hub
+- **Direct Messages** - 1:1 employee chat
+- **Channels** - Team/department groups
+- **Kudos System** - 10 recognition badges (👏⭐🏆🚀💎)
+- **Announcements** - Company-wide broadcasts
+- **Notifications** - Real-time alerts
 
-### ⏱️ Timesheet
-- Clock in/out
-- Break tracking
-- GPS location capture
-- Weekly summaries
+### 🔄 SWIPE - Schedule Swap
+```
+Employee A (Tue 1-9p) ⟷ Employee B (Fri 1-9p)
+         ↓
+   Target Accepts
+         ↓
+   Manager Approves
+         ↓
+     Swap Complete ✓
+```
 
-### 🔄 Interchange (Shift Swap)
-- Request shift swaps
-- Browse available shifts
-- Manager approval workflow
+### 👁️ WORKFORCE - Real-Time Monitoring
+- Weekly schedule grid (employees × days)
+- Pastel color-coded positions
+- Live status (clocked in/break/out)
+- Overtime tracking & alerts
+- Publish & notify schedules
 
-### 🏆 Rewards System
-- Points for actions
-- 5-tier progression (Bronze → Diamond)
-- Achievement badges
-- Login streak bonuses
+### 💳 Subscription Tiers
+| Tier | Price | Employees | AI | SWIPE | WORKFORCE |
+|------|-------|-----------|----|----|-----------|
+| Starter | $29/mo | 10 | ❌ | ❌ | ❌ |
+| Professional | $79/mo | 50 | ✅ | ✅ | ✅ |
+| Business | $199/mo | Unlimited | ✅ | ✅ | ✅ |
+
+---
 
 ## 🛠️ Tech Stack
 
-### Frontend
-- **React Native for Web** (v0.73.2)
-- **Expo** (v50.0.0)
-- **TypeScript**
-- **Redux Toolkit** - State management
-- **React Navigation** - Navigation
-- **Expo Linear Gradient** - UI styling
-- **React Hook Form + Zod** - Form validation
+| Layer | Technology |
+|-------|------------|
+| **Frontend** | React Native, Expo, TypeScript |
+| **Backend** | Python 3.9+, Flask, SQLAlchemy |
+| **Database** | PostgreSQL (AWS RDS) |
+| **AI** | Google Gemini Pro |
+| **PDF** | Playwright + Chromium |
+| **Payments** | Stripe |
+| **Email** | Resend |
+| **Cloud** | AWS (RDS, S3, EC2) |
 
-### Backend
-- **Python 3.11+**
-- **FastAPI / Flask** - API framework
-- **SQLAlchemy** - ORM
-- **Pydantic** - Data validation
-- **Playwright** - PDF generation
-
-### Database
-- **PostgreSQL 15** - Primary database
-- **AWS RDS** - Managed database hosting
-
-### Infrastructure
-- **AWS CloudFront** - CDN
-- **AWS S3** - Static hosting & file storage
-- **AWS Lambda** - Serverless functions
-- **AWS Cognito** - Authentication
+---
 
 ## 📁 Project Structure
 
 ```
 SAURELLIUS CLOUD PAYROLL MANAGEMENT/
-├── frontend/
-│   └── src/
-│       ├── components/      # Reusable UI components
-│       │   ├── auth/
-│       │   ├── dashboard/
-│       │   ├── employees/
-│       │   ├── paystubs/
-│       │   ├── timesheet/
-│       │   └── common/
-│       ├── screens/         # Screen components
-│       │   ├── auth/
-│       │   ├── dashboard/
-│       │   ├── employees/
-│       │   ├── paystubs/
-│       │   ├── timesheet/
-│       │   ├── rewards/
-│       │   └── settings/
-│       ├── navigation/      # Navigation configuration
-│       ├── services/        # API services
-│       ├── store/           # Redux store & slices
-│       ├── hooks/           # Custom hooks
-│       ├── utils/           # Utility functions
-│       ├── styles/          # Theme & styling
-│       └── assets/          # Static assets
-├── backend/
-│   ├── api/                 # API routes
-│   ├── services/            # Business logic
-│   ├── models/              # Database models
-│   └── config/              # Configuration
-├── database/
-│   └── schema.sql           # PostgreSQL schema
-├── infrastructure/
-│   └── aws-cloudformation.yaml
-├── App.tsx                  # Entry point
-├── package.json
-├── tsconfig.json
-└── README.md
+│
+├── 📂 backend/
+│   ├── app.py                          # Flask application
+│   ├── config.py                       # Configuration
+│   ├── models.py                       # SQLAlchemy models
+│   ├── .env                            # Environment variables
+│   │
+│   ├── 📂 routes/                      # API Routes (13 files)
+│   │   ├── auth_routes.py              # Authentication
+│   │   ├── stripe_routes.py            # Billing
+│   │   ├── ai_routes.py                # Saurellius AI
+│   │   ├── paystub_generator_routes.py # PDF generation
+│   │   ├── state_rules_routes.py       # State compliance
+│   │   ├── messaging_routes.py         # Communications
+│   │   ├── swipe_routes.py             # 🔄 SWIPE
+│   │   ├── workforce_routes.py         # 👁️ WORKFORCE
+│   │   └── ...                         # + 5 more
+│   │
+│   └── 📂 services/                    # Business Logic (9 files)
+│       ├── gemini_service.py           # 🤖 Saurellius AI
+│       ├── paystub_generator.py        # 🎨 25 themes + PDF
+│       ├── state_payroll_rules.py      # 🏛️ 50 states
+│       ├── messaging_service.py        # 💬 Communications Hub
+│       ├── swipe_service.py            # 🔄 SWIPE
+│       ├── workforce_service.py        # 👁️ WORKFORCE
+│       └── ...                         # + 3 more
+│
+├── 📂 frontend/
+│   ├── App.tsx                         # Entry point
+│   ├── package.json
+│   │
+│   └── 📂 src/
+│       ├── 📂 screens/                 # UI Screens (19 files)
+│       │   ├── 📂 auth/
+│       │   │   ├── LoginScreen.tsx
+│       │   │   ├── SignUpScreen.tsx
+│       │   │   └── ForgotPasswordScreen.tsx
+│       │   ├── 📂 dashboard/
+│       │   │   └── DashboardScreen.tsx
+│       │   ├── 📂 employees/
+│       │   │   ├── EmployeesScreen.tsx
+│       │   │   ├── EmployeeDetailScreen.tsx
+│       │   │   └── AddEmployeeScreen.tsx
+│       │   ├── 📂 paystubs/
+│       │   │   ├── PaystubsScreen.tsx
+│       │   │   ├── GeneratePaystubScreen.tsx
+│       │   │   └── ...
+│       │   ├── 📂 messaging/
+│       │   │   └── MessagesScreen.tsx
+│       │   ├── 📂 swipe/
+│       │   │   └── SwipeScreen.tsx      # 🔄 SWIPE UI
+│       │   ├── 📂 workforce/
+│       │   │   └── WorkforceScreen.tsx  # 👁️ WORKFORCE UI
+│       │   └── ...
+│       │
+│       └── 📂 services/                # API Clients (9 files)
+│           ├── api.ts                  # Base client
+│           ├── ai.ts                   # AI service
+│           ├── stateRules.ts           # State compliance
+│           ├── messaging.ts            # Communications
+│           ├── swipe.ts                # 🔄 SWIPE
+│           ├── workforce.ts            # 👁️ WORKFORCE
+│           └── ...
+│
+├── 📂 database/
+│   └── schema.sql                      # PostgreSQL schema
+│
+├── 📂 docs/
+│   ├── credentials_template.md
+│   └── stripe_pricing_guide.md
+│
+├── .env                                # Root environment
+├── .env.example                        # Template
+├── .gitignore
+├── README.md                           # This file
+└── SAURELLIUS_MASTER_DOCUMENT.md       # 📖 Full documentation
 ```
+
+---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js 18+
-- npm 9+
-- PostgreSQL 15+
-- Python 3.11+ (for backend)
+- Python 3.9+
+- PostgreSQL 15+ (or SQLite for local dev)
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/your-org/saurellius-cloud-payroll.git
-   cd saurellius-cloud-payroll
-   ```
+```bash
+# Clone the repository
+git clone https://github.com/diegoenterprises/saurellius.git
+cd saurellius
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+# Set up environment
+cp .env.example .env
+# Edit .env with your credentials
+```
 
-3. **Set up environment variables**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
+### Backend Setup
 
-4. **Set up database**
-   ```bash
-   psql -U postgres -f database/schema.sql
-   ```
+```bash
+cd backend
 
-5. **Start development server**
-   ```bash
-   npm run web
-   ```
+# Install dependencies
+pip install -r requirements.txt
 
-## 💻 Development
+# Install Playwright browsers
+playwright install chromium
 
-### Available Scripts
+# Run the server
+python app.py
+# Server runs on http://localhost:5001
+```
 
-| Command | Description |
-|---------|-------------|
-| `npm run web` | Start web development server |
-| `npm run ios` | Start iOS simulator |
-| `npm run android` | Start Android emulator |
-| `npm run build:web` | Build for web production |
-| `npm run test` | Run tests |
-| `npm run lint` | Run ESLint |
-| `npm run format` | Format code with Prettier |
+### Frontend Setup
 
-### Code Style
-- TypeScript strict mode enabled
-- ESLint + Prettier for formatting
-- Path aliases for clean imports
+```bash
+cd frontend
 
-## 🌐 Deployment
+# Install dependencies
+npm install
 
-### AWS Deployment
+# Start Expo
+npx expo start
 
-1. **Deploy infrastructure**
-   ```bash
-   aws cloudformation create-stack \
-     --stack-name saurellius-production \
-     --template-body file://infrastructure/aws-cloudformation.yaml \
-     --parameters ParameterKey=DBPassword,ParameterValue=YOUR_PASSWORD
-   ```
-
-2. **Build frontend**
-   ```bash
-   npm run build:production
-   ```
-
-3. **Deploy to S3**
-   ```bash
-   aws s3 sync dist/ s3://saurellius-production-frontend --delete
-   ```
-
-4. **Invalidate CloudFront cache**
-   ```bash
-   aws cloudfront create-invalidation --distribution-id YOUR_DIST_ID --paths "/*"
-   ```
-
-## 🔌 API Integration
-
-The frontend connects to the Python backend via REST API. See `frontend/src/services/api.ts` for full API documentation.
-
-### Key Endpoints
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/auth/login` | POST | User authentication |
-| `/api/paystubs/generate` | POST | Generate paystub |
-| `/api/employees` | GET/POST | Employee management |
-| `/api/timesheet/clock-in` | POST | Clock in |
-| `/api/rewards/points` | GET | Get reward points |
-
-## 📞 Support
-
-For support, email support@saurellius.com or join our Slack channel.
-
-## 📄 License
-
-MIT License - see LICENSE file for details.
+# Press 'w' for web, 'i' for iOS, 'a' for Android
+```
 
 ---
 
-Built with ❤️ by Saurellius Platform Team
+## 🔌 API Reference
+
+**Base URL:** `http://localhost:5001` (dev) | `https://api.saurellius.drpaystub.com` (prod)
+
+### Authentication
+```http
+POST /api/auth/signup     # Register
+POST /api/auth/login      # Login (returns JWT)
+```
+
+### Paystub Generator
+```http
+GET  /api/paystub-generator/themes       # List 25 themes
+POST /api/paystub-generator/generate     # Generate PDF
+GET  /api/paystub-generator/verify/:id   # Verify authenticity
+```
+
+### Saurellius AI
+```http
+POST /api/ai/chat                        # Chat with AI
+GET  /api/ai/status                      # Check availability
+```
+
+### State Compliance
+```http
+GET  /api/states                         # List all states
+GET  /api/states/:code                   # State details (CA, TX, etc.)
+POST /api/states/:code/calculate         # Calculate taxes
+```
+
+### Communications
+```http
+POST /api/messaging/dm/send              # Send DM
+GET  /api/messaging/channels             # List channels
+POST /api/messaging/recognition/send     # Send kudos
+```
+
+### SWIPE (Schedule Swap)
+```http
+POST /api/swipe/request                  # Create swap request
+POST /api/swipe/request/:id/respond      # Accept/decline
+POST /api/swipe/approval/:id/review      # Manager approve/deny
+```
+
+### WORKFORCE (Monitoring)
+```http
+GET  /api/workforce/schedule             # Weekly grid
+GET  /api/workforce/live                 # Real-time status
+POST /api/workforce/clock-in             # Clock in
+POST /api/workforce/schedule/publish     # Publish & notify
+```
+
+---
+
+## 📖 Documentation
+
+For complete documentation, see:
+
+📄 **[SAURELLIUS_MASTER_DOCUMENT.md](./SAURELLIUS_MASTER_DOCUMENT.md)**
+
+Includes:
+- Full feature descriptions
+- API endpoint reference
+- Database schema
+- Architecture diagrams
+- Security & compliance
+- Deployment guide
+
+---
+
+## 🔐 Environment Variables
+
+```env
+# Application
+FLASK_ENV=production
+SECRET_KEY=your-secret-key
+JWT_SECRET_KEY=your-jwt-secret
+
+# Database
+DATABASE_URL=postgresql://user:pass@host:5432/db
+
+# Stripe
+STRIPE_SECRET_KEY=sk_live_...
+STRIPE_PRICE_STARTER=price_...
+STRIPE_PRICE_PROFESSIONAL=price_...
+STRIPE_PRICE_BUSINESS=price_...
+
+# AI
+GEMINI_API_KEY=your-gemini-key
+
+# Email
+RESEND_API_KEY=re_...
+```
+
+---
+
+## 📊 Feature Summary
+
+| Category | Features |
+|----------|----------|
+| **Paystubs** | 25 themes, PDF generation, QR verification, security features |
+| **AI** | Gemini-powered assistant, payroll advice, tax guidance |
+| **Compliance** | 50 states + DC, tax brackets, SUTA/SDI/PFL, overtime rules |
+| **Communications** | DM, channels, kudos (10 badges), announcements, presence |
+| **SWIPE** | Shift swap requests, employee response, manager approval |
+| **WORKFORCE** | Schedule grid, position colors, live status, overtime alerts |
+| **Billing** | Stripe integration, 3 subscription tiers |
+
+---
+
+## 👥 Team
+
+**Diego Enterprises, Inc.**
+
+- Website: https://saurellius.drpaystub.com
+- Support: support@saurellius.com
+
+---
+
+## 📄 License
+
+Proprietary - © 2025 Diego Enterprises, Inc. All rights reserved.
+
+---
+
+<div align="center">
+
+**Built with ❤️ by Diego Enterprises**
+
+*Saurellius Cloud Payroll Management - Enterprise Payroll, Simplified.*
+
+</div>
