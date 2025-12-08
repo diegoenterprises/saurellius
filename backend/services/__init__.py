@@ -8,6 +8,7 @@ from .email_service import EmailService, email_service
 from .gemini_service import SaurelliusAI, saurellius_ai, gemini_ai
 from .state_payroll_rules import StatePayrollRules, state_payroll_rules
 from .paystub_generator import PaystubGenerator, paystub_generator, COLOR_THEMES, number_to_words
+from .messaging_service import SaurelliusCommunicationsHub, communications_hub, RECOGNITION_BADGES
 
 __all__ = [
     'WeatherService',
@@ -22,5 +23,8 @@ __all__ = [
     'PaystubGenerator',
     'paystub_generator',
     'COLOR_THEMES',
-    'number_to_words'
+    'number_to_words',
+    'SaurelliusCommunicationsHub',
+    'communications_hub',
+    'RECOGNITION_BADGES'
 ]
