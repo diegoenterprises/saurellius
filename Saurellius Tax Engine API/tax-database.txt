@@ -1,0 +1,625 @@
+// database/taxDatabase.js - Database initialization and management
+
+const mysql = require('mysql2/promise');
+const fs = require('fs');
+const path = require('path');
+const config = require('../config');
+
+// Database connection pool
+let pool;
+
+/**
+ * Initialize the database connection pool and ensure database is ready
+ */
+async function initialize() {
+  try {
+    // Create a connection pool
+    pool = mysql.createPool({
+      host: config.database.host,
+      user: config.database.user,
+      password: config.database.password,
+      database: config.database.name,
+      waitForConnections: true,
+      connectionLimit: 10,
+      queueLimit: 0
+    });
+    
+    // Test the connection
+    const connection = await pool.getConnection();
+    console.log('Database connection established successfully');
+    connection.release();
+    
+    // Check if we need to initialize the schema or load data
+    await checkAndInitializeDatabase();
+    
+    return true;
+  } catch (error) {
+    console.error('Database initialization failed:', error);
+    throw error;
+  }
+}
+
+/**
+ * Check if we need to initialize the database schema or load data
+ */
+async function checkAndInitializeDatabase() {
+  try {
+    // Check if the database schema is initialized
+    const [tables] = await pool.query('SHOW TABLES');
+    
+    // If no tables exist, initialize the schema
+    if (tables.length === 0) {
+      console.log('No tables found, initializing database schema...');
+      await initializeSchema();
+      
+      // Load initial tax data
+      console.log('Loading initial tax data...');
+      await loadInitialData();
+    }
+    
+    // Check if we need to update the tax data
+    await checkForDataUpdates();
+    
+  } catch (error) {
+    console.error('Database check failed:', error);
+    throw error;
+  }
+}
+
+/**
+ * Initialize the database schema
+ */
+async function initializeSchema() {
+  try {
+    // Read the schema SQL file
+    const schemaFile = path.join(__dirname, 'schema.sql');
+    const schemaSql = fs.readFileSync(schemaFile, 'utf8');
+    
+    // Split the schema into individual statements
+    const statements = schemaSql.split(';').filter(stmt => stmt.trim());
+    
+    // Execute each statement
+    for (const statement of statements) {
+      await pool.query(statement);
+    }
+    
+    console.log('Database schema initialized successfully');
+  } catch (error) {
+    console.error('Schema initialization failed:', error);
+    throw error;
+  }
+}
+
+/**
+ * Load initial tax data into the database
+ */
+async function loadInitialData() {
+  try {
+    // Load jurisdictions data
+    await loadJurisdictions();
+    
+    // Load federal tax rates
+    await loadFederalTaxes();
+    
+    // Load state tax rates
+    await loadStateTaxes();
+    
+    // Load local tax rates
+    await loadLocalTaxes();
+    
+    // Load location data
+    await loadLocationData();
+    
+    console.log('Initial tax data loaded successfully');
+  } catch (error) {
+    console.error('Data loading failed:', error);
+    throw error;
+  }
+}
+
+/**
+ * Load jurisdictions data
+ */
+async function loadJurisdictions() {
+  try {
+    // In a real implementation, this would load data from files or an API
+    // For example purposes, we'll load a few sample jurisdictions
+    
+    // Federal jurisdiction
+    await pool.query(`
+      INSERT INTO jurisdictions 
+        (jurisdiction_id, jurisdiction_name, jurisdiction_type, jurisdiction_code, state_code)
+      VALUES
+        ('FED', 'United States Federal', 'federal', 'US', NULL)
+    `);
+    
+    // Sample state jurisdictions
+    const states = [
+      { code: 'AL', name: 'Alabama' },
+      { code: 'AK', name: 'Alaska' },
+      { code: 'AZ', name: 'Arizona' },
+      // ... all 50 states, DC, territories would be included
+      { code: 'WI', name: 'Wisconsin' },
+      { code: 'WY', name: 'Wyoming' }
+    ];
+    
+    for (const state of states) {
+      await pool.query(`
+        INSERT INTO jurisdictions
+          (jurisdiction_id, jurisdiction_name, jurisdiction_type, jurisdiction_code, state_code)
+        VALUES
+          (?, ?, 'state', ?, ?)
+      `, [`ST_${state.code}`, state.name, state.code, state.code]);
+    }
+    
+    // Sample county jurisdictions (just a few examples)
+    const counties = [
+      { id: 'CTY_AZ_MARICOPA', name: 'Maricopa County', code: '13', state: 'AZ', parent: 'ST_AZ' },
+      { id: 'CTY_CA_LOSANGELES', name: 'Los Angeles County', code: '037', state: 'CA', parent: 'ST_CA' },
+      // ... many more counties would be included
+    ];
+    
+    for (const county of counties) {
+      await pool.query(`
+        INSERT INTO jurisdictions
+          (jurisdiction_id, jurisdiction_name, jurisdiction_type, jurisdiction_code, state_code, parent_jurisdiction_id)
+        VALUES
+          (?, ?, 'county', ?, ?, ?)
+      `, [county.id, county.name, county.code, county.state, county.parent]);
+    }
+    
+    // Sample cities (just a few examples)
+    const cities = [
+      { id: 'CTY_AZ_PHOENIX', name: 'Phoenix', code: '2410342', state: 'AZ', parent: 'CTY_AZ_MARICOPA', residence_based: 0 },
+      { id: 'CTY_CA_LOSANGELES', name: 'Los Angeles', code: '2410105', state: 'CA', parent: 'CTY_CA_LOSANGELES', residence_based: 0 },
+      // ... many more cities would be included
+    ];
+    
+    for (const city of cities) {
+      await pool.query(`
+        INSERT INTO jurisdictions
+          (jurisdiction_id, jurisdiction_name, jurisdiction_type, jurisdiction_code, state_code, parent_jurisdiction_id, residence_based)
+        VALUES
+          (?, ?, 'city', ?, ?, ?, ?)
+      `, [city.id, city.name, city.code, city.state, city.parent, city.residence_based]);
+    }
+    
+    console.log('Jurisdictions loaded successfully');
+  } catch (error) {
+    console.error('Failed to load jurisdictions:', error);
+    throw error;
+  }
+}
+
+/**
+ * Load federal tax rates
+ */
+async function loadFederalTaxes() {
+  try {
+    // Insert federal income tax
+    // Note: Real implementation would include complete tax brackets
+    await pool.query(`
+      INSERT INTO tax_rates
+        (tax_id, jurisdiction_id, tax_name, tax_type, rate, effective_date, brackets)
+      VALUES
+        ('FED_INCOME', 'FED', 'Federal Income Tax', 'income_tax', NULL, '2024-01-01', 
+          '${JSON.stringify([
+            { minimum: 0, maximum: 11600, rate: 0.10, flatAmount: 0 },
+            { minimum: 11600, maximum: 47150, rate: 0.12, flatAmount: 1160 },
+            { minimum: 47150, maximum: 100525, rate: 0.22, flatAmount: 5426 },
+            { minimum: 100525, maximum: 191950, rate: 0.24, flatAmount: 17168.50 },
+            { minimum: 191950, maximum: 243725, rate: 0.32, flatAmount: 39110.50 },
+            { minimum: 243725, maximum: 609350, rate: 0.35, flatAmount: 55678.50 },
+            { minimum: 609350, maximum: null, rate: 0.37, flatAmount: 183647.25 }
+          ])}'
+        )
+    `);
+    
+    // Insert Social Security tax
+    await pool.query(`
+      INSERT INTO tax_rates
+        (tax_id, jurisdiction_id, tax_name, tax_type, rate, effective_date)
+      VALUES
+        ('FED_FICA_SS', 'FED', 'Social Security', 'social_security', 0.062, '2024-01-01')
+    `);
+    
+    // Insert Medicare tax
+    await pool.query(`
+      INSERT INTO tax_rates
+        (tax_id, jurisdiction_id, tax_name, tax_type, rate, effective_date)
+      VALUES
+        ('FED_FICA_MED', 'FED', 'Medicare', 'medicare', 0.0145, '2024-01-01')
+    `);
+    
+    // Insert Additional Medicare tax
+    await pool.query(`
+      INSERT INTO tax_rates
+        (tax_id, jurisdiction_id, tax_name, tax_type, rate, minimum_wage, effective_date)
+      VALUES
+        ('FED_FICA_ADDMED', 'FED', 'Additional Medicare', 'additional_medicare', 0.009, 200000, '2024-01-01')
+    `);
+    
+    // Insert FUTA (Federal Unemployment)
+    await pool.query(`
+      INSERT INTO tax_rates
+        (tax_id, jurisdiction_id, tax_name, tax_type, rate, maximum_wage, effective_date)
+      VALUES
+        ('FED_FUTA', 'FED', 'Federal Unemployment', 'employer_futa', 0.006, 7000, '2024-01-01')
+    `);
+    
+    console.log('Federal tax rates loaded successfully');
+  } catch (error) {
+    console.error('Failed to load federal taxes:', error);
+    throw error;
+  }
+}
+
+/**
+ * Load state tax rates
+ */
+async function loadStateTaxes() {
+  try {
+    // In a real implementation, this would load comprehensive data for all states
+    // For example purposes, we'll load sample data for a few states
+    
+    // Arizona state income tax (simplified)
+    await pool.query(`
+      INSERT INTO tax_rates
+        (tax_id, jurisdiction_id, tax_name, tax_type, rate, effective_date, brackets)
+      VALUES
+        ('AZ_INCOME', 'ST_AZ', 'Arizona Income Tax', 'income_tax', NULL, '2024-01-01', 
+          '${JSON.stringify([
+            { minimum: 0, maximum: 29304, rate: 0.0259, flatAmount: 0 },
+            { minimum: 29304, maximum: 58598, rate: 0.0334, flatAmount: 759 },
+            { minimum: 58598, maximum: 100000, rate: 0.0417, flatAmount: 1721 },
+            { minimum: 100000, maximum: null, rate: 0.045, flatAmount: 3458 }
+          ])}'
+        )
+    `);
+    
+    // California state income tax (simplified)
+    await pool.query(`
+      INSERT INTO tax_rates
+        (tax_id, jurisdiction_id, tax_name, tax_type, rate, effective_date, brackets)
+      VALUES
+        ('CA_INCOME', 'ST_CA', 'California Income Tax', 'income_tax', NULL, '2024-01-01', 
+          '${JSON.stringify([
+            { minimum: 0, maximum: 10412, rate: 0.01, flatAmount: 0 },
+            { minimum: 10412, maximum: 24684, rate: 0.02, flatAmount: 104.12 },
+            { minimum: 24684, maximum: 38959, rate: 0.04, flatAmount: 389.56 },
+            { minimum: 38959, maximum: 54081, rate: 0.06, flatAmount: 964.56 },
+            { minimum: 54081, maximum: 68350, rate: 0.08, flatAmount: 1871.88 },
+            { minimum: 68350, maximum: 350470, rate: 0.093, flatAmount: 3086.44 },
+            { minimum: 350470, maximum: 420749, rate: 0.103, flatAmount: 29281.56 },
+            { minimum: 420749, maximum: 701170, rate: 0.113, flatAmount: 36509.13 },
+            { minimum: 701170, maximum: null, rate: 0.123, flatAmount: 68553.92 }
+          ])}'
+        )
+    `);
+    
+    // California SDI (State Disability Insurance)
+    await pool.query(`
+      INSERT INTO tax_rates
+        (tax_id, jurisdiction_id, tax_name, tax_type, rate, maximum_wage, effective_date)
+      VALUES
+        ('CA_SDI', 'ST_CA', 'California State Disability Insurance', 'disability_insurance', 0.009, 153164, '2024-01-01')
+    `);
+    
+    // New York state income tax (simplified)
+    await pool.query(`
+      INSERT INTO tax_rates
+        (tax_id, jurisdiction_id, tax_name, tax_type, rate, effective_date, brackets)
+      VALUES
+        ('NY_INCOME', 'ST_NY', 'New York Income Tax', 'income_tax', NULL, '2024-01-01', 
+          '${JSON.stringify([
+            { minimum: 0, maximum: 17150, rate: 0.04, flatAmount: 0 },
+            { minimum: 17150, maximum: 23600, rate: 0.045, flatAmount: 686 },
+            { minimum: 23600, maximum: 27900, rate: 0.0525, flatAmount: 977.25 },
+            { minimum: 27900, maximum: 161550, rate: 0.055, flatAmount: 1202.25 },
+            { minimum: 161550, maximum: 323200, rate: 0.06, flatAmount: 9603.50 },
+            { minimum: 323200, maximum: null, rate: 0.0685, flatAmount: 19335.50 }
+          ])}'
+        )
+    `);
+    
+    // State unemployment insurance (sample rates)
+    const suiRates = [
+      { id: 'AZ_SUI', state: 'ST_AZ', rate: 0.02, maxWage: 7000 },
+      { id: 'CA_SUI', state: 'ST_CA', rate: 0.0315, maxWage: 7000 },
+      { id: 'NY_SUI', state: 'ST_NY', rate: 0.0375, maxWage: 12000 },
+      // ... more states would be included
+    ];
+    
+    for (const sui of suiRates) {
+      await pool.query(`
+        INSERT INTO tax_rates
+          (tax_id, jurisdiction_id, tax_name, tax_type, rate, maximum_wage, effective_date)
+        VALUES
+          (?, ?, ? || ' Unemployment Insurance', 'employer_sui', ?, ?, '2024-01-01')
+      `, [sui.id, sui.state, sui.state.replace('ST_', ''), sui.rate, sui.maxWage]);
+    }
+    
+    // Paid Family Leave (for states that have it)
+    const pflStates = [
+      { id: 'CA_PFL', state: 'ST_CA', name: 'California Paid Family Leave', rate: 0.009, maxWage: 153164 },
+      { id: 'NY_PFL', state: 'ST_NY', name: 'New York Paid Family Leave', rate: 0.00455, maxWage: 87785 },
+      // ... more states with PFL would be included
+    ];
+    
+    for (const pfl of pflStates) {
+      await pool.query(`
+        INSERT INTO tax_rates
+          (tax_id, jurisdiction_id, tax_name, tax_type, rate, maximum_wage, effective_date)
+        VALUES
+          (?, ?, ?, 'paid_family_leave', ?, ?, '2024-01-01')
+      `, [pfl.id, pfl.state, pfl.name, pfl.rate, pfl.maxWage]);
+    }
+    
+    // State constants for tax calculations
+    const stateConstants = [
+      { state: 'CA', name: 'standardDeduction', value: 5202, date: '2024-01-01' },
+      { state: 'NY', name: 'standardDeduction', value: 8000, date: '2024-01-01' },
+      // ... more state constants would be included
+    ];
+    
+    for (const constant of stateConstants) {
+      await pool.query(`
+        INSERT INTO state_constants
+          (state_code, constant_name, constant_value, effective_date)
+        VALUES
+          (?, ?, ?, ?)
+      `, [constant.state, constant.name, constant.value, constant.date]);
+    }
+    
+    console.log('State tax rates loaded successfully');
+  } catch (error) {
+    console.error('Failed to load state taxes:', error);
+    throw error;
+  }
+}
+
+/**
+ * Load local tax rates
+ */
+async function loadLocalTaxes() {
+  try {
+    // In a real implementation, this would load comprehensive data for all localities
+    // For example purposes, we'll load sample data for a few localities
+    
+    // New York City income tax
+    await pool.query(`
+      INSERT INTO tax_rates
+        (tax_id, jurisdiction_id, tax_name, tax_type, rate, effective_date, brackets)
+      VALUES
+        ('NYC_INCOME', 'CTY_NY_NEWYORK', 'New York City Income Tax', 'income_tax', NULL, '2024-01-01', 
+          '${JSON.stringify([
+            { minimum: 0, maximum: 12000, rate: 0.03078, flatAmount: 0 },
+            { minimum: 12000, maximum: 25000, rate: 0.03762, flatAmount: 369.36 },
+            { minimum: 25000, maximum: 50000, rate: 0.03819, flatAmount: 857.91 },
+            { minimum: 50000, maximum: null, rate: 0.03876, flatAmount: 1813.66 }
+          ])}'
+        )
+    `);
+    
+    // Philadelphia wage tax
+    await pool.query(`
+      INSERT INTO tax_rates
+        (tax_id, jurisdiction_id, tax_name, tax_type, rate, effective_date)
+      VALUES
+        ('PHL_WAGE', 'CTY_PA_PHILADELPHIA', 'Philadelphia Wage Tax (Resident)', 'income_tax', 0.03448, '2024-01-01')
+    `);
+    
+    // Local school district taxes (examples)
+    const schoolTaxes = [
+      { id: 'PA_SD_101', jurisdiction: 'SCHD_PA_101', name: 'Pennsylvania SD 101', rate: 0.01 },
+      { id: 'OH_SD_202', jurisdiction: 'SCHD_OH_202', name: 'Ohio SD 202', rate: 0.0075 },
+      // ... more school districts would be included
+    ];
+    
+    for (const tax of schoolTaxes) {
+      await pool.query(`
+        INSERT INTO tax_rates
+          (tax_id, jurisdiction_id, tax_name, tax_type, rate, effective_date)
+        VALUES
+          (?, ?, ?, 'school_tax', ?, '2024-01-01')
+      `, [tax.id, tax.jurisdiction, tax.name, tax.rate]);
+    }
+    
+    console.log('Local tax rates loaded successfully');
+  } catch (error) {
+    console.error('Failed to load local taxes:', error);
+    throw error;
+  }
+}
+
+/**
+ * Load location data
+ */
+async function loadLocationData() {
+  try {
+    // In a real implementation, this would load comprehensive location data
+    // For example purposes, we'll load sample data for a few locations
+    
+    // Sample locations
+    const locations = [
+      { 
+        state_id: '04', 
+        county_id: '013', 
+        feature_id: '2410342', 
+        city: 'Phoenix', 
+        state: 'AZ', 
+        county: 'Maricopa',
+        latitude: 33.4484,
+        longitude: -112.0740
+      },
+      { 
+        state_id: '06', 
+        county_id: '037', 
+        feature_id: '2410105', 
+        city: 'Los Angeles', 
+        state: 'CA', 
+        county: 'Los Angeles',
+        latitude: 34.0522,
+        longitude: -118.2437
+      },
+      // ... many more locations would be included
+    ];
+    
+    for (const loc of locations) {
+      await pool.query(`
+        INSERT INTO locations
+          (state_id, county_id, feature_id, city, state, county, latitude, longitude)
+        VALUES
+          (?, ?, ?, ?, ?, ?, ?, ?)
+      `, [
+        loc.state_id, 
+        loc.county_id, 
+        loc.feature_id, 
+        loc.city, 
+        loc.state, 
+        loc.county,
+        loc.latitude,
+        loc.longitude
+      ]);
+    }
+    
+    // Link jurisdictions to locations
+    const jurisdictionLocations = [
+      { jurisdiction_id: 'CTY_AZ_PHOENIX', state_id: '04', county_id: '013', feature_id: '2410342' },
+      { jurisdiction_id: 'CTY_CA_LOSANGELES', state_id: '06', county_id: '037', feature_id: '2410105' },
+      // ... many more mappings would be included
+    ];
+    
+    for (const jl of jurisdictionLocations) {
+      await pool.query(`
+        INSERT INTO jurisdiction_locations
+          (jurisdiction_id, state_id, county_id, feature_id)
+        VALUES
+          (?, ?, ?, ?)
+      `, [
+        jl.jurisdiction_id,
+        jl.state_id,
+        jl.county_id,
+        jl.feature_id
+      ]);
+    }
+    
+    console.log('Location data loaded successfully');
+  } catch (error) {
+    console.error('Failed to load location data:', error);
+    throw error;
+  }
+}
+
+/**
+ * Check for tax data updates
+ */
+async function checkForDataUpdates() {
+  try {
+    // Get the current database version
+    const [versionResult] = await pool.query(
+      'SELECT version, last_updated FROM api_versions ORDER BY release_date DESC LIMIT 1'
+    );
+    
+    if (versionResult.length === 0) {
+      // No version record, initialize one
+      await pool.query(
+        'INSERT INTO api_versions (version, release_date, last_updated) VALUES (?, CURRENT_DATE, CURRENT_TIMESTAMP)',
+        ['1.0.0']
+      );
+      return;
+    }
+    
+    const currentVersion = versionResult[0].version;
+    const lastUpdated = versionResult[0].last_updated;
+    
+    // Check when we last updated
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+    
+    // If we've updated within the last month, no need to check again
+    if (new Date(lastUpdated) > oneMonthAgo) {
+      console.log('Tax data was recently updated, skipping check');
+      return;
+    }
+    
+    // In a real implementation, this would check an external source for tax updates
+    console.log('Checking for tax updates...');
+    
+    // Simulate finding some updates
+    const updatedTaxes = [
+      { id: 'CA_SDI', new_rate: 0.01, summary: 'California SDI rate increased for 2024' },
+      { id: 'NY_PFL', new_rate: 0.005, summary: 'New York PFL rate increased for 2024' }
+    ];
+    
+    // Apply the updates
+    for (const tax of updatedTaxes) {
+      // Get the current rate
+      const [currentRate] = await pool.query(
+        'SELECT rate FROM tax_rates WHERE tax_id = ? ORDER BY effective_date DESC LIMIT 1',
+        [tax.id]
+      );
+      
+      if (currentRate.length === 0) {
+        console.warn(`Could not find tax ${tax.id} to update`);
+        continue;
+      }
+      
+      const oldRate = currentRate[0].rate;
+      
+      // Only update if the rate has changed
+      if (oldRate !== tax.new_rate) {
+        // Insert a new tax rate with the current date
+        const effectiveDate = new Date().toISOString().slice(0, 10);
+        
+        await pool.query(
+          `UPDATE tax_rates SET rate = ? WHERE tax_id = ? AND effective_date <= ? AND (expiration_date IS NULL OR expiration_date >= ?)`,
+          [tax.new_rate, tax.id, effectiveDate, effectiveDate]
+        );
+        
+        // Record the update
+        await pool.query(
+          `INSERT INTO tax_updates 
+            (tax_id, update_type, previous_rate, summary, update_date) 
+          VALUES 
+            (?, 'modified', ?, ?, CURRENT_TIMESTAMP)`,
+          [tax.id, oldRate, tax.summary]
+        );
+        
+        console.log(`Updated tax ${tax.id} from ${oldRate} to ${tax.new_rate}`);
+      }
+    }
+    
+    // Update the last_updated timestamp
+    await pool.query(
+      'UPDATE api_versions SET last_updated = CURRENT_TIMESTAMP WHERE version = ?',
+      [currentVersion]
+    );
+    
+    console.log('Tax data update check completed');
+  } catch (error) {
+    console.error('Failed to check for tax updates:', error);
+    // Don't throw the error here, just log it to avoid blocking startup
+  }
+}
+
+/**
+ * Execute a database query
+ * @param {string} sql - SQL query to execute
+ * @param {Array} params - Query parameters
+ * @returns {Promise<Array>} Query results
+ */
+async function dbQuery(sql, params = []) {
+  try {
+    const [results] = await pool.query(sql, params);
+    return results;
+  } catch (error) {
+    console.error('Database query failed:', error);
+    throw error;
+  }
+}
+
+module.exports = {
+  initialize,
+  dbQuery
+};

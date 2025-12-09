@@ -35,6 +35,9 @@ class User(db.Model):
     # Rewards
     reward_points = db.Column(db.Integer, default=0)
     
+    # Admin access
+    is_admin = db.Column(db.Boolean, default=False)
+    
     # Timestamps
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -69,6 +72,7 @@ class User(db.Model):
             'subscription_status': self.subscription_status,
             'paystubs_this_month': self.paystubs_this_month,
             'reward_points': self.reward_points,
+            'is_admin': self.is_admin or False,
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
 

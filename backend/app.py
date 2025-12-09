@@ -65,6 +65,7 @@ def create_app(config_name='default'):
     from routes.garnishment_routes import garnishment_bp
     from routes.onboarding_routes import onboarding_bp
     from routes.reporting_routes import reporting_bp
+    from routes.admin_routes import admin_bp
     
     # Core blueprints
     app.register_blueprint(auth_bp)
@@ -90,6 +91,7 @@ def create_app(config_name='default'):
     app.register_blueprint(garnishment_bp)
     app.register_blueprint(onboarding_bp)
     app.register_blueprint(reporting_bp)
+    app.register_blueprint(admin_bp)
     
     # Health check endpoint
     @app.route('/health')

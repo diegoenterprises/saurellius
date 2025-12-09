@@ -39,6 +39,9 @@ import { PayrollRunScreen } from '../screens/payroll';
 import { OnboardingScreen } from '../screens/onboarding';
 import { ReportsScreen } from '../screens/reports';
 
+// Admin Portal
+import { AdminPortalScreen } from '../screens/admin';
+
 // Types
 export type RootStackParamList = {
   Auth: undefined;
@@ -67,6 +70,8 @@ export type RootStackParamList = {
   PayrollRun: undefined;
   Onboarding: undefined;
   Reports: undefined;
+  // Admin
+  AdminPortal: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -105,6 +110,8 @@ function DashboardStack() {
       <Stack.Screen name="PayrollRun" component={PayrollRunScreen} />
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />
       <Stack.Screen name="Reports" component={ReportsScreen} />
+      {/* Admin */}
+      <Stack.Screen name="AdminPortal" component={AdminPortalScreen} />
     </Stack.Navigator>
   );
 }
