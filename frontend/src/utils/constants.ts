@@ -107,8 +107,53 @@ export const US_STATES = [
 ] as const;
 
 export const SUBSCRIPTION_TIERS = {
-  free: { name: 'Free', maxEmployees: 5, price: 0 },
-  starter: { name: 'Starter', maxEmployees: 25, price: 39 },
-  professional: { name: 'Professional', maxEmployees: 100, price: 79 },
-  enterprise: { name: 'Enterprise', maxEmployees: Infinity, price: 199 },
+  starter: {
+    name: 'Starter',
+    price: 50,
+    includedPaystubs: 5,
+    additionalCost: 5,
+    features: [
+      'All 50 states',
+      'Complete tax calculations',
+      'YTD tracking',
+      'Premium PDFs',
+      'QR verification',
+      'Email support (48hr)',
+      '1 year storage',
+    ],
+  },
+  professional: {
+    name: 'Professional',
+    price: 100,
+    includedPaystubs: 25,
+    additionalCost: 5,
+    popular: true,
+    features: [
+      'Everything in Starter',
+      'PTO tracking',
+      'Custom branding',
+      'Bulk generation (25)',
+      'API access (beta)',
+      'Priority support (24hr)',
+      '3 years storage',
+      '3 users',
+    ],
+  },
+  business: {
+    name: 'Business',
+    price: 150,
+    includedPaystubs: -1, // unlimited
+    additionalCost: 0,
+    features: [
+      'Everything in Professional',
+      'Unlimited paystubs',
+      'White-label options',
+      'Full API access + webhooks',
+      'Dedicated account manager',
+      'Unlimited storage',
+      'Unlimited users',
+      'SSO available',
+      '99.9% SLA',
+    ],
+  },
 } as const;

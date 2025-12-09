@@ -1,5 +1,5 @@
 """
-💳 SAURELLIUS BILLING MANAGER
+SAURELLIUS BILLING MANAGER
 Handles subscription plans, usage limits, and overage calculations
 """
 
@@ -11,35 +11,60 @@ from config import Config
 class BillingManager:
     """Manages subscription billing logic and usage tracking."""
     
-    # Plan configurations from pricing guide
+    # Plan configurations from stripe_pricing_guide.md
     PLANS = {
-        'free': {
-            'name': 'Free',
-            'monthly_price': 0,
-            'paystub_limit': 1,
-            'overage_rate': 0,  # No overages on free
-            'features': ['1 paystub/month', 'Basic support']
-        },
         'starter': {
             'name': 'Starter',
             'monthly_price': 50,
             'paystub_limit': 5,
-            'overage_rate': 10,
-            'features': ['5 paystubs/month', 'All 50 states', 'Email support', '$10/extra paystub']
+            'overage_rate': 5,
+            'features': [
+                '5 paystubs/month',
+                'All 50 states',
+                'Complete tax calculations',
+                'YTD tracking',
+                'Premium PDFs',
+                'QR verification',
+                'Email support (48hr)',
+                '1 year storage',
+                '$5/extra paystub'
+            ]
         },
         'professional': {
             'name': 'Professional',
             'monthly_price': 100,
             'paystub_limit': 25,
-            'overage_rate': 8,
-            'features': ['25 paystubs/month', 'PTO tracking', 'Priority support', '3 users', '$8/extra paystub']
+            'overage_rate': 5,
+            'popular': True,
+            'features': [
+                '25 paystubs/month',
+                'Everything in Starter',
+                'PTO tracking',
+                'Custom branding',
+                'Bulk generation (25)',
+                'API access (beta)',
+                'Priority support (24hr)',
+                '3 years storage',
+                '3 users',
+                '$5/extra paystub'
+            ]
         },
         'business': {
             'name': 'Business',
             'monthly_price': 150,
             'paystub_limit': float('inf'),  # Unlimited
             'overage_rate': 0,
-            'features': ['Unlimited paystubs', 'Unlimited users', 'Dedicated support', 'SSO', 'API access']
+            'features': [
+                'Unlimited paystubs',
+                'Everything in Professional',
+                'White-label options',
+                'Full API access + webhooks',
+                'Dedicated account manager',
+                'Unlimited storage',
+                'Unlimited users',
+                'SSO available',
+                '99.9% SLA'
+            ]
         }
     }
     
@@ -49,7 +74,7 @@ class BillingManager:
     
     def get_plan_info(self, plan_name: str) -> Dict:
         """Get plan details by name."""
-        return self.PLANS.get(plan_name, self.PLANS['free'])
+        return self.PLANS.get(plan_name, self.PLANS['starter'])
     
     def get_all_plans(self) -> Dict:
         """Get all available plans."""
@@ -68,12 +93,6 @@ class BillingManager:
         plan = self.get_plan_info(self.user.subscription_tier)
         current_usage = self.user.paystubs_this_month or 0
         limit = plan['paystub_limit']
-        
-        # Free tier - strict limit
-        if self.user.subscription_tier == 'free':
-            if current_usage >= limit:
-                return False, "Free tier limit reached. Please upgrade to continue.", None
-            return True, "OK", None
         
         # Business tier - unlimited
         if self.user.subscription_tier == 'business':
