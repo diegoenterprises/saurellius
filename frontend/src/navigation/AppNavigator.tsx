@@ -30,6 +30,15 @@ import ProfileScreen from '../screens/settings/ProfileScreen';
 import SubscriptionScreen from '../screens/subscription/SubscriptionScreen';
 import TimesheetScreen from '../screens/timesheet/TimesheetScreen';
 
+// Enterprise Feature Screens
+import { AccountingScreen } from '../screens/accounting';
+import { ContractorsScreen } from '../screens/contractors';
+import { TaxCenterScreen } from '../screens/taxcenter';
+import { PTOScreen } from '../screens/pto';
+import { PayrollRunScreen } from '../screens/payroll';
+import { OnboardingScreen } from '../screens/onboarding';
+import { ReportsScreen } from '../screens/reports';
+
 // Types
 export type RootStackParamList = {
   Auth: undefined;
@@ -50,6 +59,14 @@ export type RootStackParamList = {
   Profile: undefined;
   Subscription: undefined;
   Timesheet: undefined;
+  // Enterprise Features
+  Accounting: undefined;
+  Contractors: undefined;
+  TaxCenter: undefined;
+  PTO: undefined;
+  PayrollRun: undefined;
+  Onboarding: undefined;
+  Reports: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -80,6 +97,14 @@ function DashboardStack() {
     >
       <Stack.Screen name="Dashboard" component={DashboardScreen} />
       <Stack.Screen name="Subscription" component={SubscriptionScreen} />
+      {/* Enterprise Features */}
+      <Stack.Screen name="Accounting" component={AccountingScreen} />
+      <Stack.Screen name="Contractors" component={ContractorsScreen} />
+      <Stack.Screen name="TaxCenter" component={TaxCenterScreen} />
+      <Stack.Screen name="PTO" component={PTOScreen} />
+      <Stack.Screen name="PayrollRun" component={PayrollRunScreen} />
+      <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+      <Stack.Screen name="Reports" component={ReportsScreen} />
     </Stack.Navigator>
   );
 }
