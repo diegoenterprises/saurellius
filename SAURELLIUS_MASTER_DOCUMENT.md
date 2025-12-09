@@ -24,13 +24,18 @@
    - [SWIPE - Schedule Swap](#5-swipe---schedule-swap-system)
    - [WORKFORCE - Real-Time Monitoring](#6-workforce---real-time-monitoring)
    - [Stripe Billing](#7-stripe-billing-integration)
-4. [Technical Architecture](#technical-architecture)
-5. [API Reference](#api-reference)
-6. [Frontend Screens](#frontend-screens)
-7. [Database Schema](#database-schema)
-8. [Security & Compliance](#security--compliance)
-9. [Deployment](#deployment)
-10. [Subscription Tiers](#subscription-tiers)
+4. [Enterprise Features](#enterprise-features)
+   - [Saurellius Tax Engine API](#saurellius-tax-engine-api)
+   - [DocuGinuity Compliance](#docuginuity-compliance)
+   - [Admin Portal](#admin-portal)
+5. [Technical Architecture](#technical-architecture)
+6. [API Reference](#api-reference)
+7. [Frontend Screens](#frontend-screens)
+8. [Database Schema](#database-schema)
+9. [Security & Compliance](#security--compliance)
+10. [Deployment](#deployment)
+11. [Subscription Tiers](#subscription-tiers)
+12. [Tax Engine API Tiers](#tax-engine-api-tiers)
 
 ---
 
@@ -46,6 +51,9 @@
 - **Real-Time Workforce Monitoring** - Captain's tower view of your entire workforce
 - **Employee Schedule Swapping** - SWIPE system with manager approval workflow
 - **Enterprise Communications** - Built-in messaging, kudos, and announcements
+- **Saurellius Tax Engine API** - Open API for enterprise partners with 7,400+ tax jurisdictions
+- **DocuGinuity Compliance** - Automated document tracking for I-9, W-4, W-2, 941, 1099
+- **Admin Portal** - Platform analytics, API usage tracking, Stripe integration
 
 ---
 
@@ -560,6 +568,112 @@ GET  /api/stripe/invoices           - Get invoice history
 
 ---
 
+## Enterprise Features
+
+### Saurellius Tax Engine API
+
+Enterprise-grade Open API for payroll tax calculations, available to enterprise partners.
+
+#### Coverage
+
+| Tax Type | Jurisdictions |
+|----------|---------------|
+| **Federal Income Tax** | 7 brackets, 4 filing statuses (2025 data) |
+| **Social Security** | 6.2% up to $176,100 wage base |
+| **Medicare** | 1.45% + 0.9% Additional Medicare (over $200K) |
+| **State Income Tax** | All 50 states + D.C. |
+| **SDI/VDI** | CA, HI, NJ, NY, RI, PR |
+| **Paid Family Leave** | 12 states (CO, CT, DE, MA, MD, MN, NJ, NY, OR, RI, WA) |
+| **Local Taxes** | NYC, Philadelphia, 30+ Ohio cities, MD counties |
+| **SUTA/FUTA** | All 50 states |
+| **Reciprocity** | 17 states with agreements |
+
+#### API Endpoints
+
+```
+GET  /api/v1/tax-engine                 API info and status
+POST /api/v1/tax-engine/calculate       Calculate taxes for single employee
+POST /api/v1/tax-engine/batch           Batch calculate (up to 10,000)
+GET  /api/v1/tax-engine/rates           Get rates by jurisdiction
+GET  /api/v1/tax-engine/rates/federal   Get all 2025 federal rates
+GET  /api/v1/tax-engine/rates/state/:code Get state-specific rates
+POST /api/v1/tax-engine/multistate      Multi-state calculation
+GET  /api/v1/tax-engine/reciprocity     Check reciprocity between states
+GET  /api/v1/tax-engine/local/:state    Get local jurisdictions
+POST /api/v1/tax-engine/local/calculate Calculate local tax
+GET  /api/v1/tax-engine/sdi/:state      Get SDI/PFML rates
+GET  /api/v1/tax-engine/usage           API usage and overage stats
+```
+
+---
+
+### DocuGinuity Compliance
+
+Automated document compliance and tracking system for employment and tax forms.
+
+#### Federal Forms Supported
+
+| Form | Purpose | Deadline |
+|------|---------|----------|
+| **I-9** | Employment Eligibility Verification | Within 3 days of hire |
+| **W-4** | Employee Withholding Certificate | At hire |
+| **W-2** | Wage and Tax Statement | January 31 |
+| **W-3** | Transmittal of W-2s | January 31 |
+| **940** | Employer's Annual FUTA Return | January 31 |
+| **941** | Quarterly Federal Tax Return | Quarterly |
+| **944** | Annual Federal Tax Return | January 31 |
+| **W-9** | Request for TIN | At hire (contractors) |
+| **1099-NEC** | Nonemployee Compensation | January 31 |
+| **1096** | Transmittal of 1099s | January 31 |
+| **1095-C** | ACA Health Coverage | March 2 |
+| **1094-C** | ACA Transmittal | March 2 |
+
+#### State W-4 Forms
+
+All 50 states supported with state-specific withholding forms (CA DE 4, NY IT-2104, etc.)
+
+#### API Endpoints
+
+```
+GET  /api/compliance/employee/required-documents   Get required forms
+POST /api/compliance/onboarding/checklist          Create onboarding checklist
+PUT  /api/compliance/onboarding/checklist/:id/document Update document status
+GET  /api/compliance/company/:id/status            Check compliance status
+GET  /api/compliance/forms                         Get all federal forms
+GET  /api/compliance/forms/:id                     Get form details
+GET  /api/compliance/deadlines                     Upcoming filing deadlines
+GET  /api/compliance/calendar/:year                Full filing calendar
+GET  /api/compliance/dashboard                     Compliance dashboard summary
+```
+
+---
+
+### Admin Portal
+
+Platform owner dashboard for analytics, API management, and system monitoring.
+
+#### Features
+
+- **Platform Analytics** - Total users, companies, paystubs, revenue
+- **Tax Engine API Management** - Client tracking, usage monitoring
+- **Tier Management** - Standard, Professional, Enterprise, Ultimate
+- **Overage Tracking** - Daily limits, overage costs, billing
+- **Stripe Integration** - Subscription IDs, payment status
+- **System Health** - API server, database, payment processor status
+
+#### API Endpoints
+
+```
+GET  /api/admin/dashboard              Platform analytics and KPIs
+GET  /api/admin/users                  List all platform users
+GET  /api/admin/companies              List all companies
+GET  /api/admin/api-clients            List Tax Engine API clients
+GET  /api/admin/api-usage              API usage statistics
+GET  /api/admin/revenue                Revenue metrics
+```
+
+---
+
 ## Technical Architecture
 
 ### System Architecture
@@ -918,21 +1032,50 @@ npx expo start
 
 ## Subscription Tiers
 
-### Feature Comparison
+### Platform Tiers
 
 | Feature | Starter | Professional | Business |
 |---------|---------|--------------|----------|
-| **Price** | $29/mo | $79/mo | $199/mo |
-| **Employees** | 10 | 50 | Unlimited |
-| **Paystub Themes** | 5 | 25 | 25 |
-| **AI Assistant** | — | Yes | Yes |
-| **State Compliance** | 1 state | All states | All states |
-| **SWIPE (Schedule Swap)** | — | Yes | Yes |
-| **WORKFORCE Monitoring** | — | Yes | Yes |
-| **Communications Hub** | Basic | Full | Full |
-| **API Access** | — | Limited | Unlimited |
-| **Support** | Email | Priority | Dedicated |
-| **Custom Branding** | — | — | Yes |
+| **Price** | $50/mo | $100/mo | $150/mo |
+| **Included Paystubs** | 5/month | 25/month | Unlimited |
+| **Overage Rate** | $5/each | $5/each | N/A |
+| **All 50 States** | Yes | Yes | Yes |
+| **Complete Tax Calculations** | Yes | Yes | Yes |
+| **YTD Tracking** | Yes | Yes | Yes |
+| **Premium PDF Templates** | Yes | Yes + Custom | Unlimited Custom |
+| **QR Verification** | Yes | Yes | Yes |
+| **PTO Tracking** | - | Yes | Yes |
+| **Custom Branding** | - | Company logo | White-label |
+| **Bulk Generation** | - | Up to 25 | Unlimited |
+| **API Access** | - | Beta | Full + Webhooks |
+| **Support** | Email (48hr) | Priority (24hr) | Dedicated Manager |
+| **Storage Duration** | 1 year | 3 years | Unlimited |
+| **Multi-user Access** | - | 3 users | Unlimited + Roles |
+| **SSO** | - | - | Available |
+| **SLA** | - | - | 99.9% uptime |
+
+---
+
+## Tax Engine API Tiers
+
+For enterprise partners using the Saurellius Tax Engine Open API:
+
+| Feature | Standard | Professional | Enterprise | Ultimate |
+|---------|----------|--------------|------------|----------|
+| **Annual Price** | $2,000 | $5,000 | $10,000 | $15,000 |
+| **Daily Request Limit** | 5,000 | 20,000 | 100,000 | Unlimited |
+| **Overage Rate** | $0.50/req | $0.25/req | $0.10/req | N/A |
+| **Jurisdictions** | Federal + 10 states | All states | All + Local | Full 7,400+ |
+| **Multi-State Calculations** | - | Yes | Yes | Yes |
+| **Batch Processing** | - | 100/batch | 1,000/batch | 10,000/batch |
+| **Local Tax Calculations** | - | - | Major cities | All jurisdictions |
+| **Webhooks** | - | - | Yes | Yes |
+| **Geocoding Precision** | State | City | Zip+4 | Rooftop |
+| **Historical Data** | 1 year | 3 years | 5 years | 7+ years |
+| **Implementation Support** | - | 5 hours | 20 hours | 50 hours |
+| **Support Response** | 48hr email | 24hr email/chat | 4hr phone | 1hr dedicated |
+| **SLA** | 99% | 99.5% | 99.9% | 99.99% |
+| **White-Label** | - | - | - | Yes |
 
 ---
 
@@ -958,6 +1101,17 @@ npx expo start
 | - | - | SWIPE schedule swap |
 | - | - | WORKFORCE monitoring |
 | - | - | Stripe billing |
+| 1.1.0 | Dec 2025 | Enterprise Features |
+| - | - | Saurellius Tax Engine API (Open API) |
+| - | - | 7,400+ tax jurisdictions |
+| - | - | 2025/2026 federal and state tax data |
+| - | - | SDI, PFML, local taxes, reciprocity |
+| - | - | DocuGinuity compliance module |
+| - | - | I-9, W-4, W-2, 941, 1099 tracking |
+| - | - | 2025 filing calendar |
+| - | - | Admin Portal with analytics |
+| - | - | API usage tracking with Stripe |
+| - | - | Docker deployment ready |
 
 ---
 
