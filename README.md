@@ -26,6 +26,7 @@ Saurellius Cloud Payroll Management is a full-featured enterprise platform that 
 |----------|----------|
 | **Payroll Processing** | 25 paystub themes, PDF generation, QR verification, YTD tracking |
 | **Tax Compliance** | 50 U.S. states + D.C., tax brackets, SUTA/SDI/PFL, overtime rules |
+| **Benefits & Insurance** | Medical, Dental, Vision, Life, Disability, 401(k), FSA/HSA, COBRA |
 | **AI Assistant** | Google Gemini-powered payroll advisor, compliance checker, onboarding helper |
 | **Employee Management** | Profiles, W-4 info, direct deposit, document storage |
 | **Time & Attendance** | Clock in/out, break tracking, GPS location, weekly timesheets |
@@ -33,7 +34,7 @@ Saurellius Cloud Payroll Management is a full-featured enterprise platform that 
 | **Schedule Swapping** | Employee requests, peer acceptance, manager approval workflow |
 | **Communications** | Direct messages, channels, announcements, recognition/kudos system |
 | **Rewards System** | Points, tiers (Bronze to Diamond), badges, streak bonuses |
-| **Billing** | Stripe integration, 3 subscription tiers, usage tracking |
+| **Billing** | Stripe integration, 3 tiers ($50/$100/$150), paystub-based pricing |
 | **Weather Integration** | Location-based weather for dashboard |
 | **Email System** | Transactional emails via Resend |
 
@@ -97,10 +98,20 @@ Saurellius Cloud Payroll Management is a full-featured enterprise platform that 
 - **Login Streaks** — Bonus points for consecutive days
 - **Leaderboards** — Company-wide rankings
 
+### Benefits & Insurance
+- **Medical Plans** — PPO, HMO, HDHP options with cost comparison
+- **Dental & Vision** — Preventive, basic, major coverage tiers
+- **Life Insurance** — Basic, supplemental, AD&D options
+- **Disability** — Short-term and long-term coverage
+- **Retirement** — 401(k) with employer matching
+- **FSA/HSA** — Healthcare and dependent care accounts
+- **COBRA Administration** — Qualifying events, premium tracking
+
 ### Subscription & Billing
 - **Stripe Integration** — Secure payment processing
-- **3 Tiers** — Starter ($29), Professional ($79), Business ($199)
-- **Usage Tracking** — Employee count, API calls, storage
+- **3 Tiers** — Starter ($50), Professional ($100), Business ($150)
+- **Paystub-Based Pricing** — 5/25/Unlimited paystubs per month
+- **Overage Billing** — $5 per additional paystub (Starter/Professional)
 - **Invoice History** — Download past invoices
 
 ---
@@ -203,7 +214,7 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │   ├── models.py                           # SQLAlchemy database models
 │   ├── billing.py                          # Stripe billing utilities
 │   │
-│   ├── routes/                             # API Route Handlers (13 files)
+│   ├── routes/                             # API Route Handlers (14 files)
 │   │   ├── __init__.py                     # Route exports
 │   │   ├── auth_routes.py                  # Authentication (signup, login, logout)
 │   │   ├── dashboard_routes.py             # Dashboard data aggregation
@@ -211,6 +222,7 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │   │   ├── paystub_generator_routes.py     # PDF generation with 25 themes
 │   │   ├── state_rules_routes.py           # State tax compliance API
 │   │   ├── ai_routes.py                    # Saurellius AI chat & helpers
+│   │   ├── benefits_routes.py              # Benefits & Insurance API
 │   │   ├── messaging_routes.py             # Communications Hub API
 │   │   ├── swipe_routes.py                 # SWIPE schedule swap API
 │   │   ├── workforce_routes.py             # WORKFORCE monitoring API
@@ -218,11 +230,12 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │   │   ├── email_routes.py                 # Email sending API
 │   │   └── weather_routes.py               # Weather widget API
 │   │
-│   └── services/                           # Business Logic Layer (8 files)
+│   └── services/                           # Business Logic Layer (9 files)
 │       ├── __init__.py                     # Service exports
 │       ├── paystub_generator.py            # 25 themes, PDF, security features
 │       ├── state_payroll_rules.py          # 50 states + D.C. tax rules
 │       ├── gemini_service.py               # Saurellius AI (Gemini Pro)
+│       ├── benefits_service.py             # Benefits, insurance, COBRA management
 │       ├── messaging_service.py            # DM, channels, kudos, notifications
 │       ├── swipe_service.py                # Schedule swap matching & approval
 │       ├── workforce_service.py            # Real-time monitoring & scheduling
@@ -242,7 +255,7 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │       ├── navigation/
 │       │   └── AppNavigator.tsx            # React Navigation setup
 │       │
-│       ├── screens/                        # UI Screens (17 files)
+│       ├── screens/                        # UI Screens (18 files)
 │       │   │
 │       │   ├── auth/                       # Authentication
 │       │   │   ├── LoginScreen.tsx         # Email/password login
@@ -253,15 +266,18 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │       │   │   └── DashboardScreen.tsx     # Main dashboard with stats, weather
 │       │   │
 │       │   ├── employees/                  # Employee Management
-│       │   │   ├── EmployeesScreen.tsx     # Employee list view
+│       │   │   ├── EmployeesScreen.tsx     # Employee list with search/filter
 │       │   │   ├── EmployeeDetailScreen.tsx # Individual employee profile
 │       │   │   └── AddEmployeeScreen.tsx   # New employee form
 │       │   │
 │       │   ├── paystubs/                   # Paystub Management
-│       │   │   ├── PaystubsScreen.tsx      # Paystub history list
+│       │   │   ├── PaystubsScreen.tsx      # Paystub history with YTD summary
 │       │   │   ├── PaystubDetailScreen.tsx # Individual paystub view
 │       │   │   ├── GeneratePaystubScreen.tsx # Create new paystub
-│       │   │   └── StandalonePaystubScreen.tsx # Full-page paystub viewer
+│       │   │   └── StandalonePaystubScreen.tsx # Full-page paystub viewer (25 themes)
+│       │   │
+│       │   ├── benefits/                   # Benefits & Insurance
+│       │   │   └── BenefitsScreen.tsx      # Plan enrollment, dependents, costs
 │       │   │
 │       │   ├── timesheet/                  # Time & Attendance
 │       │   │   └── TimesheetScreen.tsx     # Clock in/out, breaks, weekly view
@@ -311,16 +327,29 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │       │   └── common/                     # Shared Components
 │       │       └── ToastConfig.tsx         # Toast notifications
 │       │
-│       └── services/                       # API Client Services (9 files)
-│           ├── api.ts                      # Axios base client with JWT
-│           ├── ai.ts                       # Saurellius AI API
-│           ├── stateRules.ts               # State compliance API
-│           ├── messaging.ts                # Communications API
-│           ├── swipe.ts                    # SWIPE API
-│           ├── workforce.ts                # WORKFORCE API
-│           ├── stripe.ts                   # Billing API
-│           ├── email.ts                    # Email API
-│           └── weather.ts                  # Weather API
+│       ├── services/                       # API Client Services (10 files)
+│       │   ├── api.ts                      # Axios base client with JWT
+│       │   ├── ai.ts                       # Saurellius AI API
+│       │   ├── benefits.ts                 # Benefits & Insurance API
+│       │   ├── stateRules.ts               # State compliance API
+│       │   ├── messaging.ts                # Communications API
+│       │   ├── swipe.ts                    # SWIPE API
+│       │   ├── workforce.ts                # WORKFORCE API
+│       │   ├── stripe.ts                   # Billing API
+│       │   ├── email.ts                    # Email API
+│       │   └── weather.ts                  # Weather API
+│       │
+│       ├── hooks/                          # Custom React Hooks
+│       │   ├── index.ts                    # Hook exports
+│       │   ├── useAuth.ts                  # Authentication state
+│       │   ├── useDebounce.ts              # Input debouncing
+│       │   └── useRefresh.ts               # Pull-to-refresh state
+│       │
+│       └── utils/                          # Utility Functions
+│           ├── index.ts                    # Utility exports
+│           ├── formatters.ts               # Currency, date, phone formatting
+│           ├── validators.ts               # Email, phone, SSN validation
+│           └── constants.ts                # Colors, tiers, states
 │
 ├── database/
 │   └── schema.sql                          # PostgreSQL schema definition
@@ -410,6 +439,39 @@ GET  /api/states/:code/summary          Get state summary
 GET  /api/states/:code/tax-brackets     Get tax brackets
 POST /api/states/:code/calculate        Calculate state taxes
 GET  /api/states/compare                Compare multiple states
+```
+
+### Benefits & Insurance
+```
+# Plans
+GET  /api/benefits/plans                List all available plans
+GET  /api/benefits/plans/:type          Get plans by type (medical, dental, etc.)
+GET  /api/benefits/plans/:id/details    Get plan details with costs
+
+# Enrollment
+GET  /api/benefits/enrollment           Get employee enrollment status
+POST /api/benefits/enrollment           Enroll in benefit plan
+PUT  /api/benefits/enrollment/:id       Update enrollment
+DELETE /api/benefits/enrollment/:id     Cancel enrollment
+
+# Dependents
+GET  /api/benefits/dependents           List dependents
+POST /api/benefits/dependents           Add dependent
+PUT  /api/benefits/dependents/:id       Update dependent
+DELETE /api/benefits/dependents/:id     Remove dependent
+
+# Life Events
+POST /api/benefits/life-events          Report qualifying life event
+GET  /api/benefits/life-events          Get life event history
+
+# COBRA
+GET  /api/benefits/cobra/status         Get COBRA eligibility status
+POST /api/benefits/cobra/elect          Elect COBRA coverage
+GET  /api/benefits/cobra/payments       Get COBRA payment history
+
+# Summary
+GET  /api/benefits/summary              Get complete benefits summary
+GET  /api/benefits/costs                Get benefit cost breakdown
 ```
 
 ### Communications Hub
@@ -625,18 +687,23 @@ AWS_S3_BUCKET=saurellius-files
 
 | Feature | Starter | Professional | Business |
 |---------|---------|--------------|----------|
-| **Price** | $29/mo | $79/mo | $199/mo |
-| **Employees** | 10 | 50 | Unlimited |
-| **Paystub Themes** | 5 | 25 | 25 |
-| **Saurellius AI** | — | Yes | Yes |
-| **State Compliance** | 1 state | All 50 states | All 50 states |
-| **SWIPE (Schedule Swap)** | — | Yes | Yes |
-| **WORKFORCE Monitoring** | — | Yes | Yes |
-| **Communications Hub** | Basic | Full | Full |
-| **Timesheets** | Basic | Advanced | Advanced |
-| **API Access** | — | Limited | Unlimited |
-| **Support** | Email | Priority | Dedicated |
-| **Custom Branding** | — | — | Yes |
+| **Price** | $50/mo | $100/mo | $150/mo |
+| **Included Paystubs** | 5/month | 25/month | Unlimited |
+| **Overage Rate** | $5/each | $5/each | N/A |
+| **All 50 States** | Yes | Yes | Yes |
+| **Complete Tax Calculations** | Yes | Yes | Yes |
+| **YTD Tracking** | Yes | Yes | Yes |
+| **Premium PDF Templates** | Yes | Yes + Custom | Unlimited Custom |
+| **QR Verification** | Yes | Yes | Yes |
+| **PTO Tracking** | — | Yes | Yes |
+| **Custom Branding** | — | Company logo | White-label |
+| **Bulk Generation** | — | Up to 25 | Unlimited |
+| **API Access** | — | Beta | Full + Webhooks |
+| **Support** | Email (48hr) | Priority (24hr) | Dedicated Manager |
+| **Storage Duration** | 1 year | 3 years | Unlimited |
+| **Multi-user Access** | — | 3 users | Unlimited + Roles |
+| **SSO** | — | — | Available |
+| **SLA** | — | — | 99.9% uptime |
 
 ---
 
