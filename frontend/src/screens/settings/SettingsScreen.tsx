@@ -104,8 +104,8 @@ const SettingsScreen: React.FC = () => {
   const supportSettings: SettingItem[] = [
     { icon: 'help-circle-outline', title: 'Help Center', type: 'link' },
     { icon: 'chatbubble-outline', title: 'Contact Support', type: 'link' },
-    { icon: 'document-text-outline', title: 'Terms of Service', type: 'link' },
-    { icon: 'shield-outline', title: 'Privacy Policy', type: 'link' },
+    { icon: 'document-text-outline', title: 'Terms of Service', type: 'link', onPress: () => navigation.navigate('TermsConditions') },
+    { icon: 'shield-outline', title: 'Privacy Policy', type: 'link', onPress: () => navigation.navigate('PrivacyPolicy') },
   ];
 
   return (

@@ -109,14 +109,24 @@ const SignUpScreen: React.FC = () => {
               <TextInput style={styles.input} placeholder="Confirm Password" value={confirmPassword} onChangeText={setConfirmPassword} secureTextEntry={!showPassword} />
             </View>
 
-            <TouchableOpacity style={styles.termsRow} onPress={() => setAgreeToTerms(!agreeToTerms)}>
-              <View style={[styles.checkbox, agreeToTerms && styles.checkboxChecked]}>
+            <View style={styles.termsRow}>
+              <TouchableOpacity 
+                style={[styles.checkbox, agreeToTerms && styles.checkboxChecked]}
+                onPress={() => setAgreeToTerms(!agreeToTerms)}
+              >
                 {agreeToTerms && <Ionicons name="checkmark" size={14} color="#fff" />}
-              </View>
+              </TouchableOpacity>
               <Text style={styles.termsText}>
-                I agree to the <Text style={styles.termsLink}>Terms of Service</Text> and <Text style={styles.termsLink}>Privacy Policy</Text>
+                I agree to the{' '}
+                <Text style={styles.termsLink} onPress={() => navigation.navigate('TermsConditions')}>
+                  Terms of Service
+                </Text>
+                {' '}and{' '}
+                <Text style={styles.termsLink} onPress={() => navigation.navigate('PrivacyPolicy')}>
+                  Privacy Policy
+                </Text>
               </Text>
-            </TouchableOpacity>
+            </View>
 
             <TouchableOpacity 
               style={[styles.signUpButton, loading && styles.signUpButtonDisabled]} 

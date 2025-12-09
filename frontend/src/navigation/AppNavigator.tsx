@@ -50,6 +50,9 @@ import { ComplianceScreen } from '../screens/compliance';
 import { GarnishmentScreen } from '../screens/garnishment';
 import BenefitsScreen from '../screens/benefits/BenefitsScreen';
 
+// Legal Screens
+import { PrivacyPolicyScreen, TermsConditionsScreen } from '../screens/legal';
+
 // Types
 export type RootStackParamList = {
   Auth: undefined;
@@ -87,6 +90,9 @@ export type RootStackParamList = {
   Benefits: undefined;
   // Admin
   AdminPortal: undefined;
+  // Legal
+  PrivacyPolicy: undefined;
+  TermsConditions: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -103,6 +109,9 @@ function AuthStack() {
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="SignUp" component={SignUpScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+      {/* Legal */}
+      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
+      <Stack.Screen name="TermsConditions" component={TermsConditionsScreen} />
     </Stack.Navigator>
   );
 }
@@ -134,6 +143,9 @@ function DashboardStack() {
       <Stack.Screen name="Benefits" component={BenefitsScreen} />
       {/* Admin */}
       <Stack.Screen name="AdminPortal" component={AdminPortalScreen} />
+      {/* Legal */}
+      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
+      <Stack.Screen name="TermsConditions" component={TermsConditionsScreen} />
     </Stack.Navigator>
   );
 }
@@ -180,6 +192,9 @@ function SettingsStack() {
       <Stack.Screen name="Settings" component={SettingsScreen} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="Subscription" component={SubscriptionScreen} />
+      {/* Legal */}
+      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
+      <Stack.Screen name="TermsConditions" component={TermsConditionsScreen} />
     </Stack.Navigator>
   );
 }
