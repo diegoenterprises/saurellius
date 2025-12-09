@@ -67,6 +67,7 @@ def create_app(config_name='default'):
     from routes.reporting_routes import reporting_bp
     from routes.admin_routes import admin_bp
     from routes.tax_engine_routes import tax_engine_bp
+    from routes.compliance_routes import compliance_bp
     
     # Core blueprints
     app.register_blueprint(auth_bp)
@@ -94,6 +95,7 @@ def create_app(config_name='default'):
     app.register_blueprint(reporting_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(tax_engine_bp)
+    app.register_blueprint(compliance_bp)
     
     # Health check endpoint
     @app.route('/health')

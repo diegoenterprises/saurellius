@@ -252,6 +252,102 @@ export default function DashboardScreen() {
             />
           </View>
         </View>
+
+        {/* Enterprise Features Section */}
+        <View style={styles.enterpriseSection}>
+          <View style={styles.cardHeader}>
+            <View style={styles.cardTitleContainer}>
+              <Ionicons name="business" size={20} color={colors.primary.purple} />
+              <Text style={styles.cardTitle}>Enterprise Features</Text>
+            </View>
+          </View>
+          
+          <View style={styles.enterpriseGrid}>
+            <TouchableOpacity 
+              style={styles.enterpriseCard}
+              onPress={() => navigation.navigate('AdminPortal' as any)}
+            >
+              <LinearGradient
+                colors={['#8B5CF6', '#6D28D9']}
+                style={styles.enterpriseIconBg}
+              >
+                <Ionicons name="shield-checkmark" size={24} color="#FFF" />
+              </LinearGradient>
+              <Text style={styles.enterpriseCardTitle}>Admin Portal</Text>
+              <Text style={styles.enterpriseCardDesc}>Analytics & API Management</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.enterpriseCard}
+              onPress={() => navigation.navigate('Compliance' as any)}
+            >
+              <LinearGradient
+                colors={['#10B981', '#059669']}
+                style={styles.enterpriseIconBg}
+              >
+                <Ionicons name="document-text" size={24} color="#FFF" />
+              </LinearGradient>
+              <Text style={styles.enterpriseCardTitle}>Compliance</Text>
+              <Text style={styles.enterpriseCardDesc}>DocuGinuity Forms</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.enterpriseCard}
+              onPress={() => navigation.navigate('Reporting' as any)}
+            >
+              <LinearGradient
+                colors={['#F59E0B', '#D97706']}
+                style={styles.enterpriseIconBg}
+              >
+                <Ionicons name="bar-chart" size={24} color="#FFF" />
+              </LinearGradient>
+              <Text style={styles.enterpriseCardTitle}>Reports</Text>
+              <Text style={styles.enterpriseCardDesc}>Payroll Analytics</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.enterpriseCard}
+              onPress={() => navigation.navigate('TaxFiling' as any)}
+            >
+              <LinearGradient
+                colors={['#3B82F6', '#1D4ED8']}
+                style={styles.enterpriseIconBg}
+              >
+                <Ionicons name="calculator" size={24} color="#FFF" />
+              </LinearGradient>
+              <Text style={styles.enterpriseCardTitle}>Tax Filing</Text>
+              <Text style={styles.enterpriseCardDesc}>941, 940, W-2</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.enterpriseCard}
+              onPress={() => navigation.navigate('Contractors' as any)}
+            >
+              <LinearGradient
+                colors={['#EC4899', '#BE185D']}
+                style={styles.enterpriseIconBg}
+              >
+                <Ionicons name="briefcase" size={24} color="#FFF" />
+              </LinearGradient>
+              <Text style={styles.enterpriseCardTitle}>Contractors</Text>
+              <Text style={styles.enterpriseCardDesc}>1099 Management</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.enterpriseCard}
+              onPress={() => navigation.navigate('PTO' as any)}
+            >
+              <LinearGradient
+                colors={['#14B8A6', '#0D9488']}
+                style={styles.enterpriseIconBg}
+              >
+                <Ionicons name="calendar" size={24} color="#FFF" />
+              </LinearGradient>
+              <Text style={styles.enterpriseCardTitle}>Time Off</Text>
+              <Text style={styles.enterpriseCardDesc}>PTO & Leave</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </ScrollView>
     </View>
   );
@@ -394,5 +490,43 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSize.xl,
     fontWeight: '700',
     color: colors.text.primary,
+  },
+  enterpriseSection: {
+    backgroundColor: '#FFF',
+    borderRadius: 16,
+    padding: spacing.lg,
+    marginTop: spacing.lg,
+  },
+  enterpriseGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  enterpriseCard: {
+    width: '31%',
+    backgroundColor: '#F8FAFC',
+    borderRadius: 12,
+    padding: spacing.md,
+    alignItems: 'center',
+  },
+  enterpriseIconBg: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  enterpriseCardTitle: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#1F2937',
+    textAlign: 'center',
+  },
+  enterpriseCardDesc: {
+    fontSize: 11,
+    color: '#6B7280',
+    textAlign: 'center',
+    marginTop: 2,
   },
 });

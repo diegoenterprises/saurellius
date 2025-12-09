@@ -25,6 +25,7 @@ from .payroll_run_service import SaurelliusPayrollRun, payroll_run_service
 from .reporting_service import SaurelliusReporting, reporting_service
 from .onboarding_service import SaurelliusOnboarding, onboarding_service
 from .tax_engine_service import SaurelliusTaxEngine, tax_engine
+from .compliance_service import DocuGinuityCompliance, compliance_service
 
 __all__ = [
     # Core
@@ -72,4 +73,7 @@ __all__ = [
     # Tax Engine API
     'SaurelliusTaxEngine',
     'tax_engine',
+    # DocuGinuity Compliance
+    'DocuGinuityCompliance',
+    'compliance_service',
 ]
