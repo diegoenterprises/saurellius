@@ -37,6 +37,9 @@ Saurellius Cloud Payroll Management is a full-featured enterprise platform that 
 | **Billing** | Stripe integration, 3 tiers ($50/$100/$150), paystub-based pricing |
 | **Weather Integration** | Location-based weather for dashboard |
 | **Email System** | Transactional emails via Resend |
+| **Tax Engine API** | Open API for enterprise partners, 7,400+ jurisdictions, real-time tax calculations |
+| **DocuGinuity Compliance** | Automated document tracking, I-9, W-4, W-2, 941, 1099, filing calendars |
+| **Admin Portal** | Platform analytics, KPIs, API usage tracking, Stripe integration |
 
 ---
 
@@ -113,6 +116,51 @@ Saurellius Cloud Payroll Management is a full-featured enterprise platform that 
 - **Paystub-Based Pricing** — 5/25/Unlimited paystubs per month
 - **Overage Billing** — $5 per additional paystub (Starter/Professional)
 - **Invoice History** — Download past invoices
+
+### Saurellius Tax Engine API (Open API)
+Enterprise-grade payroll tax calculation engine for partners.
+
+- **7,400+ Tax Jurisdictions** — Federal, state, local, school district, transit
+- **2025/2026 Tax Data** — Real IRS and state revenue data
+- **Federal Taxes** — Income tax (7 brackets), Social Security ($176,100 wage base), Medicare with Additional Medicare
+- **State Taxes** — All 50 states + D.C. (progressive and flat rates)
+- **SDI/VDI** — California, Hawaii, New Jersey, New York, Rhode Island, Puerto Rico
+- **Paid Family Leave (PFML)** — 12 states (CO, CT, DE, MA, MD, MN, NJ, NY, OR, RI, WA)
+- **Local Taxes** — NYC, Philadelphia, Ohio cities, Maryland counties, transit districts
+- **Multi-State Calculations** — Reciprocity agreements for 17 states
+- **SUTA/FUTA** — State and federal unemployment for all states
+- **Batch Processing** — Up to 10,000 employees per request (Ultimate tier)
+- **3ms Average Response** — Enterprise performance
+
+#### API Pricing Tiers
+
+| Tier | Annual Price | Daily Limit | Overage Rate | Features |
+|------|--------------|-------------|--------------|----------|
+| Standard | $2,000 | 5,000 | $0.50/request | Federal + 10 states |
+| Professional | $5,000 | 20,000 | $0.25/request | All states, multi-state, batch (100) |
+| Enterprise | $10,000 | 100,000 | $0.10/request | Local taxes, webhooks, batch (1,000) |
+| Ultimate | $15,000 | Unlimited | N/A | Full access, batch (10,000), white-label |
+
+### DocuGinuity Compliance Module
+Automated document compliance and tracking system.
+
+- **Federal Forms** — I-9, W-4, W-2, W-3, 940, 941, 944, W-9, 1099-NEC, 1096, 1095-C, 1094-C
+- **State W-4 Forms** — All 50 states (CA DE 4, NY IT-2104, IL IL-W-4, etc.)
+- **2025 Filing Calendar** — All quarterly and annual deadlines
+- **Onboarding Checklists** — Auto-generated with due dates (I-9 within 3 days)
+- **Compliance Tracking** — Status, completion rate, missing/expiring documents
+- **Deadline Alerts** — Upcoming filing reminders
+- **Company Compliance Score** — Overall compliance status assessment
+
+### Admin Portal
+Platform owner dashboard for analytics and management.
+
+- **Platform Analytics** — Users, companies, paystubs, revenue metrics
+- **Tax Engine API Management** — Client usage tracking, tier management
+- **Stripe Integration** — Subscription IDs, overage billing
+- **Usage Monitoring** — Daily limits, overage calculations
+- **System Health** — API server, database, payment processor status
+- **User Management** — View and manage platform users
 
 ---
 
@@ -214,7 +262,7 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │   ├── models.py                           # SQLAlchemy database models
 │   ├── billing.py                          # Stripe billing utilities
 │   │
-│   ├── routes/                             # API Route Handlers (14 files)
+│   ├── routes/                             # API Route Handlers (20 files)
 │   │   ├── __init__.py                     # Route exports
 │   │   ├── auth_routes.py                  # Authentication (signup, login, logout)
 │   │   ├── dashboard_routes.py             # Dashboard data aggregation
@@ -228,9 +276,15 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │   │   ├── workforce_routes.py             # WORKFORCE monitoring API
 │   │   ├── stripe_routes.py                # Subscription billing API
 │   │   ├── email_routes.py                 # Email sending API
-│   │   └── weather_routes.py               # Weather widget API
+│   │   ├── weather_routes.py               # Weather widget API
+│   │   ├── tax_engine_routes.py            # Tax Engine Open API
+│   │   ├── compliance_routes.py            # DocuGinuity compliance API
+│   │   ├── admin_routes.py                 # Admin Portal API
+│   │   ├── accounting_routes.py            # Accounting integrations
+│   │   ├── contractor_routes.py            # 1099 contractor management
+│   │   └── pto_routes.py                   # PTO and leave management
 │   │
-│   └── services/                           # Business Logic Layer (9 files)
+│   └── services/                           # Business Logic Layer (15 files)
 │       ├── __init__.py                     # Service exports
 │       ├── paystub_generator.py            # 25 themes, PDF, security features
 │       ├── state_payroll_rules.py          # 50 states + D.C. tax rules
@@ -240,7 +294,13 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │       ├── swipe_service.py                # Schedule swap matching & approval
 │       ├── workforce_service.py            # Real-time monitoring & scheduling
 │       ├── email_service.py                # Resend email integration
-│       └── weather_service.py              # OpenWeather API integration
+│       ├── weather_service.py              # OpenWeather API integration
+│       ├── tax_engine_service.py           # Tax Engine (2025/2026 tax data)
+│       ├── compliance_service.py           # DocuGinuity compliance tracking
+│       ├── accounting_service.py           # Accounting integrations
+│       ├── contractor_service.py           # 1099 contractor management
+│       ├── pto_service.py                  # PTO and leave tracking
+│       └── reporting_service.py            # Payroll reports and analytics
 │
 ├── frontend/
 │   │
@@ -327,7 +387,7 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │       │   └── common/                     # Shared Components
 │       │       └── ToastConfig.tsx         # Toast notifications
 │       │
-│       ├── services/                       # API Client Services (10 files)
+│       ├── services/                       # API Client Services (14 files)
 │       │   ├── api.ts                      # Axios base client with JWT
 │       │   ├── ai.ts                       # Saurellius AI API
 │       │   ├── benefits.ts                 # Benefits & Insurance API
@@ -337,7 +397,11 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │       │   ├── workforce.ts                # WORKFORCE API
 │       │   ├── stripe.ts                   # Billing API
 │       │   ├── email.ts                    # Email API
-│       │   └── weather.ts                  # Weather API
+│       │   ├── weather.ts                  # Weather API
+│       │   ├── taxEngine.ts                # Tax Engine API
+│       │   ├── compliance.ts               # DocuGinuity compliance API
+│       │   ├── contractors.ts              # Contractor management API
+│       │   └── pto.ts                      # PTO tracking API
 │       │
 │       ├── hooks/                          # Custom React Hooks
 │       │   ├── index.ts                    # Hook exports
@@ -582,6 +646,72 @@ GET  /api/weather                       Get weather for user location
 GET  /api/weather/:city                 Get weather for specific city
 ```
 
+### Tax Engine API (Open API)
+```
+# Core Endpoints
+GET  /api/v1/tax-engine                 API info and status
+POST /api/v1/tax-engine/calculate       Calculate taxes for single employee
+POST /api/v1/tax-engine/batch           Batch calculate (up to 10,000)
+
+# Tax Rates
+GET  /api/v1/tax-engine/rates           Get rates by jurisdiction
+GET  /api/v1/tax-engine/rates/federal   Get all 2025 federal rates
+GET  /api/v1/tax-engine/rates/state/:code Get state-specific rates
+
+# Multi-State
+POST /api/v1/tax-engine/multistate      Multi-state calculation with reciprocity
+GET  /api/v1/tax-engine/reciprocity     Check reciprocity between states
+
+# Local Taxes
+GET  /api/v1/tax-engine/local/:state    Get local jurisdictions for state
+POST /api/v1/tax-engine/local/calculate Calculate local tax
+
+# Additional
+GET  /api/v1/tax-engine/sdi/:state      Get SDI/PFML rates for state
+GET  /api/v1/tax-engine/jurisdictions   List all jurisdictions
+POST /api/v1/tax-engine/w4/calculate    W-4 recommendations
+GET  /api/v1/tax-engine/usage           API usage and overage stats
+
+# Webhooks (Enterprise+)
+GET  /api/v1/tax-engine/webhooks        List registered webhooks
+POST /api/v1/tax-engine/webhooks        Register webhook
+DELETE /api/v1/tax-engine/webhooks/:id  Delete webhook
+```
+
+### DocuGinuity Compliance
+```
+# Employee Documents
+GET  /api/compliance/employee/required-documents   Get required forms
+POST /api/compliance/onboarding/checklist          Create onboarding checklist
+PUT  /api/compliance/onboarding/checklist/:id/document Update document status
+
+# Company Compliance
+GET  /api/compliance/company/required-documents    Get company required forms
+GET  /api/compliance/company/:id/status            Check compliance status
+
+# Form Library
+GET  /api/compliance/forms                         Get all federal forms
+GET  /api/compliance/forms/:id                     Get form details
+GET  /api/compliance/forms/state/:code/withholding Get state W-4 form
+
+# Deadlines
+GET  /api/compliance/deadlines                     Upcoming filing deadlines
+GET  /api/compliance/calendar/:year                Full filing calendar
+
+# Dashboard
+GET  /api/compliance/dashboard                     Compliance dashboard summary
+```
+
+### Admin Portal
+```
+GET  /api/admin/dashboard              Platform analytics and KPIs
+GET  /api/admin/users                  List all platform users
+GET  /api/admin/companies              List all companies
+GET  /api/admin/api-clients            List Tax Engine API clients
+GET  /api/admin/api-usage              API usage statistics
+GET  /api/admin/revenue                Revenue metrics
+```
+
 ---
 
 ## Getting Started
@@ -679,6 +809,9 @@ AWS_ACCESS_KEY_ID=your-access-key
 AWS_SECRET_ACCESS_KEY=your-secret-key
 AWS_REGION=us-east-1
 AWS_S3_BUCKET=saurellius-files
+
+# Tax Engine API (for Open API clients)
+TAX_ENGINE_API_URL=https://api.saurellius.drpaystub.com/api/v1/tax-engine
 ```
 
 ---
@@ -704,6 +837,29 @@ AWS_S3_BUCKET=saurellius-files
 | **Multi-user Access** | — | 3 users | Unlimited + Roles |
 | **SSO** | — | — | Available |
 | **SLA** | — | — | 99.9% uptime |
+
+---
+
+## Tax Engine API Tiers
+
+For enterprise partners using the Saurellius Tax Engine Open API:
+
+| Feature | Standard | Professional | Enterprise | Ultimate |
+|---------|----------|--------------|------------|----------|
+| **Annual Price** | $2,000 | $5,000 | $10,000 | $15,000 |
+| **Daily Request Limit** | 5,000 | 20,000 | 100,000 | Unlimited |
+| **Overage Rate** | $0.50/req | $0.25/req | $0.10/req | N/A |
+| **Jurisdictions** | Federal + 10 states | All states | All + Local | Full 7,400+ |
+| **Multi-State Calculations** | — | Yes | Yes | Yes |
+| **Batch Processing** | — | 100/batch | 1,000/batch | 10,000/batch |
+| **Local Tax Calculations** | — | — | Major cities | All jurisdictions |
+| **Webhooks** | — | — | Yes | Yes |
+| **Geocoding Precision** | State | City | Zip+4 | Rooftop |
+| **Historical Data** | 1 year | 3 years | 5 years | 7+ years |
+| **Implementation Support** | — | 5 hours | 20 hours | 50 hours |
+| **Support Response** | 48hr email | 24hr email/chat | 4hr phone | 1hr dedicated |
+| **SLA** | 99% | 99.5% | 99.9% | 99.99% |
+| **White-Label** | — | — | — | Yes |
 
 ---
 
