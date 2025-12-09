@@ -40,6 +40,7 @@ Saurellius Cloud Payroll Management is a full-featured enterprise platform that 
 | **Tax Engine API** | Open API for enterprise partners, 7,400+ jurisdictions, real-time tax calculations |
 | **DocuGinuity Compliance** | Automated document tracking, I-9, W-4, W-2, 941, 1099, filing calendars |
 | **Admin Portal** | Platform analytics, KPIs, API usage tracking, Stripe integration |
+| **Real-Time Tax Updates** | Automated scheduler applies tax rates on effective dates, always current |
 
 ---
 
@@ -162,6 +163,18 @@ Platform owner dashboard for analytics and management.
 - **System Health** — API server, database, payment processor status
 - **User Management** — View and manage platform users
 
+### Real-Time Tax Update Scheduler
+Automated background scheduler ensures the platform always uses current tax rates.
+
+- **Automatic Rate Application** — Tax rates applied on effective dates (Jan 1, etc.)
+- **2025/2026 Federal Data** — Pre-loaded tax brackets, SS wage base, standard deductions
+- **State Rate Updates** — SDI, PFML, state taxes with effective dates
+- **Minimum Wage Tracking** — State minimum wages updated automatically
+- **Compliance Deadlines** — 941, W-2, 1099 deadlines with alerts
+- **Daily Checks** — Midnight check for rate changes
+- **Monthly Checks** — 1st of month rate application
+- **Weekly Alerts** — Compliance deadline reminders every Monday
+
 ---
 
 ## Architecture
@@ -282,7 +295,8 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │   │   ├── admin_routes.py                 # Admin Portal API
 │   │   ├── accounting_routes.py            # Accounting integrations
 │   │   ├── contractor_routes.py            # 1099 contractor management
-│   │   └── pto_routes.py                   # PTO and leave management
+│   │   ├── pto_routes.py                   # PTO and leave management
+│   │   └── scheduler_routes.py             # Tax update scheduler API
 │   │
 │   └── services/                           # Business Logic Layer (15 files)
 │       ├── __init__.py                     # Service exports
@@ -300,7 +314,8 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │       ├── accounting_service.py           # Accounting integrations
 │       ├── contractor_service.py           # 1099 contractor management
 │       ├── pto_service.py                  # PTO and leave tracking
-│       └── reporting_service.py            # Payroll reports and analytics
+│       ├── reporting_service.py            # Payroll reports and analytics
+│       └── scheduler_service.py            # Automated tax update scheduler
 │
 ├── frontend/
 │   │
@@ -710,6 +725,19 @@ GET  /api/admin/companies              List all companies
 GET  /api/admin/api-clients            List Tax Engine API clients
 GET  /api/admin/api-usage              API usage statistics
 GET  /api/admin/revenue                Revenue metrics
+```
+
+### Tax Update Scheduler
+```
+GET  /api/scheduler/status             Scheduler status and health
+GET  /api/scheduler/current-rates      Current effective federal rates
+GET  /api/scheduler/current-rates/state/:code  State-specific rates
+GET  /api/scheduler/pending-updates    Future rate changes
+GET  /api/scheduler/deadlines          Upcoming compliance deadlines
+GET  /api/scheduler/minimum-wage/:code State minimum wage
+GET  /api/scheduler/tax-year/:year     Tax year info and key dates
+GET  /api/scheduler/calendar/:year     Full tax calendar with deadlines
+POST /api/scheduler/check-updates      Manually trigger update check
 ```
 
 ---

@@ -28,6 +28,7 @@
    - [Saurellius Tax Engine API](#saurellius-tax-engine-api)
    - [DocuGinuity Compliance](#docuginuity-compliance)
    - [Admin Portal](#admin-portal)
+   - [Tax Update Scheduler](#tax-update-scheduler)
 5. [Technical Architecture](#technical-architecture)
 6. [API Reference](#api-reference)
 7. [Frontend Screens](#frontend-screens)
@@ -54,6 +55,7 @@
 - **Saurellius Tax Engine API** - Open API for enterprise partners with 7,400+ tax jurisdictions
 - **DocuGinuity Compliance** - Automated document tracking for I-9, W-4, W-2, 941, 1099
 - **Admin Portal** - Platform analytics, API usage tracking, Stripe integration
+- **Real-Time Tax Updates** - Automated scheduler applies rates on effective dates, always current
 
 ---
 
@@ -674,6 +676,67 @@ GET  /api/admin/revenue                Revenue metrics
 
 ---
 
+### Tax Update Scheduler
+
+Automated background scheduler that ensures the platform always uses current, accurate tax rates.
+
+#### Automatic Update Schedule
+
+| Schedule | Action |
+|----------|--------|
+| **Daily at midnight** | Check for rate changes effective today |
+| **1st of every month** | Apply monthly rate updates |
+| **Every Monday 9 AM** | Check compliance deadlines (14 days ahead) |
+| **Hourly** | Health check on scheduler |
+
+#### Pre-loaded Tax Data
+
+| Year | Data Included |
+|------|---------------|
+| **2025** | Federal brackets (7), SS wage base ($176,100), standard deductions, FICA rates |
+| **2026** | Federal brackets (7), SS wage base ($181,200), standard deductions, FICA rates |
+
+#### State Updates with Effective Dates
+
+- **California SDI** - Rate and wage base updates for 2025/2026
+- **New York PFL** - Rate and wage base updates for 2025/2026
+- **Washington PFML** - 2025 rates
+- **Colorado PFML** - 2025 rates
+- **Massachusetts PFML** - 2025 rates
+- **Oregon PFML** - 2025 rates
+- **Connecticut PFML** - 2025 rates
+
+#### Minimum Wage Tracking
+
+| State | Effective Date | Rate |
+|-------|---------------|------|
+| California | Jan 1, 2025 | $16.50 |
+| California | Jan 1, 2026 | $17.00 |
+| Washington | Jan 1, 2025 | $16.66 |
+| New York | Jan 1, 2025 | $16.50 |
+| New York | Jan 1, 2026 | $17.00 |
+| Colorado | Jan 1, 2025 | $14.81 |
+| Massachusetts | Jan 1, 2025 | $15.00 |
+| Arizona | Jan 1, 2025 | $14.70 |
+| Florida | Sep 30, 2025 | $14.00 |
+| Florida | Sep 30, 2026 | $15.00 |
+
+#### API Endpoints
+
+```
+GET  /api/scheduler/status             Scheduler status and health
+GET  /api/scheduler/current-rates      Current effective federal rates
+GET  /api/scheduler/current-rates/state/:code  State-specific rates
+GET  /api/scheduler/pending-updates    Future rate changes
+GET  /api/scheduler/deadlines          Upcoming compliance deadlines
+GET  /api/scheduler/minimum-wage/:code State minimum wage
+GET  /api/scheduler/tax-year/:year     Tax year info and key dates
+GET  /api/scheduler/calendar/:year     Full tax calendar with deadlines
+POST /api/scheduler/check-updates      Manually trigger update check
+```
+
+---
+
 ## Technical Architecture
 
 ### System Architecture
@@ -1112,6 +1175,13 @@ For enterprise partners using the Saurellius Tax Engine Open API:
 | - | - | Admin Portal with analytics |
 | - | - | API usage tracking with Stripe |
 | - | - | Docker deployment ready |
+| 1.2.0 | Dec 2025 | Real-Time Tax Updates |
+| - | - | Automated tax update scheduler |
+| - | - | 2025/2026 federal rates pre-loaded |
+| - | - | State SDI/PFML effective date tracking |
+| - | - | Minimum wage updates by state |
+| - | - | Compliance deadline alerts |
+| - | - | Daily/monthly/weekly scheduled checks |
 
 ---
 
