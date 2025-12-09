@@ -41,7 +41,7 @@ def create_app(config_name='default'):
         }
     })
     
-    # Register blueprints
+    # Register blueprints - Core
     from routes.auth_routes import auth_bp
     from routes.stripe_routes import stripe_bp
     from routes.dashboard_routes import dashboard_bp
@@ -56,6 +56,17 @@ def create_app(config_name='default'):
     from routes.workforce_routes import workforce_bp
     from routes.benefits_routes import benefits_bp
     
+    # Register blueprints - Enterprise Features
+    from routes.accounting_routes import accounting_bp
+    from routes.contractor_routes import contractor_bp
+    from routes.payroll_run_routes import payroll_run_bp
+    from routes.pto_routes import pto_bp
+    from routes.tax_filing_routes import tax_filing_bp
+    from routes.garnishment_routes import garnishment_bp
+    from routes.onboarding_routes import onboarding_bp
+    from routes.reporting_routes import reporting_bp
+    
+    # Core blueprints
     app.register_blueprint(auth_bp)
     app.register_blueprint(stripe_bp)
     app.register_blueprint(dashboard_bp)
@@ -69,6 +80,16 @@ def create_app(config_name='default'):
     app.register_blueprint(swipe_bp)
     app.register_blueprint(workforce_bp)
     app.register_blueprint(benefits_bp)
+    
+    # Enterprise feature blueprints
+    app.register_blueprint(accounting_bp)
+    app.register_blueprint(contractor_bp)
+    app.register_blueprint(payroll_run_bp)
+    app.register_blueprint(pto_bp)
+    app.register_blueprint(tax_filing_bp)
+    app.register_blueprint(garnishment_bp)
+    app.register_blueprint(onboarding_bp)
+    app.register_blueprint(reporting_bp)
     
     # Health check endpoint
     @app.route('/health')
