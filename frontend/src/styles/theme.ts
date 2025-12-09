@@ -116,6 +116,64 @@ export const shadows = {
     shadowRadius: 8,
     elevation: 5,
   },
+  glow: {
+    shadowColor: '#1473FF',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+};
+
+// Typography (for structured access)
+export const typography = {
+  fontSize: {
+    xs: 10,
+    sm: 12,
+    md: 14,
+    lg: 16,
+    xl: 18,
+    '2xl': 20,
+    '3xl': 24,
+    '4xl': 32,
+    display: 48,
+  },
+  fontWeight: {
+    normal: '400' as const,
+    medium: '500' as const,
+    semibold: '600' as const,
+    bold: '700' as const,
+  },
+};
+
+// Extended colors with nested structure (for component compatibility)
+export const extendedColors = {
+  primary: {
+    blue: '#1473FF',
+    purple: '#BE01FF',
+    default: '#1473FF',
+  },
+  text: {
+    primary: '#ffffff',
+    secondary: '#a0a0a0',
+    muted: '#666666',
+  },
+  surface: {
+    primary: '#1a1a2e',
+    secondary: '#0f0f23',
+    tertiary: '#16213e',
+    elevated: '#252545',
+  },
+  border: {
+    default: '#2a2a4e',
+    light: '#3a3a5e',
+  },
+  status: {
+    success: '#10b981',
+    warning: '#f59e0b',
+    error: '#ef4444',
+    info: '#3b82f6',
+  },
 };
 
 // Paystub Theme Colors (25 themes)

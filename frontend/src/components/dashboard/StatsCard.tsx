@@ -10,23 +10,40 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors, spacing, borderRadius, fontSize } from '../../styles/theme';
 
 interface StatsCardProps {
-  title: string;
+  title?: string;
+  label?: string; // Alias for title
   value: string | number;
   icon: keyof typeof Ionicons.glyphMap;
-  trend?: {
+  trend?: string | {
     value: number;
     isPositive: boolean;
   };
+  trendUp?: boolean; // Simplified trend direction
   gradientColors?: [string, string];
 }
 
 export default function StatsCard({
   title,
+  label,
   value,
   icon,
   trend,
+  trendUp = true,
   gradientColors = ['#1473FF', '#BE01FF'],
 }: StatsCardProps) {
+  // Support both title and label props
+  const displayTitle = title || label || '';
+  
+  // Support both string and object trend formats
+  const getTrendInfo = () => {
+    if (!trend) return null;
+    if (typeof trend === 'string') {
+      return { text: trend, isPositive: trendUp };
+    }
+    return { text: `${trend.value}%`, isPositive: trend.isPositive };
+  };
+  
+  const trendInfo = getTrendInfo();
   return (
     <LinearGradient
       colors={gradientColors}
@@ -39,22 +56,22 @@ export default function StatsCard({
       </View>
       
       <Text style={styles.value}>{value}</Text>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.title}>{displayTitle}</Text>
       
-      {trend && (
+      {trendInfo && (
         <View style={styles.trendContainer}>
           <Ionicons
-            name={trend.isPositive ? 'trending-up' : 'trending-down'}
+            name={trendInfo.isPositive ? 'trending-up' : 'trending-down'}
             size={14}
-            color={trend.isPositive ? '#10b981' : '#ef4444'}
+            color={trendInfo.isPositive ? '#10b981' : '#ef4444'}
           />
           <Text
             style={[
               styles.trendText,
-              { color: trend.isPositive ? '#10b981' : '#ef4444' },
+              { color: trendInfo.isPositive ? '#10b981' : '#ef4444' },
             ]}
           >
-            {trend.value}%
+            {trendInfo.text}
           </Text>
         </View>
       )}

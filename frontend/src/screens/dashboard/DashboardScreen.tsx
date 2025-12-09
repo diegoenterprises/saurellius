@@ -21,7 +21,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { fetchDashboard } from '../../store/slices/dashboardSlice';
 import { AppDispatch, RootState } from '../../store';
 import { RootStackParamList } from '../../navigation/AppNavigator';
-import { colors, gradients, shadows, spacing, borderRadius, typography } from '../../styles/theme';
+import { extendedColors as colors, gradients, shadows, spacing, borderRadius, typography } from '../../styles/theme';
 
 // Components
 import Header from '../../components/dashboard/Header';
@@ -153,22 +153,22 @@ export default function DashboardScreen() {
                 initials="SM"
                 name="Sarah Mitchell"
                 role="Senior Developer • CA"
-                onGeneratePaystub={() => navigation.navigate('GeneratePaystub', { employeeId: '1' })}
-                onEdit={() => navigation.navigate('EmployeeDetail', { employeeId: '1' })}
+                onGeneratePaystub={() => navigation.navigate('GeneratePaystub', { employeeId: 1 })}
+                onEdit={() => navigation.navigate('EmployeeDetail', { employeeId: 1 })}
               />
               <EmployeeCard
                 initials="MJ"
                 name="Michael Johnson"
                 role="Product Manager • NY"
-                onGeneratePaystub={() => navigation.navigate('GeneratePaystub', { employeeId: '2' })}
-                onEdit={() => navigation.navigate('EmployeeDetail', { employeeId: '2' })}
+                onGeneratePaystub={() => navigation.navigate('GeneratePaystub', { employeeId: 2 })}
+                onEdit={() => navigation.navigate('EmployeeDetail', { employeeId: 2 })}
               />
               <EmployeeCard
                 initials="EC"
                 name="Emily Chen"
                 role="UX Designer • TX"
-                onGeneratePaystub={() => navigation.navigate('GeneratePaystub', { employeeId: '3' })}
-                onEdit={() => navigation.navigate('EmployeeDetail', { employeeId: '3' })}
+                onGeneratePaystub={() => navigation.navigate('GeneratePaystub', { employeeId: 3 })}
+                onEdit={() => navigation.navigate('EmployeeDetail', { employeeId: 3 })}
               />
             </View>
 
