@@ -48,11 +48,70 @@ const MOCK_METRICS = {
 };
 
 const MOCK_API_CLIENTS = [
-  { id: '1', name: 'ADP Integration', tier: 'Enterprise', requests_today: 45230, monthly_limit: 100000, status: 'active', revenue: 10000 },
-  { id: '2', name: 'Gusto Partner', tier: 'Professional', requests_today: 12450, monthly_limit: 20000, status: 'active', revenue: 5000 },
-  { id: '3', name: 'QuickBooks Connect', tier: 'Ultimate', requests_today: 89120, monthly_limit: -1, status: 'active', revenue: 15000 },
-  { id: '4', name: 'Paylocity API', tier: 'Standard', requests_today: 4890, monthly_limit: 5000, status: 'over_limit', revenue: 2000 },
+  { 
+    id: '1', 
+    name: 'ADP Integration', 
+    tier: 'Enterprise', 
+    requests_today: 45230, 
+    daily_limit: 100000, 
+    status: 'active', 
+    annual_revenue: 10000,
+    overage_requests: 0,
+    overage_cost: 0,
+    overage_rate: 0.10,
+    stripe_subscription_id: 'sub_1A2B3C4D5E',
+    stripe_customer_id: 'cus_ADPIntegration',
+  },
+  { 
+    id: '2', 
+    name: 'Gusto Partner', 
+    tier: 'Professional', 
+    requests_today: 12450, 
+    daily_limit: 20000, 
+    status: 'active', 
+    annual_revenue: 5000,
+    overage_requests: 0,
+    overage_cost: 0,
+    overage_rate: 0.25,
+    stripe_subscription_id: 'sub_2B3C4D5E6F',
+    stripe_customer_id: 'cus_GustoPartner',
+  },
+  { 
+    id: '3', 
+    name: 'QuickBooks Connect', 
+    tier: 'Ultimate', 
+    requests_today: 89120, 
+    daily_limit: -1, 
+    status: 'active', 
+    annual_revenue: 15000,
+    overage_requests: 0,
+    overage_cost: 0,
+    overage_rate: 0,
+    stripe_subscription_id: 'sub_3C4D5E6F7G',
+    stripe_customer_id: 'cus_QuickBooks',
+  },
+  { 
+    id: '4', 
+    name: 'Paylocity API', 
+    tier: 'Standard', 
+    requests_today: 6890, 
+    daily_limit: 5000, 
+    status: 'over_limit', 
+    annual_revenue: 2000,
+    overage_requests: 1890,
+    overage_cost: 945.00,
+    overage_rate: 0.50,
+    stripe_subscription_id: 'sub_4D5E6F7G8H',
+    stripe_customer_id: 'cus_Paylocity',
+  },
 ];
+
+const TIER_PRICING = {
+  Standard: { annual: 2000, daily_limit: 5000, overage_rate: 0.50 },
+  Professional: { annual: 5000, daily_limit: 20000, overage_rate: 0.25 },
+  Enterprise: { annual: 10000, daily_limit: 100000, overage_rate: 0.10 },
+  Ultimate: { annual: 15000, daily_limit: -1, overage_rate: 0 },
+};
 
 const MOCK_USERS = [
   { id: '1', name: 'John Smith', email: 'john@company.com', tier: 'Professional', status: 'active', joined: '2024-01-15', paystubs: 234 },
@@ -338,26 +397,36 @@ export default function AdminPortalScreen({ navigation }: any) {
                   }]}>{client.tier}</Text>
                 </View>
               </View>
-              <Text style={styles.apiClientRevenue}>{formatCurrency(client.revenue)}/yr</Text>
+              <Text style={styles.apiClientRevenue}>{formatCurrency(client.annual_revenue)}/yr</Text>
             </View>
 
             <View style={styles.apiUsageContainer}>
               <View style={styles.apiUsageHeader}>
                 <Text style={styles.apiUsageLabel}>Today's Usage</Text>
                 <Text style={styles.apiUsageValue}>
-                  {formatNumber(client.requests_today)} / {client.monthly_limit === -1 ? 'Unlimited' : formatNumber(client.monthly_limit)}
+                  {formatNumber(client.requests_today)} / {client.daily_limit === -1 ? 'Unlimited' : formatNumber(client.daily_limit)}
                 </Text>
               </View>
               <View style={styles.usageBar}>
                 <View style={[
                   styles.usageFill, 
                   { 
-                    width: client.monthly_limit === -1 ? '30%' : `${Math.min((client.requests_today / client.monthly_limit) * 100, 100)}%`,
+                    width: client.daily_limit === -1 ? '30%' : `${Math.min((client.requests_today / client.daily_limit) * 100, 100)}%`,
                     backgroundColor: client.status === 'over_limit' ? '#EF4444' : '#1473FF'
                   }
                 ]} />
               </View>
             </View>
+
+            {/* Overage Info */}
+            {client.overage_requests > 0 && (
+              <View style={styles.overageInfo}>
+                <Ionicons name="warning" size={16} color="#F59E0B" />
+                <Text style={styles.overageText}>
+                  {formatNumber(client.overage_requests)} overage requests • {formatCurrency(client.overage_cost)} billed
+                </Text>
+              </View>
+            )}
 
             <View style={styles.apiClientFooter}>
               <View style={[styles.statusBadge, { 
@@ -372,8 +441,12 @@ export default function AdminPortalScreen({ navigation }: any) {
                   {client.status === 'active' ? 'Active' : 'Over Limit'}
                 </Text>
               </View>
+              <View style={styles.stripeInfo}>
+                <Ionicons name="card" size={12} color="#6B7280" />
+                <Text style={styles.stripeIdText}>Stripe: {client.stripe_subscription_id.slice(0, 12)}...</Text>
+              </View>
               <TouchableOpacity style={styles.viewDetailsBtn}>
-                <Text style={styles.viewDetailsText}>View Details</Text>
+                <Text style={styles.viewDetailsText}>Manage</Text>
                 <Ionicons name="arrow-forward" size={14} color="#1473FF" />
               </TouchableOpacity>
             </View>
@@ -1014,5 +1087,28 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     marginTop: 12,
+  },
+  overageInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FEF3C7',
+    padding: 8,
+    borderRadius: 6,
+    marginBottom: 12,
+    gap: 8,
+  },
+  overageText: {
+    fontSize: 12,
+    color: '#92400E',
+    fontWeight: '500',
+  },
+  stripeInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  stripeIdText: {
+    fontSize: 11,
+    color: '#6B7280',
   },
 });
