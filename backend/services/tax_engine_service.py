@@ -387,6 +387,134 @@ class SaurelliusTaxEngine:
     FUTA_RATE = 0.006  # 0.6% after credit
     FUTA_WAGE_BASE = 7000
     
+    # ==========================================================================
+    # STATE DISABILITY INSURANCE (SDI/VDI) 2025
+    # ==========================================================================
+    
+    SDI_RATES_2025 = {
+        'CA': {'employee_rate': 0.009, 'employer_rate': 0, 'wage_base': 153164, 'name': 'CA SDI'},
+        'HI': {'employee_rate': 0.005, 'employer_rate': 0, 'wage_base': 69724, 'name': 'HI TDI'},
+        'NJ': {'employee_rate': 0.006, 'employer_rate': 0, 'wage_base': 161400, 'name': 'NJ TDI'},
+        'NY': {'employee_rate': 0.005, 'employer_rate': 0, 'wage_base': 60000, 'name': 'NY DBL'},
+        'RI': {'employee_rate': 0.012, 'employer_rate': 0, 'wage_base': 87000, 'name': 'RI TDI'},
+        'PR': {'employee_rate': 0.003, 'employer_rate': 0.003, 'wage_base': 9000, 'name': 'PR SINOT'},
+    }
+    
+    # ==========================================================================
+    # PAID FAMILY & MEDICAL LEAVE (PFML) 2025
+    # ==========================================================================
+    
+    PFML_RATES_2025 = {
+        'CA': {'employee_rate': 0, 'employer_rate': 0, 'wage_base': 153164, 'name': 'CA PFL'},  # Included in SDI
+        'CO': {'employee_rate': 0.0045, 'employer_rate': 0.0045, 'wage_base': 176100, 'name': 'CO FAMLI'},
+        'CT': {'employee_rate': 0.005, 'employer_rate': 0, 'wage_base': 176100, 'name': 'CT PFMLA'},
+        'DE': {'employee_rate': 0.004, 'employer_rate': 0.004, 'wage_base': 176100, 'name': 'DE PFML'},
+        'MA': {'employee_rate': 0.00318, 'employer_rate': 0.00318, 'wage_base': 176100, 'name': 'MA PFML'},
+        'MD': {'employee_rate': 0.0025, 'employer_rate': 0.0025, 'wage_base': 176100, 'name': 'MD FAMLI'},
+        'MN': {'employee_rate': 0.004, 'employer_rate': 0.004, 'wage_base': 176100, 'name': 'MN PFML'},
+        'NJ': {'employee_rate': 0.0028, 'employer_rate': 0, 'wage_base': 161400, 'name': 'NJ FLI'},
+        'NY': {'employee_rate': 0.00455, 'employer_rate': 0, 'wage_base': 89343, 'name': 'NY PFL'},
+        'OR': {'employee_rate': 0.006, 'employer_rate': 0.004, 'wage_base': 176100, 'name': 'OR PFMLI'},
+        'RI': {'employee_rate': 0, 'employer_rate': 0, 'wage_base': 87000, 'name': 'RI TCI'},  # Included in TDI
+        'WA': {'employee_rate': 0.0058, 'employer_rate': 0.0, 'wage_base': 176100, 'name': 'WA PFML'},
+    }
+    
+    # ==========================================================================
+    # LOCAL TAXES - MAJOR CITIES 2025
+    # ==========================================================================
+    
+    LOCAL_TAXES_2025 = {
+        # New York City
+        'NYC': {
+            'state': 'NY',
+            'type': 'city',
+            'name': 'New York City',
+            'brackets': [
+                {'min': 0, 'max': 12000, 'rate': 0.03078},
+                {'min': 12000, 'max': 25000, 'rate': 0.03762},
+                {'min': 25000, 'max': 50000, 'rate': 0.03819},
+                {'min': 50000, 'max': float('inf'), 'rate': 0.03876},
+            ]
+        },
+        'YONKERS': {
+            'state': 'NY',
+            'type': 'city',
+            'name': 'Yonkers',
+            'resident_rate': 0.16535,  # % of state tax
+            'nonresident_rate': 0.005,  # Flat on earnings
+        },
+        # Pennsylvania Local Earned Income Tax
+        'PHILADELPHIA': {'state': 'PA', 'type': 'city', 'name': 'Philadelphia', 'resident_rate': 0.0375, 'nonresident_rate': 0.034125},
+        'PITTSBURGH': {'state': 'PA', 'type': 'city', 'name': 'Pittsburgh', 'resident_rate': 0.03, 'nonresident_rate': 0.01},
+        # Ohio Cities
+        'COLUMBUS_OH': {'state': 'OH', 'type': 'city', 'name': 'Columbus', 'rate': 0.025},
+        'CLEVELAND_OH': {'state': 'OH', 'type': 'city', 'name': 'Cleveland', 'rate': 0.025},
+        'CINCINNATI_OH': {'state': 'OH', 'type': 'city', 'name': 'Cincinnati', 'rate': 0.021},
+        'TOLEDO_OH': {'state': 'OH', 'type': 'city', 'name': 'Toledo', 'rate': 0.025},
+        'AKRON_OH': {'state': 'OH', 'type': 'city', 'name': 'Akron', 'rate': 0.025},
+        # Kentucky Cities
+        'LOUISVILLE_KY': {'state': 'KY', 'type': 'city', 'name': 'Louisville', 'rate': 0.0225},
+        'LEXINGTON_KY': {'state': 'KY', 'type': 'city', 'name': 'Lexington', 'rate': 0.025},
+        # Michigan Cities
+        'DETROIT_MI': {'state': 'MI', 'type': 'city', 'name': 'Detroit', 'resident_rate': 0.024, 'nonresident_rate': 0.012},
+        'GRAND_RAPIDS_MI': {'state': 'MI', 'type': 'city', 'name': 'Grand Rapids', 'resident_rate': 0.015, 'nonresident_rate': 0.0075},
+        # Missouri Cities
+        'ST_LOUIS_MO': {'state': 'MO', 'type': 'city', 'name': 'St. Louis', 'rate': 0.01},
+        'KANSAS_CITY_MO': {'state': 'MO', 'type': 'city', 'name': 'Kansas City', 'rate': 0.01},
+        # Indiana Counties
+        'MARION_IN': {'state': 'IN', 'type': 'county', 'name': 'Marion County', 'rate': 0.0202},
+        'LAKE_IN': {'state': 'IN', 'type': 'county', 'name': 'Lake County', 'rate': 0.015},
+        # Maryland Counties (all have local tax)
+        'BALTIMORE_CITY_MD': {'state': 'MD', 'type': 'city', 'name': 'Baltimore City', 'rate': 0.0320},
+        'MONTGOMERY_MD': {'state': 'MD', 'type': 'county', 'name': 'Montgomery County', 'rate': 0.0320},
+        'PRINCE_GEORGES_MD': {'state': 'MD', 'type': 'county', 'name': "Prince George's County", 'rate': 0.0320},
+        # Alabama Cities
+        'BIRMINGHAM_AL': {'state': 'AL', 'type': 'city', 'name': 'Birmingham', 'rate': 0.01},
+        # Colorado
+        'DENVER_CO': {'state': 'CO', 'type': 'city', 'name': 'Denver OPT', 'monthly_flat': 9.75},
+        'AURORA_CO': {'state': 'CO', 'type': 'city', 'name': 'Aurora OPT', 'monthly_flat': 2.00},
+        # Oregon Transit
+        'TRIMET_OR': {'state': 'OR', 'type': 'transit', 'name': 'TriMet Transit', 'rate': 0.008276},
+        'LANE_TRANSIT_OR': {'state': 'OR', 'type': 'transit', 'name': 'Lane Transit', 'rate': 0.0082},
+        # School Districts (Ohio, Pennsylvania)
+        'COLUMBUS_SD_OH': {'state': 'OH', 'type': 'school', 'name': 'Columbus City Schools', 'rate': 0.02},
+    }
+    
+    # ==========================================================================
+    # STATE TAX RECIPROCITY AGREEMENTS 2025
+    # ==========================================================================
+    
+    RECIPROCITY_AGREEMENTS = {
+        'AZ': ['CA', 'IN', 'OR', 'VA'],
+        'DC': ['MD', 'VA'],
+        'IL': ['IA', 'KY', 'MI', 'WI'],
+        'IN': ['KY', 'MI', 'OH', 'PA', 'WI'],
+        'IA': ['IL'],
+        'KY': ['IL', 'IN', 'MI', 'OH', 'VA', 'WV', 'WI'],
+        'MD': ['DC', 'PA', 'VA', 'WV'],
+        'MI': ['IL', 'IN', 'KY', 'MN', 'OH', 'WI'],
+        'MN': ['MI', 'ND'],
+        'MT': ['ND'],
+        'NJ': ['PA'],
+        'ND': ['MN', 'MT'],
+        'OH': ['IN', 'KY', 'MI', 'PA', 'WV'],
+        'PA': ['IN', 'MD', 'NJ', 'OH', 'VA', 'WV'],
+        'VA': ['DC', 'KY', 'MD', 'PA', 'WV'],
+        'WV': ['KY', 'MD', 'OH', 'PA', 'VA'],
+        'WI': ['IL', 'IN', 'KY', 'MI'],
+    }
+    
+    # ==========================================================================
+    # OVERAGE PRICING (per 1000 requests over limit)
+    # ==========================================================================
+    
+    OVERAGE_RATES = {
+        'standard': 0.50,      # $0.50 per request over 5,000/day
+        'professional': 0.25,  # $0.25 per request over 20,000/day
+        'enterprise': 0.10,    # $0.10 per request over 100,000/day
+        'ultimate': 0,         # Unlimited - no overages
+    }
+    
     def __init__(self):
         """Initialize the Tax Engine."""
         self.calculation_count = 0
@@ -665,6 +793,186 @@ class SaurelliusTaxEngine:
         
         return taxable * rate
     
+    def _calculate_sdi(
+        self,
+        gross_pay: float,
+        ytd_gross: float,
+        state_code: str
+    ) -> Dict[str, float]:
+        """Calculate State Disability Insurance (SDI/VDI/TDI)."""
+        sdi_data = self.SDI_RATES_2025.get(state_code)
+        
+        if not sdi_data:
+            return {'employee': 0, 'employer': 0, 'name': None}
+        
+        wage_base = sdi_data['wage_base']
+        
+        if ytd_gross >= wage_base:
+            return {'employee': 0, 'employer': 0, 'name': sdi_data['name']}
+        
+        remaining = wage_base - ytd_gross
+        taxable = min(gross_pay, remaining)
+        
+        return {
+            'employee': taxable * sdi_data['employee_rate'],
+            'employer': taxable * sdi_data['employer_rate'],
+            'name': sdi_data['name']
+        }
+    
+    def _calculate_pfml(
+        self,
+        gross_pay: float,
+        ytd_gross: float,
+        state_code: str
+    ) -> Dict[str, float]:
+        """Calculate Paid Family & Medical Leave (PFML)."""
+        pfml_data = self.PFML_RATES_2025.get(state_code)
+        
+        if not pfml_data:
+            return {'employee': 0, 'employer': 0, 'name': None}
+        
+        wage_base = pfml_data['wage_base']
+        
+        if ytd_gross >= wage_base:
+            return {'employee': 0, 'employer': 0, 'name': pfml_data['name']}
+        
+        remaining = wage_base - ytd_gross
+        taxable = min(gross_pay, remaining)
+        
+        return {
+            'employee': taxable * pfml_data['employee_rate'],
+            'employer': taxable * pfml_data['employer_rate'],
+            'name': pfml_data['name']
+        }
+    
+    def _calculate_local_tax(
+        self,
+        gross_pay: float,
+        local_code: str,
+        is_resident: bool,
+        pay_frequency: str
+    ) -> float:
+        """Calculate local tax (city, county, school district, transit)."""
+        local_data = self.LOCAL_TAXES_2025.get(local_code)
+        
+        if not local_data:
+            return 0
+        
+        pay_periods = {'weekly': 52, 'biweekly': 26, 'semimonthly': 24, 'monthly': 12}
+        periods = pay_periods.get(pay_frequency, 26)
+        
+        # Monthly flat taxes (like Denver OPT)
+        if 'monthly_flat' in local_data:
+            return local_data['monthly_flat'] / (periods / 12)
+        
+        # Bracketed taxes (like NYC)
+        if 'brackets' in local_data:
+            annual_income = gross_pay * periods
+            annual_tax = 0
+            for bracket in local_data['brackets']:
+                if annual_income > bracket['min']:
+                    bracket_income = min(annual_income, bracket['max']) - bracket['min']
+                    annual_tax += bracket_income * bracket['rate']
+            return annual_tax / periods
+        
+        # Flat rate with resident/nonresident distinction
+        if 'resident_rate' in local_data:
+            rate = local_data['resident_rate'] if is_resident else local_data.get('nonresident_rate', 0)
+            return gross_pay * rate
+        
+        # Simple flat rate
+        if 'rate' in local_data:
+            return gross_pay * local_data['rate']
+        
+        return 0
+    
+    def check_reciprocity(self, home_state: str, work_state: str) -> Dict[str, Any]:
+        """Check if reciprocity agreement exists between two states."""
+        if home_state == work_state:
+            return {
+                'has_reciprocity': True,
+                'tax_state': home_state,
+                'reason': 'Same state'
+            }
+        
+        # Check if work state has reciprocity with home state
+        work_state_agreements = self.RECIPROCITY_AGREEMENTS.get(work_state, [])
+        if home_state in work_state_agreements:
+            return {
+                'has_reciprocity': True,
+                'tax_state': home_state,
+                'reason': f'{work_state} has reciprocity with {home_state}'
+            }
+        
+        return {
+            'has_reciprocity': False,
+            'tax_state': work_state,
+            'reason': f'No reciprocity - taxed in work state {work_state}'
+        }
+    
+    def calculate_multistate_taxes(self, employee_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Calculate taxes for employee working in multiple states."""
+        calculation_id = str(uuid.uuid4())
+        
+        home_state = employee_data.get('home_state')
+        work_locations = employee_data.get('work_locations', [])
+        total_earnings = float(employee_data.get('total_earnings', 0))
+        filing_status = employee_data.get('filing_status', 'single')
+        pay_frequency = employee_data.get('pay_frequency', 'biweekly')
+        
+        state_taxes = []
+        
+        for location in work_locations:
+            work_state = location.get('state')
+            earnings_percent = float(location.get('earnings_percent', 0)) / 100
+            state_earnings = total_earnings * earnings_percent
+            
+            # Check reciprocity
+            reciprocity = self.check_reciprocity(home_state, work_state)
+            tax_state = reciprocity['tax_state']
+            
+            # Calculate state tax
+            state_tax = self._calculate_state_tax(state_earnings, tax_state, pay_frequency)
+            
+            state_taxes.append({
+                'work_state': work_state,
+                'tax_state': tax_state,
+                'earnings': round(state_earnings, 2),
+                'earnings_percent': location.get('earnings_percent'),
+                'tax_amount': round(state_tax, 2),
+                'has_reciprocity': reciprocity['has_reciprocity'],
+                'reciprocity_note': reciprocity['reason']
+            })
+        
+        total_state_tax = sum(s['tax_amount'] for s in state_taxes)
+        
+        return {
+            'calculation_id': calculation_id,
+            'timestamp': datetime.utcnow().isoformat(),
+            'home_state': home_state,
+            'total_earnings': total_earnings,
+            'state_allocations': state_taxes,
+            'total_state_tax': round(total_state_tax, 2)
+        }
+    
+    def get_local_jurisdictions(self, state_code: str) -> List[Dict]:
+        """Get all local tax jurisdictions for a state."""
+        jurisdictions = []
+        for code, data in self.LOCAL_TAXES_2025.items():
+            if data.get('state') == state_code:
+                jurisdictions.append({
+                    'code': code,
+                    'name': data.get('name'),
+                    'type': data.get('type'),
+                    'rate': data.get('rate') or data.get('resident_rate'),
+                })
+        return jurisdictions
+    
+    def calculate_overage_cost(self, tier: str, requests_over_limit: int) -> float:
+        """Calculate overage cost for API usage exceeding tier limit."""
+        rate = self.OVERAGE_RATES.get(tier, 0.50)
+        return requests_over_limit * rate
+    
     def get_tax_rates(self, state_code: str, effective_date: str = None) -> Dict:
         """Get tax rates for a jurisdiction."""
         return {
@@ -672,13 +980,19 @@ class SaurelliusTaxEngine:
                 'brackets': self.FEDERAL_TAX_BRACKETS_2025,
                 'fica': self.FICA_2025,
                 'standard_deductions': self.STANDARD_DEDUCTIONS_2025,
+                'futa': {'rate': self.FUTA_RATE, 'wage_base': self.FUTA_WAGE_BASE},
             },
             'state': {
                 'code': state_code,
                 'income_tax': self.STATE_TAX_RATES_2025.get(state_code),
                 'suta': self.SUTA_RATES_2025.get(state_code),
+                'sdi': self.SDI_RATES_2025.get(state_code),
+                'pfml': self.PFML_RATES_2025.get(state_code),
+                'reciprocity': self.RECIPROCITY_AGREEMENTS.get(state_code, []),
             },
+            'local': self.get_local_jurisdictions(state_code),
             'effective_date': effective_date or datetime.utcnow().strftime('%Y-%m-%d'),
+            'tax_year': 2025,
         }
     
     def calculate_batch(self, employees: List[Dict]) -> Dict:

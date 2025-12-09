@@ -505,6 +505,11 @@ def get_usage():
     usage_key = f"{g.client['client_id']}:{today}"
     current_usage = USAGE_TRACKING.get(usage_key, 0)
     
+    # Calculate overages
+    daily_limit = g.client['daily_limit']
+    overage_count = max(0, current_usage - daily_limit) if daily_limit != -1 else 0
+    overage_cost = tax_engine.calculate_overage_cost(g.client['tier'], overage_count)
+    
     return jsonify({
         'success': True,
         'data': {
@@ -512,8 +517,191 @@ def get_usage():
             'tier': g.client['tier'],
             'date': today,
             'requests_today': current_usage,
-            'daily_limit': g.client['daily_limit'] if g.client['daily_limit'] != -1 else 'unlimited',
-            'remaining': g.client['daily_limit'] - current_usage if g.client['daily_limit'] != -1 else 'unlimited',
+            'daily_limit': daily_limit if daily_limit != -1 else 'unlimited',
+            'remaining': max(0, daily_limit - current_usage) if daily_limit != -1 else 'unlimited',
+            'overage_requests': overage_count,
+            'overage_cost': round(overage_cost, 2),
+            'overage_rate': tax_engine.OVERAGE_RATES.get(g.client['tier'], 0),
+        },
+    })
+
+
+@tax_engine_bp.route('/api/v1/tax-engine/multistate', methods=['POST'])
+@require_api_key
+@require_feature('multistate')
+def calculate_multistate():
+    """
+    Calculate taxes for employee working in multiple states.
+    
+    Request body:
+    {
+        "home_state": "PA",
+        "total_earnings": 5000,
+        "filing_status": "single",
+        "pay_frequency": "biweekly",
+        "work_locations": [
+            {"state": "PA", "earnings_percent": 60},
+            {"state": "NJ", "earnings_percent": 25},
+            {"state": "NY", "earnings_percent": 15}
+        ]
+    }
+    """
+    try:
+        data = request.get_json()
+        
+        if not data or 'work_locations' not in data:
+            return jsonify({
+                'error': {
+                    'code': 'invalid_request',
+                    'message': 'work_locations array is required.'
+                }
+            }), 400
+        
+        result = tax_engine.calculate_multistate_taxes(data)
+        
+        return jsonify({
+            'success': True,
+            'data': result,
+            'meta': {
+                'api_version': '1.0.0',
+                'client_tier': g.client['tier'],
+            }
+        })
+        
+    except Exception as e:
+        return jsonify({
+            'error': {
+                'code': 'multistate_error',
+                'message': str(e)
+            }
+        }), 500
+
+
+@tax_engine_bp.route('/api/v1/tax-engine/reciprocity', methods=['GET'])
+@require_api_key
+@require_feature('multistate')
+def check_reciprocity():
+    """
+    Check reciprocity agreement between two states.
+    
+    Query params:
+    - home_state: Resident state (e.g., PA)
+    - work_state: Work state (e.g., NJ)
+    """
+    home_state = request.args.get('home_state', '').upper()
+    work_state = request.args.get('work_state', '').upper()
+    
+    if not home_state or not work_state:
+        return jsonify({
+            'error': {
+                'code': 'missing_params',
+                'message': 'Both home_state and work_state are required.'
+            }
+        }), 400
+    
+    result = tax_engine.check_reciprocity(home_state, work_state)
+    
+    return jsonify({
+        'success': True,
+        'data': result,
+    })
+
+
+@tax_engine_bp.route('/api/v1/tax-engine/local/<state_code>', methods=['GET'])
+@require_api_key
+@require_feature('local')
+def get_local_jurisdictions(state_code):
+    """Get all local tax jurisdictions for a state."""
+    state_code = state_code.upper()
+    
+    jurisdictions = tax_engine.get_local_jurisdictions(state_code)
+    
+    return jsonify({
+        'success': True,
+        'data': {
+            'state': state_code,
+            'jurisdictions': jurisdictions,
+            'count': len(jurisdictions),
+        },
+    })
+
+
+@tax_engine_bp.route('/api/v1/tax-engine/local/calculate', methods=['POST'])
+@require_api_key
+@require_feature('local')
+def calculate_local_tax():
+    """
+    Calculate local tax for a jurisdiction.
+    
+    Request body:
+    {
+        "gross_pay": 5000,
+        "local_code": "NYC",
+        "is_resident": true,
+        "pay_frequency": "biweekly"
+    }
+    """
+    try:
+        data = request.get_json()
+        
+        gross_pay = float(data.get('gross_pay', 0))
+        local_code = data.get('local_code', '').upper()
+        is_resident = data.get('is_resident', True)
+        pay_frequency = data.get('pay_frequency', 'biweekly')
+        
+        local_tax = tax_engine._calculate_local_tax(gross_pay, local_code, is_resident, pay_frequency)
+        local_data = tax_engine.LOCAL_TAXES_2025.get(local_code, {})
+        
+        return jsonify({
+            'success': True,
+            'data': {
+                'local_code': local_code,
+                'jurisdiction_name': local_data.get('name'),
+                'jurisdiction_type': local_data.get('type'),
+                'state': local_data.get('state'),
+                'gross_pay': gross_pay,
+                'is_resident': is_resident,
+                'tax_amount': round(local_tax, 2),
+            },
+        })
+        
+    except Exception as e:
+        return jsonify({
+            'error': {
+                'code': 'local_tax_error',
+                'message': str(e)
+            }
+        }), 500
+
+
+@tax_engine_bp.route('/api/v1/tax-engine/sdi/<state_code>', methods=['GET'])
+@require_api_key
+@require_feature('rates')
+def get_sdi_rates(state_code):
+    """Get State Disability Insurance rates for a state."""
+    state_code = state_code.upper()
+    
+    sdi = tax_engine.SDI_RATES_2025.get(state_code)
+    pfml = tax_engine.PFML_RATES_2025.get(state_code)
+    
+    if not sdi and not pfml:
+        return jsonify({
+            'success': True,
+            'data': {
+                'state': state_code,
+                'has_sdi': False,
+                'has_pfml': False,
+                'message': f'{state_code} does not have mandatory SDI/PFML programs'
+            },
+        })
+    
+    return jsonify({
+        'success': True,
+        'data': {
+            'state': state_code,
+            'sdi': sdi,
+            'pfml': pfml,
+            'tax_year': 2025,
         },
     })
 
