@@ -145,14 +145,29 @@ const SignUpScreen: React.FC = () => {
             </View>
 
             <View style={styles.socialButtons}>
-              <TouchableOpacity style={styles.socialButton}>
+              <TouchableOpacity 
+                style={styles.socialButton}
+                onPress={() => Alert.alert('Google Sign-In', 'Configure GOOGLE_CLIENT_ID in environment variables to enable Google authentication.')}
+              >
                 <Ionicons name="logo-google" size={24} color="#DB4437" />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.socialButton}>
+              <TouchableOpacity 
+                style={styles.socialButton}
+                onPress={() => Alert.alert('Apple Sign-In', 'Requires Apple Developer Program membership ($99/year) and iOS device.')}
+              >
                 <Ionicons name="logo-apple" size={24} color="#000" />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.socialButton}>
+              <TouchableOpacity 
+                style={styles.socialButton}
+                onPress={() => Alert.alert('Microsoft Sign-In', 'Configure AZURE_CLIENT_ID in environment variables to enable Microsoft authentication.')}
+              >
                 <Ionicons name="logo-microsoft" size={24} color="#00A4EF" />
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.socialButton}
+                onPress={() => Alert.alert('Facebook Sign-In', 'Configure FACEBOOK_APP_ID in environment variables to enable Facebook authentication.')}
+              >
+                <Ionicons name="logo-facebook" size={24} color="#1877F2" />
               </TouchableOpacity>
             </View>
 

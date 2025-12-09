@@ -138,6 +138,65 @@ export default function LoginScreen() {
           </TouchableOpacity>
         </View>
 
+        {/* Social Login Divider */}
+        <View style={styles.divider}>
+          <View style={styles.dividerLine} />
+          <Text style={styles.dividerText}>or continue with</Text>
+          <View style={styles.dividerLine} />
+        </View>
+
+        {/* Social Login Buttons */}
+        <View style={styles.socialButtons}>
+          <TouchableOpacity 
+            style={styles.socialButton}
+            onPress={() => {
+              Toast.show({
+                type: 'info',
+                text1: 'Google Sign-In',
+                text2: 'Configure GOOGLE_CLIENT_ID in environment',
+              });
+            }}
+          >
+            <Ionicons name="logo-google" size={24} color="#DB4437" />
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.socialButton}
+            onPress={() => {
+              Toast.show({
+                type: 'info',
+                text1: 'Apple Sign-In',
+                text2: 'Requires Apple Developer membership',
+              });
+            }}
+          >
+            <Ionicons name="logo-apple" size={24} color="#000" />
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.socialButton}
+            onPress={() => {
+              Toast.show({
+                type: 'info',
+                text1: 'Microsoft Sign-In',
+                text2: 'Configure AZURE_CLIENT_ID in environment',
+              });
+            }}
+          >
+            <Ionicons name="logo-microsoft" size={24} color="#00A4EF" />
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.socialButton}
+            onPress={() => {
+              Toast.show({
+                type: 'info',
+                text1: 'Facebook Sign-In',
+                text2: 'Configure FACEBOOK_APP_ID in environment',
+              });
+            }}
+          >
+            <Ionicons name="logo-facebook" size={24} color="#1877F2" />
+          </TouchableOpacity>
+        </View>
+
         {/* Sign Up Link */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>Don't have an account? </Text>
@@ -218,6 +277,37 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: fontSize.lg,
     fontWeight: '600',
+  },
+  divider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: spacing.lg,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: colors.border,
+  },
+  dividerText: {
+    marginHorizontal: spacing.md,
+    fontSize: fontSize.sm,
+    color: colors.textMuted,
+  },
+  socialButtons: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 20,
+    marginBottom: spacing.xl,
+  },
+  socialButton: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: colors.card,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   footer: {
     flexDirection: 'row',
