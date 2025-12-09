@@ -41,6 +41,7 @@ Saurellius Cloud Payroll Management is a full-featured enterprise platform that 
 | **DocuGinuity Compliance** | Automated document tracking, I-9, W-4, W-2, 941, 1099, filing calendars |
 | **Admin Portal** | Platform analytics, KPIs, API usage tracking, Stripe integration |
 | **Real-Time Tax Updates** | Automated scheduler applies tax rates on effective dates, always current |
+| **Wage Garnishments** | Child support, tax levies, student loans, creditor garnishments, legal priority |
 
 ---
 
@@ -175,6 +176,16 @@ Automated background scheduler ensures the platform always uses current tax rate
 - **Monthly Checks** — 1st of month rate application
 - **Weekly Alerts** — Compliance deadline reminders every Monday
 
+### Wage Garnishment Management
+Complete garnishment tracking with legal priority calculations.
+
+- **Garnishment Types** — Child support, tax levies, student loans, creditor, bankruptcy
+- **Priority Order** — Automatic deduction priority per federal/state law
+- **Payment Tracking** — Track total owed, paid, and remaining balances
+- **Disposable Income** — Calculate max garnishment based on disposable income
+- **Status Management** — Active, suspended, completed, terminated statuses
+- **Compliance** — CCPA limits, multi-garnishment handling
+
 ---
 
 ## Architecture
@@ -296,9 +307,10 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │   │   ├── accounting_routes.py            # Accounting integrations
 │   │   ├── contractor_routes.py            # 1099 contractor management
 │   │   ├── pto_routes.py                   # PTO and leave management
-│   │   └── scheduler_routes.py             # Tax update scheduler API
+│   │   ├── scheduler_routes.py             # Tax update scheduler API
+│   │   └── garnishment_routes.py           # Wage garnishment management
 │   │
-│   └── services/                           # Business Logic Layer (15 files)
+│   └── services/                           # Business Logic Layer (17 files)
 │       ├── __init__.py                     # Service exports
 │       ├── paystub_generator.py            # 25 themes, PDF, security features
 │       ├── state_payroll_rules.py          # 50 states + D.C. tax rules
@@ -315,7 +327,8 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │       ├── contractor_service.py           # 1099 contractor management
 │       ├── pto_service.py                  # PTO and leave tracking
 │       ├── reporting_service.py            # Payroll reports and analytics
-│       └── scheduler_service.py            # Automated tax update scheduler
+│       ├── scheduler_service.py            # Automated tax update scheduler
+│       └── garnishment_service.py          # Wage garnishment calculations
 │
 ├── frontend/
 │   │
@@ -402,8 +415,12 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │       │   └── common/                     # Shared Components
 │       │       └── ToastConfig.tsx         # Toast notifications
 │       │
-│       ├── services/                       # API Client Services (14 files)
+│       ├── services/                       # API Client Services (25 files)
 │       │   ├── api.ts                      # Axios base client with JWT
+│       │   ├── auth.ts                     # Authentication API
+│       │   ├── dashboard.ts                # Dashboard data API
+│       │   ├── employees.ts                # Employee management API
+│       │   ├── paystubs.ts                 # Paystub generation API
 │       │   ├── ai.ts                       # Saurellius AI API
 │       │   ├── benefits.ts                 # Benefits & Insurance API
 │       │   ├── stateRules.ts               # State compliance API
@@ -414,9 +431,17 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │       │   ├── email.ts                    # Email API
 │       │   ├── weather.ts                  # Weather API
 │       │   ├── taxEngine.ts                # Tax Engine API
+│       │   ├── taxFiling.ts                # Tax filing API
 │       │   ├── compliance.ts               # DocuGinuity compliance API
 │       │   ├── contractors.ts              # Contractor management API
-│       │   └── pto.ts                      # PTO tracking API
+│       │   ├── pto.ts                      # PTO tracking API
+│       │   ├── admin.ts                    # Admin Portal API
+│       │   ├── accounting.ts               # Accounting integrations API
+│       │   ├── onboarding.ts               # Employee onboarding API
+│       │   ├── payrollRun.ts               # Payroll run API
+│       │   ├── reports.ts                  # Reports and analytics API
+│       │   ├── scheduler.ts                # Tax update scheduler API
+│       │   └── garnishment.ts              # Wage garnishment API
 │       │
 │       ├── hooks/                          # Custom React Hooks
 │       │   ├── index.ts                    # Hook exports
@@ -738,6 +763,20 @@ GET  /api/scheduler/minimum-wage/:code State minimum wage
 GET  /api/scheduler/tax-year/:year     Tax year info and key dates
 GET  /api/scheduler/calendar/:year     Full tax calendar with deadlines
 POST /api/scheduler/check-updates      Manually trigger update check
+```
+
+### Wage Garnishments
+```
+GET  /api/garnishments                 List all garnishments
+GET  /api/garnishments/:id             Get garnishment details
+POST /api/garnishments                 Create new garnishment
+PUT  /api/garnishments/:id             Update garnishment
+DELETE /api/garnishments/:id           Delete garnishment
+POST /api/garnishments/:id/suspend     Suspend garnishment
+POST /api/garnishments/:id/resume      Resume garnishment
+POST /api/garnishments/:id/terminate   Terminate garnishment
+GET  /api/garnishments/:id/payments    Get payment history
+POST /api/garnishments/calculate       Calculate garnishments for payroll
 ```
 
 ---

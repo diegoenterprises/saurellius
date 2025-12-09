@@ -29,6 +29,7 @@
    - [DocuGinuity Compliance](#docuginuity-compliance)
    - [Admin Portal](#admin-portal)
    - [Tax Update Scheduler](#tax-update-scheduler)
+   - [Wage Garnishment Management](#wage-garnishment-management)
 5. [Technical Architecture](#technical-architecture)
 6. [API Reference](#api-reference)
 7. [Frontend Screens](#frontend-screens)
@@ -56,6 +57,7 @@
 - **DocuGinuity Compliance** - Automated document tracking for I-9, W-4, W-2, 941, 1099
 - **Admin Portal** - Platform analytics, API usage tracking, Stripe integration
 - **Real-Time Tax Updates** - Automated scheduler applies rates on effective dates, always current
+- **Wage Garnishment Management** - Child support, tax levies, student loans with legal priority
 
 ---
 
@@ -737,6 +739,47 @@ POST /api/scheduler/check-updates      Manually trigger update check
 
 ---
 
+## 5.10 Wage Garnishment Management
+
+Complete wage garnishment tracking with legal priority calculations and compliance.
+
+### Features
+
+- **Garnishment Types** — Child support, alimony, federal/state tax levies, student loans, creditor garnishments, bankruptcy
+- **Priority Order** — Automatic deduction priority per federal/state law
+- **Payment Tracking** — Track total owed, paid, and remaining balances
+- **Disposable Income** — Calculate max garnishment based on disposable income
+- **Status Management** — Active, suspended, completed, terminated statuses
+- **CCPA Compliance** — Consumer Credit Protection Act limits enforced
+- **Multi-Garnishment** — Handle multiple garnishments with proper priority
+
+### Priority Order
+
+1. Child Support
+2. Federal Tax Levies
+3. State Tax Levies
+4. Alimony/Spousal Support
+5. Student Loans
+6. Creditor Garnishments
+7. Other
+
+### API Endpoints
+
+```
+GET  /api/garnishments                 List all garnishments
+GET  /api/garnishments/:id             Get garnishment details
+POST /api/garnishments                 Create new garnishment
+PUT  /api/garnishments/:id             Update garnishment
+DELETE /api/garnishments/:id           Delete garnishment
+POST /api/garnishments/:id/suspend     Suspend garnishment
+POST /api/garnishments/:id/resume      Resume garnishment
+POST /api/garnishments/:id/terminate   Terminate garnishment
+GET  /api/garnishments/:id/payments    Get payment history
+POST /api/garnishments/calculate       Calculate garnishments for payroll
+```
+
+---
+
 ## Technical Architecture
 
 ### System Architecture
@@ -1182,6 +1225,17 @@ For enterprise partners using the Saurellius Tax Engine Open API:
 | - | - | Minimum wage updates by state |
 | - | - | Compliance deadline alerts |
 | - | - | Daily/monthly/weekly scheduled checks |
+| 1.3.0 | Dec 2025 | Frontend-Backend Parity & Garnishments |
+| - | - | Complete frontend-backend screen coverage |
+| - | - | 25 frontend API services matching backend |
+| - | - | Wage Garnishment Management module |
+| - | - | Child support, tax levies, student loans |
+| - | - | Legal priority order calculations |
+| - | - | CCPA compliance enforcement |
+| - | - | ComplianceScreen for DocuGinuity |
+| - | - | GarnishmentScreen with payment tracking |
+| - | - | Theme system updates for components |
+| - | - | All 14 enterprise features on Dashboard |
 
 ---
 
