@@ -42,6 +42,14 @@ import { ReportsScreen } from '../screens/reports';
 // Admin Portal
 import { AdminPortalScreen } from '../screens/admin';
 
+// Additional Enterprise Screens
+import { SwipeScreen } from '../screens/swipe';
+import { WorkforceScreen } from '../screens/workforce';
+import { MessagesScreen } from '../screens/messaging';
+import { ComplianceScreen } from '../screens/compliance';
+import { GarnishmentScreen } from '../screens/garnishment';
+import BenefitsScreen from '../screens/benefits/BenefitsScreen';
+
 // Types
 export type RootStackParamList = {
   Auth: undefined;
@@ -70,6 +78,13 @@ export type RootStackParamList = {
   PayrollRun: undefined;
   Onboarding: undefined;
   Reports: undefined;
+  // Additional Enterprise
+  Swipe: undefined;
+  Workforce: undefined;
+  Messages: undefined;
+  Compliance: undefined;
+  Garnishment: undefined;
+  Benefits: undefined;
   // Admin
   AdminPortal: undefined;
 };
@@ -110,6 +125,13 @@ function DashboardStack() {
       <Stack.Screen name="PayrollRun" component={PayrollRunScreen} />
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />
       <Stack.Screen name="Reports" component={ReportsScreen} />
+      {/* Additional Enterprise */}
+      <Stack.Screen name="Swipe" component={SwipeScreen} />
+      <Stack.Screen name="Workforce" component={WorkforceScreen} />
+      <Stack.Screen name="Messages" component={MessagesScreen} />
+      <Stack.Screen name="Compliance" component={ComplianceScreen} />
+      <Stack.Screen name="Garnishment" component={GarnishmentScreen} />
+      <Stack.Screen name="Benefits" component={BenefitsScreen} />
       {/* Admin */}
       <Stack.Screen name="AdminPortal" component={AdminPortalScreen} />
     </Stack.Navigator>

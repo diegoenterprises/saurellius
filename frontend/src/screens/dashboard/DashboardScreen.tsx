@@ -307,7 +307,7 @@ export default function DashboardScreen() {
 
             <TouchableOpacity 
               style={styles.enterpriseCard}
-              onPress={() => navigation.navigate('TaxFiling' as any)}
+              onPress={() => navigation.navigate('TaxCenter' as any)}
             >
               <LinearGradient
                 colors={['#3B82F6', '#1D4ED8']}
@@ -345,6 +345,76 @@ export default function DashboardScreen() {
               </LinearGradient>
               <Text style={styles.enterpriseCardTitle}>Time Off</Text>
               <Text style={styles.enterpriseCardDesc}>PTO & Leave</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.enterpriseCard}
+              onPress={() => navigation.navigate('Swipe' as any)}
+            >
+              <LinearGradient
+                colors={['#6366F1', '#4F46E5']}
+                style={styles.enterpriseIconBg}
+              >
+                <Ionicons name="swap-horizontal" size={24} color="#FFF" />
+              </LinearGradient>
+              <Text style={styles.enterpriseCardTitle}>SWIPE</Text>
+              <Text style={styles.enterpriseCardDesc}>Schedule Swap</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.enterpriseCard}
+              onPress={() => navigation.navigate('Workforce' as any)}
+            >
+              <LinearGradient
+                colors={['#0EA5E9', '#0284C7']}
+                style={styles.enterpriseIconBg}
+              >
+                <Ionicons name="people" size={24} color="#FFF" />
+              </LinearGradient>
+              <Text style={styles.enterpriseCardTitle}>Workforce</Text>
+              <Text style={styles.enterpriseCardDesc}>Real-Time View</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.enterpriseCard}
+              onPress={() => navigation.navigate('Messages' as any)}
+            >
+              <LinearGradient
+                colors={['#A855F7', '#9333EA']}
+                style={styles.enterpriseIconBg}
+              >
+                <Ionicons name="chatbubbles" size={24} color="#FFF" />
+              </LinearGradient>
+              <Text style={styles.enterpriseCardTitle}>Messages</Text>
+              <Text style={styles.enterpriseCardDesc}>Communications</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.enterpriseCard}
+              onPress={() => navigation.navigate('Garnishment' as any)}
+            >
+              <LinearGradient
+                colors={['#EF4444', '#DC2626']}
+                style={styles.enterpriseIconBg}
+              >
+                <Ionicons name="wallet" size={24} color="#FFF" />
+              </LinearGradient>
+              <Text style={styles.enterpriseCardTitle}>Garnishments</Text>
+              <Text style={styles.enterpriseCardDesc}>Wage Deductions</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.enterpriseCard}
+              onPress={() => navigation.navigate('Benefits' as any)}
+            >
+              <LinearGradient
+                colors={['#22C55E', '#16A34A']}
+                style={styles.enterpriseIconBg}
+              >
+                <Ionicons name="heart" size={24} color="#FFF" />
+              </LinearGradient>
+              <Text style={styles.enterpriseCardTitle}>Benefits</Text>
+              <Text style={styles.enterpriseCardDesc}>Health & Insurance</Text>
             </TouchableOpacity>
           </View>
         </View>
