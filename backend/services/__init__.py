@@ -26,6 +26,7 @@ from .reporting_service import SaurelliusReporting, reporting_service
 from .onboarding_service import SaurelliusOnboarding, onboarding_service
 from .tax_engine_service import SaurelliusTaxEngine, tax_engine
 from .compliance_service import DocuGinuityCompliance, compliance_service
+from .scheduler_service import TaxUpdateScheduler, tax_scheduler, get_scheduler, init_scheduler
 
 __all__ = [
     # Core
@@ -76,4 +77,9 @@ __all__ = [
     # DocuGinuity Compliance
     'DocuGinuityCompliance',
     'compliance_service',
+    # Tax Update Scheduler
+    'TaxUpdateScheduler',
+    'tax_scheduler',
+    'get_scheduler',
+    'init_scheduler',
 ]
