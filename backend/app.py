@@ -54,6 +54,7 @@ def create_app(config_name='default'):
     from routes.messaging_routes import messaging_bp
     from routes.swipe_routes import swipe_bp
     from routes.workforce_routes import workforce_bp
+    from routes.benefits_routes import benefits_bp
     
     app.register_blueprint(auth_bp)
     app.register_blueprint(stripe_bp)
@@ -67,6 +68,7 @@ def create_app(config_name='default'):
     app.register_blueprint(messaging_bp)
     app.register_blueprint(swipe_bp)
     app.register_blueprint(workforce_bp)
+    app.register_blueprint(benefits_bp)
     
     # Health check endpoint
     @app.route('/health')

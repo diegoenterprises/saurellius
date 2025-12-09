@@ -11,6 +11,7 @@ from .paystub_generator import PaystubGenerator, paystub_generator, COLOR_THEMES
 from .messaging_service import SaurelliusCommunicationsHub, communications_hub, RECOGNITION_BADGES
 from .swipe_service import SaurelliusSwipe, swipe_service
 from .workforce_service import SaurelliusWorkforce, workforce_service
+from .benefits_service import SaurelliusBenefits, benefits_service
 
 __all__ = [
     'WeatherService',
@@ -32,5 +33,7 @@ __all__ = [
     'SaurelliusSwipe',
     'swipe_service',
     'SaurelliusWorkforce',
-    'workforce_service'
+    'workforce_service',
+    'SaurelliusBenefits',
+    'benefits_service'
 ]
