@@ -15,6 +15,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 interface TimeEntry {
   id: string;
@@ -27,6 +28,7 @@ interface TimeEntry {
 }
 
 const TimesheetScreen: React.FC = () => {
+  const navigation = useNavigation();
   const [isClockedIn, setIsClockedIn] = useState(false);
   const [isOnBreak, setIsOnBreak] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -104,8 +106,18 @@ const TimesheetScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient colors={['#1473FF', '#BE01FF']} style={styles.header}>
-        <Text style={styles.headerTitle}>Timesheet</Text>
-        <Text style={styles.headerSubtitle}>{currentTime.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</Text>
+        <View style={styles.headerRow}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back" size={24} color="#fff" />
+          </TouchableOpacity>
+          <View style={styles.headerTitleContainer}>
+            <Text style={styles.headerTitle}>Timesheet</Text>
+            <Text style={styles.headerSubtitle}>{currentTime.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</Text>
+          </View>
+        </View>
       </LinearGradient>
 
       <ScrollView
@@ -221,6 +233,9 @@ const TimesheetScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f5f5f5' },
   header: { paddingHorizontal: 20, paddingVertical: 20 },
+  headerRow: { flexDirection: 'row', alignItems: 'center' },
+  backButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.2)', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
+  headerTitleContainer: { flex: 1 },
   headerTitle: { fontSize: 28, fontWeight: '700', color: '#fff' },
   headerSubtitle: { fontSize: 14, color: 'rgba(255,255,255,0.8)', marginTop: 4 },
   content: { flex: 1 },

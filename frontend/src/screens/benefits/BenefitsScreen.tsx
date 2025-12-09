@@ -17,6 +17,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import benefitsService, {
   BenefitPlan,
   Enrollment,
@@ -27,6 +28,7 @@ import benefitsService, {
 type TabType = 'overview' | 'medical' | 'dental' | 'vision' | 'life' | 'retirement' | 'dependents';
 
 const BenefitsScreen: React.FC = () => {
+  const navigation = useNavigation();
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [summary, setSummary] = useState<BenefitsSummary | null>(null);
   const [plans, setPlans] = useState<BenefitPlan[]>([]);
@@ -351,8 +353,18 @@ const BenefitsScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient colors={['#1473FF', '#BE01FF']} style={styles.header}>
-        <Text style={styles.headerTitle}>Benefits</Text>
-        <Text style={styles.headerSubtitle}>Manage your health and insurance</Text>
+        <View style={styles.headerRow}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back" size={24} color="#fff" />
+          </TouchableOpacity>
+          <View style={styles.headerTitleContainer}>
+            <Text style={styles.headerTitle}>Benefits</Text>
+            <Text style={styles.headerSubtitle}>Manage your health and insurance</Text>
+          </View>
+        </View>
       </LinearGradient>
 
       {/* Tab Bar */}
@@ -468,6 +480,22 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: 20,
     paddingVertical: 20,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  headerTitleContainer: {
+    flex: 1,
   },
   headerTitle: {
     fontSize: 28,

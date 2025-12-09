@@ -19,6 +19,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
 
 interface Shift {
@@ -54,7 +55,9 @@ interface SwapRequest {
 
 type TabType = 'pending' | 'my-requests' | 'history';
 
-const SwipeScreen: React.FC = () => {
+const SwipeScreen: React.FC<{ navigation?: any }> = ({ navigation: navProp }) => {
+  const navigationHook = useNavigation();
+  const navigation = navProp || navigationHook;
   const [activeTab, setActiveTab] = useState<TabType>('pending');
   const [pendingRequests, setPendingRequests] = useState<SwapRequest[]>([]);
   const [myIncoming, setMyIncoming] = useState<SwapRequest[]>([]);
@@ -454,9 +457,18 @@ const SwipeScreen: React.FC = () => {
         end={{ x: 1, y: 0 }}
         style={styles.header}
       >
-        <View style={styles.headerContent}>
-          <Text style={styles.headerTitle}>Swipe Approval</Text>
-          <Text style={styles.headerSubtitle}>Schedule Swap Management</Text>
+        <View style={styles.headerRow}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back" size={24} color="#fff" />
+          </TouchableOpacity>
+          <View style={styles.headerContent}>
+            <Text style={styles.headerTitle}>Swipe Approval</Text>
+            <Text style={styles.headerSubtitle}>Schedule Swap Management</Text>
+          </View>
+          <View style={{ width: 40 }} />
         </View>
       </LinearGradient>
 
@@ -561,7 +573,22 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingTop: 12,
   },
-  headerContent: {},
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  headerContent: {
+    flex: 1,
+  },
   headerTitle: {
     fontSize: 24,
     fontWeight: 'bold',

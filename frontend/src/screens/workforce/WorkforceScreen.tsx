@@ -18,6 +18,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -89,6 +90,7 @@ const POSITIONS = [
 ];
 
 const WorkforceScreen: React.FC = () => {
+  const navigation = useNavigation();
   const [schedule, setSchedule] = useState<ScheduleRow[]>([]);
   const [dates, setDates] = useState<DateInfo[]>([]);
   const [weekStart, setWeekStart] = useState<string>('');
@@ -249,7 +251,13 @@ const WorkforceScreen: React.FC = () => {
         style={styles.header}
       >
         <View style={styles.headerTop}>
-          <View>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back" size={24} color="#fff" />
+          </TouchableOpacity>
+          <View style={styles.headerTitleContainer}>
             <Text style={styles.headerTitle}>Workforce</Text>
             <Text style={styles.headerSubtitle}>Schedule Management</Text>
           </View>
@@ -400,8 +408,20 @@ const styles = StyleSheet.create({
   headerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     marginBottom: 16,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  headerTitleContainer: {
+    flex: 1,
   },
   headerTitle: {
     fontSize: 24,
