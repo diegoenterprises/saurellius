@@ -1,5 +1,5 @@
 /**
- * 💰 SAURELLIUS DIGITAL WALLET SERVICE
+ * SAURELLIUS DIGITAL WALLET SERVICE
  * Employer and Employee wallet management
  */
 
@@ -177,17 +177,17 @@ export const formatCurrency = (amount: number): string => {
 
 export const getTransactionIcon = (type: string): string => {
   const icons: Record<string, string> = {
-    deposit: '💰',
-    withdrawal: '🏦',
-    payout: '💸',
-    batch_payout: '📤',
-    wage: '💵',
-    ewa: '⚡',
-    transfer: '🔄',
-    reserve: '🔒',
-    fee: '💳',
+    deposit: 'arrow-down-circle-outline',
+    withdrawal: 'arrow-up-circle-outline',
+    payout: 'send-outline',
+    batch_payout: 'people-outline',
+    wage: 'cash-outline',
+    ewa: 'flash-outline',
+    transfer: 'swap-horizontal-outline',
+    reserve: 'lock-closed-outline',
+    fee: 'card-outline',
   };
-  return icons[type] || '📝';
+  return icons[type] || 'receipt-outline';
 };
 
 export const getTransactionColor = (amount: number): string => {

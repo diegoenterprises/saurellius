@@ -1,5 +1,5 @@
 /**
- * 🎨 CUSTOM DRAWER CONTENT
+ * CUSTOM DRAWER CONTENT
  * Beautiful side navigation with sections
  */
 

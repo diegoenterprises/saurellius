@@ -1,5 +1,5 @@
 /**
- * 💰 SAURELLIUS DIGITAL WALLET SCREEN
+ * SAURELLIUS DIGITAL WALLET SCREEN
  * Employer and Employee wallet management
  */
 
@@ -17,6 +17,7 @@ import {
   Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import walletService, {
   WalletBalance,
   Transaction,
@@ -168,17 +169,19 @@ export default function WalletScreen() {
             style={[styles.tab, walletType === 'employee' && styles.tabActive]}
             onPress={() => setWalletType('employee')}
           >
-            <Text style={[styles.tabText, walletType === 'employee' && styles.tabTextActive]}>
-              💵 Employee Wallet
-            </Text>
+            <View style={styles.tabContent}>
+              <Ionicons name="cash-outline" size={18} color={walletType === 'employee' ? '#FFF' : COLORS.text} />
+              <Text style={[styles.tabText, walletType === 'employee' && styles.tabTextActive]}>Employee Wallet</Text>
+            </View>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.tab, walletType === 'employer' && styles.tabActive]}
             onPress={() => setWalletType('employer')}
           >
-            <Text style={[styles.tabText, walletType === 'employer' && styles.tabTextActive]}>
-              🏢 Employer Wallet
-            </Text>
+            <View style={styles.tabContent}>
+              <Ionicons name="business-outline" size={18} color={walletType === 'employer' ? '#FFF' : COLORS.text} />
+              <Text style={[styles.tabText, walletType === 'employer' && styles.tabTextActive]}>Employer Wallet</Text>
+            </View>
           </TouchableOpacity>
         </View>
 
@@ -216,33 +219,33 @@ export default function WalletScreen() {
           {walletType === 'employer' ? (
             <>
               <TouchableOpacity style={styles.actionButton} onPress={() => setShowFundModal(true)}>
-                <Text style={styles.actionIcon}>💳</Text>
+                <Ionicons name="card-outline" size={24} color={COLORS.primary} />
                 <Text style={styles.actionText}>Fund Wallet</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.actionButton}>
-                <Text style={styles.actionIcon}>📤</Text>
+                <Ionicons name="send-outline" size={24} color={COLORS.primary} />
                 <Text style={styles.actionText}>Pay Employees</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.actionButton}>
-                <Text style={styles.actionIcon}>🔒</Text>
+                <Ionicons name="lock-closed-outline" size={24} color={COLORS.primary} />
                 <Text style={styles.actionText}>Set Reserve</Text>
               </TouchableOpacity>
             </>
           ) : (
             <>
               <TouchableOpacity style={styles.actionButton} onPress={() => setShowTransferModal(true)}>
-                <Text style={styles.actionIcon}>🏦</Text>
+                <Ionicons name="arrow-up-circle-outline" size={24} color={COLORS.primary} />
                 <Text style={styles.actionText}>Transfer</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.actionButton, { backgroundColor: '#DCFCE7' }]}
                 onPress={() => setShowEWAModal(true)}
               >
-                <Text style={styles.actionIcon}>⚡</Text>
+                <Ionicons name="flash-outline" size={24} color={COLORS.success} />
                 <Text style={[styles.actionText, { color: COLORS.success }]}>Get Paid Early</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.actionButton}>
-                <Text style={styles.actionIcon}>📊</Text>
+                <Ionicons name="list-outline" size={24} color={COLORS.primary} />
                 <Text style={styles.actionText}>History</Text>
               </TouchableOpacity>
             </>
@@ -253,7 +256,10 @@ export default function WalletScreen() {
         {walletType === 'employee' && (
           <View style={styles.ewaCard}>
             <View style={styles.ewaHeader}>
-              <Text style={styles.ewaTitle}>⚡ Earned Wage Access</Text>
+              <View style={{flexDirection: 'row', alignItems: 'center', gap: 6}}>
+                <Ionicons name="flash" size={18} color="#166534" />
+                <Text style={styles.ewaTitle}>Earned Wage Access</Text>
+              </View>
               <Text style={styles.ewaSubtitle}>Get paid before payday</Text>
             </View>
             <View style={styles.ewaProgress}>
@@ -285,7 +291,7 @@ export default function WalletScreen() {
             transactions.map((txn) => (
               <View key={txn.id} style={styles.transactionItem}>
                 <View style={styles.transactionLeft}>
-                  <Text style={styles.transactionIcon}>{getTransactionIcon(txn.type)}</Text>
+                  <Ionicons name={getTransactionIcon(txn.type) as any} size={24} color={getTransactionColor(txn.amount)} />
                   <View>
                     <Text style={styles.transactionDesc}>{txn.description}</Text>
                     <Text style={styles.transactionDate}>
@@ -306,7 +312,10 @@ export default function WalletScreen() {
       <Modal visible={showFundModal} animationType="slide" transparent>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>💳 Fund Wallet</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8}}>
+              <Ionicons name="card-outline" size={24} color={COLORS.primary} />
+              <Text style={styles.modalTitle}>Fund Wallet</Text>
+            </View>
             <TextInput
               style={styles.input}
               placeholder="Amount"
@@ -334,7 +343,10 @@ export default function WalletScreen() {
       <Modal visible={showTransferModal} animationType="slide" transparent>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>🏦 Transfer to Bank</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8}}>
+              <Ionicons name="arrow-up-circle-outline" size={24} color={COLORS.primary} />
+              <Text style={styles.modalTitle}>Transfer to Bank</Text>
+            </View>
             <TextInput
               style={styles.input}
               placeholder="Amount"
@@ -354,7 +366,10 @@ export default function WalletScreen() {
                 style={[styles.speedOption, transferSpeed === 'instant' && styles.speedOptionActive]}
                 onPress={() => setTransferSpeed('instant')}
               >
-                <Text style={styles.speedTitle}>Instant ⚡</Text>
+                <View style={{flexDirection: 'row', alignItems: 'center', gap: 4}}>
+                  <Text style={styles.speedTitle}>Instant</Text>
+                  <Ionicons name="flash" size={14} color={COLORS.warning} />
+                </View>
                 <Text style={styles.speedSubtitle}>Minutes • $1.50</Text>
               </TouchableOpacity>
             </View>
@@ -374,7 +389,10 @@ export default function WalletScreen() {
       <Modal visible={showEWAModal} animationType="slide" transparent>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>⚡ Get Paid Early</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8}}>
+              <Ionicons name="flash" size={24} color={COLORS.success} />
+              <Text style={styles.modalTitle}>Get Paid Early</Text>
+            </View>
             <Text style={styles.modalSubtitle}>
               Available: {formatCurrency(wallet?.ewa_available || 0)}
             </Text>
@@ -408,6 +426,7 @@ const styles = StyleSheet.create({
   tabContainer: { flexDirection: 'row', padding: 16, gap: 8 },
   tab: { flex: 1, padding: 12, borderRadius: 12, backgroundColor: COLORS.card, alignItems: 'center' },
   tabActive: { backgroundColor: COLORS.primary },
+  tabContent: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   tabText: { fontSize: 14, color: COLORS.text, fontWeight: '600' },
   tabTextActive: { color: '#FFF' },
   

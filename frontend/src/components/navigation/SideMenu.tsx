@@ -1,5 +1,5 @@
 /**
- * 🎨 SAURELLIUS SIDE MENU
+ * SAURELLIUS SIDE MENU
  * Beautiful collapsible side navigation
  */
 
