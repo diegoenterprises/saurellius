@@ -23,7 +23,7 @@ class ProductionTestSuite:
         self.test_data = None
         
     def log(self, msg, level="INFO"):
-        icons = {"PASS": "✅", "FAIL": "❌", "INFO": "ℹ️"}
+        icons = {"PASS": "", "FAIL": "", "INFO": ""}
         print(f"{icons.get(level, '•')} {msg}")
     
     def test(self, name, condition, fail_msg=""):
@@ -37,17 +37,17 @@ class ProductionTestSuite:
 
     def run_all_phases(self):
         print("\n" + "="*60)
-        print("🚀 SAURELLIUS PRODUCTION TEST SUITE")
+        print(" SAURELLIUS PRODUCTION TEST SUITE")
         print("="*60)
         
         # PHASE 1: Generate test data
-        print("\n📋 PHASE 1: TEST DATA GENERATION")
+        print("\n PHASE 1: TEST DATA GENERATION")
         gen = TestDataGenerator()
         self.test_data = gen.generate_all()
         self.test("100 total workers", len(self.test_data['employees']) + len(self.test_data['contractors']) == 100)
         
         # PHASE 2: Onboarding
-        print("\n📋 PHASE 2: ONBOARDING")
+        print("\n PHASE 2: ONBOARDING")
         emp = self.test_data['employees'][0]
         ob = onboarding_service.create_onboarding(emp['id'], {
             'employee_name': f"{emp['first_name']} {emp['last_name']}",
@@ -57,14 +57,14 @@ class ProductionTestSuite:
         self.test("Tasks generated", len(ob['tasks']) > 10)
         
         # PHASE 3: PTO
-        print("\n📋 PHASE 3: PTO & TIME TRACKING")
+        print("\n PHASE 3: PTO & TIME TRACKING")
         enrollment = pto_service.enroll_employee(emp['id'], emp['hire_date'].isoformat())
         self.test("PTO enrollment", 'balances' in enrollment)
         holidays = pto_service.get_holidays()
         self.test("Holidays defined", len(holidays) >= 10)
         
         # PHASE 4: Payroll Processing
-        print("\n📋 PHASE 4: PAYROLL PROCESSING")
+        print("\n PHASE 4: PAYROLL PROCESSING")
         run = payroll_run_service.create_payroll_run({
             'pay_period_start': (date.today() - timedelta(days=13)).isoformat(),
             'pay_period_end': date.today().isoformat(),
@@ -90,7 +90,7 @@ class ProductionTestSuite:
         self.test("Payroll completed", processed['status'] == 'completed')
         
         # PHASE 5: Tax Validation
-        print("\n📋 PHASE 5: TAX CALCULATIONS")
+        print("\n PHASE 5: TAX CALCULATIONS")
         result = tax_engine.calculate_taxes({
             'gross_pay': 5000, 'filing_status': 'single', 'pay_frequency': 'biweekly',
             'work_state': 'CA', 'allowances': 1
@@ -99,7 +99,7 @@ class ProductionTestSuite:
         self.test("FICA calculated", result['employee_taxes']['social_security'] > 0)
         
         # PHASE 6: Garnishments
-        print("\n📋 PHASE 6: GARNISHMENTS")
+        print("\n PHASE 6: GARNISHMENTS")
         garn = garnishment_service.create_garnishment("TEST001", {
             'garnishment_type': 'child_support', 'case_number': 'CS-123',
             'amount_value': 500, 'payee_name': 'State CSE'
@@ -107,7 +107,7 @@ class ProductionTestSuite:
         self.test("Garnishment created", garn['priority'] == 1)
         
         # PHASE 7: ACH/Payments
-        print("\n📋 PHASE 7: PAYMENT PROCESSING")
+        print("\n PHASE 7: PAYMENT PROCESSING")
         acct = ach_service.add_bank_account("EMP001", "employee", {
             'routing_number': '121000248', 'account_number': '1234567890',
             'account_type': 'checking', 'account_holder_name': 'Test'
@@ -115,14 +115,14 @@ class ProductionTestSuite:
         self.test("Bank account added", acct['status'] == 'pending')
         
         # PHASE 8-10: Summary checks
-        print("\n📋 PHASES 8-10: REPORTING & PERFORMANCE")
+        print("\n PHASES 8-10: REPORTING & PERFORMANCE")
         self.test("Reporting service exists", hasattr(pto_service, 'get_pto_liability_report'))
         self.test("Onboarding metrics", hasattr(onboarding_service, 'get_onboarding_metrics'))
         
         # SUMMARY
         print("\n" + "="*60)
-        print(f"📊 TEST RESULTS: {self.passed} PASSED / {self.failed} FAILED")
-        print(f"📊 PASS RATE: {self.passed/(self.passed+self.failed)*100:.1f}%")
+        print(f" TEST RESULTS: {self.passed} PASSED / {self.failed} FAILED")
+        print(f" PASS RATE: {self.passed/(self.passed+self.failed)*100:.1f}%")
         print("="*60)
         
         return self.failed == 0

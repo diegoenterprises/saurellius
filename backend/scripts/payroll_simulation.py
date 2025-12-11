@@ -1,5 +1,5 @@
 """
-🚀 SAURELLIUS PAYROLL PRODUCTION SIMULATION
+ SAURELLIUS PAYROLL PRODUCTION SIMULATION
 Complete end-to-end payroll lifecycle testing
 
 This script simulates:
@@ -49,7 +49,7 @@ class PayrollSimulation:
         
     def log(self, message: str, level: str = "INFO"):
         """Log simulation output"""
-        emoji = {"INFO": "ℹ️", "SUCCESS": "✅", "WARNING": "⚠️", "ERROR": "❌", "GAP": "🔴"}
+        emoji = {"INFO": "", "SUCCESS": "", "WARNING": "", "ERROR": "", "GAP": ""}
         print(f"{emoji.get(level, '•')} [{level}] {message}")
         
     def log_gap(self, category: str, description: str, severity: str = "medium"):
@@ -689,7 +689,7 @@ class PayrollSimulation:
         medium = [g for g in self.gaps_identified if g["severity"] == "medium"]
         
         self.log(f"\nTotal Gaps Found: {len(self.gaps_identified)}")
-        self.log(f"  🔴 Critical: {len(critical)}")
+        self.log(f"   Critical: {len(critical)}")
         self.log(f"  🟠 High: {len(high)}")
         self.log(f"  🟡 Medium: {len(medium)}")
         
@@ -727,7 +727,7 @@ class PayrollSimulation:
     
     def run(self):
         """Execute complete payroll simulation"""
-        self.log("🚀 SAURELLIUS PAYROLL PRODUCTION SIMULATION")
+        self.log(" SAURELLIUS PAYROLL PRODUCTION SIMULATION")
         self.log("=" * 60)
         self.log(f"Simulation started: {datetime.now().isoformat()}")
         self.log("=" * 60 + "\n")

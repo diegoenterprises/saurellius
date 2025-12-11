@@ -140,7 +140,7 @@ def seed_users():
             existing = User.query.filter_by(email=email).first()
             
             if existing:
-                print(f"  ⚠️  User {email} already exists - updating...")
+                print(f"    User {email} already exists - updating...")
                 existing.first_name = user_data['first_name']
                 existing.last_name = user_data['last_name']
                 existing.role = user_data.get('role', 'employer')
@@ -150,7 +150,7 @@ def seed_users():
                 existing.reward_points = user_data['reward_points']
                 existing.set_password(user_data['password'])
             else:
-                print(f"  ✅ Creating user: {email} ({user_data.get('role', 'employer')})")
+                print(f"   Creating user: {email} ({user_data.get('role', 'employer')})")
                 user = User(
                     email=email,
                     first_name=user_data['first_name'],
@@ -167,9 +167,9 @@ def seed_users():
         db.session.commit()
         
         print("\n" + "="*60)
-        print("🎉 TEST ACCOUNTS READY!")
+        print(" TEST ACCOUNTS READY!")
         print("="*60)
-        print("\n📋 Login Credentials by ROLE:\n")
+        print("\n Login Credentials by ROLE:\n")
         print("  ╔═══════════════════════════════════════════════════════╗")
         print("  ║ PLATFORM ADMIN (Full Access - You)                    ║")
         print("  ╠═══════════════════════════════════════════════════════╣")

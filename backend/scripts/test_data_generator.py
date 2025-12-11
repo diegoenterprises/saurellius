@@ -176,7 +176,7 @@ class TestDataGenerator:
             }
             self.contractors.append(con)
         
-        print(f"✅ Generated {len(self.employees)} employees + {len(self.contractors)} contractors")
+        print(f" Generated {len(self.employees)} employees + {len(self.contractors)} contractors")
         return {'employees': self.employees, 'contractors': self.contractors}
 
 

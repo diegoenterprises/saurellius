@@ -1,5 +1,5 @@
 """
-📧 Email Service - Resend API Integration
+Email Service - Resend API Integration
 Sends transactional emails via Resend for Saurellius Cloud Payroll
 """
 
@@ -51,7 +51,7 @@ class EmailService:
             print(f" Email sent! Message ID: {response.get('id')}")
             return True
         except Exception as e:
-            print(f"❌ Email sending failed: {e}")
+            print(f"Email sending failed: {e}")
             return False
 
     def send_paystub_notification(
@@ -103,7 +103,7 @@ class EmailService:
 
     def send_welcome_email(self, recipient: str, user_name: str) -> bool:
         """Send welcome email to new users."""
-        subject = "Welcome to Saurellius Cloud Payroll! 🎉"
+        subject = "Welcome to Saurellius Cloud Payroll!"
         
         body_html = f"""
         <!DOCTYPE html>
@@ -123,7 +123,7 @@ class EmailService:
         <body>
             <div class="container">
                 <div class="header">
-                    <h1>Welcome to Saurellius! 🚀</h1>
+                    <h1>Welcome to Saurellius!</h1>
                     <p>Cloud Payroll Management Made Simple</p>
                 </div>
                 <div class="content">
@@ -144,7 +144,7 @@ class EmailService:
                         <span>Track payroll with detailed analytics</span>
                     </div>
                     <div class="feature">
-                        <span class="feature-icon">🎁</span>
+                        <span class="feature-icon"></span>
                         <span>Earn rewards with every paystub generated</span>
                     </div>
                     
@@ -183,7 +183,7 @@ class EmailService:
         <body>
             <div class="container">
                 <div class="header">
-                    <h1>🔐 Password Reset</h1>
+                    <h1>Password Reset</h1>
                 </div>
                 <div class="content">
                     <p>We received a request to reset your password.</p>
@@ -192,7 +192,7 @@ class EmailService:
                     <a href="{reset_link}" class="button">Reset Password</a>
                     
                     <div class="warning">
-                        <strong>⚠️ Security Notice:</strong> This link expires in 1 hour. If you didn't request this reset, please ignore this email.
+                        <strong>Security Notice:</strong> This link expires in 1 hour. If you didn't request this reset, please ignore this email.
                     </div>
                 </div>
                 <div class="footer">
@@ -215,7 +215,7 @@ class EmailService:
         monthly_price: float
     ) -> bool:
         """Send subscription confirmation email."""
-        subject = f"Subscription Confirmed - {plan_name} Plan 🎉"
+        subject = f"Subscription Confirmed - {plan_name} Plan"
         
         body_html = f"""
         <!DOCTYPE html>
