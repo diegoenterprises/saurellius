@@ -181,6 +181,42 @@ AI-powered payroll assistance.
 | **Plan Recommendations** | Suggest optimal subscription tier |
 | **Tax Guidance** | Explain withholding calculations |
 
+### 💰 Digital Wallet
+
+Complete digital wallet system for instant payroll.
+
+#### Employer Wallet
+
+| Feature | Description |
+|---------|-------------|
+| **Fund Wallet** | Add funds via bank (free) or card (2.9% fee) |
+| **Payroll Reserve** | Set aside funds for upcoming payroll |
+| **Instant Pay** | Pay employees instantly from wallet balance |
+| **Batch Payments** | Process multiple employee payments at once |
+| **Bank Withdrawal** | Transfer to bank (instant $1.50 or free 1-3 days) |
+| **Transaction History** | Complete audit trail of all wallet activity |
+
+#### Employee Wallet
+
+| Feature | Description |
+|---------|-------------|
+| **Receive Wages** | Get paid instantly into digital wallet |
+| **Earned Wage Access** | Get up to 50% of earned wages before payday (1% fee) |
+| **Instant Transfer** | Move money to bank in minutes ($1.50) |
+| **Standard Transfer** | Free bank transfer in 1-3 business days |
+| **Balance Tracking** | View available balance and YTD wages |
+| **Transaction History** | Complete record of all transactions |
+
+#### Fees
+
+| Service | Fee |
+|---------|-----|
+| Fund wallet (bank/ACH) | Free |
+| Fund wallet (card) | 2.9% |
+| Standard bank transfer | Free |
+| Instant bank transfer | $1.50 |
+| Earned Wage Access | 1% |
+
 ---
 
 ## Saurellius Tax Engine API
