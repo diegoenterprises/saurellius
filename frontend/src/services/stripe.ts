@@ -13,80 +13,132 @@ export const STRIPE_CONFIG = {
   publishableKey: process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_xxxxx',
 };
 
-// Plan configurations matching the pricing guide
+// Plan configurations based on competitor analysis
 export interface PlanConfig {
   id: string;
   name: string;
   price: number;
-  includedPaystubs: number;
-  additionalCost: number;
+  pricePerEmployee: number;
+  targetEmployees: string;
   features: string[];
   badge?: string;
   popular?: boolean;
+  annualPrice?: number;
+  annualSavings?: number;
 }
 
 export const SUBSCRIPTION_PLANS: Record<string, PlanConfig> = {
   starter: {
     id: 'starter',
     name: 'Starter',
-    price: 50.00,
-    includedPaystubs: 5,
-    additionalCost: 5.00,
+    price: 39.00,
+    pricePerEmployee: 5.00,
+    targetEmployees: '1-25 employees',
     features: [
-      'All 50 states supported',
-      'Complete tax calculations (Federal, State, Local, FICA)',
-      'YTD tracking',
-      'Premium PDF templates',
-      'QR verification',
-      'Standard document security',
-      'Email support (48hr response)',
-      '1 year storage',
+      'Full-service payroll processing',
+      'Unlimited payroll runs',
+      'Federal, state, local tax filing',
+      'W-2 and 1099 preparation',
+      'Direct deposit (2-day)',
+      'Employee self-service portal',
+      'Basic reporting',
+      'Email support',
     ],
     badge: 'SMALL BUSINESS',
+    annualPrice: 399,
+    annualSavings: 69,
   },
   professional: {
     id: 'professional',
     name: 'Professional',
-    price: 100.00,
-    includedPaystubs: 25,
-    additionalCost: 5.00,
+    price: 79.00,
+    pricePerEmployee: 8.00,
+    targetEmployees: '10-100 employees',
     features: [
-      'Everything in Starter',
-      'PTO tracking (Vacation, Sick, Personal)',
-      'Custom branding (logo & colors)',
-      'Bulk generation (up to 25 at once)',
-      'API access (beta)',
-      'Priority email support (24hr)',
-      '3 year storage',
-      '3 users included',
-      'CSV & Excel exports',
-      'Custom deduction templates',
+      'Everything in Starter, plus:',
+      'Same-day direct deposit',
+      'Time tracking & scheduling',
+      'PTO management',
+      'Benefits administration',
+      'Digital Wallet & EWA',
+      'HR document storage',
+      'Onboarding workflows',
+      'Priority email & chat support',
+      'Custom reporting',
     ],
     badge: 'MOST POPULAR',
     popular: true,
+    annualPrice: 799,
+    annualSavings: 149,
   },
   business: {
     id: 'business',
     name: 'Business',
-    price: 150.00,
-    includedPaystubs: -1, // Unlimited
-    additionalCost: 0,
+    price: 149.00,
+    pricePerEmployee: 10.00,
+    targetEmployees: '50-500 employees',
     features: [
-      'Everything in Professional',
-      'UNLIMITED paystubs',
-      'White-label (remove Saurellius branding)',
-      'Full API access + webhooks',
-      'Dedicated account manager + phone support',
-      'Unlimited storage',
-      'Unlimited users + role management',
-      'SSO (Single Sign-On) available',
+      'Everything in Professional, plus:',
+      'Talent Management (ATS, Performance Reviews)',
+      'Learning Management System (LMS)',
+      'Goal Setting & OKRs',
+      '360-Degree Feedback',
+      'Advanced Analytics & Predictive Insights',
+      'Job Costing & Labor Allocation',
+      'FMLA Tracking',
+      '401(k) Administration',
+      'Dedicated account manager',
+      'Phone support',
+    ],
+    badge: 'MID-MARKET',
+    annualPrice: 1499,
+    annualSavings: 289,
+  },
+  enterprise: {
+    id: 'enterprise',
+    name: 'Enterprise',
+    price: 0, // Custom pricing
+    pricePerEmployee: 12.00,
+    targetEmployees: '250+ employees',
+    features: [
+      'Everything in Business, plus:',
+      'Canadian payroll support',
+      'Multi-currency (USD/CAD)',
       'Custom integrations',
-      '99.9% uptime SLA',
-      'Advanced analytics dashboard',
-      'Complete audit logs',
+      'Full API access',
+      'Advanced compliance tools',
+      'Succession planning',
+      'Compensation benchmarking',
+      'Dedicated implementation team',
+      '24/7 phone support',
+      'SLA guarantees',
     ],
     badge: 'ENTERPRISE',
   },
+};
+
+// Volume discount structure
+export const VOLUME_DISCOUNTS = [
+  { minEmployees: 1, maxEmployees: 25, discount: 0, label: 'Standard pricing' },
+  { minEmployees: 26, maxEmployees: 50, discount: 5, label: '5% discount' },
+  { minEmployees: 51, maxEmployees: 100, discount: 10, label: '10% discount' },
+  { minEmployees: 101, maxEmployees: 250, discount: 15, label: '15% discount' },
+  { minEmployees: 251, maxEmployees: 500, discount: 20, label: '20% discount' },
+  { minEmployees: 501, maxEmployees: Infinity, discount: 25, label: 'Custom negotiated' },
+];
+
+// Add-on pricing
+export const ADDON_PRICING = {
+  sameDayACH: { price: 2.00, unit: 'per payment', includedIn: ['professional', 'business', 'enterprise'] },
+  instantPay: { price: 1.99, unit: 'per transaction', note: 'Employee-paid option available' },
+  backgroundChecks: { min: 25, max: 75, unit: 'per check', note: 'Tiered by depth' },
+  workersComp: { price: 5.00, unit: 'per employee/month', note: 'Pay-as-you-go option' },
+  garnishment: { price: 3.00, unit: 'per garnishment/month' },
+  filing1099: { price: 5.00, unit: 'per contractor', note: 'Annual' },
+  additionalState: { price: 10.00, unit: 'per state/month', note: 'Beyond primary state' },
+  apiAccess: { price: 99.00, unit: 'per month', includedIn: ['enterprise'] },
+  customIntegration: { setup: 499, monthly: 49, unit: 'per integration' },
+  certifiedPayroll: { price: 25.00, unit: 'per month', note: 'For government contractors' },
 };
 
 // ============================================================================
@@ -210,37 +262,49 @@ export interface PaystubLimitCheck {
 
 export const pricingUtils = {
   /**
-   * Calculate total cost for a given number of paystubs
+   * Calculate total monthly cost for a given number of employees
    */
-  calculateCost: (plan: string, paystubCount: number): number => {
+  calculateMonthlyCost: (plan: string, employeeCount: number): number => {
     const planConfig = SUBSCRIPTION_PLANS[plan];
     if (!planConfig) return 0;
 
-    if (planConfig.includedPaystubs === -1) {
-      return planConfig.price; // Unlimited plan
+    if (planConfig.price === 0) {
+      // Enterprise - custom pricing
+      return employeeCount * planConfig.pricePerEmployee;
     }
 
-    const overage = Math.max(0, paystubCount - planConfig.includedPaystubs);
-    return planConfig.price + (overage * planConfig.additionalCost);
+    const discount = pricingUtils.getVolumeDiscount(employeeCount);
+    const employeeCost = employeeCount * planConfig.pricePerEmployee * (1 - discount / 100);
+    return planConfig.price + employeeCost;
   },
 
   /**
-   * Get savings comparison vs per-paystub pricing
+   * Get volume discount percentage based on employee count
    */
-  calculateSavings: (plan: string, paystubCount: number): number => {
-    const perPaystubCost = 5.00;
-    const withoutPlan = paystubCount * perPaystubCost;
-    const withPlan = pricingUtils.calculateCost(plan, paystubCount);
-    return Math.max(0, withoutPlan - withPlan);
+  getVolumeDiscount: (employeeCount: number): number => {
+    const tier = VOLUME_DISCOUNTS.find(
+      t => employeeCount >= t.minEmployees && employeeCount <= t.maxEmployees
+    );
+    return tier?.discount || 0;
   },
 
   /**
-   * Recommend best plan based on expected usage
+   * Calculate annual savings with prepayment
    */
-  recommendPlan: (expectedPaystubs: number): string => {
-    if (expectedPaystubs <= 5) return 'starter';
-    if (expectedPaystubs <= 30) return 'professional';
-    return 'business';
+  calculateAnnualSavings: (plan: string, employeeCount: number): number => {
+    const planConfig = SUBSCRIPTION_PLANS[plan];
+    if (!planConfig || !planConfig.annualSavings) return 0;
+    return planConfig.annualSavings;
+  },
+
+  /**
+   * Recommend best plan based on employee count
+   */
+  recommendPlan: (employeeCount: number): string => {
+    if (employeeCount <= 25) return 'starter';
+    if (employeeCount <= 100) return 'professional';
+    if (employeeCount <= 500) return 'business';
+    return 'enterprise';
   },
 
   /**
@@ -254,12 +318,21 @@ export const pricingUtils = {
   },
 
   /**
-   * Get remaining paystubs display text
+   * Get pricing display text for a plan
    */
-  getRemainingText: (remaining: number): string => {
-    if (remaining === -1) return 'Unlimited';
-    if (remaining === 0) return 'No included paystubs remaining';
-    return `${remaining} paystub${remaining === 1 ? '' : 's'} remaining`;
+  getPricingText: (plan: string): string => {
+    const planConfig = SUBSCRIPTION_PLANS[plan];
+    if (!planConfig) return '';
+    if (planConfig.price === 0) return 'Custom pricing';
+    return `$${planConfig.price}/mo + $${planConfig.pricePerEmployee}/employee`;
+  },
+
+  /**
+   * Get target employee range for a plan
+   */
+  getTargetText: (plan: string): string => {
+    const planConfig = SUBSCRIPTION_PLANS[plan];
+    return planConfig?.targetEmployees || '';
   },
 };
 

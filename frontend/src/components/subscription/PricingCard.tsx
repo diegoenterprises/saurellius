@@ -18,7 +18,7 @@ interface PricingCardProps {
 }
 
 export default function PricingCard({ plan, isCurrentPlan, onSelect, disabled }: PricingCardProps) {
-  const isUnlimited = plan.includedPaystubs === -1;
+  const isEnterprise = plan.price === 0;
 
   return (
     <View style={[styles.container, plan.popular && styles.popularContainer]}>
@@ -46,27 +46,31 @@ export default function PricingCard({ plan, isCurrentPlan, onSelect, disabled }:
       <View style={styles.header}>
         <Text style={styles.planName}>{plan.name}</Text>
         <View style={styles.priceContainer}>
-          <Text style={styles.currency}>$</Text>
-          <Text style={styles.price}>{plan.price}</Text>
-          <Text style={styles.period}>/month</Text>
+          {isEnterprise ? (
+            <Text style={styles.customPrice}>Custom Pricing</Text>
+          ) : (
+            <>
+              <Text style={styles.currency}>$</Text>
+              <Text style={styles.price}>{plan.price}</Text>
+              <Text style={styles.period}>/month</Text>
+            </>
+          )}
         </View>
       </View>
 
-      {/* Paystub Allowance */}
+      {/* Employee Pricing */}
       <View style={styles.allowanceContainer}>
         <View style={styles.allowanceBadge}>
-          <Ionicons name="document-text" size={16} color={colors.primary.purple} />
+          <Ionicons name="people" size={16} color={colors.primary.purple} />
           <Text style={styles.allowanceText}>
-            {isUnlimited ? 'Unlimited' : plan.includedPaystubs} paystubs/month
+            {plan.targetEmployees}
           </Text>
         </View>
-        {!isUnlimited && (
-          <Text style={styles.additionalText}>
-            +${plan.additionalCost.toFixed(2)} per additional
-          </Text>
-        )}
-        {isUnlimited && (
-          <Text style={styles.unlimitedText}>No extra charges ever!</Text>
+        <Text style={styles.additionalText}>
+          +${plan.pricePerEmployee.toFixed(2)} per employee/month
+        </Text>
+        {plan.annualSavings && (
+          <Text style={styles.unlimitedText}>Save ${plan.annualSavings} with annual billing</Text>
         )}
       </View>
 
@@ -190,6 +194,11 @@ const styles = StyleSheet.create({
     fontSize: 48,
     fontWeight: '700',
     color: colors.text.primary,
+  },
+  customPrice: {
+    fontSize: typography.fontSize.xl,
+    fontWeight: '700',
+    color: colors.primary.purple,
   },
   period: {
     fontSize: typography.fontSize.base,
