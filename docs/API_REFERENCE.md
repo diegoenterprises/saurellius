@@ -158,19 +158,57 @@ Authorization: Bearer <your_jwt_token>
 | `/api/wallet/ewa/request` | POST | Request EWA |
 | `/api/wallet/ewa/eligibility` | GET | Check EWA eligibility |
 
-### AI Services
+### AI Services (34 Features)
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
+| `/api/ai/assistant` | POST | Universal platform-aware assistant |
 | `/api/ai/chat` | POST | AI chat assistant |
+| `/api/ai/chat/contextual` | POST | Context-aware chat |
 | `/api/ai/paystub/validate` | POST | Validate paystub |
 | `/api/ai/dashboard/insights` | POST | Get dashboard insights |
 | `/api/ai/compliance/check` | POST | Check compliance |
-| `/api/ai/wallet/fraud-check` | POST | Check for fraud |
-| `/api/ai/wallet/insights` | POST | Get spending insights |
-| `/api/ai/scheduling/optimize` | POST | Optimize schedule |
-| `/api/ai/payroll/pre-run-analysis` | POST | Pre-run analysis |
-| `/api/ai/alerts/generate` | POST | Generate smart alerts |
+
+**Talent Management AI:**
+| `/api/ai/talent/analyze-candidate` | POST | Score candidates, interview questions |
+| `/api/ai/talent/generate-review` | POST | AI-assisted performance reviews |
+| `/api/ai/talent/learning-path` | POST | Personalized learning recommendations |
+
+**Employee Experience AI:**
+| `/api/ai/experience/financial-wellness` | POST | Financial health scoring |
+| `/api/ai/experience/survey-analysis` | POST | Engagement survey analytics |
+
+**Benefits & Retirement AI:**
+| `/api/ai/benefits/optimize-selection` | POST | Personalized plan recommendations |
+| `/api/ai/benefits/retirement-readiness` | POST | 401(k) readiness analysis |
+
+**Labor & Job Costing AI:**
+| `/api/ai/labor/project-profitability` | POST | Project health and profit analysis |
+| `/api/ai/labor/forecast` | POST | Labor demand forecasting |
+
+**Contractor & Tax AI:**
+| `/api/ai/contractor/analyze` | POST | Misclassification risk detection |
+| `/api/ai/tax/analyze` | POST | Tax optimization opportunities |
+
+**Wallet Intelligence:**
+| `/api/ai/wallet/analyze-transaction` | POST | Fraud detection |
+| `/api/ai/wallet/insights` | POST | Spending insights |
+| `/api/ai/wallet/analyze-ewa` | POST | EWA risk assessment |
+
+**Scheduling Intelligence:**
+| `/api/ai/schedule/optimize` | POST | Schedule optimization |
+| `/api/ai/schedule/predict` | POST | Demand forecasting |
+| `/api/ai/schedule/analyze-swap` | POST | Shift swap analysis |
+
+**Payroll Intelligence:**
+| `/api/ai/payroll/analyze-run` | POST | Pre-run validation |
+| `/api/ai/payroll/optimizations` | POST | Cost optimization suggestions |
+
+**Smart Notifications:**
+| `/api/ai/alerts/generate` | POST | Generate priority alerts |
+| `/api/ai/alerts/preferences` | POST | Personalize notification delivery |
+
+| `/api/ai/status` | GET | Check AI service status |
 
 ---
 

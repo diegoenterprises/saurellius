@@ -229,17 +229,54 @@ Internal messaging and recognition system.
 
 ### Saurellius AI
 
-Comprehensive AI-powered assistance powered by Google Gemini, embedded throughout the entire platform.
+Comprehensive AI-powered assistance powered by Google Gemini, embedded throughout the entire platform with **34 AI features**.
 
 #### Core AI Features
 
 | Feature | Description |
 |---------|-------------|
-| **Contextual Chat** | Full platform-aware AI assistant with access to all your data |
+| **Universal Assistant** | Full platform-aware AI with knowledge of all modules |
+| **Contextual Chat** | Context-sensitive responses based on current screen |
 | **Natural Language Queries** | Ask questions about payroll data in plain English |
 | **Compliance Checker** | Verify payroll against state-specific regulations |
 | **Tax Guidance** | Explain withholding calculations and optimization |
 | **Document Analysis** | AI-powered extraction from W-4, I-9, and other forms |
+
+#### Talent Management AI
+
+| Feature | Description |
+|---------|-------------|
+| **Candidate Analysis** | Score candidates, generate interview questions, salary recommendations |
+| **Performance Review Generation** | AI-assisted review writing with ratings and goals |
+| **Learning Path Suggestions** | Personalized training recommendations and career paths |
+
+#### Employee Experience AI
+
+| Feature | Description |
+|---------|-------------|
+| **Financial Wellness Analysis** | Employee financial health scoring with resources |
+| **Survey Response Analysis** | Engagement survey analytics with action items |
+
+#### Benefits & Retirement AI
+
+| Feature | Description |
+|---------|-------------|
+| **Benefits Optimization** | Personalized plan recommendations based on profile |
+| **Retirement Readiness** | 401(k) readiness scoring with contribution suggestions |
+
+#### Labor & Job Costing AI
+
+| Feature | Description |
+|---------|-------------|
+| **Project Profitability** | Project health, budget variance, profit projections |
+| **Labor Forecasting** | AI-powered headcount and overtime forecasting |
+
+#### Contractor & Tax AI
+
+| Feature | Description |
+|---------|-------------|
+| **Contractor Analysis** | Misclassification risk detection for 1099 compliance |
+| **Tax Situation Analysis** | Tax optimization opportunities and deadline alerts |
 
 #### Wallet Intelligence
 
