@@ -169,17 +169,54 @@ Internal messaging and recognition system.
 | **Recognition** | Kudos badges with point values |
 | **Notifications** | Real-time alerts with read receipts |
 
-###  Saurellius AI
+### Saurellius AI
 
-AI-powered payroll assistance.
+Comprehensive AI-powered assistance powered by Google Gemini, embedded throughout the entire platform.
+
+#### Core AI Features
 
 | Feature | Description |
 |---------|-------------|
-| **Natural Language Chat** | Ask payroll questions in plain English |
-| **Compliance Checker** | Verify payroll against regulations |
-| **Onboarding Helper** | Guide new users through setup |
-| **Plan Recommendations** | Suggest optimal subscription tier |
-| **Tax Guidance** | Explain withholding calculations |
+| **Contextual Chat** | Full platform-aware AI assistant with access to all your data |
+| **Natural Language Queries** | Ask questions about payroll data in plain English |
+| **Compliance Checker** | Verify payroll against state-specific regulations |
+| **Tax Guidance** | Explain withholding calculations and optimization |
+| **Document Analysis** | AI-powered extraction from W-4, I-9, and other forms |
+
+#### Wallet Intelligence
+
+| Feature | Description |
+|---------|-------------|
+| **Transaction Analysis** | Real-time fraud detection on wallet transactions |
+| **Spending Insights** | AI-generated insights on wallet usage patterns |
+| **EWA Risk Assessment** | Evaluate Earned Wage Access requests for risk |
+| **Funding Recommendations** | Smart suggestions for wallet funding amounts |
+
+#### Scheduling Intelligence
+
+| Feature | Description |
+|---------|-------------|
+| **Schedule Optimization** | AI recommendations to improve scheduling efficiency |
+| **Demand Forecasting** | Predict future staffing needs based on patterns |
+| **Shift Swap Analysis** | Evaluate swap requests for coverage and overtime impact |
+| **Overtime Alerts** | Proactive warnings for employees approaching 40 hours |
+
+#### Payroll Intelligence
+
+| Feature | Description |
+|---------|-------------|
+| **Pre-Run Analysis** | Comprehensive validation before processing payroll |
+| **Anomaly Detection** | Identify unusual patterns in paystub data |
+| **Cost Optimization** | Suggestions to reduce payroll processing costs |
+| **Paystub Validation** | AI verification of tax calculations and deductions |
+
+#### Smart Notifications
+
+| Feature | Description |
+|---------|-------------|
+| **Priority Alerts** | AI-generated alerts based on platform-wide data |
+| **Personalized Delivery** | Optimize notification timing based on user behavior |
+| **Actionable Insights** | Each alert includes recommended next steps |
 
 ###  Digital Wallet
 
