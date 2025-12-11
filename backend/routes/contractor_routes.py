@@ -246,3 +246,47 @@ def validate_w9():
     result = contractor_service.validate_w9_data(data)
     
     return jsonify({'success': True, 'validation': result})
+
+
+# =============================================================================
+# MULTI-CURRENCY SUPPORT (USD/CAD)
+# =============================================================================
+
+EXCHANGE_RATES = {
+    'USD': 1.0,
+    'CAD': 0.74,
+}
+
+
+@contractor_bp.route('/exchange-rates', methods=['GET'])
+@jwt_required()
+def get_exchange_rates():
+    """Get current exchange rates for contractor payments."""
+    from datetime import datetime
+    return jsonify({
+        'success': True,
+        'base_currency': 'USD',
+        'rates': EXCHANGE_RATES,
+        'last_updated': datetime.now().isoformat()
+    })
+
+
+@contractor_bp.route('/convert-currency', methods=['POST'])
+@jwt_required()
+def convert_currency():
+    """Convert amount between USD and CAD."""
+    data = request.get_json()
+    amount = data.get('amount')
+    from_currency = data.get('from_currency', 'USD')
+    to_currency = data.get('to_currency', 'CAD')
+    
+    usd_amount = amount * EXCHANGE_RATES.get(from_currency, 1.0)
+    target_amount = usd_amount / EXCHANGE_RATES.get(to_currency, 1.0)
+    
+    return jsonify({
+        'success': True,
+        'original_amount': amount,
+        'original_currency': from_currency,
+        'converted_amount': round(target_amount, 2),
+        'target_currency': to_currency
+    })

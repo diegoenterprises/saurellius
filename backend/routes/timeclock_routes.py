@@ -574,3 +574,88 @@ def approve_timesheet():
         'approved_count': approved_count,
         'message': f'Approved {approved_count} time entries for {employee_id}'
     })
+
+
+# =============================================================================
+# JOB COSTING & PROJECT TIME ALLOCATION
+# =============================================================================
+
+PROJECTS = {}
+JOB_CODES = {}
+
+
+@timeclock_bp.route('/projects', methods=['GET'])
+@jwt_required()
+def get_projects():
+    """Get all projects for job costing."""
+    status = request.args.get('status', 'active')
+    projects = [p for p in PROJECTS.values() if p.get('status') == status]
+    return jsonify({'success': True, 'projects': projects})
+
+
+@timeclock_bp.route('/projects', methods=['POST'])
+@jwt_required()
+def create_project():
+    """Create a new project for job costing."""
+    data = request.get_json()
+    project_id = f"PROJ-{uuid.uuid4().hex[:8].upper()}"
+    
+    project = {
+        'id': project_id,
+        'name': data.get('name'),
+        'code': data.get('code'),
+        'client': data.get('client'),
+        'budget_hours': data.get('budget_hours', 0),
+        'budget_cost': data.get('budget_cost', 0),
+        'actual_hours': 0,
+        'actual_cost': 0,
+        'status': 'active',
+        'created_at': datetime.utcnow().isoformat()
+    }
+    
+    PROJECTS[project_id] = project
+    return jsonify({'success': True, 'project': project}), 201
+
+
+@timeclock_bp.route('/job-codes', methods=['GET'])
+@jwt_required()
+def get_job_codes():
+    """Get all job codes."""
+    return jsonify({'success': True, 'codes': list(JOB_CODES.values())})
+
+
+@timeclock_bp.route('/job-codes', methods=['POST'])
+@jwt_required()
+def create_job_code():
+    """Create a new job code."""
+    data = request.get_json()
+    code_id = f"JC-{uuid.uuid4().hex[:6].upper()}"
+    
+    job_code = {
+        'id': code_id,
+        'code': data.get('code'),
+        'name': data.get('name'),
+        'billable': data.get('billable', True),
+        'rate_multiplier': data.get('rate_multiplier', 1.0)
+    }
+    
+    JOB_CODES[code_id] = job_code
+    return jsonify({'success': True, 'code': job_code}), 201
+
+
+@timeclock_bp.route('/allocate', methods=['POST'])
+@jwt_required()
+def allocate_time_to_project():
+    """Allocate time entry to a project/job code."""
+    data = request.get_json()
+    
+    allocation = {
+        'time_entry_id': data.get('time_entry_id'),
+        'project_id': data.get('project_id'),
+        'job_code_id': data.get('job_code_id'),
+        'hours': data.get('hours'),
+        'billable': data.get('billable', True),
+        'allocated_at': datetime.utcnow().isoformat()
+    }
+    
+    return jsonify({'success': True, 'allocation': allocation}), 201

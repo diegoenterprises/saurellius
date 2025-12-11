@@ -19,12 +19,7 @@ from .benefits_routes import benefits_bp
 from .wallet_routes import wallet_bp
 from .tax_updater_routes import tax_updater_bp
 from .talent_routes import talent_bp
-from .analytics_routes import analytics_bp
-from .fmla_routes import fmla_bp
-from .job_costing_routes import job_costing_bp
 from .employee_experience_routes import employee_exp_bp
-from .retirement_routes import retirement_bp
-from .contractor_1099_routes import contractor_1099_bp
 
 __all__ = [
     'auth_bp',
@@ -43,10 +38,5 @@ __all__ = [
     'wallet_bp',
     'tax_updater_bp',
     'talent_bp',
-    'analytics_bp',
-    'fmla_bp',
-    'job_costing_bp',
     'employee_exp_bp',
-    'retirement_bp',
-    'contractor_1099_bp',
 ]

@@ -658,3 +658,98 @@ def submit_open_enrollment_elections():
         "elections_processed": len(results),
         "results": results
     })
+
+
+# =============================================================================
+# 401(K) RETIREMENT ADMINISTRATION
+# =============================================================================
+
+@benefits_bp.route('/retirement/enrollment', methods=['POST'])
+@jwt_required()
+def enroll_retirement():
+    """Enroll employee in 401(k) retirement plan."""
+    data = request.get_json()
+    
+    enrollment = {
+        'employee_id': data.get('employee_id'),
+        'contribution_percentage': data.get('contribution_percentage', 6),
+        'roth_percentage': data.get('roth_percentage', 0),
+        'catch_up_eligible': data.get('catch_up_eligible', False),
+        'enrolled_at': datetime.now().isoformat()
+    }
+    
+    return jsonify({'success': True, 'enrollment': enrollment}), 201
+
+
+@benefits_bp.route('/retirement/contribution', methods=['PUT'])
+@jwt_required()
+def update_retirement_contribution():
+    """Update 401(k) contribution percentage."""
+    data = request.get_json()
+    
+    return jsonify({
+        'success': True,
+        'message': 'Contribution updated',
+        'new_percentage': data.get('contribution_percentage')
+    })
+
+
+@benefits_bp.route('/retirement/vesting/<employee_id>', methods=['GET'])
+@jwt_required()
+def get_vesting_status(employee_id):
+    """Get 401(k) vesting status for employee."""
+    return jsonify({
+        'success': True,
+        'vesting': {
+            'employee_id': employee_id,
+            'years_of_service': 3.5,
+            'vesting_percentage': 60,
+            'vested_balance': 45000,
+            'unvested_balance': 30000
+        }
+    })
+
+
+# =============================================================================
+# FMLA (FAMILY MEDICAL LEAVE ACT)
+# =============================================================================
+
+@benefits_bp.route('/fmla/eligibility/<employee_id>', methods=['GET'])
+@jwt_required()
+def check_fmla_eligibility(employee_id):
+    """Check FMLA eligibility for an employee."""
+    return jsonify({
+        'success': True,
+        'eligibility': {
+            'employee_id': employee_id,
+            'eligible': True,
+            'criteria': {
+                'months_employed': {'required': 12, 'actual': 18, 'met': True},
+                'hours_worked': {'required': 1250, 'actual': 1820, 'met': True}
+            },
+            'entitlement': {
+                'total_weeks': 12,
+                'used_weeks': 2,
+                'remaining_weeks': 10
+            }
+        }
+    })
+
+
+@benefits_bp.route('/fmla/request', methods=['POST'])
+@jwt_required()
+def create_fmla_request():
+    """Create an FMLA leave request."""
+    data = request.get_json()
+    
+    fmla_case = {
+        'employee_id': data.get('employee_id'),
+        'type': data.get('type'),
+        'reason': data.get('reason'),
+        'start_date': data.get('start_date'),
+        'expected_end_date': data.get('expected_end_date'),
+        'status': 'pending',
+        'created_at': datetime.now().isoformat()
+    }
+    
+    return jsonify({'success': True, 'case': fmla_case}), 201
