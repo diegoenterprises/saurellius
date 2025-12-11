@@ -128,6 +128,10 @@ def create_app(config_name='default'):
     app.register_blueprint(audit_bp)
     app.register_blueprint(cobra_bp)
     
+    # Tax Engine V2 - Production API
+    from routes.tax_engine_v2_routes import tax_engine_v2_bp
+    app.register_blueprint(tax_engine_v2_bp)
+    
     # Initialize Tax Update Scheduler
     from services.scheduler_service import init_scheduler
     init_scheduler(app)
