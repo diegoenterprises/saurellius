@@ -268,8 +268,8 @@
 | API Requests/Day | 5,000 | 20,000 | 100,000 | Unlimited |
 | Calculation Speed | Standard | Enhanced | Priority | Ultra-Priority |
 | Jurisdictions | Federal + 10 States | Federal + All States | All + Local (Limited) | All + Full Local |
-| Webhook Notifications | ✓ | ✓ | ✓ | ✓ |
-| Multi-State Calculations | - | ✓ | ✓ | ✓ |
+| Webhook Notifications |  |  |  |  |
+| Multi-State Calculations | - |  |  |  |
 | Geocoding Precision | State | City | Zip+4 | Rooftop |
 | Historical Data | 1 Year | 3 Years | 5 Years | 7+ Years |
 | Batch Processing | - | 100 Records | 1,000 Records | 10,000 Records |
@@ -277,9 +277,9 @@
 | Technical Support | Email Only | Email + Chat | Email + Chat + Phone | Dedicated Support |
 | Implementation Support | - | 5 Hours | 20 Hours | 50 Hours |
 | SLA | 99% Uptime | 99.5% Uptime | 99.9% Uptime | 99.99% Uptime |
-| Custom Tax Rules | - | - | ✓ | ✓ |
-| White-Labeling | - | - | - | ✓ |
-| On-Premise Option | - | - | Add-on | ✓ |
+| Custom Tax Rules | - | - |  |  |
+| White-Labeling | - | - | - |  |
+| On-Premise Option | - | - | Add-on |  |
 
 ### Detailed Tier Features
 

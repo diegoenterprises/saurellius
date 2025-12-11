@@ -37,7 +37,7 @@ Saurellius is a comprehensive **enterprise payroll management platform** designe
 
 ## Core Modules
 
-### 💰 Payroll Processing Engine
+###  Payroll Processing Engine
 
 Complete payroll calculation and processing system.
 
@@ -51,7 +51,7 @@ Complete payroll calculation and processing system.
 | **Batch Processing** | Process thousands of employees in single payroll runs |
 | **Payroll Reports** | Register, tax liability, journal entries, check register |
 
-### 📋 Tax Compliance
+###  Tax Compliance
 
 Comprehensive tax calculation and filing support.
 
@@ -66,7 +66,7 @@ Comprehensive tax calculation and filing support.
 | **W-4 Processing** | 2020+ W-4 support with all 5 steps |
 | **Year-End Filing** | W-2, W-3, 1099, 940, 941, 944 preparation |
 
-### 👥 Employee Management
+###  Employee Management
 
 Complete employee lifecycle administration.
 
@@ -93,7 +93,7 @@ Complete workforce time tracking system.
 | **GPS Location** | Geofenced clock events for field workers |
 | **Meal Break Violations** | Automatic detection and premium calculation |
 
-### 📅 Workforce Scheduling
+###  Workforce Scheduling
 
 Employee scheduling and shift management.
 
@@ -106,7 +106,7 @@ Employee scheduling and shift management.
 | **SWIPE System** | Employee shift swap requests with manager approval |
 | **Availability** | Employee availability preferences |
 
-### 🏥 Benefits Administration
+### Benefits Administration
 
 Complete benefits and insurance management.
 
@@ -120,7 +120,7 @@ Complete benefits and insurance management.
 | **Benefits Taxability** | Pre-tax vs post-tax deduction handling |
 | **COBRA Management** | 60-day elections, 102% premiums, grace periods |
 
-### 💸 Garnishment Management
+###  Garnishment Management
 
 Wage garnishment processing with legal compliance.
 
@@ -132,7 +132,7 @@ Wage garnishment processing with legal compliance.
 | **Payment Tracking** | Balance tracking and payment history |
 | **Court Orders** | Document storage and compliance tracking |
 
-### 📊 Reporting & Analytics
+###  Reporting & Analytics
 
 Comprehensive payroll and HR reporting.
 
@@ -145,7 +145,7 @@ Comprehensive payroll and HR reporting.
 | **Audit Trail** | Complete change history for compliance |
 | **Custom Reports** | Configurable report builder |
 
-### 🔐 Audit & Compliance
+###  Audit & Compliance
 
 Complete audit trail and approval workflows.
 
@@ -157,7 +157,7 @@ Complete audit trail and approval workflows.
 | **Security Events** | Login tracking, failed attempts, IP logging |
 | **Document Retention** | Configurable retention policies |
 
-### 💬 Communications Hub
+###  Communications Hub
 
 Internal messaging and recognition system.
 
@@ -169,7 +169,7 @@ Internal messaging and recognition system.
 | **Recognition** | Kudos badges with point values |
 | **Notifications** | Real-time alerts with read receipts |
 
-### 🤖 Saurellius AI
+###  Saurellius AI
 
 AI-powered payroll assistance.
 
@@ -181,7 +181,7 @@ AI-powered payroll assistance.
 | **Plan Recommendations** | Suggest optimal subscription tier |
 | **Tax Guidance** | Explain withholding calculations |
 
-### 💰 Digital Wallet
+###  Digital Wallet
 
 Complete digital wallet system for instant payroll.
 

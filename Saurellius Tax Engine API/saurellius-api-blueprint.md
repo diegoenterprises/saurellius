@@ -563,10 +563,10 @@ The Saurellius Tax Engine supports the following interfaces:
 
 | Interface | Web API | Windows 32-Bit | Windows 64-Bit | Linux 64-Bit |
 |-----------|---------|---------------|---------------|-------------|
-| JSON      | ✓       | ✓             | ✓             | ✓           |
-| XML       | ✓       | ✓             | ✓             | ✓           |
-| C/C++     |         | ✓             | ✓             | ✓           |
-| JAVA      |         | ✓             | ✓             | ✓           |
-| .NET      |         | ✓             | ✓             |             |
-| .NET Core |         |               | ✓             | ✓           |
-| Delphi    |         | ✓             |               |             |
+| JSON      |        |              |              |            |
+| XML       |        |              |              |            |
+| C/C++     |         |              |              |            |
+| JAVA      |         |              |              |            |
+| .NET      |         |              |              |             |
+| .NET Core |         |               |              |            |
+| Delphi    |         |              |               |             |

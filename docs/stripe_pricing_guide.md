@@ -1,6 +1,6 @@
 # Saurellius Stripe Pricing & Implementation Guide
 
-## 📊 Complete Tier Pricing Map
+##  Complete Tier Pricing Map
 
 ### Starter Plan - $50/month
 **Target:** Small businesses, freelancers, 1-5 employees
@@ -12,17 +12,17 @@
 | **Additional Paystubs** | $5.00 each |
 | **States Supported** | All 50 states |
 | **Tax Calculations** | Complete (Federal, State, Local, FICA) |
-| **YTD Tracking** | ✅ Yes |
-| **Premium PDF Templates** | ✅ Yes |
-| **QR Verification** | ✅ Yes |
-| **Document Security** | ✅ Standard |
-| **PTO Tracking** | ❌ No |
-| **Custom Branding** | ❌ No |
-| **Bulk Generation** | ❌ No |
-| **API Access** | ❌ No |
+| **YTD Tracking** |  Yes |
+| **Premium PDF Templates** |  Yes |
+| **QR Verification** |  Yes |
+| **Document Security** |  Standard |
+| **PTO Tracking** |  No |
+| **Custom Branding** |  No |
+| **Bulk Generation** |  No |
+| **API Access** |  No |
 | **Support** | Email (48hr response) |
 | **Storage Duration** | 1 year |
-| **Multi-user Access** | ❌ No |
+| **Multi-user Access** |  No |
 
 **Stripe Product ID:** `prod_starter_xxxxx`  
 **Stripe Price ID:** `price_starter_xxxxx`
@@ -39,26 +39,26 @@
 | **Additional Paystubs** | $5.00 each |
 | **States Supported** | All 50 states |
 | **Tax Calculations** | Advanced (includes SDI, local taxes) |
-| **YTD Tracking** | ✅ Yes |
-| **Premium PDF Templates** | ✅ Yes + 5 custom templates |
-| **QR Verification** | ✅ Yes |
-| **Document Security** | ✅ Enhanced |
-| **PTO Tracking** | ✅ Yes (Vacation, Sick, Personal) |
-| **Custom Branding** | ✅ Company logo & colors |
-| **Bulk Generation** | ✅ Yes (up to 25 at once) |
-| **API Access** | ✅ Beta access |
+| **YTD Tracking** |  Yes |
+| **Premium PDF Templates** |  Yes + 5 custom templates |
+| **QR Verification** |  Yes |
+| **Document Security** |  Enhanced |
+| **PTO Tracking** |  Yes (Vacation, Sick, Personal) |
+| **Custom Branding** |  Company logo & colors |
+| **Bulk Generation** |  Yes (up to 25 at once) |
+| **API Access** |  Beta access |
 | **Support** | Priority Email (24hr response) |
 | **Storage Duration** | 3 years |
-| **Multi-user Access** | ✅ 3 users |
+| **Multi-user Access** |  3 users |
 | **Export Options** | CSV, Excel reports |
-| **Deduction Templates** | ✅ Custom templates |
+| **Deduction Templates** |  Custom templates |
 
 **Stripe Product ID:** `prod_professional_xxxxx`  
 **Stripe Price ID:** `price_professional_xxxxx`
 
 ---
 
-### Business Plan - $150/month 🚀 UNLIMITED
+### Business Plan - $150/month  UNLIMITED
 **Target:** Enterprises, payroll providers, 25+ employees
 
 | Feature | Included |
@@ -68,31 +68,31 @@
 | **Additional Paystubs** | **FREE (no extra charges)** |
 | **States Supported** | All 50 states |
 | **Tax Calculations** | Advanced + Custom rules |
-| **YTD Tracking** | ✅ Yes |
-| **Premium PDF Templates** | ✅ Unlimited custom templates |
-| **QR Verification** | ✅ Yes |
-| **Document Security** | ✅ Enterprise-grade |
-| **PTO Tracking** | ✅ Advanced (custom policies) |
-| **Custom Branding** | ✅ White-label (remove Saurellius branding) |
-| **Bulk Generation** | ✅ Yes (unlimited) |
-| **API Access** | ✅ Full API access + webhooks |
+| **YTD Tracking** |  Yes |
+| **Premium PDF Templates** |  Unlimited custom templates |
+| **QR Verification** |  Yes |
+| **Document Security** |  Enterprise-grade |
+| **PTO Tracking** |  Advanced (custom policies) |
+| **Custom Branding** |  White-label (remove Saurellius branding) |
+| **Bulk Generation** |  Yes (unlimited) |
+| **API Access** |  Full API access + webhooks |
 | **Support** | Dedicated account manager + phone |
 | **Storage Duration** | Unlimited |
-| **Multi-user Access** | ✅ Unlimited users + roles |
+| **Multi-user Access** |  Unlimited users + roles |
 | **Export Options** | CSV, Excel, PDF, JSON |
-| **Deduction Templates** | ✅ Unlimited custom |
-| **SSO (Single Sign-On)** | ✅ Available |
-| **Custom Integrations** | ✅ Available |
+| **Deduction Templates** |  Unlimited custom |
+| **SSO (Single Sign-On)** |  Available |
+| **Custom Integrations** |  Available |
 | **SLA** | 99.9% uptime guarantee |
-| **Advanced Analytics** | ✅ Full dashboard |
-| **Audit Logs** | ✅ Complete history |
+| **Advanced Analytics** |  Full dashboard |
+| **Audit Logs** |  Complete history |
 
 **Stripe Product ID:** `prod_business_xxxxx`  
 **Stripe Price ID:** `price_business_xxxxx`
 
 ---
 
-## 💰 Pricing Examples
+##  Pricing Examples
 
 ### Starter Plan Examples
 ```
@@ -128,7 +128,7 @@ ANY number of paystubs: $150.00 (flat rate)
 
 ---
 
-## 🔧 Stripe Product Setup Instructions
+##  Stripe Product Setup Instructions
 
 ### Step 1: Create Products in Stripe Dashboard
 
@@ -200,7 +200,7 @@ ANY number of paystubs: $150.00 (flat rate)
 
 ---
 
-## 💻 Implementation Code
+##  Implementation Code
 
 ### 1. Update `config.py` - Add Stripe Price IDs
 
@@ -778,7 +778,7 @@ def get_billing_info():
 
 ---
 
-## 🔐 Environment Variables
+##  Environment Variables
 
 Add these to your `.env` file or Elastic Beanstalk environment:
 
@@ -796,7 +796,7 @@ STRIPE_PRICE_BUSINESS=price_xxxxxxxxxxxxx
 
 ---
 
-## 🚀 Deployment Steps
+##  Deployment Steps
 
 ### 1. Update Stripe Dashboard
 ```
@@ -835,7 +835,7 @@ eb deploy
 
 ---
 
-## 📊 Testing
+##  Testing
 
 ### Test Overage Billing
 ```python
@@ -866,7 +866,7 @@ Decline: 4000 0000 0000 0002
 
 ---
 
-## 📱 Frontend Integration
+##  Frontend Integration
 
 Update your signup form to pass the selected plan:
 
@@ -911,7 +911,7 @@ async function handleSignup(event) {
 
 ---
 
-## ✅ Checklist
+##  Checklist
 
 - [ ] Create 3 products in Stripe Dashboard
 - [ ] Copy all Price IDs
