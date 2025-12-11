@@ -1,5 +1,5 @@
 """
-🚀 SAURELLIUS CLOUD PAYROLL - Flask Application Factory
+SAURELLIUS CLOUD PAYROLL - Flask Application Factory
 Main entry point for the backend API
 """
 

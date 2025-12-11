@@ -204,7 +204,7 @@ def onboarding_checklist():
 
 
 # =============================================================================
-# 🧮 TAX INTELLIGENCE
+# TAX INTELLIGENCE
 # =============================================================================
 
 @ai_bp.route('/api/ai/tax/explain', methods=['POST'])

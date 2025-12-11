@@ -60,7 +60,7 @@ class WeatherService:
                     'timezone_offset': data.get('time_zone', {}).get('offset', 0)
                 }
         except Exception as e:
-            print(f"❌ Location lookup failed: {e}")
+            print(f"Location lookup failed: {e}")
             return None
     
     def get_weather(self, latitude: float, longitude: float) -> Optional[Dict]:
@@ -120,7 +120,7 @@ class WeatherService:
                     ]
                 }
         except Exception as e:
-            print(f"❌ Weather lookup failed: {e}")
+            print(f"Weather lookup failed: {e}")
             return None
     
     def get_season(self, latitude: float) -> str:
