@@ -75,6 +75,11 @@ def create_app(config_name='default'):
     from routes.compliance_routes import compliance_bp
     from routes.scheduler_routes import scheduler_bp
     
+    # Register blueprints - Gap Fill (Production Readiness)
+    from routes.ach_routes import ach_bp
+    from routes.termination_routes import termination_bp
+    from routes.payroll_corrections_routes import corrections_bp
+    
     # Core blueprints
     app.register_blueprint(auth_bp)
     app.register_blueprint(stripe_bp)
@@ -103,6 +108,11 @@ def create_app(config_name='default'):
     app.register_blueprint(tax_engine_bp)
     app.register_blueprint(compliance_bp)
     app.register_blueprint(scheduler_bp)
+    
+    # Gap Fill blueprints (Production Readiness)
+    app.register_blueprint(ach_bp)
+    app.register_blueprint(termination_bp)
+    app.register_blueprint(corrections_bp)
     
     # Initialize Tax Update Scheduler
     from services.scheduler_service import init_scheduler
