@@ -172,6 +172,7 @@ class BillingManager:
     def check_can_generate_paystub(self) -> Tuple[bool, str, Optional[float]]:
         """
         Check if user can generate a paystub.
+        With employee-based pricing, paystubs are unlimited for all tiers.
         
         Returns:
             Tuple of (can_generate, message, overage_amount)
@@ -179,42 +180,29 @@ class BillingManager:
         if not self.user:
             return False, "User not found", None
         
-        plan = self.get_plan_info(self.user.subscription_tier)
-        current_usage = self.user.paystubs_this_month or 0
-        limit = plan['paystub_limit']
-        
-        # Business tier - unlimited
-        if self.user.subscription_tier == 'business':
-            return True, "OK", None
-        
-        # Starter/Professional - allow overages
-        if current_usage >= limit:
-            overage_rate = plan['overage_rate']
-            return True, f"Overage: ${overage_rate} will be charged", overage_rate
-        
-        remaining = limit - current_usage
-        return True, f"{remaining} paystubs remaining this month", None
+        # All tiers now have unlimited paystubs - billing is employee-based
+        return True, "Unlimited paystubs included with your plan", None
     
-    def calculate_overage_charges(self) -> Dict:
-        """Calculate any overage charges for the current billing period."""
+    def get_billing_summary(self) -> Dict:
+        """Get billing summary based on employee count."""
         if not self.user:
-            return {'overage_count': 0, 'overage_amount': 0}
+            return {'monthly_cost': 0, 'employee_count': 0}
         
         plan = self.get_plan_info(self.user.subscription_tier)
-        limit = plan['paystub_limit']
-        current_usage = self.user.paystubs_this_month or 0
-        
-        if current_usage <= limit or limit == float('inf'):
-            return {'overage_count': 0, 'overage_amount': 0}
-        
-        overage_count = current_usage - int(limit)
-        overage_rate = plan['overage_rate']
-        overage_amount = overage_count * overage_rate
+        employee_count = self.user.employee_count or 0
+        monthly_cost = self.calculate_monthly_cost(self.user.subscription_tier, employee_count)
+        discount = self.get_volume_discount(employee_count)
         
         return {
-            'overage_count': overage_count,
-            'overage_rate': overage_rate,
-            'overage_amount': overage_amount
+            'plan': self.user.subscription_tier,
+            'plan_name': plan['name'],
+            'base_price': plan['monthly_price'],
+            'price_per_employee': plan['price_per_employee'],
+            'employee_count': employee_count,
+            'volume_discount': discount,
+            'monthly_cost': monthly_cost,
+            'annual_cost': monthly_cost * 12,
+            'annual_savings': plan.get('annual_savings', 0)
         }
     
     def get_usage_summary(self) -> Dict:
@@ -223,28 +211,21 @@ class BillingManager:
             return {}
         
         plan = self.get_plan_info(self.user.subscription_tier)
-        current_usage = self.user.paystubs_this_month or 0
-        limit = plan['paystub_limit']
-        
-        # Calculate percentage (cap at 100 for display)
-        if limit == float('inf'):
-            usage_percentage = 0
-        else:
-            usage_percentage = min(100, (current_usage / limit) * 100) if limit > 0 else 0
-        
-        overages = self.calculate_overage_charges()
+        employee_count = self.user.employee_count or 0
+        monthly_cost = self.calculate_monthly_cost(self.user.subscription_tier, employee_count)
+        discount = self.get_volume_discount(employee_count)
         
         return {
             'plan': self.user.subscription_tier,
             'plan_name': plan['name'],
-            'paystubs_used': current_usage,
-            'paystubs_limit': 'Unlimited' if limit == float('inf') else int(limit),
-            'paystubs_remaining': 'Unlimited' if limit == float('inf') else max(0, int(limit) - current_usage),
-            'usage_percentage': round(usage_percentage, 1),
-            'monthly_price': plan['monthly_price'],
-            'overage_count': overages['overage_count'],
-            'overage_amount': overages['overage_amount'],
-            'total_generated': self.user.total_paystubs_generated or 0,
+            'target_employees': plan['target_employees'],
+            'employee_count': employee_count,
+            'base_price': plan['monthly_price'],
+            'price_per_employee': plan['price_per_employee'],
+            'volume_discount': discount,
+            'monthly_cost': monthly_cost,
+            'paystubs_generated': self.user.total_paystubs_generated or 0,
+            'paystubs_limit': 'Unlimited',
             'billing_cycle_start': self.user.billing_cycle_start.isoformat() if self.user.billing_cycle_start else None
         }
     
@@ -260,38 +241,28 @@ class BillingManager:
             self.user.paystubs_this_month = (self.user.paystubs_this_month or 0) + 1
             self.user.total_paystubs_generated = (self.user.total_paystubs_generated or 0) + 1
     
-    def recommend_plan(self) -> Dict:
-        """Recommend a plan based on usage patterns."""
+    def recommend_plan_for_user(self) -> Dict:
+        """Recommend a plan based on employee count."""
         if not self.user:
-            return self.PLANS['starter']
+            return {'recommended': 'starter', 'reason': 'Start with our Starter plan'}
         
-        avg_monthly = self.user.total_paystubs_generated or 0
+        employee_count = self.user.employee_count or 0
+        recommended = self.recommend_plan(employee_count)
         
-        if avg_monthly <= 5:
-            return {
-                'recommended': 'starter',
-                'reason': 'Perfect for small businesses with up to 5 paystubs/month'
-            }
-        elif avg_monthly <= 25:
-            return {
-                'recommended': 'professional',
-                'reason': 'Best value for growing businesses'
-            }
-        else:
-            return {
-                'recommended': 'business',
-                'reason': 'Unlimited paystubs for high-volume needs'
-            }
-    
-    @staticmethod
-    def get_stripe_price_id(plan_name: str) -> Optional[str]:
-        """Get Stripe Price ID for a plan."""
-        price_ids = {
-            'starter': Config.STRIPE_PRICES.get('starter'),
-            'professional': Config.STRIPE_PRICES.get('professional'),
-            'business': Config.STRIPE_PRICES.get('business')
+        reasons = {
+            'starter': f'Perfect for small businesses with {employee_count} employees (1-25 range)',
+            'professional': f'Best value for growing businesses with {employee_count} employees (10-100 range)',
+            'business': f'Full-featured for mid-sized companies with {employee_count} employees (50-500 range)',
+            'enterprise': f'Enterprise solution for {employee_count}+ employees with custom pricing'
         }
-        return price_ids.get(plan_name)
+        
+        return {
+            'recommended': recommended,
+            'reason': reasons.get(recommended, 'Contact us for a custom quote'),
+            'current_plan': self.user.subscription_tier,
+            'employee_count': employee_count,
+            'estimated_cost': self.calculate_monthly_cost(recommended, employee_count)
+        }
 
 
 # Singleton instance
