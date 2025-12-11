@@ -210,12 +210,12 @@ The Saurellius Tax Engine is a production-ready, enterprise-grade payroll tax ca
 
 ### API Pricing
 
-| Tier | Annual Price | Daily Limit | Features |
-|------|--------------|-------------|----------|
-| **Starter** | $1,000 | 1,000 | Geocode, Calculate |
-| **Growth** | $3,000 | 10,000 | + Batch, Gross-up |
-| **Scale** | $8,000 | 100,000 | + Multi-state, Local |
-| **Enterprise** | Custom | Unlimited | Full access, SLA |
+| Tier | Annual Price | Daily Limit | Overage Rate | Features |
+|------|--------------|-------------|--------------|----------|
+| **Standard** | $2,000 | 5,000 | $0.50/request | Geocode, Calculate, Rates |
+| **Professional** | $5,000 | 20,000 | $0.25/request | + Batch (100), Multi-state, Gross-up |
+| **Enterprise** | $10,000 | 100,000 | $0.10/request | + Local taxes, Webhooks, Canada, Batch (1,000) |
+| **Ultimate** | $15,000 | Unlimited | N/A | Full access, Batch (10,000), White-label, SLA |
 
 ### Sample Request
 

@@ -26,12 +26,12 @@ Authorization: Bearer your_api_key_here
 
 ## Pricing Tiers
 
-| Tier | Price | Daily Limit | Features |
-|------|-------|-------------|----------|
-| **Starter** | $1,000/year | 1,000 | geocode, calculate |
-| **Growth** | $3,000/year | 10,000 | + batch, grossup |
-| **Scale** | $8,000/year | 100,000 | + multistate, local |
-| **Enterprise** | Custom | Unlimited | All features |
+| Tier | Annual Price | Daily Limit | Overage Rate | Features |
+|------|--------------|-------------|--------------|----------|
+| **Standard** | $2,000 | 5,000 | $0.50/request | Geocode, Calculate, Rates |
+| **Professional** | $5,000 | 20,000 | $0.25/request | + Batch (100), Multi-state, Gross-up |
+| **Enterprise** | $10,000 | 100,000 | $0.10/request | + Local taxes, Webhooks, Canada, Batch (1,000) |
+| **Ultimate** | $15,000 | Unlimited | N/A | Full access, Batch (10,000), White-label, SLA |
 
 ---
 

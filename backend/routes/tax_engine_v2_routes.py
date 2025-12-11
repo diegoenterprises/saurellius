@@ -336,11 +336,44 @@ CANADIAN_PROVINCIAL_BRACKETS_2025 = {
 # API CLIENT MANAGEMENT
 # =============================================================================
 
+# =============================================================================
+# API PRICING TIERS (OFFICIAL)
+# - Standard: $2,000/year - 5,000 requests/day
+# - Professional: $5,000/year - 20,000 requests/day
+# - Enterprise: $10,000/year - 100,000 requests/day
+# - Ultimate: $15,000/year - Unlimited
+# =============================================================================
+
 API_CLIENTS = {
-    'ste_v2_starter': {'tier': 'starter', 'daily_limit': 1000, 'features': ['geocode', 'calculate']},
-    'ste_v2_growth': {'tier': 'growth', 'daily_limit': 10000, 'features': ['geocode', 'calculate', 'batch', 'grossup']},
-    'ste_v2_scale': {'tier': 'scale', 'daily_limit': 100000, 'features': ['geocode', 'calculate', 'batch', 'grossup', 'multistate', 'local']},
-    'ste_v2_enterprise': {'tier': 'enterprise', 'daily_limit': -1, 'features': ['all']},
+    # Demo keys for testing
+    'ste_v2_demo_standard_key': {
+        'client_id': 'demo_standard',
+        'name': 'Demo Standard Client',
+        'tier': 'standard',
+        'daily_limit': 5000,
+        'features': ['geocode', 'calculate', 'rates'],
+    },
+    'ste_v2_demo_professional_key': {
+        'client_id': 'demo_professional',
+        'name': 'Demo Professional Client',
+        'tier': 'professional',
+        'daily_limit': 20000,
+        'features': ['geocode', 'calculate', 'rates', 'batch', 'grossup', 'multistate'],
+    },
+    'ste_v2_demo_enterprise_key': {
+        'client_id': 'demo_enterprise',
+        'name': 'Demo Enterprise Client',
+        'tier': 'enterprise',
+        'daily_limit': 100000,
+        'features': ['geocode', 'calculate', 'rates', 'batch', 'grossup', 'multistate', 'local', 'webhooks', 'canada'],
+    },
+    'ste_v2_demo_ultimate_key': {
+        'client_id': 'demo_ultimate',
+        'name': 'Demo Ultimate Client',
+        'tier': 'ultimate',
+        'daily_limit': -1,  # Unlimited
+        'features': ['all'],
+    },
 }
 
 USAGE_TRACKING = {}
