@@ -8,7 +8,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { UsageSummary, pricingUtils } from '../../services/stripe';
-import { colors, gradients, spacing, borderRadius, typography, shadows } from '../../styles/theme';
+import { extendedColors as colors, gradients, spacing, borderRadius, typography, shadows } from '../../styles/theme';
 
 interface UsageTrackerProps {
   usage: UsageSummary;

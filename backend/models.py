@@ -35,8 +35,9 @@ class User(db.Model):
     # Rewards
     reward_points = db.Column(db.Integer, default=0)
     
-    # Admin access
-    is_admin = db.Column(db.Boolean, default=False)
+    # Role & Admin access
+    role = db.Column(db.String(50), default='employer')  # employer, manager, employee
+    is_admin = db.Column(db.Boolean, default=False)  # Platform admin (you)
     
     # Timestamps
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -68,6 +69,7 @@ class User(db.Model):
             'first_name': self.first_name,
             'last_name': self.last_name,
             'full_name': self.full_name,
+            'role': self.role or 'employer',
             'subscription_tier': self.subscription_tier,
             'subscription_status': self.subscription_status,
             'paystubs_this_month': self.paystubs_this_month,

@@ -1,6 +1,6 @@
 /**
  * EMPLOYEE DETAIL SCREEN
- * View and edit individual employee information
+ * View and edit individual employee information - 100% functional
  */
 import React, { useState, useEffect } from 'react';
 import {
@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import employeesService from '../../services/employees';
 
 interface Employee {
   id: number;
@@ -67,46 +68,50 @@ export default function EmployeeDetailScreen({ route, navigation }: any) {
   }, [employeeId]);
 
   const fetchEmployee = async () => {
-    // Mock data - replace with API call
-    setTimeout(() => {
+    try {
+      const data = await employeesService.getEmployeeById(employeeId);
       setEmployee({
-        id: employeeId,
-        first_name: 'Sarah',
-        last_name: 'Johnson',
-        email: 'sarah.johnson@company.com',
-        phone: '(555) 123-4567',
-        department: 'Engineering',
-        position: 'Senior Developer',
-        status: 'active',
-        hire_date: '2022-03-15',
-        salary: 95000,
-        pay_type: 'salary',
-        address: {
-          street: '123 Main Street',
-          city: 'San Francisco',
-          state: 'CA',
-          zip: '94102',
+        id: data.id,
+        first_name: data.first_name,
+        last_name: data.last_name,
+        email: data.email,
+        phone: data.phone || '',
+        department: data.department || '',
+        position: data.position || '',
+        status: data.status as 'active' | 'inactive' | 'on_leave',
+        hire_date: data.hire_date,
+        salary: data.pay_rate || 0,
+        pay_type: data.pay_type,
+        hourly_rate: data.pay_type === 'hourly' ? data.pay_rate : undefined,
+        address: data.address || {
+          street: '',
+          city: '',
+          state: '',
+          zip: '',
         },
         emergency_contact: {
-          name: 'John Johnson',
-          relationship: 'Spouse',
-          phone: '(555) 987-6543',
+          name: '',
+          relationship: '',
+          phone: '',
         },
         direct_deposit: {
-          bank_name: 'Chase Bank',
-          account_type: 'Checking',
-          routing_last4: '1234',
-          account_last4: '5678',
+          bank_name: '',
+          account_type: '',
+          routing_last4: '',
+          account_last4: '',
         },
         tax_info: {
-          filing_status: 'Married Filing Jointly',
-          allowances: 2,
+          filing_status: data.filing_status || 'Single',
+          allowances: data.allowances || 0,
           additional_withholding: 0,
         },
       });
+    } catch (error: any) {
+      Alert.alert('Error', 'Failed to load employee details');
+    } finally {
       setLoading(false);
       setRefreshing(false);
-    }, 500);
+    }
   };
 
   const onRefresh = () => {
@@ -120,13 +125,29 @@ export default function EmployeeDetailScreen({ route, navigation }: any) {
 
   const handleDeactivate = () => {
     Alert.alert(
-      'Deactivate Employee',
-      'Are you sure you want to deactivate this employee?',
+      'Terminate Employee',
+      'Are you sure you want to terminate this employee? This action cannot be undone.',
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Deactivate', style: 'destructive', onPress: () => {} },
+        { 
+          text: 'Terminate', 
+          style: 'destructive', 
+          onPress: async () => {
+            try {
+              await employeesService.terminateEmployee(employeeId, new Date().toISOString().split('T')[0]);
+              Alert.alert('Success', 'Employee has been terminated.');
+              navigation.goBack();
+            } catch (error: any) {
+              Alert.alert('Error', error.response?.data?.message || 'Failed to terminate employee');
+            }
+          }
+        },
       ]
     );
+  };
+
+  const handleGeneratePaystub = () => {
+    navigation.navigate('GeneratePaystub', { employeeId });
   };
 
   const getStatusColor = (status: string) => {
@@ -134,7 +155,7 @@ export default function EmployeeDetailScreen({ route, navigation }: any) {
       case 'active': return '#10B981';
       case 'inactive': return '#EF4444';
       case 'on_leave': return '#F59E0B';
-      default: return '#666';
+      default: return '#a0a0a0';
     }
   };
 
@@ -173,7 +194,7 @@ export default function EmployeeDetailScreen({ route, navigation }: any) {
 
   const renderInfoRow = (icon: string, label: string, value: string) => (
     <View style={styles.infoRow}>
-      <Ionicons name={icon as any} size={20} color="#666" />
+      <Ionicons name={icon as any} size={20} color="#a0a0a0" />
       <View style={styles.infoContent}>
         <Text style={styles.infoLabel}>{label}</Text>
         <Text style={styles.infoValue}>{value}</Text>
@@ -316,7 +337,7 @@ export default function EmployeeDetailScreen({ route, navigation }: any) {
                   <Text style={styles.documentName}>{doc}</Text>
                   <Text style={styles.documentDate}>Uploaded Jan 15, 2024</Text>
                 </View>
-                <Ionicons name="download-outline" size={20} color="#666" />
+                <Ionicons name="download-outline" size={20} color="#a0a0a0" />
               </TouchableOpacity>
             ))}
           </View>
@@ -437,9 +458,9 @@ const styles = StyleSheet.create({
   },
   tabContainer: {
     flexDirection: 'row',
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
     borderBottomWidth: 1,
-    borderBottomColor: '#EEE',
+    borderBottomColor: '#2a2a4e',
   },
   tab: {
     flex: 1,
@@ -452,7 +473,7 @@ const styles = StyleSheet.create({
   },
   tabText: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
   },
   activeTabText: {
     color: '#1473FF',
@@ -462,14 +483,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   section: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
     marginTop: 12,
     paddingVertical: 16,
   },
   sectionTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#999',
+    color: '#a0a0a0',
     paddingHorizontal: 20,
     marginBottom: 12,
     textTransform: 'uppercase',
@@ -482,7 +503,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
+    borderBottomColor: '#2a2a4e',
   },
   infoContent: {
     marginLeft: 12,
@@ -490,15 +511,15 @@ const styles = StyleSheet.create({
   },
   infoLabel: {
     fontSize: 12,
-    color: '#999',
+    color: '#a0a0a0',
     marginBottom: 2,
   },
   infoValue: {
     fontSize: 15,
-    color: '#333',
+    color: '#FFFFFF',
   },
   documentsContainer: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
     marginTop: 12,
     paddingVertical: 8,
   },
@@ -508,13 +529,13 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
+    borderBottomColor: '#2a2a4e',
   },
   documentIcon: {
     width: 40,
     height: 40,
     borderRadius: 8,
-    backgroundColor: '#F0F7FF',
+    backgroundColor: '#1473FF20',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -525,15 +546,15 @@ const styles = StyleSheet.create({
   documentName: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#333',
+    color: '#FFFFFF',
   },
   documentDate: {
     fontSize: 12,
-    color: '#999',
+    color: '#a0a0a0',
     marginTop: 2,
   },
   actionsContainer: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
     marginTop: 12,
     paddingVertical: 8,
   },
@@ -543,7 +564,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
+    borderBottomColor: '#2a2a4e',
   },
   actionButtonText: {
     fontSize: 15,

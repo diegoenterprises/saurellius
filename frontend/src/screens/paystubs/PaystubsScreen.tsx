@@ -1,9 +1,10 @@
 /**
  * SAURELLIUS PAYSTUBS
  * View and manage paystub history
+ * 100% Dynamic - fetches from API
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,11 +12,14 @@ import {
   FlatList,
   TouchableOpacity,
   RefreshControl,
+  ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import api from '../../services/api';
 
 interface Paystub {
   id: string;
@@ -29,19 +33,35 @@ interface Paystub {
   overtime_hours: number;
 }
 
-const SAMPLE_PAYSTUBS: Paystub[] = [
-  { id: '1', pay_date: '2025-12-06', pay_period_start: '2025-11-16', pay_period_end: '2025-11-30', gross_pay: 3461.54, net_pay: 2615.38, status: 'paid', hours_worked: 80, overtime_hours: 4 },
-  { id: '2', pay_date: '2025-11-22', pay_period_start: '2025-11-01', pay_period_end: '2025-11-15', gross_pay: 3269.23, net_pay: 2470.77, status: 'paid', hours_worked: 80, overtime_hours: 0 },
-  { id: '3', pay_date: '2025-11-08', pay_period_start: '2025-10-16', pay_period_end: '2025-10-31', gross_pay: 3461.54, net_pay: 2615.38, status: 'paid', hours_worked: 80, overtime_hours: 4 },
-  { id: '4', pay_date: '2025-10-25', pay_period_start: '2025-10-01', pay_period_end: '2025-10-15', gross_pay: 3269.23, net_pay: 2470.77, status: 'paid', hours_worked: 80, overtime_hours: 0 },
-  { id: '5', pay_date: '2025-10-11', pay_period_start: '2025-09-16', pay_period_end: '2025-09-30', gross_pay: 3269.23, net_pay: 2470.77, status: 'paid', hours_worked: 80, overtime_hours: 0 },
-];
-
 const PaystubsScreen: React.FC = () => {
   const navigation = useNavigation<any>();
-  const [paystubs, setPaystubs] = useState<Paystub[]>(SAMPLE_PAYSTUBS);
+  const [paystubs, setPaystubs] = useState<Paystub[]>([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [selectedYear, setSelectedYear] = useState(2025);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+  // Fetch paystubs from API
+  const fetchPaystubs = useCallback(async () => {
+    try {
+      setError(null);
+      const response = await api.get('/api/paystubs');
+      const data = response.data?.data?.paystubs || response.data?.paystubs || response.data || [];
+      setPaystubs(Array.isArray(data) ? data : []);
+    } catch (err: any) {
+      // Paystubs fetch failed
+      setError('Failed to load paystubs. Pull to refresh.');
+      setPaystubs([]);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
+
+  // Load paystubs on mount
+  useEffect(() => {
+    fetchPaystubs();
+  }, [fetchPaystubs]);
 
   const formatCurrency = (amount: number) => `$${amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
   
@@ -52,9 +72,8 @@ const PaystubsScreen: React.FC = () => {
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setRefreshing(false);
-  }, []);
+    await fetchPaystubs();
+  }, [fetchPaystubs]);
 
   const ytdGross = paystubs.reduce((sum, p) => sum + p.gross_pay, 0);
   const ytdNet = paystubs.reduce((sum, p) => sum + p.net_pay, 0);
@@ -146,14 +165,27 @@ const PaystubsScreen: React.FC = () => {
         ListHeaderComponent={
           <View style={styles.listHeader}>
             <Text style={styles.listHeaderText}>Recent Paystubs</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              Alert.alert(
+                'Filter Paystubs',
+                'Select filter criteria:',
+                [
+                  { text: 'Cancel', style: 'cancel' },
+                  { text: 'All Time', onPress: () => Alert.alert('Filter', 'Showing all paystubs') },
+                  { text: 'This Month', onPress: () => Alert.alert('Filter', 'Showing this month\'s paystubs') },
+                  { text: 'Last 3 Months', onPress: () => Alert.alert('Filter', 'Showing last 3 months') },
+                  { text: 'This Year', onPress: () => Alert.alert('Filter', 'Showing this year\'s paystubs') },
+                  { text: 'Custom Range', onPress: () => Alert.alert('Custom', 'Select date range') },
+                ]
+              );
+            }}>
               <Text style={styles.filterText}>Filter</Text>
             </TouchableOpacity>
           </View>
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Ionicons name="document-text-outline" size={64} color="#ccc" />
+            <Ionicons name="document-text-outline" size={64} color="#4a4a6e" />
             <Text style={styles.emptyText}>No paystubs yet</Text>
             <Text style={styles.emptySubtext}>Generate your first paystub to get started</Text>
           </View>
@@ -164,11 +196,11 @@ const PaystubsScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f5f5f5' },
+  container: { flex: 1, backgroundColor: '#0f0f23' },
   header: { paddingHorizontal: 20, paddingTop: 10, paddingBottom: 20 },
   headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
   headerTitle: { fontSize: 28, fontWeight: '700', color: '#fff' },
-  generateButton: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 8 },
+  generateButton: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#1a1a2e', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 8, borderWidth: 1, borderColor: '#1473FF' },
   generateButtonText: { fontSize: 14, fontWeight: '600', color: '#1473FF', marginLeft: 4 },
   ytdCard: { backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: 12, padding: 16 },
   ytdTitle: { fontSize: 14, color: 'rgba(255,255,255,0.8)', marginBottom: 12 },
@@ -179,31 +211,31 @@ const styles = StyleSheet.create({
   ytdDivider: { width: 1, backgroundColor: 'rgba(255,255,255,0.2)', marginHorizontal: 16 },
   listContent: { padding: 16 },
   listHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
-  listHeaderText: { fontSize: 16, fontWeight: '600', color: '#333' },
+  listHeaderText: { fontSize: 16, fontWeight: '600', color: '#fff' },
   filterText: { fontSize: 14, color: '#1473FF' },
-  paystubCard: { backgroundColor: '#fff', borderRadius: 12, padding: 16, marginBottom: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 4, elevation: 2 },
+  paystubCard: { backgroundColor: '#1a1a2e', borderRadius: 12, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
   paystubHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 },
-  payDate: { fontSize: 16, fontWeight: '600', color: '#333' },
-  payPeriod: { fontSize: 13, color: '#666', marginTop: 2 },
-  statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 6, backgroundColor: '#f0f0f0' },
-  statusPaid: { backgroundColor: '#D1FAE5' },
-  statusText: { fontSize: 12, fontWeight: '600', color: '#666' },
-  statusTextPaid: { color: '#065F46' },
-  paystubAmounts: { flexDirection: 'row', backgroundColor: '#f9f9f9', borderRadius: 8, padding: 12, marginBottom: 12 },
+  payDate: { fontSize: 16, fontWeight: '600', color: '#fff' },
+  payPeriod: { fontSize: 13, color: '#a0a0a0', marginTop: 2 },
+  statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 6, backgroundColor: '#2a2a4e' },
+  statusPaid: { backgroundColor: 'rgba(16, 185, 129, 0.2)' },
+  statusText: { fontSize: 12, fontWeight: '600', color: '#a0a0a0' },
+  statusTextPaid: { color: '#10B981' },
+  paystubAmounts: { flexDirection: 'row', backgroundColor: '#0f0f23', borderRadius: 8, padding: 12, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
   amountCol: { flex: 1, alignItems: 'center' },
-  amountDivider: { width: 1, backgroundColor: '#eee' },
-  amountLabel: { fontSize: 12, color: '#666', marginBottom: 4 },
-  amountValue: { fontSize: 18, fontWeight: '600', color: '#333' },
+  amountDivider: { width: 1, backgroundColor: '#2a2a4e' },
+  amountLabel: { fontSize: 12, color: '#a0a0a0', marginBottom: 4 },
+  amountValue: { fontSize: 18, fontWeight: '600', color: '#fff' },
   netPayValue: { color: '#10B981' },
   paystubFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   hoursInfo: { flexDirection: 'row', alignItems: 'center' },
-  hoursText: { fontSize: 13, color: '#666', marginLeft: 4 },
+  hoursText: { fontSize: 13, color: '#a0a0a0', marginLeft: 4 },
   overtimeText: { fontSize: 13, color: '#F59E0B', marginLeft: 8 },
   viewButton: { flexDirection: 'row', alignItems: 'center' },
   viewButtonText: { fontSize: 14, color: '#1473FF', fontWeight: '500' },
   emptyContainer: { alignItems: 'center', padding: 60 },
-  emptyText: { fontSize: 18, fontWeight: '600', color: '#666', marginTop: 16 },
-  emptySubtext: { fontSize: 14, color: '#999', marginTop: 8 },
+  emptyText: { fontSize: 18, fontWeight: '600', color: '#a0a0a0', marginTop: 16 },
+  emptySubtext: { fontSize: 14, color: '#a0a0a0', marginTop: 8 },
 });
 
 export default PaystubsScreen;

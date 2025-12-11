@@ -1,5 +1,5 @@
 /**
- * 📊 ACCOUNTING SERVICE
+ * ACCOUNTING SERVICE
  * Frontend service for Chart of Accounts, Journal Entries, and Financial Reports
  */
 

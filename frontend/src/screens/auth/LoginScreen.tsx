@@ -1,5 +1,5 @@
 /**
- * 🔐 LOGIN SCREEN
+ * LOGIN SCREEN
  * User authentication login form
  */
 
@@ -13,6 +13,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useDispatch, useSelector } from 'react-redux';
@@ -70,12 +71,11 @@ export default function LoginScreen() {
       >
         {/* Logo & Title */}
         <View style={styles.header}>
-          <LinearGradient
-            colors={gradients.primary}
-            style={styles.logoContainer}
-          >
-            <Ionicons name="briefcase" size={40} color="#fff" />
-          </LinearGradient>
+          <Image
+            source={require('../../../assets/logo.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
           <Text style={styles.title}>Saurellius</Text>
           <Text style={styles.subtitle}>Cloud Payroll Management</Text>
         </View>
@@ -169,7 +169,7 @@ export default function LoginScreen() {
               });
             }}
           >
-            <Ionicons name="logo-apple" size={24} color="#000" />
+            <Ionicons name="logo-apple" size={24} color="#FFFFFF" />
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.socialButton}
@@ -222,12 +222,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: spacing.xxl,
   },
-  logoContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+  logo: {
+    width: 120,
+    height: 120,
     marginBottom: spacing.md,
   },
   title: {

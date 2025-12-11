@@ -1,5 +1,5 @@
 /**
- * 🏛️ TAX FILING SERVICE
+ * TAX FILING SERVICE
  * Frontend service for Tax Forms, Filings, and Deposits
  */
 

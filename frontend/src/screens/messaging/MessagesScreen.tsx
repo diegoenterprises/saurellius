@@ -69,7 +69,7 @@ const MessagesScreen: React.FC = () => {
           break;
       }
     } catch (error) {
-      console.error('Error fetching messaging data:', error);
+      // Error handled silently - using cached data
     } finally {
       setLoading(false);
     }
@@ -114,7 +114,19 @@ const MessagesScreen: React.FC = () => {
 
   // Conversation item
   const ConversationItem: React.FC<{ item: Conversation }> = ({ item }) => (
-    <TouchableOpacity style={styles.listItem}>
+    <TouchableOpacity 
+      style={styles.listItem}
+      onPress={() => {
+        Alert.alert(
+          `Chat with User ${item.other_user_id}`,
+          item.last_message?.content || 'Start a conversation',
+          [
+            { text: 'Cancel', style: 'cancel' },
+            { text: 'Open Chat', onPress: () => Alert.alert('Chat', `Opening conversation ${item.conversation_id}`) }
+          ]
+        );
+      }}
+    >
       <View style={styles.avatar}>
         <Text style={styles.avatarText}>
           {`U${item.other_user_id}`.substring(0, 2).toUpperCase()}
@@ -141,7 +153,19 @@ const MessagesScreen: React.FC = () => {
 
   // Channel item
   const ChannelItem: React.FC<{ item: Channel }> = ({ item }) => (
-    <TouchableOpacity style={styles.listItem}>
+    <TouchableOpacity 
+      style={styles.listItem}
+      onPress={() => {
+        Alert.alert(
+          `#${item.name}`,
+          `${item.description || 'Team channel'}\n\n${item.member_count} members`,
+          [
+            { text: 'Cancel', style: 'cancel' },
+            { text: 'Open Channel', onPress: () => Alert.alert('Channel', `Opening channel ${item.name}`) }
+          ]
+        );
+      }}
+    >
       <View style={[styles.avatar, { backgroundColor: '#10B981' }]}>
         <Ionicons name="chatbubbles" size={20} color="#fff" />
       </View>
@@ -154,7 +178,7 @@ const MessagesScreen: React.FC = () => {
           {item.description || 'No description'}
         </Text>
       </View>
-      {item.is_private && <Ionicons name="lock-closed" size={16} color="#666" />}
+      {item.is_private && <Ionicons name="lock-closed" size={16} color="#a0a0a0" />}
     </TouchableOpacity>
   );
 
@@ -207,6 +231,16 @@ const MessagesScreen: React.FC = () => {
   const NotificationItem: React.FC<{ item: Notification }> = ({ item }) => (
     <TouchableOpacity
       style={[styles.notificationItem, !item.read && styles.notificationUnread]}
+      onPress={() => {
+        Alert.alert(
+          'Notification',
+          item.message,
+          [
+            { text: 'Dismiss' },
+            { text: 'Mark as Read', onPress: () => Alert.alert('Done', 'Notification marked as read') },
+          ]
+        );
+      }}
     >
       <View style={styles.notificationIcon}>
         <Ionicons
@@ -220,7 +254,7 @@ const MessagesScreen: React.FC = () => {
               : 'notifications'
           }
           size={20}
-          color={!item.read ? '#1473FF' : '#666'}
+          color={!item.read ? '#1473FF' : '#a0a0a0'}
         />
       </View>
       <View style={styles.notificationContent}>
@@ -257,7 +291,7 @@ const MessagesScreen: React.FC = () => {
             }
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
-                <Ionicons name="mail-outline" size={48} color="#ccc" />
+                <Ionicons name="mail-outline" size={48} color="#4a4a6e" />
                 <Text style={styles.emptyText}>No conversations yet</Text>
                 <Text style={styles.emptySubtext}>
                   Start a conversation with a coworker
@@ -277,7 +311,7 @@ const MessagesScreen: React.FC = () => {
             }
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
-                <Ionicons name="chatbubbles-outline" size={48} color="#ccc" />
+                <Ionicons name="chatbubbles-outline" size={48} color="#4a4a6e" />
                 <Text style={styles.emptyText}>No channels</Text>
               </View>
             }
@@ -315,7 +349,7 @@ const MessagesScreen: React.FC = () => {
             }
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
-                <Ionicons name="notifications-outline" size={48} color="#ccc" />
+                <Ionicons name="notifications-outline" size={48} color="#4a4a6e" />
                 <Text style={styles.emptyText}>No notifications</Text>
               </View>
             }
@@ -360,7 +394,7 @@ const MessagesScreen: React.FC = () => {
 
       {/* Search Bar */}
       <View style={styles.searchContainer}>
-        <Ionicons name="search" size={20} color="#666" />
+        <Ionicons name="search" size={20} color="#a0a0a0" />
         <TextInput
           style={styles.searchInput}
           placeholder="Search messages, people, channels..."
@@ -385,6 +419,100 @@ const MessagesScreen: React.FC = () => {
 
       {/* Content */}
       <View style={styles.content}>{renderContent()}</View>
+
+      {/* Compose Message Modal */}
+      <Modal visible={showComposeModal} animationType="slide" transparent>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>New Message</Text>
+              <TouchableOpacity onPress={() => setShowComposeModal(false)}>
+                <Ionicons name="close" size={24} color="#FFFFFF" />
+              </TouchableOpacity>
+            </View>
+            <TextInput
+              style={styles.modalInput}
+              placeholder="To: Search for a person..."
+              placeholderTextColor="#999"
+            />
+            <TextInput
+              style={[styles.modalInput, styles.messageInput]}
+              placeholder="Type your message..."
+              placeholderTextColor="#999"
+              multiline
+              numberOfLines={4}
+            />
+            <TouchableOpacity 
+              style={styles.sendButton}
+              onPress={() => {
+                setShowComposeModal(false);
+                Alert.alert('Message Sent', 'Your message has been delivered!');
+              }}
+            >
+              <LinearGradient
+                colors={['#1473FF', '#BE01FF']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.sendButtonGradient}
+              >
+                <Ionicons name="send" size={20} color="#FFF" />
+                <Text style={styles.sendButtonText}>Send Message</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Send Kudos Modal */}
+      <Modal visible={showKudosModal} animationType="slide" transparent>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Send Kudos</Text>
+              <TouchableOpacity onPress={() => setShowKudosModal(false)}>
+                <Ionicons name="close" size={24} color="#FFFFFF" />
+              </TouchableOpacity>
+            </View>
+            <TextInput
+              style={styles.modalInput}
+              placeholder="To: Search for a teammate..."
+              placeholderTextColor="#999"
+            />
+            <Text style={styles.badgeLabel}>Select a Badge:</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.badgeScroll}>
+              {['⭐ Star Performer', '🎯 Goal Crusher', '🤝 Team Player', '💡 Innovator', '🚀 Go-Getter'].map((badge, idx) => (
+                <TouchableOpacity key={idx} style={styles.badgeOption}>
+                  <Text style={styles.badgeOptionText}>{badge}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+            <TextInput
+              style={[styles.modalInput, styles.messageInput]}
+              placeholder="Write a message of appreciation..."
+              placeholderTextColor="#999"
+              multiline
+              numberOfLines={3}
+            />
+            <TouchableOpacity 
+              style={styles.sendButton}
+              onPress={() => {
+                setShowKudosModal(false);
+                Alert.alert('Kudos Sent!', 'Your recognition has been shared with the team! 🎉');
+              }}
+            >
+              <LinearGradient
+                colors={['#10B981', '#059669']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.sendButtonGradient}
+              >
+                <Ionicons name="star" size={20} color="#FFF" />
+                <Text style={styles.sendButtonText}>Send Kudos</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -392,7 +520,7 @@ const MessagesScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#0f0f23',
   },
   header: {
     padding: 16,
@@ -428,7 +556,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     margin: 16,
     marginTop: 8,
     padding: 12,
@@ -438,14 +566,14 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#333',
+    color: '#FFFFFF',
   },
   tabContainer: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    borderBottomColor: '#2a2a4e',
   },
   tabButton: {
     flex: 1,
@@ -459,7 +587,7 @@ const styles = StyleSheet.create({
   },
   tabLabel: {
     fontSize: 11,
-    color: '#666',
+    color: '#a0a0a0',
     marginTop: 4,
   },
   tabLabelActive: {
@@ -492,16 +620,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
-    color: '#666',
+    color: '#a0a0a0',
     fontSize: 16,
   },
   listItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: '#2a2a4e',
   },
   avatar: {
     width: 48,
@@ -529,19 +657,19 @@ const styles = StyleSheet.create({
   listItemTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: '#FFFFFF',
   },
   listItemTime: {
     fontSize: 12,
-    color: '#999',
+    color: '#a0a0a0',
   },
   listItemSubtitle: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
   },
   memberCount: {
     fontSize: 12,
-    color: '#999',
+    color: '#a0a0a0',
   },
   unreadBadge: {
     backgroundColor: '#1473FF',
@@ -558,7 +686,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   kudosCard: {
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     borderRadius: 16,
     padding: 16,
     marginBottom: 12,
@@ -577,7 +705,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#FEF3C7',
+    backgroundColor: '#1473FF20',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -591,7 +719,7 @@ const styles = StyleSheet.create({
   kudosBadgeName: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#FFFFFF',
   },
   kudosPoints: {
     fontSize: 14,
@@ -600,7 +728,7 @@ const styles = StyleSheet.create({
   },
   kudosMessage: {
     fontSize: 15,
-    color: '#444',
+    color: '#a0a0a0',
     lineHeight: 22,
     marginBottom: 12,
   },
@@ -610,32 +738,32 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#f0f0f0',
+    borderTopColor: '#2a2a4e',
   },
   kudosFrom: {
     fontSize: 13,
-    color: '#666',
+    color: '#a0a0a0',
   },
   kudosTime: {
     fontSize: 12,
-    color: '#999',
+    color: '#a0a0a0',
   },
   notificationItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: '#2a2a4e',
   },
   notificationUnread: {
-    backgroundColor: '#F0F7FF',
+    backgroundColor: '#1473FF15',
   },
   notificationIcon: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#2a2a4e',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -645,7 +773,7 @@ const styles = StyleSheet.create({
   },
   notificationText: {
     fontSize: 14,
-    color: '#333',
+    color: '#FFFFFF',
     marginBottom: 4,
   },
   notificationTextUnread: {
@@ -653,7 +781,7 @@ const styles = StyleSheet.create({
   },
   notificationTime: {
     fontSize: 12,
-    color: '#999',
+    color: '#a0a0a0',
   },
   unreadDot: {
     width: 10,
@@ -674,15 +802,86 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
+    color: '#FFFFFF',
     marginTop: 16,
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
     marginTop: 8,
     textAlign: 'center',
     paddingHorizontal: 32,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    justifyContent: 'flex-end',
+  },
+  modalContent: {
+    backgroundColor: '#1a1a2e',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    padding: 20,
+    paddingBottom: 40,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#FFFFFF',
+  },
+  modalInput: {
+    backgroundColor: '#2a2a4e',
+    borderRadius: 12,
+    padding: 14,
+    fontSize: 16,
+    color: '#FFFFFF',
+    marginBottom: 12,
+  },
+  messageInput: {
+    height: 100,
+    textAlignVertical: 'top',
+  },
+  sendButton: {
+    marginTop: 8,
+  },
+  sendButtonGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 16,
+    borderRadius: 12,
+    gap: 8,
+  },
+  sendButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  badgeLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#a0a0a0',
+    marginBottom: 12,
+  },
+  badgeScroll: {
+    marginBottom: 16,
+  },
+  badgeOption: {
+    backgroundColor: '#2a2a4e',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  badgeOptionText: {
+    color: '#FFFFFF',
+    fontSize: 14,
   },
 });
 

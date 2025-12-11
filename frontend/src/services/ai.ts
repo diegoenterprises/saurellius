@@ -1,5 +1,5 @@
 /**
- * 🤖 AI SERVICE
+ * AI SERVICE
  * Frontend API client for Gemini AI features
  */
 

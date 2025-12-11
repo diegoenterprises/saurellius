@@ -1,5 +1,5 @@
 /**
- * ✨ STANDALONE PAYSTUB GENERATOR
+ * STANDALONE PAYSTUB GENERATOR
  * For employers to generate individual paystubs without employee records
  */
 
@@ -18,15 +18,15 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 
-import { AppDispatch, RootState } from '../../store';
-import { checkPaystubLimit } from '../../store/slices/billingSlice';
-import { paystubService } from '../../services/api';
+import { RootState } from '../../store';
+import paystubService from '../../services/paystubs';
+import taxEngine from '../../services/taxEngine';
 import { PAYSTUB_THEMES } from '../../styles/theme';
-import { colors, gradients, spacing, borderRadius, typography, shadows } from '../../styles/theme';
+import { extendedColors as colors, gradients, spacing, borderRadius, typography, shadows } from '../../styles/theme';
 
 // US States list
 const US_STATES = [
@@ -174,15 +174,36 @@ const initialFormData: PaystubFormData = {
   theme: 'diego_original',
 };
 
+// Calculated taxes state
+interface CalculatedTaxes {
+  federal: number;
+  state: number;
+  socialSecurity: number;
+  medicare: number;
+  totalTaxes: number;
+  netPay: number;
+  isCalculating: boolean;
+}
+
 export default function StandalonePaystubScreen() {
-  const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation();
-  const { paystubLimit } = useSelector((state: RootState) => state.billing);
+  const user = useSelector((state: RootState) => state.auth.user);
   
   const [formData, setFormData] = useState<PaystubFormData>(initialFormData);
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 4;
+  
+  // Auto-calculated taxes from tax engine
+  const [calculatedTaxes, setCalculatedTaxes] = useState<CalculatedTaxes>({
+    federal: 0,
+    state: 0,
+    socialSecurity: 0,
+    medicare: 0,
+    totalTaxes: 0,
+    netPay: 0,
+    isCalculating: false,
+  });
 
   const updateField = (field: keyof PaystubFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -195,6 +216,65 @@ export default function StandalonePaystubScreen() {
     const commission = parseFloat(formData.commission || '0');
     return regularPay + overtimePay + bonus + commission;
   };
+
+  // Auto-calculate taxes when earnings or state changes
+  const calculateTaxesAuto = async () => {
+    const grossPay = calculateGrossPay();
+    if (grossPay <= 0 || !formData.employeeState) return;
+
+    setCalculatedTaxes(prev => ({ ...prev, isCalculating: true }));
+
+    try {
+      const result = await taxEngine.calculateTaxes({
+        gross_pay: grossPay,
+        filing_status: formData.filingStatus as any || 'single',
+        pay_frequency: formData.payFrequency as any || 'biweekly',
+        work_state: formData.employeeState,
+        ytd_gross: parseFloat(formData.ytdGross) || 0,
+        ytd_social_security: parseFloat(formData.ytdSocialSecurity) || 0,
+      });
+
+      setCalculatedTaxes({
+        federal: result.taxes.federal.withholding,
+        state: result.taxes.state.withholding,
+        socialSecurity: result.taxes.federal.social_security,
+        medicare: result.taxes.federal.medicare,
+        totalTaxes: result.summary.total_taxes,
+        netPay: result.summary.net_pay,
+        isCalculating: false,
+      });
+    } catch (error) {
+      // Tax calculation fallback to estimates
+      // Fallback to rough estimates if API fails
+      const federal = grossPay * 0.12;
+      const state = grossPay * 0.05;
+      const ss = grossPay * 0.062;
+      const medicare = grossPay * 0.0145;
+      const total = federal + state + ss + medicare;
+      
+      setCalculatedTaxes({
+        federal,
+        state,
+        socialSecurity: ss,
+        medicare,
+        totalTaxes: total,
+        netPay: grossPay - total,
+        isCalculating: false,
+      });
+    }
+  };
+
+  // Trigger tax calculation when relevant fields change
+  React.useEffect(() => {
+    const debounce = setTimeout(() => {
+      if (formData.hourlyRate && formData.regularHours && formData.employeeState) {
+        calculateTaxesAuto();
+      }
+    }, 500);
+    return () => clearTimeout(debounce);
+  }, [formData.hourlyRate, formData.regularHours, formData.overtimeHours, 
+      formData.bonus, formData.commission, formData.employeeState, 
+      formData.filingStatus, formData.payFrequency]);
 
   const handleGeneratePaystub = async () => {
     // Validate required fields
@@ -211,11 +291,8 @@ export default function StandalonePaystubScreen() {
     setIsLoading(true);
 
     try {
-      // Check billing limit first
-      await dispatch(checkPaystubLimit()).unwrap();
-
-      // Generate paystub via API
-      const response = await paystubService.generate({
+      // Generate paystub via backend API
+      const response = await paystubService.generateStandalonePaystub({
         company: {
           name: formData.companyName,
           address: formData.companyAddress,
@@ -232,9 +309,9 @@ export default function StandalonePaystubScreen() {
           zip: formData.employeeZip,
           ssn_last_four: formData.employeeSSN.slice(-4),
         },
-        pay_info: {
-          period_start: formData.payPeriodStart,
-          period_end: formData.payPeriodEnd,
+        pay_period: {
+          start: formData.payPeriodStart,
+          end: formData.payPeriodEnd,
           pay_date: formData.payDate,
           pay_frequency: formData.payFrequency,
         },
@@ -250,12 +327,24 @@ export default function StandalonePaystubScreen() {
           allowances: parseInt(formData.allowances),
           work_state: formData.employeeState,
         },
+        // Auto-calculated taxes from tax engine
+        taxes: {
+          federal: calculatedTaxes.federal,
+          state: calculatedTaxes.state,
+          social_security: calculatedTaxes.socialSecurity,
+          medicare: calculatedTaxes.medicare,
+        },
         ytd: {
-          gross: parseFloat(formData.ytdGross),
-          federal_tax: parseFloat(formData.ytdFederalTax),
-          state_tax: parseFloat(formData.ytdStateTax),
-          social_security: parseFloat(formData.ytdSocialSecurity),
-          medicare: parseFloat(formData.ytdMedicare),
+          gross: parseFloat(formData.ytdGross) || 0,
+          federal_tax: parseFloat(formData.ytdFederalTax) || 0,
+          state_tax: parseFloat(formData.ytdStateTax) || 0,
+          social_security: parseFloat(formData.ytdSocialSecurity) || 0,
+          medicare: parseFloat(formData.ytdMedicare) || 0,
+        },
+        totals: {
+          gross_pay: calculateGrossPay(),
+          total_taxes: calculatedTaxes.totalTaxes,
+          net_pay: calculatedTaxes.netPay,
         },
         theme: formData.theme,
       });
@@ -263,11 +352,25 @@ export default function StandalonePaystubScreen() {
       Toast.show({
         type: 'success',
         text1: 'Paystub Generated!',
-        text2: 'Your paystub has been created successfully',
+        text2: `Verification ID: ${response.verification_id}`,
       });
 
-      // Navigate to paystub detail or download
-      navigation.navigate('PaystubDetail' as never, { paystubId: response.data.id } as never);
+      // Handle the PDF - on web, open in new tab; on mobile, could save/share
+      if (Platform.OS === 'web' && response.pdf_base64) {
+        // Convert base64 to blob and download
+        const byteCharacters = atob(response.pdf_base64);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      }
+
+      // Go back to paystubs list
+      navigation.goBack();
 
     } catch (error: any) {
       Toast.show({
@@ -785,7 +888,7 @@ export default function StandalonePaystubScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#1a1a2e',
   },
   header: {
     paddingTop: 60,

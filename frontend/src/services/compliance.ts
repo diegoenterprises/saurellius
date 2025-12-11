@@ -1,5 +1,5 @@
 /**
- * 📋 DOCUGINUITY COMPLIANCE SERVICE
+ * DOCUGINUITY COMPLIANCE SERVICE
  * Frontend service for document compliance management
  */
 

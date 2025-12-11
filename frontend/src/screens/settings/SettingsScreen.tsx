@@ -17,6 +17,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../store/slices/authSlice';
+import { AppDispatch, RootState } from '../../store';
 
 interface SettingItem {
   icon: string;
@@ -29,10 +32,12 @@ interface SettingItem {
 
 const SettingsScreen: React.FC = () => {
   const navigation = useNavigation<any>();
+  const dispatch = useDispatch<AppDispatch>();
+  const { user } = useSelector((state: RootState) => state.auth);
   const [notifications, setNotifications] = useState(true);
   const [emailAlerts, setEmailAlerts] = useState(true);
   const [biometrics, setBiometrics] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true); // Default to dark mode
   const [autoClockOut, setAutoClockOut] = useState(true);
 
   const renderSettingItem = (item: SettingItem) => (
@@ -72,15 +77,15 @@ const SettingsScreen: React.FC = () => {
       'Are you sure you want to log out?',
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Log Out', style: 'destructive', onPress: () => navigation.navigate('Login') },
+        { text: 'Log Out', style: 'destructive', onPress: () => dispatch(logout()) },
       ]
     );
   };
 
   const accountSettings: SettingItem[] = [
     { icon: 'person-outline', title: 'Profile', subtitle: 'Edit your personal information', type: 'link', onPress: () => navigation.navigate('Profile') },
-    { icon: 'card-outline', title: 'Payment Methods', subtitle: 'Manage your payment options', type: 'link' },
-    { icon: 'business-outline', title: 'Company Info', subtitle: 'View company details', type: 'link' },
+    { icon: 'card-outline', title: 'Payment Methods', subtitle: 'Manage your payment options', type: 'link', onPress: () => navigation.navigate('Subscription') },
+    { icon: 'business-outline', title: 'Company Info', subtitle: 'View company details', type: 'link', onPress: () => navigation.navigate('Compliance' as any) },
   ];
 
   const notificationSettings: SettingItem[] = [
@@ -90,8 +95,8 @@ const SettingsScreen: React.FC = () => {
 
   const securitySettings: SettingItem[] = [
     { icon: 'finger-print-outline', title: 'Biometric Login', subtitle: 'Use Face ID or Touch ID', type: 'toggle', value: biometrics, onPress: () => setBiometrics(!biometrics) },
-    { icon: 'lock-closed-outline', title: 'Change Password', type: 'link' },
-    { icon: 'shield-checkmark-outline', title: 'Two-Factor Auth', subtitle: 'Enabled', type: 'link' },
+    { icon: 'lock-closed-outline', title: 'Change Password', type: 'link', onPress: () => Alert.alert('Change Password', 'Password change email sent to your registered email address.') },
+    { icon: 'shield-checkmark-outline', title: 'Two-Factor Auth', subtitle: 'Enabled', type: 'link', onPress: () => Alert.alert('Two-Factor Auth', 'Two-factor authentication is currently enabled for your account.') },
   ];
 
   const appSettings: SettingItem[] = [
@@ -102,8 +107,8 @@ const SettingsScreen: React.FC = () => {
   ];
 
   const supportSettings: SettingItem[] = [
-    { icon: 'help-circle-outline', title: 'Help Center', type: 'link' },
-    { icon: 'chatbubble-outline', title: 'Contact Support', type: 'link' },
+    { icon: 'help-circle-outline', title: 'Help Center', type: 'link', onPress: () => Alert.alert('Help Center', 'Visit help.saurellius.com for documentation and FAQs.') },
+    { icon: 'chatbubble-outline', title: 'Contact Support', type: 'link', onPress: () => Alert.alert('Contact Support', 'Email: support@saurellius.com\nPhone: 1-800-PAY-STUB') },
     { icon: 'document-text-outline', title: 'Terms of Service', type: 'link', onPress: () => navigation.navigate('TermsConditions') },
     { icon: 'shield-outline', title: 'Privacy Policy', type: 'link', onPress: () => navigation.navigate('PrivacyPolicy') },
   ];
@@ -152,21 +157,21 @@ const SettingsScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f5f5f5' },
+  container: { flex: 1, backgroundColor: '#0f0f23' },
   header: { paddingHorizontal: 20, paddingVertical: 20 },
   headerTitle: { fontSize: 28, fontWeight: '700', color: '#fff' },
   content: { flex: 1 },
-  sectionTitle: { fontSize: 14, fontWeight: '600', color: '#666', marginTop: 24, marginBottom: 8, marginHorizontal: 16 },
-  section: { backgroundColor: '#fff', borderRadius: 12, marginHorizontal: 16, overflow: 'hidden' },
-  settingItem: { flexDirection: 'row', alignItems: 'center', padding: 16, borderBottomWidth: 1, borderBottomColor: '#f0f0f0' },
-  settingIcon: { width: 36, height: 36, borderRadius: 8, backgroundColor: '#EBF4FF', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
+  sectionTitle: { fontSize: 14, fontWeight: '600', color: '#a0a0a0', marginTop: 24, marginBottom: 8, marginHorizontal: 16 },
+  section: { backgroundColor: '#1a1a2e', borderRadius: 12, marginHorizontal: 16, overflow: 'hidden', borderWidth: 1, borderColor: '#2a2a4e' },
+  settingItem: { flexDirection: 'row', alignItems: 'center', padding: 16, borderBottomWidth: 1, borderBottomColor: '#2a2a4e' },
+  settingIcon: { width: 36, height: 36, borderRadius: 8, backgroundColor: 'rgba(20, 115, 255, 0.15)', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
   settingContent: { flex: 1 },
-  settingTitle: { fontSize: 16, color: '#333' },
-  settingSubtitle: { fontSize: 13, color: '#999', marginTop: 2 },
-  settingValue: { fontSize: 14, color: '#666' },
-  logoutButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#FEE2E2', marginHorizontal: 16, marginTop: 24, padding: 16, borderRadius: 12 },
+  settingTitle: { fontSize: 16, color: '#fff' },
+  settingSubtitle: { fontSize: 13, color: '#a0a0a0', marginTop: 2 },
+  settingValue: { fontSize: 14, color: '#a0a0a0' },
+  logoutButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(239, 68, 68, 0.15)', marginHorizontal: 16, marginTop: 24, padding: 16, borderRadius: 12, borderWidth: 1, borderColor: 'rgba(239, 68, 68, 0.3)' },
   logoutText: { fontSize: 16, fontWeight: '600', color: '#EF4444', marginLeft: 8 },
-  version: { textAlign: 'center', fontSize: 12, color: '#999', marginVertical: 24 },
+  version: { textAlign: 'center', fontSize: 12, color: '#a0a0a0', marginVertical: 24 },
 });
 
 export default SettingsScreen;

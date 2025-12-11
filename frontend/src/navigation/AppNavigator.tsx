@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
@@ -126,6 +127,11 @@ function DashboardStack() {
     >
       <Stack.Screen name="Dashboard" component={DashboardScreen} />
       <Stack.Screen name="Subscription" component={SubscriptionScreen} />
+      {/* Quick Actions from Dashboard */}
+      <Stack.Screen name="GeneratePaystub" component={GeneratePaystubScreen} />
+      <Stack.Screen name="AddEmployee" component={AddEmployeeScreen} />
+      <Stack.Screen name="EmployeeDetail" component={EmployeeDetailScreen} />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
       {/* Enterprise Features */}
       <Stack.Screen name="Accounting" component={AccountingScreen} />
       <Stack.Screen name="Contractors" component={ContractorsScreen} />
@@ -278,12 +284,14 @@ export default function AppNavigator() {
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {isAuthenticated ? (
-        <Stack.Screen name="Main" component={MainTabs} />
-      ) : (
-        <Stack.Screen name="Auth" component={AuthStack} />
-      )}
-    </Stack.Navigator>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {isAuthenticated ? (
+          <Stack.Screen name="Main" component={MainTabs} />
+        ) : (
+          <Stack.Screen name="Auth" component={AuthStack} />
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }

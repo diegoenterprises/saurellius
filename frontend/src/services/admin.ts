@@ -1,5 +1,5 @@
 /**
- * 👑 ADMIN SERVICE
+ * ADMIN SERVICE
  * Frontend service for Admin Portal - Platform Analytics & Management
  */
 

@@ -25,10 +25,10 @@ WebBrowser.maybeCompleteAuthSession();
 export const OAUTH_CONFIG = {
   google: {
     // Get these from Google Cloud Console -> APIs & Services -> Credentials
-    expoClientId: process.env.EXPO_PUBLIC_GOOGLE_EXPO_CLIENT_ID || 'YOUR_EXPO_CLIENT_ID.apps.googleusercontent.com',
-    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID || 'YOUR_IOS_CLIENT_ID.apps.googleusercontent.com',
-    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID || 'YOUR_ANDROID_CLIENT_ID.apps.googleusercontent.com',
-    webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || 'YOUR_WEB_CLIENT_ID.apps.googleusercontent.com',
+    expoClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || '898792061250-hqkp8ngdajjs2pus9di45lisamft2gb7.apps.googleusercontent.com',
+    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID || '898792061250-hqkp8ngdajjs2pus9di45lisamft2gb7.apps.googleusercontent.com',
+    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID || '898792061250-hqkp8ngdajjs2pus9di45lisamft2gb7.apps.googleusercontent.com',
+    webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID || '898792061250-hqkp8ngdajjs2pus9di45lisamft2gb7.apps.googleusercontent.com',
   },
   microsoft: {
     // Get these from Azure Portal -> App Registrations

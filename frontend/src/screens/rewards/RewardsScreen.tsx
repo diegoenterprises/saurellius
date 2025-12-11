@@ -1,9 +1,10 @@
 /**
  * SAURELLIUS REWARDS
  * Points, tiers, badges, streaks, and leaderboard
+ * 100% Dynamic - fetches from API
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -11,10 +12,12 @@ import {
   ScrollView,
   TouchableOpacity,
   RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import api from '../../services/api';
 
 interface Badge {
   id: string;
@@ -32,39 +35,62 @@ interface LeaderboardEntry {
   isCurrentUser: boolean;
 }
 
+interface RewardsData {
+  userPoints: number;
+  currentTier: string;
+  nextTier: string;
+  pointsToNextTier: number;
+  loginStreak: number;
+  badges: Badge[];
+  leaderboard: LeaderboardEntry[];
+}
+
 const RewardsScreen: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'overview' | 'badges' | 'leaderboard'>('overview');
   
-  const userPoints = 2450;
-  const currentTier = 'Gold';
-  const nextTier = 'Platinum';
-  const pointsToNextTier = 550;
-  const loginStreak = 12;
+  // Dynamic state from API
+  const [rewardsData, setRewardsData] = useState<RewardsData>({
+    userPoints: 0,
+    currentTier: 'Bronze',
+    nextTier: 'Silver',
+    pointsToNextTier: 1000,
+    loginStreak: 0,
+    badges: [],
+    leaderboard: [],
+  });
 
-  const badges: Badge[] = [
-    { id: '1', name: 'Early Bird', icon: 'sunny', description: 'Clock in before 8 AM for 5 days', earned: true, earnedDate: '2025-11-15' },
-    { id: '2', name: 'Perfect Week', icon: 'checkmark-circle', description: 'Complete all timesheets on time', earned: true, earnedDate: '2025-11-20' },
-    { id: '3', name: 'Team Player', icon: 'people', description: 'Send 10 kudos to colleagues', earned: true, earnedDate: '2025-12-01' },
-    { id: '4', name: 'Streak Master', icon: 'flame', description: 'Maintain 30 day login streak', earned: false },
-    { id: '5', name: 'Benefits Pro', icon: 'shield-checkmark', description: 'Complete benefits enrollment', earned: true, earnedDate: '2025-01-15' },
-    { id: '6', name: 'First Paystub', icon: 'document-text', description: 'Generate your first paystub', earned: true, earnedDate: '2025-01-10' },
-    { id: '7', name: 'Tax Expert', icon: 'calculator', description: 'Use AI assistant for tax questions', earned: false },
-    { id: '8', name: 'Social Butterfly', icon: 'chatbubbles', description: 'Join 5 channels', earned: false },
-  ];
+  // Fetch rewards data from API
+  const fetchRewardsData = useCallback(async () => {
+    try {
+      const response = await api.get('/api/rewards');
+      const data = response.data?.data || response.data || {};
+      setRewardsData({
+        userPoints: data.points || data.userPoints || 0,
+        currentTier: data.tier || data.currentTier || 'Bronze',
+        nextTier: data.nextTier || 'Silver',
+        pointsToNextTier: data.pointsToNextTier || data.points_to_next_tier || 1000,
+        loginStreak: data.loginStreak || data.login_streak || 0,
+        badges: data.badges || [],
+        leaderboard: data.leaderboard || [],
+      });
+    } catch (err) {
+      // Rewards fetch failed
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
 
-  const leaderboard: LeaderboardEntry[] = [
-    { rank: 1, name: 'Sarah Johnson', points: 5200, isCurrentUser: false },
-    { rank: 2, name: 'Michael Chen', points: 4800, isCurrentUser: false },
-    { rank: 3, name: 'Emily Davis', points: 3900, isCurrentUser: false },
-    { rank: 4, name: 'You', points: 2450, isCurrentUser: true },
-    { rank: 5, name: 'James Wilson', points: 2100, isCurrentUser: false },
-    { rank: 6, name: 'Maria Garcia', points: 1800, isCurrentUser: false },
-    { rank: 7, name: 'David Brown', points: 1500, isCurrentUser: false },
-  ];
+  useEffect(() => {
+    fetchRewardsData();
+  }, [fetchRewardsData]);
 
-  const getTierColor = (tier: string) => {
-    const colors: Record<string, string[]> = {
+  const { userPoints, currentTier, nextTier, pointsToNextTier, loginStreak, badges, leaderboard } = rewardsData;
+
+  const getTierColor = (tier: string): [string, string] => {
+    const colors: Record<string, [string, string]> = {
       'Bronze': ['#CD7F32', '#8B4513'],
       'Silver': ['#C0C0C0', '#808080'],
       'Gold': ['#FFD700', '#DAA520'],
@@ -76,8 +102,7 @@ const RewardsScreen: React.FC = () => {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setRefreshing(false);
+    await fetchRewardsData();
   };
 
   const renderOverview = () => (
@@ -147,7 +172,7 @@ const RewardsScreen: React.FC = () => {
               <Ionicons 
                 name={badge.icon as any} 
                 size={28} 
-                color={badge.earned ? '#1473FF' : '#ccc'} 
+                color={badge.earned ? '#1473FF' : '#4a4a6e'} 
               />
             </View>
             <Text style={[styles.badgeName, !badge.earned && styles.badgeNameLocked]}>
@@ -226,14 +251,14 @@ const RewardsScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f5f5f5' },
+  container: { flex: 1, backgroundColor: '#0f0f23' },
   header: { paddingHorizontal: 20, paddingVertical: 20 },
   headerTitle: { fontSize: 28, fontWeight: '700', color: '#fff' },
   headerSubtitle: { fontSize: 14, color: 'rgba(255,255,255,0.8)', marginTop: 4 },
-  tabBar: { flexDirection: 'row', backgroundColor: '#fff', borderBottomWidth: 1, borderBottomColor: '#eee' },
+  tabBar: { flexDirection: 'row', backgroundColor: '#1a1a2e', borderBottomWidth: 1, borderBottomColor: '#2a2a4e' },
   tab: { flex: 1, paddingVertical: 14, alignItems: 'center' },
   tabActive: { borderBottomWidth: 2, borderBottomColor: '#1473FF' },
-  tabText: { fontSize: 14, color: '#666' },
+  tabText: { fontSize: 14, color: '#a0a0a0' },
   tabTextActive: { color: '#1473FF', fontWeight: '600' },
   content: { flex: 1, padding: 16 },
   pointsCard: { borderRadius: 16, padding: 24, alignItems: 'center', marginBottom: 16 },
@@ -245,38 +270,38 @@ const styles = StyleSheet.create({
   progressBar: { height: 8, backgroundColor: 'rgba(255,255,255,0.3)', borderRadius: 4, overflow: 'hidden' },
   progressFill: { height: '100%', backgroundColor: '#fff', borderRadius: 4 },
   progressText: { fontSize: 12, color: 'rgba(255,255,255,0.9)', textAlign: 'center', marginTop: 8 },
-  streakCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 12, padding: 16, marginBottom: 16 },
-  streakIcon: { width: 56, height: 56, borderRadius: 28, backgroundColor: '#FEF3C7', justifyContent: 'center', alignItems: 'center' },
+  streakCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#1a1a2e', borderRadius: 12, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: '#2a2a4e' },
+  streakIcon: { width: 56, height: 56, borderRadius: 28, backgroundColor: 'rgba(245, 158, 11, 0.2)', justifyContent: 'center', alignItems: 'center' },
   streakInfo: { flex: 1, marginLeft: 16 },
-  streakValue: { fontSize: 18, fontWeight: '700', color: '#333' },
-  streakLabel: { fontSize: 14, color: '#666', marginTop: 2 },
+  streakValue: { fontSize: 18, fontWeight: '700', color: '#fff' },
+  streakLabel: { fontSize: 14, color: '#a0a0a0', marginTop: 2 },
   streakBonus: { alignItems: 'center' },
   bonusText: { fontSize: 18, fontWeight: '700', color: '#10B981' },
-  bonusLabel: { fontSize: 12, color: '#666' },
+  bonusLabel: { fontSize: 12, color: '#a0a0a0' },
   section: { marginTop: 8 },
-  sectionTitle: { fontSize: 18, fontWeight: '600', color: '#333', marginBottom: 12 },
-  activityRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 12, padding: 16, marginBottom: 8 },
+  sectionTitle: { fontSize: 18, fontWeight: '600', color: '#fff', marginBottom: 12 },
+  activityRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#1a1a2e', borderRadius: 12, padding: 16, marginBottom: 8, borderWidth: 1, borderColor: '#2a2a4e' },
   activityInfo: { flex: 1 },
-  activityAction: { fontSize: 14, fontWeight: '500', color: '#333' },
-  activityTime: { fontSize: 12, color: '#999', marginTop: 2 },
+  activityAction: { fontSize: 14, fontWeight: '500', color: '#fff' },
+  activityTime: { fontSize: 12, color: '#a0a0a0', marginTop: 2 },
   activityPoints: { fontSize: 16, fontWeight: '700', color: '#10B981' },
   badgesGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
-  badgeCard: { width: '47%', backgroundColor: '#fff', borderRadius: 12, padding: 16, alignItems: 'center', position: 'relative' },
+  badgeCard: { width: '47%', backgroundColor: '#1a1a2e', borderRadius: 12, padding: 16, alignItems: 'center', position: 'relative', borderWidth: 1, borderColor: '#2a2a4e' },
   badgeCardLocked: { opacity: 0.6 },
-  badgeIcon: { width: 56, height: 56, borderRadius: 28, backgroundColor: '#EBF4FF', justifyContent: 'center', alignItems: 'center', marginBottom: 8 },
-  badgeIconLocked: { backgroundColor: '#f5f5f5' },
-  badgeName: { fontSize: 14, fontWeight: '600', color: '#333', textAlign: 'center' },
-  badgeNameLocked: { color: '#999' },
-  badgeDescription: { fontSize: 12, color: '#666', textAlign: 'center', marginTop: 4 },
+  badgeIcon: { width: 56, height: 56, borderRadius: 28, backgroundColor: 'rgba(20, 115, 255, 0.15)', justifyContent: 'center', alignItems: 'center', marginBottom: 8 },
+  badgeIconLocked: { backgroundColor: '#252545' },
+  badgeName: { fontSize: 14, fontWeight: '600', color: '#fff', textAlign: 'center' },
+  badgeNameLocked: { color: '#a0a0a0' },
+  badgeDescription: { fontSize: 12, color: '#a0a0a0', textAlign: 'center', marginTop: 4 },
   earnedBadge: { position: 'absolute', top: 8, right: 8 },
-  leaderboardRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderRadius: 12, padding: 16, marginBottom: 8 },
-  leaderboardRowHighlight: { backgroundColor: '#EBF4FF', borderWidth: 1, borderColor: '#1473FF' },
-  rankBadge: { width: 32, height: 32, borderRadius: 16, backgroundColor: '#f5f5f5', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
-  rankBadgeTop: { backgroundColor: '#FEF3C7' },
-  rankText: { fontSize: 14, fontWeight: '600', color: '#666' },
-  leaderName: { flex: 1, fontSize: 16, color: '#333' },
+  leaderboardRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#1a1a2e', borderRadius: 12, padding: 16, marginBottom: 8, borderWidth: 1, borderColor: '#2a2a4e' },
+  leaderboardRowHighlight: { backgroundColor: 'rgba(20, 115, 255, 0.15)', borderWidth: 1, borderColor: '#1473FF' },
+  rankBadge: { width: 32, height: 32, borderRadius: 16, backgroundColor: '#252545', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
+  rankBadgeTop: { backgroundColor: 'rgba(245, 158, 11, 0.2)' },
+  rankText: { fontSize: 14, fontWeight: '600', color: '#a0a0a0' },
+  leaderName: { flex: 1, fontSize: 16, color: '#fff' },
   leaderNameHighlight: { fontWeight: '700', color: '#1473FF' },
-  leaderPoints: { fontSize: 14, fontWeight: '600', color: '#666' },
+  leaderPoints: { fontSize: 14, fontWeight: '600', color: '#a0a0a0' },
 });
 
 export default RewardsScreen;

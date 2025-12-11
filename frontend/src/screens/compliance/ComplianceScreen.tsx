@@ -183,28 +183,43 @@ export default function ComplianceScreen({ navigation }: any) {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Quick Actions</Text>
         <View style={styles.actionsGrid}>
-          <TouchableOpacity style={styles.actionCard}>
+          <TouchableOpacity 
+            style={styles.actionCard}
+            onPress={() => navigation.navigate('AddEmployee' as any)}
+          >
             <View style={[styles.actionIcon, { backgroundColor: 'rgba(16, 185, 129, 0.15)' }]}>
               <Ionicons name="add-circle" size={24} color="#10B981" />
             </View>
             <Text style={styles.actionLabel}>New Employee</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity style={styles.actionCard}>
+          <TouchableOpacity 
+            style={styles.actionCard}
+            onPress={() => setActiveTab('documents')}
+          >
             <View style={[styles.actionIcon, { backgroundColor: 'rgba(59, 130, 246, 0.15)' }]}>
               <Ionicons name="scan" size={24} color="#3B82F6" />
             </View>
             <Text style={styles.actionLabel}>Scan Document</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity style={styles.actionCard}>
+          <TouchableOpacity 
+            style={styles.actionCard}
+            onPress={() => {
+              // Show alerts - filter missing documents
+              setActiveTab('documents');
+            }}
+          >
             <View style={[styles.actionIcon, { backgroundColor: 'rgba(245, 158, 11, 0.15)' }]}>
               <Ionicons name="alert-circle" size={24} color="#F59E0B" />
             </View>
             <Text style={styles.actionLabel}>View Alerts</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity style={styles.actionCard}>
+          <TouchableOpacity 
+            style={styles.actionCard}
+            onPress={() => navigation.navigate('Reports' as any)}
+          >
             <View style={[styles.actionIcon, { backgroundColor: 'rgba(139, 92, 246, 0.15)' }]}>
               <Ionicons name="download" size={24} color="#8B5CF6" />
             </View>
@@ -325,7 +340,10 @@ export default function ComplianceScreen({ navigation }: any) {
           <Text style={styles.onboardingSubtitle}>
             Automated document collection for new hires
           </Text>
-          <TouchableOpacity style={styles.onboardingButton}>
+          <TouchableOpacity 
+            style={styles.onboardingButton}
+            onPress={() => navigation.navigate('Onboarding' as any)}
+          >
             <Text style={styles.onboardingButtonText}>Start Onboarding</Text>
             <Ionicons name="arrow-forward" size={18} color="#10B981" />
           </TouchableOpacity>
@@ -336,13 +354,17 @@ export default function ComplianceScreen({ navigation }: any) {
         <Text style={styles.sectionTitle}>Required Documents</Text>
         
         {[
-          { name: 'I-9 Form', desc: 'Within 3 days of hire', icon: 'person-circle' },
-          { name: 'W-4 Form', desc: 'At time of hire', icon: 'document' },
-          { name: 'State W-4', desc: 'State-specific withholding', icon: 'map' },
-          { name: 'Direct Deposit', desc: 'Bank account verification', icon: 'card' },
-          { name: 'Emergency Contact', desc: 'Required for safety', icon: 'call' },
+          { name: 'I-9 Form', desc: 'Within 3 days of hire', icon: 'person-circle', docType: 'i9' },
+          { name: 'W-4 Form', desc: 'At time of hire', icon: 'document', docType: 'w4' },
+          { name: 'State W-4', desc: 'State-specific withholding', icon: 'map', docType: 'state_w4' },
+          { name: 'Direct Deposit', desc: 'Bank account verification', icon: 'card', docType: 'direct_deposit' },
+          { name: 'Emergency Contact', desc: 'Required for safety', icon: 'call', docType: 'emergency' },
         ].map((item, index) => (
-          <View key={index} style={styles.checklistItem}>
+          <TouchableOpacity 
+            key={index} 
+            style={styles.checklistItem}
+            onPress={() => setActiveTab('documents')}
+          >
             <View style={styles.checklistIcon}>
               <Ionicons name={item.icon as any} size={20} color="#1473FF" />
             </View>
@@ -350,8 +372,8 @@ export default function ComplianceScreen({ navigation }: any) {
               <Text style={styles.checklistName}>{item.name}</Text>
               <Text style={styles.checklistDesc}>{item.desc}</Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color="#6B7280" />
-          </View>
+            <Ionicons name="chevron-forward" size={20} color="#a0a0a0" />
+          </TouchableOpacity>
         ))}
       </View>
     </View>
@@ -752,7 +774,7 @@ const styles = StyleSheet.create({
   onboardingButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 12,

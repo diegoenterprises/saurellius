@@ -35,7 +35,7 @@ export default function WeatherWidget() {
         setError('Could not load weather data');
       }
     } catch (err) {
-      console.error('Weather fetch error:', err);
+      // Weather fetch failed - showing fallback
       setError('Weather unavailable');
     } finally {
       setLoading(false);

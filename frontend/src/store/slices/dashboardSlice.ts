@@ -1,10 +1,11 @@
 /**
- * 📊 DASHBOARD SLICE
- * Dashboard state management
+ * DASHBOARD SLICE
+ * Dashboard state management - 100% dynamic
  */
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { dashboardAPI, rewardsAPI } from '../../services/api';
+import dashboardService from '../../services/dashboard';
+import api from '../../services/api';
 
 // Types
 interface DashboardStats {
@@ -34,10 +35,21 @@ interface RewardsInfo {
   tier_progress: number;
 }
 
+interface RecentEmployee {
+  id: number;
+  first_name: string;
+  last_name: string;
+  position: string;
+  department: string;
+  state: string;
+  status: string;
+}
+
 interface DashboardState {
   stats: DashboardStats | null;
   activities: Activity[];
   rewards: RewardsInfo | null;
+  recentEmployees: RecentEmployee[];
   isLoading: boolean;
   error: string | null;
 }
@@ -46,6 +58,7 @@ const initialState: DashboardState = {
   stats: null,
   activities: [],
   rewards: null,
+  recentEmployees: [],
   isLoading: false,
   error: null,
 };
@@ -55,16 +68,18 @@ export const fetchDashboard = createAsyncThunk(
   'dashboard/fetchDashboard',
   async (_, { rejectWithValue }) => {
     try {
-      const [summaryRes, activityRes, rewardsRes] = await Promise.all([
-        dashboardAPI.getSummary(),
-        dashboardAPI.getRecentActivity(10),
-        rewardsAPI.getPoints(),
+      const [statsRes, activityRes, rewardsRes, employeesRes] = await Promise.all([
+        dashboardService.getDashboardStats(),
+        dashboardService.getActivityFeed(10),
+        dashboardService.getRewardsData(),
+        api.get('/api/employees?limit=3').catch(() => ({ data: { employees: [] } })),
       ]);
       
       return {
-        stats: summaryRes.stats,
-        activities: activityRes.activities,
+        stats: statsRes,
+        activities: activityRes || [],
         rewards: rewardsRes,
+        recentEmployees: employeesRes.data?.employees || employeesRes.data?.data?.employees || [],
       };
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to load dashboard');
@@ -76,8 +91,8 @@ export const fetchRecentActivity = createAsyncThunk(
   'dashboard/fetchRecentActivity',
   async (limit: number = 10, { rejectWithValue }) => {
     try {
-      const response = await dashboardAPI.getRecentActivity(limit);
-      return response.activities;
+      const activities = await dashboardService.getActivityFeed(limit);
+      return activities || [];
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to load activity');
     }
@@ -110,9 +125,10 @@ const dashboardSlice = createSlice({
     });
     builder.addCase(fetchDashboard.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.stats = action.payload.stats;
+      state.stats = action.payload.stats as any;
       state.activities = action.payload.activities;
-      state.rewards = action.payload.rewards;
+      state.rewards = action.payload.rewards as any;
+      state.recentEmployees = action.payload.recentEmployees;
     });
     builder.addCase(fetchDashboard.rejected, (state, action) => {
       state.isLoading = false;

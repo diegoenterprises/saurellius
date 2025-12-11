@@ -1,5 +1,5 @@
 /**
- * 📈 REPORTS SERVICE
+ * REPORTS SERVICE
  * Frontend service for Payroll Reports and Analytics
  */
 

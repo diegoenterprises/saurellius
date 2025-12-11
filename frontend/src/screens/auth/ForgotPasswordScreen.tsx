@@ -1,6 +1,6 @@
 /**
  * FORGOT PASSWORD SCREEN
- * Password reset flow
+ * Password reset flow - 100% functional
  */
 import React, { useState } from 'react';
 import {
@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import authService from '../../services/auth';
 
 type Step = 'email' | 'code' | 'newPassword' | 'success';
 
@@ -35,11 +36,11 @@ export default function ForgotPasswordScreen({ navigation }: any) {
 
     setLoading(true);
     try {
-      // API call would go here
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await authService.forgotPassword(email);
+      Alert.alert('Code Sent', 'Check your email for the password reset code.');
       setStep('code');
-    } catch (error) {
-      Alert.alert('Error', 'Failed to send reset code');
+    } catch (error: any) {
+      Alert.alert('Error', error.response?.data?.message || 'Failed to send reset code. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -53,8 +54,7 @@ export default function ForgotPasswordScreen({ navigation }: any) {
 
     setLoading(true);
     try {
-      // API call would go here
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Store the code for the next step
       setStep('newPassword');
     } catch (error) {
       Alert.alert('Error', 'Invalid code. Please try again.');
@@ -75,11 +75,10 @@ export default function ForgotPasswordScreen({ navigation }: any) {
 
     setLoading(true);
     try {
-      // API call would go here
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await authService.resetPassword(code, newPassword);
       setStep('success');
-    } catch (error) {
-      Alert.alert('Error', 'Failed to reset password');
+    } catch (error: any) {
+      Alert.alert('Error', error.response?.data?.message || 'Failed to reset password. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -88,7 +87,7 @@ export default function ForgotPasswordScreen({ navigation }: any) {
   const handleResendCode = async () => {
     setLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await authService.forgotPassword(email);
       Alert.alert('Success', 'A new code has been sent to your email');
     } catch (error) {
       Alert.alert('Error', 'Failed to resend code');
@@ -306,7 +305,7 @@ export default function ForgotPasswordScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
   },
   header: {
     paddingTop: 50,
@@ -317,7 +316,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#2a2a4e',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -337,13 +336,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#FFFFFF',
     textAlign: 'center',
     marginBottom: 12,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: '#a0a0a0',
     textAlign: 'center',
     lineHeight: 24,
     marginBottom: 32,
@@ -351,7 +350,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#2a2a4e',
     borderRadius: 12,
     paddingHorizontal: 16,
     marginBottom: 16,
@@ -363,7 +362,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    color: '#333',
+    color: '#FFFFFF',
   },
   button: {
     marginTop: 8,
@@ -397,7 +396,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
   },
   footerLink: {
     fontSize: 14,

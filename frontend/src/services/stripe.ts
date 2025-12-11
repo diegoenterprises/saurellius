@@ -1,5 +1,5 @@
 /**
- * 💳 STRIPE SERVICE
+ * STRIPE SERVICE
  * Subscription and billing integration
  */
 

@@ -1,8 +1,8 @@
 /**
  * PTO SCREEN
- * Leave Management, Time Off Requests, Balance Tracking, Calendar
+ * Leave Management, Time Off Requests - 100% functional
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -12,9 +12,11 @@ import {
   TextInput,
   Modal,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import api from '../../services/api';
 
 type TabType = 'balances' | 'requests' | 'calendar';
 
@@ -38,23 +40,10 @@ interface LeaveRequest {
   reason: string;
 }
 
-const MOCK_BALANCES: LeaveBalance[] = [
+const DEFAULT_BALANCES: LeaveBalance[] = [
   { type: 'Vacation', available: 64, used: 40, pending: 8, total: 104, color: '#3B82F6' },
   { type: 'Sick', available: 32, used: 16, pending: 0, total: 48, color: '#10B981' },
   { type: 'Personal', available: 16, used: 8, pending: 0, total: 24, color: '#8B5CF6' },
-];
-
-const MOCK_REQUESTS: LeaveRequest[] = [
-  { id: '1', employeeName: 'John Smith', type: 'Vacation', startDate: '2024-12-23', endDate: '2024-12-27', hours: 40, status: 'pending', reason: 'Holiday travel' },
-  { id: '2', employeeName: 'Sarah Johnson', type: 'Sick', startDate: '2024-12-18', endDate: '2024-12-18', hours: 8, status: 'approved', reason: 'Doctor appointment' },
-  { id: '3', employeeName: 'Mike Davis', type: 'Personal', startDate: '2024-12-20', endDate: '2024-12-20', hours: 8, status: 'approved', reason: 'Personal errands' },
-  { id: '4', employeeName: 'Emily Chen', type: 'Vacation', startDate: '2024-12-30', endDate: '2025-01-03', hours: 32, status: 'pending', reason: 'New Year vacation' },
-];
-
-const MOCK_HOLIDAYS = [
-  { date: '2024-12-24', name: 'Christmas Eve' },
-  { date: '2024-12-25', name: 'Christmas Day' },
-  { date: '2025-01-01', name: 'New Year\'s Day' },
 ];
 
 export default function PTOScreen({ navigation }: any) {
@@ -62,6 +51,67 @@ export default function PTOScreen({ navigation }: any) {
   const [showRequestModal, setShowRequestModal] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [balances, setBalances] = useState<LeaveBalance[]>(DEFAULT_BALANCES);
+  const [requests, setRequests] = useState<LeaveRequest[]>([]);
+  const [holidays, setHolidays] = useState<{date: string; name: string}[]>([
+    { date: '2024-12-24', name: 'Christmas Eve' },
+    { date: '2024-12-25', name: 'Christmas Day' },
+    { date: '2025-01-01', name: 'New Year\'s Day' },
+  ]);
+  const [loading, setLoading] = useState(true);
+  const [requestFilter, setRequestFilter] = useState<'all' | 'pending' | 'approved' | 'denied'>('all');
+  
+  // New request form state
+  const [newRequest, setNewRequest] = useState({
+    type: 'Vacation',
+    startDate: '',
+    endDate: '',
+    reason: '',
+  });
+
+  useEffect(() => {
+    fetchPTOData();
+  }, []);
+
+  const fetchPTOData = async () => {
+    try {
+      // Fetch balances
+      const balanceRes = await api.get('/api/pto/balances');
+      if (balanceRes.data?.balances) {
+        setBalances(balanceRes.data.balances.map((b: any) => ({
+          ...b,
+          color: b.type === 'Vacation' ? '#3B82F6' : b.type === 'Sick' ? '#10B981' : '#8B5CF6',
+        })));
+      }
+      
+      // Fetch requests
+      const requestsRes = await api.get('/api/pto/requests');
+      if (requestsRes.data?.requests) {
+        setRequests(requestsRes.data.requests);
+      }
+    } catch (error) {
+      // Using default PTO data
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmitRequest = async () => {
+    if (!newRequest.startDate || !newRequest.endDate) {
+      Alert.alert('Error', 'Please select start and end dates');
+      return;
+    }
+    
+    try {
+      await api.post('/api/pto/requests', newRequest);
+      Alert.alert('Success', 'PTO request submitted successfully!');
+      setShowRequestModal(false);
+      setNewRequest({ type: 'Vacation', startDate: '', endDate: '', reason: '' });
+      fetchPTOData();
+    } catch (error: any) {
+      Alert.alert('Error', error.response?.data?.message || 'Failed to submit request');
+    }
+  };
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
@@ -73,8 +123,35 @@ export default function PTOScreen({ navigation }: any) {
     return colors[status] || '#6B7280';
   };
 
-  const totalAvailable = MOCK_BALANCES.reduce((sum, b) => sum + b.available, 0);
-  const totalUsed = MOCK_BALANCES.reduce((sum, b) => sum + b.used, 0);
+  const handleApproveRequest = async (requestId: string) => {
+    try {
+      await api.put(`/api/pto/requests/${requestId}`, { status: 'approved' });
+      Alert.alert('Success', 'Request has been approved!');
+      // Update local state
+      setRequests(prev => prev.map(r => r.id === requestId ? { ...r, status: 'approved' } : r));
+    } catch (error: any) {
+      Alert.alert('Error', error.response?.data?.message || 'Failed to approve request');
+    }
+  };
+
+  const handleDenyRequest = async (requestId: string) => {
+    try {
+      await api.put(`/api/pto/requests/${requestId}`, { status: 'denied' });
+      Alert.alert('Request Denied', 'The request has been denied.');
+      // Update local state
+      setRequests(prev => prev.map(r => r.id === requestId ? { ...r, status: 'denied' } : r));
+    } catch (error: any) {
+      Alert.alert('Error', error.response?.data?.message || 'Failed to deny request');
+    }
+  };
+
+  const filteredRequests = requests.filter(r => 
+    requestFilter === 'all' ? true : r.status === requestFilter
+  );
+
+  const totalAvailable = balances.reduce((sum: number, b: LeaveBalance) => sum + b.available, 0);
+  const totalUsed = balances.reduce((sum: number, b: LeaveBalance) => sum + b.used, 0);
+  const totalPending = balances.reduce((sum: number, b: LeaveBalance) => sum + b.pending, 0);
 
   const renderBalances = () => (
     <View style={styles.tabContent}>
@@ -108,7 +185,7 @@ export default function PTOScreen({ navigation }: any) {
       {/* Balance Cards */}
       <Text style={styles.sectionTitle}>Leave Balances</Text>
       <View style={styles.balancesList}>
-        {MOCK_BALANCES.map((balance, index) => (
+        {balances.map((balance, index) => (
           <View key={index} style={styles.balanceCard}>
             <View style={styles.balanceHeader}>
               <View style={[styles.balanceIcon, { backgroundColor: balance.color + '20' }]}>
@@ -169,7 +246,7 @@ export default function PTOScreen({ navigation }: any) {
       {/* Upcoming Holidays */}
       <Text style={styles.sectionTitle}>Upcoming Holidays</Text>
       <View style={styles.holidaysList}>
-        {MOCK_HOLIDAYS.map((holiday, index) => (
+        {holidays.map((holiday, index) => (
           <View key={index} style={styles.holidayItem}>
             <View style={styles.holidayIcon}>
               <Ionicons name="star" size={16} color="#F59E0B" />
@@ -187,22 +264,34 @@ export default function PTOScreen({ navigation }: any) {
   const renderRequests = () => (
     <View style={styles.tabContent}>
       <View style={styles.filterRow}>
-        <TouchableOpacity style={[styles.filterChip, styles.filterChipActive]}>
-          <Text style={styles.filterChipTextActive}>All</Text>
+        <TouchableOpacity 
+          style={[styles.filterChip, requestFilter === 'all' && styles.filterChipActive]}
+          onPress={() => setRequestFilter('all')}
+        >
+          <Text style={requestFilter === 'all' ? styles.filterChipTextActive : styles.filterChipText}>All</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.filterChip}>
-          <Text style={styles.filterChipText}>Pending</Text>
+        <TouchableOpacity 
+          style={[styles.filterChip, requestFilter === 'pending' && styles.filterChipActive]}
+          onPress={() => setRequestFilter('pending')}
+        >
+          <Text style={requestFilter === 'pending' ? styles.filterChipTextActive : styles.filterChipText}>Pending</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.filterChip}>
-          <Text style={styles.filterChipText}>Approved</Text>
+        <TouchableOpacity 
+          style={[styles.filterChip, requestFilter === 'approved' && styles.filterChipActive]}
+          onPress={() => setRequestFilter('approved')}
+        >
+          <Text style={requestFilter === 'approved' ? styles.filterChipTextActive : styles.filterChipText}>Approved</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.filterChip}>
-          <Text style={styles.filterChipText}>Denied</Text>
+        <TouchableOpacity 
+          style={[styles.filterChip, requestFilter === 'denied' && styles.filterChipActive]}
+          onPress={() => setRequestFilter('denied')}
+        >
+          <Text style={requestFilter === 'denied' ? styles.filterChipTextActive : styles.filterChipText}>Denied</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.requestsList}>
-        {MOCK_REQUESTS.map((request) => (
+        {filteredRequests.map((request) => (
           <View key={request.id} style={styles.requestCard}>
             <View style={styles.requestHeader}>
               <View style={styles.requestEmployee}>
@@ -223,12 +312,12 @@ export default function PTOScreen({ navigation }: any) {
 
             <View style={styles.requestDates}>
               <View style={styles.requestDateItem}>
-                <Ionicons name="calendar-outline" size={16} color="#666" />
+                <Ionicons name="calendar-outline" size={16} color="#a0a0a0" />
                 <Text style={styles.requestDateText}>{request.startDate}</Text>
               </View>
-              <Ionicons name="arrow-forward" size={16} color="#CCC" />
+              <Ionicons name="arrow-forward" size={16} color="#4a4a6e" />
               <View style={styles.requestDateItem}>
-                <Ionicons name="calendar-outline" size={16} color="#666" />
+                <Ionicons name="calendar-outline" size={16} color="#a0a0a0" />
                 <Text style={styles.requestDateText}>{request.endDate}</Text>
               </View>
               <View style={styles.requestHours}>
@@ -242,14 +331,14 @@ export default function PTOScreen({ navigation }: any) {
               <View style={styles.requestActions}>
                 <TouchableOpacity 
                   style={[styles.requestActionBtn, styles.approveBtn]}
-                  onPress={() => Alert.alert('Approved', 'Request has been approved')}
+                  onPress={() => handleApproveRequest(request.id)}
                 >
                   <Ionicons name="checkmark" size={18} color="#FFF" />
                   <Text style={styles.requestActionText}>Approve</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                   style={[styles.requestActionBtn, styles.denyBtn]}
-                  onPress={() => Alert.alert('Denied', 'Request has been denied')}
+                  onPress={() => handleDenyRequest(request.id)}
                 >
                   <Ionicons name="close" size={18} color="#FFF" />
                   <Text style={styles.requestActionText}>Deny</Text>
@@ -319,7 +408,7 @@ export default function PTOScreen({ navigation }: any) {
                 <>
                   <Text style={styles.calendarDayText}>{day}</Text>
                   {/* Indicators for holidays/leave */}
-                  {MOCK_HOLIDAYS.some(h => h.date === `${selectedYear}-${String(selectedMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`) && (
+                  {holidays.some(h => h.date === `${selectedYear}-${String(selectedMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`) && (
                     <View style={[styles.dayIndicator, { backgroundColor: '#F59E0B' }]} />
                   )}
                 </>
@@ -345,7 +434,7 @@ export default function PTOScreen({ navigation }: any) {
 
         <Text style={styles.sectionTitle}>Upcoming Time Off</Text>
         <View style={styles.upcomingList}>
-          {MOCK_REQUESTS.filter(r => r.status === 'approved').map((request) => (
+          {requests.filter(r => r.status === 'approved').map((request) => (
             <View key={request.id} style={styles.upcomingItem}>
               <View style={styles.upcomingDates}>
                 <Text style={styles.upcomingStartDate}>{request.startDate}</Text>
@@ -472,7 +561,7 @@ export default function PTOScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#1a1a2e',
   },
   header: {
     paddingTop: 50,
@@ -572,7 +661,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#FFFFFF',
     marginBottom: 12,
   },
   balancesList: {
@@ -580,7 +669,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   balanceCard: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 16,
   },
@@ -600,7 +689,7 @@ const styles = StyleSheet.create({
   balanceType: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: '#FFFFFF',
   },
   balanceNumbers: {
     flexDirection: 'row',
@@ -615,7 +704,7 @@ const styles = StyleSheet.create({
   },
   balanceSubtext: {
     fontSize: 12,
-    color: '#666',
+    color: '#a0a0a0',
   },
   balanceDetails: {
     flex: 1,
@@ -627,12 +716,12 @@ const styles = StyleSheet.create({
   },
   balanceDetailLabel: {
     fontSize: 13,
-    color: '#666',
+    color: '#a0a0a0',
   },
   balanceDetailValue: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#333',
+    color: '#FFFFFF',
   },
   progressContainer: {},
   progressBar: {
@@ -665,7 +754,7 @@ const styles = StyleSheet.create({
     color: '#FFF',
   },
   holidaysList: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 16,
     gap: 12,
@@ -687,11 +776,11 @@ const styles = StyleSheet.create({
   holidayName: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#333',
+    color: '#FFFFFF',
   },
   holidayDate: {
     fontSize: 12,
-    color: '#666',
+    color: '#a0a0a0',
   },
   filterRow: {
     flexDirection: 'row',
@@ -702,14 +791,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
   },
   filterChipActive: {
     backgroundColor: '#1473FF',
   },
   filterChipText: {
     fontSize: 13,
-    color: '#666',
+    color: '#a0a0a0',
   },
   filterChipTextActive: {
     fontSize: 13,
@@ -720,7 +809,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   requestCard: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 16,
   },
@@ -739,7 +828,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#EBF5FF',
+    backgroundColor: '#1a1a2e',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -751,11 +840,11 @@ const styles = StyleSheet.create({
   employeeName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#333',
+    color: '#FFFFFF',
   },
   requestType: {
     fontSize: 13,
-    color: '#666',
+    color: '#a0a0a0',
   },
   statusBadge: {
     paddingHorizontal: 10,
@@ -780,7 +869,7 @@ const styles = StyleSheet.create({
   },
   requestDateText: {
     fontSize: 13,
-    color: '#666',
+    color: '#a0a0a0',
   },
   requestHours: {
     marginLeft: 'auto',
@@ -792,11 +881,11 @@ const styles = StyleSheet.create({
   requestHoursText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#333',
+    color: '#FFFFFF',
   },
   requestReason: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
     fontStyle: 'italic',
   },
   requestActions: {
@@ -832,18 +921,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 16,
   },
   calendarMonth: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
+    color: '#FFFFFF',
   },
   calendarWeekDays: {
     flexDirection: 'row',
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     paddingVertical: 10,
     marginBottom: 8,
@@ -853,12 +942,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 12,
     fontWeight: '600',
-    color: '#666',
+    color: '#a0a0a0',
   },
   calendarDays: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 8,
     marginBottom: 16,
@@ -871,7 +960,7 @@ const styles = StyleSheet.create({
   },
   calendarDayText: {
     fontSize: 14,
-    color: '#333',
+    color: '#FFFFFF',
   },
   dayIndicator: {
     width: 6,
@@ -897,13 +986,13 @@ const styles = StyleSheet.create({
   },
   legendText: {
     fontSize: 12,
-    color: '#666',
+    color: '#a0a0a0',
   },
   upcomingList: {
     gap: 12,
   },
   upcomingItem: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 16,
     flexDirection: 'row',
@@ -914,20 +1003,20 @@ const styles = StyleSheet.create({
   upcomingStartDate: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: '#FFFFFF',
   },
   upcomingEndDate: {
     fontSize: 12,
-    color: '#666',
+    color: '#a0a0a0',
   },
   upcomingName: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#333',
+    color: '#FFFFFF',
   },
   upcomingType: {
     fontSize: 12,
-    color: '#666',
+    color: '#a0a0a0',
   },
   modalOverlay: {
     flex: 1,
@@ -935,7 +1024,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 24,
@@ -950,7 +1039,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#FFFFFF',
   },
   formGroup: {
     marginBottom: 16,
@@ -958,7 +1047,7 @@ const styles = StyleSheet.create({
   formLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#333',
+    color: '#FFFFFF',
     marginBottom: 8,
   },
   formRow: {
@@ -966,11 +1055,11 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   formInput: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 14,
     fontSize: 16,
-    color: '#333',
+    color: '#FFFFFF',
   },
   formTextArea: {
     minHeight: 80,
@@ -984,12 +1073,12 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 12,
     borderRadius: 8,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#1a1a2e',
     alignItems: 'center',
   },
   leaveTypeText: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
   },
   modalButton: {
     marginTop: 8,

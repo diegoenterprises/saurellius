@@ -32,12 +32,17 @@ def create_app(config_name='default'):
         r"/api/*": {
             "origins": [
                 "http://localhost:3000",
+                "http://localhost:8081",
+                "http://localhost:8082",
                 "http://localhost:19006",
+                "http://127.0.0.1:8081",
+                "http://127.0.0.1:8082",
                 "https://saurellius.drpaystub.com",
                 "https://api.saurellius.drpaystub.com"
             ],
             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-            "allow_headers": ["Content-Type", "Authorization"]
+            "allow_headers": ["Content-Type", "Authorization"],
+            "supports_credentials": True
         }
     })
     

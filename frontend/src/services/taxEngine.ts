@@ -1,5 +1,5 @@
 /**
- * 🏛️ TAX ENGINE API SERVICE
+ * TAX ENGINE API SERVICE
  * Frontend service for Saurellius Tax Engine Open API
  * Enterprise-grade payroll tax calculations
  */

@@ -1,5 +1,5 @@
 /**
- * 📊 DASHBOARD SCREEN
+ * DASHBOARD SCREEN
  * Matches the dashboard.html design with hero, stats, employees, rewards
  */
 
@@ -22,6 +22,7 @@ import { fetchDashboard } from '../../store/slices/dashboardSlice';
 import { AppDispatch, RootState } from '../../store';
 import { RootStackParamList } from '../../navigation/AppNavigator';
 import { extendedColors as colors, gradients, shadows, spacing, borderRadius, typography } from '../../styles/theme';
+import useResponsive from '../../hooks/useResponsive';
 
 // Components
 import Header from '../../components/dashboard/Header';
@@ -30,14 +31,24 @@ import RewardsCard from '../../components/dashboard/RewardsCard';
 import EmployeeCard from '../../components/dashboard/EmployeeCard';
 import ActivityItem from '../../components/dashboard/ActivityItem';
 import SubscriptionCard from '../../components/dashboard/SubscriptionCard';
+import AIInsightsCard from '../../components/ai/AIInsightsCard';
+import WeatherWidget from '../../components/dashboard/WeatherWidget';
 
 type DashboardNavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
+// Tier hierarchy for feature access
+const TIER_LEVELS: Record<string, number> = {
+  free: 0,
+  starter: 1,
+  professional: 2,
+  business: 3,
+};
 
 export default function DashboardScreen() {
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation<DashboardNavigationProp>();
   const { user } = useSelector((state: RootState) => state.auth);
-  const { stats, activities, rewards, isLoading } = useSelector((state: RootState) => state.dashboard);
+  const { stats, activities, rewards, recentEmployees, isLoading } = useSelector((state: RootState) => state.dashboard);
 
   useEffect(() => {
     dispatch(fetchDashboard());
@@ -48,6 +59,47 @@ export default function DashboardScreen() {
   };
 
   const firstName = user?.first_name || 'User';
+  const userTier = user?.subscription_tier || 'free';
+  const tierLevel = TIER_LEVELS[userTier] ?? 0;
+  
+  // Feature access helpers
+  const hasFeatureAccess = (minTier: string) => tierLevel >= (TIER_LEVELS[minTier] ?? 0);
+  const isAdmin = user?.is_admin === true;
+  const userRole = (user as any)?.role || 'employee';
+  const isEmployer = userRole === 'admin' || userRole === 'employer' || userRole === 'manager' || isAdmin;
+
+  // Responsive design
+  const { isMobile, isTablet, isDesktop, horizontalPadding, gridColumns } = useResponsive();
+
+  // Responsive styles
+  const responsiveStyles = {
+    scrollContent: {
+      padding: horizontalPadding,
+      paddingBottom: spacing.xxl,
+      maxWidth: isDesktop ? 1400 : '100%',
+      marginHorizontal: isDesktop ? 'auto' : 0,
+      width: '100%',
+    },
+    mainGrid: {
+      flexDirection: (isMobile ? 'column' : 'row') as 'column' | 'row',
+      gap: spacing.lg,
+    },
+    leftColumn: {
+      flex: isMobile ? undefined : 2,
+      width: isMobile ? '100%' : undefined,
+    },
+    rightColumn: {
+      flex: isMobile ? undefined : 1,
+      width: isMobile ? '100%' : undefined,
+    },
+    enterpriseGrid: {
+      flexDirection: 'row' as const,
+      flexWrap: 'wrap' as const,
+      justifyContent: 'center' as const,
+      gap: 16,
+    },
+    enterpriseCardWidth: isMobile ? '45%' as const : isTablet ? '30%' as const : 140,
+  };
 
   return (
     <View style={styles.container}>
@@ -55,7 +107,7 @@ export default function DashboardScreen() {
       
       <ScrollView
         style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, responsiveStyles.scrollContent]}
         refreshControl={
           <RefreshControl refreshing={isLoading} onRefresh={handleRefresh} />
         }
@@ -71,10 +123,15 @@ export default function DashboardScreen() {
           <View style={styles.heroContent}>
             <Text style={styles.heroTitle}>Welcome back, {firstName}! 👋</Text>
             <Text style={styles.heroSubtitle}>
-              Your payroll dashboard is ready. Generate paystubs, manage employees, and track your rewards.
+              Your admin dashboard is ready. Monitor platform activity, generate paystubs, and manage your system.
             </Text>
           </View>
         </LinearGradient>
+
+        {/* Weather Widget */}
+        <View style={styles.weatherContainer}>
+          <WeatherWidget />
+        </View>
 
         {/* Stats Grid */}
         <View style={styles.statsGrid}>
@@ -107,10 +164,29 @@ export default function DashboardScreen() {
           />
         </View>
 
+        {/* AI Insights - Powered by Gemini */}
+        <View style={{ paddingHorizontal: spacing.md }}>
+          <AIInsightsCard
+            metrics={{
+              total_payroll: stats?.ytd_gross || 0,
+              employee_count: stats?.active_employees || 0,
+              avg_pay: stats?.avg_net_pay || 0,
+              paystubs_generated: stats?.total_paystubs || 0,
+              prev_total_payroll: (stats as any)?.prev_ytd_gross || 0,
+              prev_paystubs: (stats as any)?.prev_paystubs || 0,
+              plan: user?.subscription_tier || 'free',
+              usage_percent: (stats as any)?.usage_percent || 0,
+            }}
+          />
+        </View>
+
         {/* Action Buttons */}
         <View style={styles.actions}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('GeneratePaystub', {})}
+            activeOpacity={0.8}
+            onPress={() => {
+                            navigation.navigate('GeneratePaystub', {});
+            }}
           >
             <LinearGradient
               colors={gradients.primary}
@@ -124,8 +200,11 @@ export default function DashboardScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity
+            activeOpacity={0.8}
             style={styles.secondaryActionButton}
-            onPress={() => navigation.navigate('AddEmployee')}
+            onPress={() => {
+                            navigation.navigate('AddEmployee');
+            }}
           >
             <Ionicons name="person-add-outline" size={20} color={colors.text.primary} />
             <Text style={styles.secondaryActionText}>Add Employee</Text>
@@ -148,28 +227,31 @@ export default function DashboardScreen() {
                 </TouchableOpacity>
               </View>
 
-              {/* Sample Employees - would be mapped from actual data */}
-              <EmployeeCard
-                initials="SM"
-                name="Sarah Mitchell"
-                role="Senior Developer • CA"
-                onGeneratePaystub={() => navigation.navigate('GeneratePaystub', { employeeId: 1 })}
-                onEdit={() => navigation.navigate('EmployeeDetail', { employeeId: 1 })}
-              />
-              <EmployeeCard
-                initials="MJ"
-                name="Michael Johnson"
-                role="Product Manager • NY"
-                onGeneratePaystub={() => navigation.navigate('GeneratePaystub', { employeeId: 2 })}
-                onEdit={() => navigation.navigate('EmployeeDetail', { employeeId: 2 })}
-              />
-              <EmployeeCard
-                initials="EC"
-                name="Emily Chen"
-                role="UX Designer • TX"
-                onGeneratePaystub={() => navigation.navigate('GeneratePaystub', { employeeId: 3 })}
-                onEdit={() => navigation.navigate('EmployeeDetail', { employeeId: 3 })}
-              />
+              <View style={styles.employeeList}>
+                {recentEmployees && recentEmployees.length > 0 ? (
+                  recentEmployees.slice(0, 3).map((employee: any) => (
+                    <EmployeeCard
+                      key={employee.id}
+                      initials={`${employee.first_name?.[0] || ''}${employee.last_name?.[0] || ''}`}
+                      name={`${employee.first_name || ''} ${employee.last_name || ''}`}
+                      role={`${employee.position || 'Employee'} • ${employee.state || 'US'}`}
+                      onGeneratePaystub={() => navigation.navigate('GeneratePaystub', { employeeId: employee.id })}
+                      onEdit={() => navigation.navigate('EmployeeDetail', { employeeId: employee.id })}
+                    />
+                  ))
+                ) : (
+                  <View style={styles.emptyEmployees}>
+                    <Ionicons name="people-outline" size={32} color="#a0a0a0" />
+                    <Text style={styles.emptyText}>No employees yet</Text>
+                    <TouchableOpacity 
+                      style={styles.addEmployeeLink}
+                      onPress={() => navigation.navigate('AddEmployee' as any)}
+                    >
+                      <Text style={styles.addEmployeeText}>Add your first employee</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </View>
             </View>
 
             {/* Recent Activity Card */}
@@ -181,21 +263,21 @@ export default function DashboardScreen() {
                 </View>
               </View>
 
-              <ActivityItem
-                icon="document-text"
-                title="Paystub generated for Sarah Mitchell"
-                time="2 hours ago"
-              />
-              <ActivityItem
-                icon="star"
-                title="Earned 10 reward points"
-                time="5 hours ago"
-              />
-              <ActivityItem
-                icon="person-add"
-                title="New employee added: Emily Chen"
-                time="1 day ago"
-              />
+              {activities && activities.length > 0 ? (
+                activities.slice(0, 3).map((activity: any, index: number) => (
+                  <ActivityItem
+                    key={activity.id || index}
+                    icon={activity.icon || 'ellipse'}
+                    title={activity.title || activity.description}
+                    time={activity.timestamp || 'Recently'}
+                  />
+                ))
+              ) : (
+                <View style={styles.emptyEmployees}>
+                  <Ionicons name="time-outline" size={32} color="#a0a0a0" />
+                  <Text style={styles.emptyText}>No recent activity</Text>
+                </View>
+              )}
             </View>
           </View>
 
@@ -248,7 +330,7 @@ export default function DashboardScreen() {
             {/* Subscription Card */}
             <SubscriptionCard
               plan={user?.subscription_tier || 'professional'}
-              onUpgrade={() => console.log('Upgrade')}
+              onUpgrade={() => navigation.navigate('Subscription' as any)}
             />
           </View>
         </View>
@@ -262,79 +344,108 @@ export default function DashboardScreen() {
             </View>
           </View>
           
-          <View style={styles.enterpriseGrid}>
-            <TouchableOpacity 
-              style={styles.enterpriseCard}
-              onPress={() => navigation.navigate('AdminPortal' as any)}
-            >
-              <LinearGradient
-                colors={['#8B5CF6', '#6D28D9']}
-                style={styles.enterpriseIconBg}
+          <View style={[styles.enterpriseGrid, responsiveStyles.enterpriseGrid]}>
+            {/* Admin Portal - Only visible to platform admins (you) */}
+            {isAdmin && (
+              <TouchableOpacity 
+                style={[styles.enterpriseCard, { width: responsiveStyles.enterpriseCardWidth }]}
+                onPress={() => navigation.navigate('AdminPortal' as any)}
               >
-                <Ionicons name="shield-checkmark" size={24} color="#FFF" />
-              </LinearGradient>
-              <Text style={styles.enterpriseCardTitle}>Admin Portal</Text>
-              <Text style={styles.enterpriseCardDesc}>Analytics & API Management</Text>
-            </TouchableOpacity>
+                <LinearGradient
+                  colors={['#8B5CF6', '#6D28D9']}
+                  style={styles.enterpriseIconBg}
+                >
+                  <Ionicons name="shield-checkmark" size={24} color="#FFF" />
+                </LinearGradient>
+                <Text style={styles.enterpriseCardTitle}>Admin Portal</Text>
+                <Text style={styles.enterpriseCardDesc}>Platform Analytics</Text>
+              </TouchableOpacity>
+            )}
+
+            {/* Employer/Admin Only Features */}
+            {isEmployer && (
+              <TouchableOpacity 
+                style={[styles.enterpriseCard, { width: responsiveStyles.enterpriseCardWidth }]}
+                onPress={() => navigation.navigate('Compliance' as any)}
+              >
+                <LinearGradient
+                  colors={['#10B981', '#059669']}
+                  style={styles.enterpriseIconBg}
+                >
+                  <Ionicons name="document-text" size={24} color="#FFF" />
+                </LinearGradient>
+                <Text style={styles.enterpriseCardTitle}>Compliance</Text>
+                <Text style={styles.enterpriseCardDesc}>DocuGinuity Forms</Text>
+              </TouchableOpacity>
+            )}
+
+            {isEmployer && (
+              <TouchableOpacity 
+                style={[styles.enterpriseCard, { width: responsiveStyles.enterpriseCardWidth }]}
+                onPress={() => navigation.navigate('Reports' as any)}
+              >
+                <LinearGradient
+                  colors={['#F59E0B', '#D97706']}
+                  style={styles.enterpriseIconBg}
+                >
+                  <Ionicons name="bar-chart" size={24} color="#FFF" />
+                </LinearGradient>
+                <Text style={styles.enterpriseCardTitle}>Reports</Text>
+                <Text style={styles.enterpriseCardDesc}>Payroll Analytics</Text>
+              </TouchableOpacity>
+            )}
+
+            {isEmployer && (
+              <TouchableOpacity 
+                style={[styles.enterpriseCard, { width: responsiveStyles.enterpriseCardWidth }]}
+                onPress={() => navigation.navigate('TaxCenter' as any)}
+              >
+                <LinearGradient
+                  colors={['#3B82F6', '#1D4ED8']}
+                  style={styles.enterpriseIconBg}
+                >
+                  <Ionicons name="calculator" size={24} color="#FFF" />
+                </LinearGradient>
+                <Text style={styles.enterpriseCardTitle}>Tax Filing</Text>
+                <Text style={styles.enterpriseCardDesc}>941, 940, W-2</Text>
+              </TouchableOpacity>
+            )}
+
+            {isEmployer && (
+              <TouchableOpacity 
+                style={[styles.enterpriseCard, { width: responsiveStyles.enterpriseCardWidth }]}
+                onPress={() => navigation.navigate('Contractors' as any)}
+              >
+                <LinearGradient
+                  colors={['#EC4899', '#BE185D']}
+                  style={styles.enterpriseIconBg}
+                >
+                  <Ionicons name="briefcase" size={24} color="#FFF" />
+                </LinearGradient>
+                <Text style={styles.enterpriseCardTitle}>Contractors</Text>
+                <Text style={styles.enterpriseCardDesc}>1099 Management</Text>
+              </TouchableOpacity>
+            )}
+
+            {/* Employee Features - Clock In/Out */}
+            {!isEmployer && (
+              <TouchableOpacity 
+                style={[styles.enterpriseCard, { width: responsiveStyles.enterpriseCardWidth }]}
+                onPress={() => navigation.navigate('Timesheet' as any)}
+              >
+                <LinearGradient
+                  colors={['#F97316', '#EA580C']}
+                  style={styles.enterpriseIconBg}
+                >
+                  <Ionicons name="time" size={24} color="#FFF" />
+                </LinearGradient>
+                <Text style={styles.enterpriseCardTitle}>Timesheet</Text>
+                <Text style={styles.enterpriseCardDesc}>Clock In/Out</Text>
+              </TouchableOpacity>
+            )}
 
             <TouchableOpacity 
-              style={styles.enterpriseCard}
-              onPress={() => navigation.navigate('Compliance' as any)}
-            >
-              <LinearGradient
-                colors={['#10B981', '#059669']}
-                style={styles.enterpriseIconBg}
-              >
-                <Ionicons name="document-text" size={24} color="#FFF" />
-              </LinearGradient>
-              <Text style={styles.enterpriseCardTitle}>Compliance</Text>
-              <Text style={styles.enterpriseCardDesc}>DocuGinuity Forms</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity 
-              style={styles.enterpriseCard}
-              onPress={() => navigation.navigate('Reporting' as any)}
-            >
-              <LinearGradient
-                colors={['#F59E0B', '#D97706']}
-                style={styles.enterpriseIconBg}
-              >
-                <Ionicons name="bar-chart" size={24} color="#FFF" />
-              </LinearGradient>
-              <Text style={styles.enterpriseCardTitle}>Reports</Text>
-              <Text style={styles.enterpriseCardDesc}>Payroll Analytics</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity 
-              style={styles.enterpriseCard}
-              onPress={() => navigation.navigate('TaxCenter' as any)}
-            >
-              <LinearGradient
-                colors={['#3B82F6', '#1D4ED8']}
-                style={styles.enterpriseIconBg}
-              >
-                <Ionicons name="calculator" size={24} color="#FFF" />
-              </LinearGradient>
-              <Text style={styles.enterpriseCardTitle}>Tax Filing</Text>
-              <Text style={styles.enterpriseCardDesc}>941, 940, W-2</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity 
-              style={styles.enterpriseCard}
-              onPress={() => navigation.navigate('Contractors' as any)}
-            >
-              <LinearGradient
-                colors={['#EC4899', '#BE185D']}
-                style={styles.enterpriseIconBg}
-              >
-                <Ionicons name="briefcase" size={24} color="#FFF" />
-              </LinearGradient>
-              <Text style={styles.enterpriseCardTitle}>Contractors</Text>
-              <Text style={styles.enterpriseCardDesc}>1099 Management</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity 
-              style={styles.enterpriseCard}
+              style={[styles.enterpriseCard, { width: responsiveStyles.enterpriseCardWidth }]}
               onPress={() => navigation.navigate('PTO' as any)}
             >
               <LinearGradient
@@ -348,7 +459,7 @@ export default function DashboardScreen() {
             </TouchableOpacity>
 
             <TouchableOpacity 
-              style={styles.enterpriseCard}
+              style={[styles.enterpriseCard, { width: responsiveStyles.enterpriseCardWidth }]}
               onPress={() => navigation.navigate('Swipe' as any)}
             >
               <LinearGradient
@@ -361,22 +472,24 @@ export default function DashboardScreen() {
               <Text style={styles.enterpriseCardDesc}>Schedule Swap</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity 
-              style={styles.enterpriseCard}
-              onPress={() => navigation.navigate('Workforce' as any)}
-            >
-              <LinearGradient
-                colors={['#0EA5E9', '#0284C7']}
-                style={styles.enterpriseIconBg}
+            {isEmployer && (
+              <TouchableOpacity 
+                style={[styles.enterpriseCard, { width: responsiveStyles.enterpriseCardWidth }]}
+                onPress={() => navigation.navigate('Workforce' as any)}
               >
-                <Ionicons name="people" size={24} color="#FFF" />
-              </LinearGradient>
-              <Text style={styles.enterpriseCardTitle}>Workforce</Text>
-              <Text style={styles.enterpriseCardDesc}>Real-Time View</Text>
-            </TouchableOpacity>
+                <LinearGradient
+                  colors={['#0EA5E9', '#0284C7']}
+                  style={styles.enterpriseIconBg}
+                >
+                  <Ionicons name="people" size={24} color="#FFF" />
+                </LinearGradient>
+                <Text style={styles.enterpriseCardTitle}>Workforce</Text>
+                <Text style={styles.enterpriseCardDesc}>Real-Time View</Text>
+              </TouchableOpacity>
+            )}
 
             <TouchableOpacity 
-              style={styles.enterpriseCard}
+              style={[styles.enterpriseCard, { width: responsiveStyles.enterpriseCardWidth }]}
               onPress={() => navigation.navigate('Messages' as any)}
             >
               <LinearGradient
@@ -389,22 +502,24 @@ export default function DashboardScreen() {
               <Text style={styles.enterpriseCardDesc}>Communications</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity 
-              style={styles.enterpriseCard}
-              onPress={() => navigation.navigate('Garnishment' as any)}
-            >
-              <LinearGradient
-                colors={['#EF4444', '#DC2626']}
-                style={styles.enterpriseIconBg}
+            {isEmployer && (
+              <TouchableOpacity 
+                style={[styles.enterpriseCard, { width: responsiveStyles.enterpriseCardWidth }]}
+                onPress={() => navigation.navigate('Garnishment' as any)}
               >
-                <Ionicons name="wallet" size={24} color="#FFF" />
-              </LinearGradient>
-              <Text style={styles.enterpriseCardTitle}>Garnishments</Text>
-              <Text style={styles.enterpriseCardDesc}>Wage Deductions</Text>
-            </TouchableOpacity>
+                <LinearGradient
+                  colors={['#EF4444', '#DC2626']}
+                  style={styles.enterpriseIconBg}
+                >
+                  <Ionicons name="wallet" size={24} color="#FFF" />
+                </LinearGradient>
+                <Text style={styles.enterpriseCardTitle}>Garnishments</Text>
+                <Text style={styles.enterpriseCardDesc}>Wage Deductions</Text>
+              </TouchableOpacity>
+            )}
 
             <TouchableOpacity 
-              style={styles.enterpriseCard}
+              style={[styles.enterpriseCard, { width: responsiveStyles.enterpriseCardWidth }]}
               onPress={() => navigation.navigate('Benefits' as any)}
             >
               <LinearGradient
@@ -426,7 +541,7 @@ export default function DashboardScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#0f0f23',
   },
   scrollView: {
     flex: 1,
@@ -455,6 +570,9 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSize.lg,
     color: 'rgba(255, 255, 255, 0.95)',
     lineHeight: 24,
+  },
+  weatherContainer: {
+    marginBottom: spacing.lg,
   },
   statsGrid: {
     flexDirection: 'row',
@@ -562,22 +680,29 @@ const styles = StyleSheet.create({
     color: colors.text.primary,
   },
   enterpriseSection: {
-    backgroundColor: '#FFF',
+    backgroundColor: colors.surface.primary,
     borderRadius: 16,
     padding: spacing.lg,
     marginTop: spacing.lg,
+    borderWidth: 1,
+    borderColor: colors.border.default,
   },
   enterpriseGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
+    justifyContent: 'flex-start',
+    gap: 16,
+    marginTop: 8,
   },
   enterpriseCard: {
-    width: '31%',
-    backgroundColor: '#F8FAFC',
+    minHeight: 120,
+    backgroundColor: colors.surface.elevated,
     borderRadius: 12,
     padding: spacing.md,
     alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: colors.border.default,
   },
   enterpriseIconBg: {
     width: 48,
@@ -590,13 +715,33 @@ const styles = StyleSheet.create({
   enterpriseCardTitle: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1F2937',
+    color: colors.text.primary,
     textAlign: 'center',
   },
   enterpriseCardDesc: {
     fontSize: 11,
-    color: '#6B7280',
+    color: colors.text.secondary,
     textAlign: 'center',
     marginTop: 2,
+  },
+  employeeList: {
+    gap: 12,
+  },
+  emptyEmployees: {
+    alignItems: 'center',
+    padding: 24,
+  },
+  emptyText: {
+    fontSize: 14,
+    color: '#a0a0a0',
+    marginTop: 8,
+  },
+  addEmployeeLink: {
+    marginTop: 12,
+  },
+  addEmployeeText: {
+    fontSize: 14,
+    color: '#1473FF',
+    fontWeight: '600',
   },
 });

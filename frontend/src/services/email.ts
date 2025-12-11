@@ -1,5 +1,5 @@
 /**
- * 📧 Email Service
+ * Email Service
  * API calls for email functionality
  */
 

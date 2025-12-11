@@ -5,7 +5,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors, borderRadius, shadows } from '../../styles/theme';
+import { extendedColors as colors, borderRadius, shadows } from '../../styles/theme';
 
 export const toastConfig = {
   success: ({ text1, text2 }: any) => (

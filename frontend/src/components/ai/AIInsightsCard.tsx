@@ -29,10 +29,79 @@ interface AIInsightsCardProps {
   };
 }
 
+// Generate local insights based on metrics when API fails
+const generateLocalInsights = (metrics: AIInsightsCardProps['metrics']): DashboardInsights => {
+  const employeeCount = metrics.employee_count || 0;
+  const totalPayroll = metrics.total_payroll || 0;
+  const paystubs = metrics.paystubs_generated || 0;
+  const avgPay = metrics.avg_pay || 0;
+  const plan = metrics.plan || 'free';
+  
+  const insights: string[] = [];
+  const recommendations: string[] = [];
+  const alerts: string[] = [];
+  
+  // Generate admin-focused insights
+  if (paystubs === 0) {
+    insights.push("Platform is operational and ready for paystub generation.");
+    insights.push("All system services are running normally.");
+    recommendations.push("Test the paystub generator with sample data.");
+    recommendations.push("Review platform settings and configurations.");
+  } else {
+    insights.push(`Platform has processed ${paystubs} paystub${paystubs > 1 ? 's' : ''} totaling $${totalPayroll.toLocaleString()}.`);
+    if (employeeCount > 0) {
+      insights.push(`${employeeCount} employee record${employeeCount > 1 ? 's' : ''} in the system.`);
+    }
+    if (avgPay > 0) {
+      insights.push(`Average paystub value: $${avgPay.toLocaleString()}.`);
+    }
+  }
+  
+  // Admin recommendations
+  recommendations.push("Monitor system performance and API usage.");
+  recommendations.push("Review security logs and access patterns.");
+  
+  // Plan info for admin
+  if (plan) {
+    insights.push(`Current subscription tier: ${plan.charAt(0).toUpperCase() + plan.slice(1)}.`);
+  }
+  
+  // Seasonal alerts
+  const month = new Date().getMonth();
+  if (month === 11 || month === 0) {
+    alerts.push("Year-end tax documents (W-2, 1099) should be prepared by January 31st.");
+  }
+  if (month >= 3 && month <= 4) {
+    alerts.push("Q1 payroll tax filings are due. Ensure all forms are submitted.");
+  }
+  
+  // Generate admin-focused headline
+  let headline = "Admin Dashboard Active";
+  if (paystubs === 0) {
+    headline = "Platform Ready - All Systems Operational";
+  } else {
+    headline = `Platform Active: $${totalPayroll.toLocaleString()} Processed`;
+  }
+
+  return {
+    headline,
+    insights,
+    recommendations,
+    alerts,
+    trends: {
+      payroll_trend: totalPayroll > (metrics.prev_total_payroll || 0) ? 'up' : 'stable',
+      percent_change: metrics.prev_total_payroll 
+        ? Math.round(((totalPayroll - metrics.prev_total_payroll) / metrics.prev_total_payroll) * 100)
+        : 0,
+    },
+  };
+};
+
 export default function AIInsightsCard({ metrics }: AIInsightsCardProps) {
   const [insights, setInsights] = useState<DashboardInsights | null>(null);
   const [loading, setLoading] = useState(true);
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(true); // Start expanded to show insights
+  const [usingLocal, setUsingLocal] = useState(false);
 
   useEffect(() => {
     fetchInsights();
@@ -40,11 +109,21 @@ export default function AIInsightsCard({ metrics }: AIInsightsCardProps) {
 
   const fetchInsights = async () => {
     setLoading(true);
+    setUsingLocal(false);
     try {
       const data = await aiService.getDashboardInsights(metrics);
-      setInsights(data);
+      if (data && data.headline) {
+        setInsights(data);
+      } else {
+        // API returned empty, use local insights
+        setInsights(generateLocalInsights(metrics));
+        setUsingLocal(true);
+      }
     } catch (error) {
-      console.error('Failed to fetch insights:', error);
+      console.error('Failed to fetch AI insights, using local generation:', error);
+      // Generate local insights as fallback
+      setInsights(generateLocalInsights(metrics));
+      setUsingLocal(true);
     } finally {
       setLoading(false);
     }

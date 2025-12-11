@@ -5,7 +5,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { colors, spacing, borderRadius, typography, gradients } from '../../styles/theme';
+import { extendedColors as colors, spacing, borderRadius, typography, gradients } from '../../styles/theme';
 
 interface EmployeeCardProps {
   initials: string;

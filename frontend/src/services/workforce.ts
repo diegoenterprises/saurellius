@@ -1,5 +1,5 @@
 /**
- * 👁️ SAURELLIUS WORKFORCE SERVICE
+ * SAURELLIUS WORKFORCE SERVICE
  * Frontend API client for workforce management
  */
 

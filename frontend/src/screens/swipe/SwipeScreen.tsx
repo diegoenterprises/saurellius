@@ -68,7 +68,21 @@ const SwipeScreen: React.FC<{ navigation?: any }> = ({ navigation: navProp }) =>
   const [selectedRequest, setSelectedRequest] = useState<SwapRequest | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [managerNotes, setManagerNotes] = useState('');
-  const [isManager, setIsManager] = useState(true); // TODO: Get from user context
+  const [isManager, setIsManager] = useState(false);
+
+  // Fetch user role to determine manager status
+  useEffect(() => {
+    const checkManagerRole = async () => {
+      try {
+        const userRes = await api.get('/api/auth/me');
+        const role = userRes.data?.user?.role || userRes.data?.role;
+        setIsManager(role === 'admin' || role === 'manager' || role === 'supervisor' || role === 'employer');
+      } catch (error) {
+        // Role check failed - defaulting to employee
+      }
+    };
+    checkManagerRole();
+  }, []);
 
   const fetchData = useCallback(async () => {
     try {
@@ -149,7 +163,7 @@ const SwipeScreen: React.FC<{ navigation?: any }> = ({ navigation: navProp }) =>
         fetchData();
       }
     } catch (error) {
-      console.error('Error responding to request:', error);
+      // Error handled by Alert below
       Alert.alert('Error', 'Failed to process response');
     }
   };
@@ -166,17 +180,17 @@ const SwipeScreen: React.FC<{ navigation?: any }> = ({ navigation: navProp }) =>
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending':
-        return { bg: '#FEF3C7', text: '#92400E' };
+        return { bg: '#F59E0B20', text: '#F59E0B' };
       case 'accepted':
       case 'manager_pending':
-        return { bg: '#DBEAFE', text: '#1E40AF' };
+        return { bg: '#1473FF20', text: '#1473FF' };
       case 'manager_approved':
-        return { bg: '#D1FAE5', text: '#065F46' };
+        return { bg: '#10B98120', text: '#10B981' };
       case 'declined':
       case 'manager_denied':
-        return { bg: '#FEE2E2', text: '#991B1B' };
+        return { bg: '#EF444420', text: '#EF4444' };
       default:
-        return { bg: '#F3F4F6', text: '#374151' };
+        return { bg: '#6B728020', text: '#a0a0a0' };
     }
   };
 
@@ -512,7 +526,7 @@ const SwipeScreen: React.FC<{ navigation?: any }> = ({ navigation: navProp }) =>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Swap Request Details</Text>
               <TouchableOpacity onPress={() => setShowDetailModal(false)}>
-                <Ionicons name="close" size={24} color="#64748B" />
+                <Ionicons name="close" size={24} color="#a0a0a0" />
               </TouchableOpacity>
             </View>
 
@@ -567,7 +581,7 @@ const SwipeScreen: React.FC<{ navigation?: any }> = ({ navigation: navProp }) =>
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#0f0f23',
   },
   header: {
     padding: 20,
@@ -602,24 +616,21 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     marginHorizontal: 16,
     marginTop: -20,
     marginBottom: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    borderWidth: 1,
+    borderColor: '#2a2a4e',
   },
   searchInput: {
     flex: 1,
     marginLeft: 12,
     fontSize: 16,
-    color: '#1E293B',
+    color: '#FFFFFF',
   },
   tabContainer: {
     flexDirection: 'row',
@@ -633,9 +644,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     marginRight: 8,
     borderRadius: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: '#2a2a4e',
   },
   tabBtnActive: {
     backgroundColor: '#6366F1',
@@ -644,7 +655,7 @@ const styles = StyleSheet.create({
   tabText: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#64748B',
+    color: '#a0a0a0',
   },
   tabTextActive: {
     color: '#fff',
@@ -670,22 +681,19 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#64748B',
+    color: '#a0a0a0',
     marginTop: 16,
     marginBottom: 12,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   requestCard: {
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     borderRadius: 16,
     padding: 16,
     marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#2a2a4e',
   },
   cardHeader: {
     flexDirection: 'row',
@@ -705,7 +713,7 @@ const styles = StyleSheet.create({
   overtimeWarning: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FEF3C7',
+    backgroundColor: '#F59E0B20',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -714,7 +722,7 @@ const styles = StyleSheet.create({
   overtimeText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#92400E',
+    color: '#F59E0B',
   },
   swapContainer: {
     flexDirection: 'row',
@@ -728,7 +736,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#E2E8F0',
+    backgroundColor: '#2a2a4e',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
@@ -736,12 +744,12 @@ const styles = StyleSheet.create({
   avatarTextSmall: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#64748B',
+    color: '#a0a0a0',
   },
   employeeName: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1E293B',
+    color: '#FFFFFF',
     marginBottom: 8,
     textAlign: 'center',
   },
@@ -753,7 +761,7 @@ const styles = StyleSheet.create({
   },
   shiftDate: {
     fontSize: 11,
-    color: '#64748B',
+    color: '#a0a0a0',
     marginBottom: 2,
   },
   shiftTime: {
@@ -769,7 +777,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: '#F1F5F9',
+    borderTopColor: '#2a2a4e',
   },
   actionBtn: {
     flex: 1,
@@ -786,7 +794,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   rejectBtn: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: '#EF444420',
   },
   rejectBtnText: {
     color: '#DC2626',
@@ -800,7 +808,7 @@ const styles = StyleSheet.create({
     paddingVertical: 60,
   },
   loadingText: {
-    color: '#64748B',
+    color: '#a0a0a0',
   },
   emptyContainer: {
     alignItems: 'center',
@@ -809,12 +817,12 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1E293B',
+    color: '#FFFFFF',
     marginTop: 16,
   },
   emptyText: {
     fontSize: 14,
-    color: '#64748B',
+    color: '#a0a0a0',
     marginTop: 4,
   },
   modalOverlay: {
@@ -823,7 +831,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '80%',
@@ -834,18 +842,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
+    borderBottomColor: '#2a2a4e',
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1E293B',
+    color: '#FFFFFF',
   },
   modalBody: {
     padding: 16,
   },
   reasonBox: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#2a2a4e',
     padding: 16,
     borderRadius: 12,
     marginTop: 12,
@@ -853,26 +861,26 @@ const styles = StyleSheet.create({
   reasonLabel: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#64748B',
+    color: '#a0a0a0',
     marginBottom: 4,
   },
   reasonText: {
     fontSize: 14,
-    color: '#1E293B',
+    color: '#FFFFFF',
   },
   notesLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1E293B',
+    color: '#FFFFFF',
     marginTop: 20,
     marginBottom: 8,
   },
   notesInput: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#2a2a4e',
     borderRadius: 12,
     padding: 12,
     fontSize: 14,
-    color: '#1E293B',
+    color: '#FFFFFF',
     minHeight: 80,
     textAlignVertical: 'top',
   },

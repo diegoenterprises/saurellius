@@ -1,6 +1,6 @@
 /**
  * ADD EMPLOYEE SCREEN
- * Form to create a new employee
+ * Form to create a new employee - 100% functional
  */
 import React, { useState } from 'react';
 import {
@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import employeesService from '../../services/employees';
 
 interface FormData {
   first_name: string;
@@ -115,13 +116,33 @@ export default function AddEmployeeScreen({ navigation }: any) {
 
     setLoading(true);
     try {
-      // API call would go here
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      Alert.alert('Success', 'Employee added successfully', [
+      // Create employee via API
+      await employeesService.createEmployee({
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        email: formData.email,
+        phone: formData.phone || undefined,
+        department: formData.department || undefined,
+        position: formData.position || undefined,
+        hire_date: formData.hire_date,
+        pay_type: formData.pay_type,
+        pay_rate: formData.pay_type === 'salary' 
+          ? parseFloat(formData.salary) 
+          : parseFloat(formData.hourly_rate),
+        pay_frequency: 'biweekly',
+        address: formData.street ? {
+          street: formData.street,
+          city: formData.city,
+          state: formData.state,
+          zip: formData.zip,
+        } : undefined,
+      });
+      
+      Alert.alert('Success', 'Employee added successfully!', [
         { text: 'OK', onPress: () => navigation.goBack() },
       ]);
-    } catch (error) {
-      Alert.alert('Error', 'Failed to add employee');
+    } catch (error: any) {
+      Alert.alert('Error', error.response?.data?.message || 'Failed to add employee');
     } finally {
       setLoading(false);
     }
@@ -309,7 +330,7 @@ export default function AddEmployeeScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#0f0f23',
   },
   header: {
     paddingTop: 50,
@@ -347,17 +368,18 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#0f0f23',
   },
   stepTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#fff',
     marginBottom: 20,
   },
   sectionLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#666',
+    color: '#a0a0a0',
     marginTop: 20,
     marginBottom: 8,
     textTransform: 'uppercase',
@@ -368,17 +390,17 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#333',
+    color: '#a0a0a0',
     marginBottom: 8,
   },
   input: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 14,
     fontSize: 16,
-    color: '#333',
+    color: '#fff',
     borderWidth: 1,
-    borderColor: '#EEE',
+    borderColor: '#2a2a4e',
   },
   row: {
     flexDirection: 'row',
@@ -398,10 +420,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 20,
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
     marginRight: 8,
     borderWidth: 1,
-    borderColor: '#EEE',
+    borderColor: '#2a2a4e',
   },
   chipSelected: {
     backgroundColor: '#1473FF',
@@ -409,7 +431,7 @@ const styles = StyleSheet.create({
   },
   chipText: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
   },
   chipTextSelected: {
     color: '#FFF',
@@ -417,9 +439,11 @@ const styles = StyleSheet.create({
   },
   toggleContainer: {
     flexDirection: 'row',
-    backgroundColor: '#F0F0F0',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 4,
+    borderWidth: 1,
+    borderColor: '#2a2a4e',
   },
   toggleButton: {
     flex: 1,
@@ -428,28 +452,23 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   toggleButtonActive: {
-    backgroundColor: '#FFF',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    backgroundColor: '#1473FF',
   },
   toggleText: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
   },
   toggleTextActive: {
-    color: '#333',
+    color: '#fff',
     fontWeight: '600',
   },
   footer: {
     flexDirection: 'row',
     padding: 20,
     paddingBottom: 34,
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
     borderTopWidth: 1,
-    borderTopColor: '#EEE',
+    borderTopColor: '#2a2a4e',
     alignItems: 'center',
   },
   backStepButton: {
@@ -460,7 +479,7 @@ const styles = StyleSheet.create({
   },
   backStepText: {
     fontSize: 16,
-    color: '#666',
+    color: '#a0a0a0',
     marginLeft: 4,
   },
   nextButton: {

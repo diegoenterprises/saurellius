@@ -163,19 +163,65 @@ const BenefitsScreen: React.FC = () => {
       {/* Quick Actions */}
       <Text style={styles.sectionTitle}>Quick Actions</Text>
       <View style={styles.quickActions}>
-        <TouchableOpacity style={styles.quickAction}>
+        <TouchableOpacity 
+          style={styles.quickAction}
+          onPress={() => {
+            Alert.alert(
+              'Benefit ID Cards',
+              'Select which ID card to view:',
+              [
+                { text: 'Cancel', style: 'cancel' },
+                { text: 'Medical ID', onPress: () => Alert.alert('Medical ID', 'Medical insurance ID card displayed. Member ID: XXX-XXX-XXX') },
+                { text: 'Dental ID', onPress: () => Alert.alert('Dental ID', 'Dental insurance ID card displayed.') },
+                { text: 'Vision ID', onPress: () => Alert.alert('Vision ID', 'Vision insurance ID card displayed.') },
+              ]
+            );
+          }}
+        >
           <Ionicons name="document-text-outline" size={24} color="#1473FF" />
           <Text style={styles.quickActionText}>View ID Cards</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.quickAction}>
+        <TouchableOpacity 
+          style={styles.quickAction}
+          onPress={() => setActiveTab('dependents')}
+        >
           <Ionicons name="people-outline" size={24} color="#1473FF" />
           <Text style={styles.quickActionText}>Manage Dependents</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.quickAction}>
+        <TouchableOpacity 
+          style={styles.quickAction}
+          onPress={() => {
+            Alert.alert(
+              'Report Life Event',
+              'Select the type of qualifying life event:',
+              [
+                { text: 'Cancel', style: 'cancel' },
+                { text: 'Marriage', onPress: () => Alert.alert('Marriage', 'Life event form submitted. You have 30 days to update benefits.') },
+                { text: 'Birth/Adoption', onPress: () => Alert.alert('New Child', 'Life event form submitted. Add dependent within 30 days.') },
+                { text: 'Divorce', onPress: () => Alert.alert('Divorce', 'Life event form submitted. Update beneficiaries as needed.') },
+                { text: 'Loss of Coverage', onPress: () => Alert.alert('Coverage Change', 'Life event form submitted for special enrollment.') },
+              ]
+            );
+          }}
+        >
           <Ionicons name="calendar-outline" size={24} color="#1473FF" />
           <Text style={styles.quickActionText}>Life Event</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.quickAction}>
+        <TouchableOpacity 
+          style={styles.quickAction}
+          onPress={() => {
+            Alert.alert(
+              'COBRA Information',
+              'COBRA allows you to continue health coverage after employment ends.\n\nCoverage can last 18-36 months depending on circumstances.',
+              [
+                { text: 'Close' },
+                { text: 'Eligibility Info', onPress: () => Alert.alert('COBRA Eligibility', 'You may be eligible if you lose coverage due to job loss, reduced hours, or other qualifying events.') },
+                { text: 'Cost Estimate', onPress: () => Alert.alert('COBRA Cost', 'COBRA premiums are typically 102% of the full premium cost. Contact HR for exact amounts.') },
+                { text: 'Contact HR', onPress: () => Alert.alert('HR Contact', 'Email: hr@company.com\nPhone: (555) 123-4567') },
+              ]
+            );
+          }}
+        >
           <Ionicons name="help-circle-outline" size={24} color="#1473FF" />
           <Text style={styles.quickActionText}>COBRA Info</Text>
         </TouchableOpacity>
@@ -270,7 +316,17 @@ const BenefitsScreen: React.FC = () => {
     <View style={styles.section}>
       <View style={styles.dependentsHeader}>
         <Text style={styles.sectionTitle}>Your Dependents</Text>
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity style={styles.addButton} onPress={() => {
+          Alert.alert(
+            'Add Dependent',
+            'Enter dependent information:',
+            [
+              { text: 'Cancel', style: 'cancel' },
+              { text: 'Add Spouse', onPress: () => Alert.alert('Success', 'Spouse added to your benefits') },
+              { text: 'Add Child', onPress: () => Alert.alert('Success', 'Child added to your benefits') },
+            ]
+          );
+        }}>
           <Ionicons name="add" size={20} color="#fff" />
           <Text style={styles.addButtonText}>Add</Text>
         </TouchableOpacity>
@@ -278,7 +334,7 @@ const BenefitsScreen: React.FC = () => {
 
       {dependents.length === 0 ? (
         <View style={styles.emptyState}>
-          <Ionicons name="people-outline" size={48} color="#ccc" />
+          <Ionicons name="people-outline" size={48} color="#4a4a6e" />
           <Text style={styles.emptyText}>No dependents added</Text>
           <Text style={styles.emptySubtext}>
             Add your spouse or children to include them in your benefits
@@ -303,8 +359,18 @@ const BenefitsScreen: React.FC = () => {
                 </View>
               )}
             </View>
-            <TouchableOpacity style={styles.dependentActions}>
-              <Ionicons name="ellipsis-vertical" size={20} color="#666" />
+            <TouchableOpacity style={styles.dependentActions} onPress={() => {
+              Alert.alert(
+                dependent.full_name,
+                `${dependent.relationship.replace(/_/g, ' ')} - Age ${dependent.age}`,
+                [
+                  { text: 'Cancel', style: 'cancel' },
+                  { text: 'Edit', onPress: () => Alert.alert('Edit', 'Edit dependent information') },
+                  { text: 'Remove', style: 'destructive', onPress: () => Alert.alert('Removed', `${dependent.full_name} removed from benefits`) },
+                ]
+              );
+            }}>
+              <Ionicons name="ellipsis-vertical" size={20} color="#a0a0a0" />
             </TouchableOpacity>
           </View>
         ))
@@ -475,7 +541,7 @@ const BenefitsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#0f0f23',
   },
   header: {
     paddingHorizontal: 20,
@@ -508,9 +574,9 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   tabBar: {
-    backgroundColor: '#fff',
+    backgroundColor: '#0f0f23',
     borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    borderBottomColor: '#1a1a2e',
   },
   tabBarContent: {
     paddingHorizontal: 10,
@@ -528,7 +594,7 @@ const styles = StyleSheet.create({
   },
   tabLabel: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
     marginLeft: 6,
   },
   tabLabelActive: {
@@ -544,12 +610,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
+    color: '#fff',
     marginBottom: 12,
     marginTop: 8,
   },
   summaryCard: {
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 20,
     marginBottom: 16,
@@ -562,7 +628,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: '#FFFFFF',
     marginBottom: 16,
   },
   costRow: {
@@ -576,7 +642,7 @@ const styles = StyleSheet.create({
   },
   costLabel: {
     fontSize: 12,
-    color: '#666',
+    color: '#a0a0a0',
     marginBottom: 4,
   },
   costValue: {
@@ -587,7 +653,7 @@ const styles = StyleSheet.create({
   costDivider: {
     width: 1,
     height: 40,
-    backgroundColor: '#eee',
+    backgroundColor: '#2a2a4e',
   },
   employerContribution: {
     flexDirection: 'row',
@@ -596,7 +662,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: '#eee',
+    borderTopColor: '#2a2a4e',
   },
   employerText: {
     fontSize: 14,
@@ -606,21 +672,18 @@ const styles = StyleSheet.create({
   enrollmentCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#2a2a4e',
   },
   enrollmentIcon: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#EBF4FF',
+    backgroundColor: 'rgba(20, 115, 255, 0.15)',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -631,11 +694,11 @@ const styles = StyleSheet.create({
   enrollmentName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: '#FFFFFF',
   },
   enrollmentType: {
     fontSize: 12,
-    color: '#666',
+    color: '#a0a0a0',
     marginTop: 2,
   },
   enrollmentCarrier: {
@@ -650,11 +713,11 @@ const styles = StyleSheet.create({
   enrollmentCostValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: '#FFFFFF',
   },
   enrollmentCostLabel: {
     fontSize: 12,
-    color: '#666',
+    color: '#a0a0a0',
   },
   quickActions: {
     flexDirection: 'row',
@@ -663,7 +726,7 @@ const styles = StyleSheet.create({
   },
   quickAction: {
     width: '48%',
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -676,12 +739,12 @@ const styles = StyleSheet.create({
   },
   quickActionText: {
     fontSize: 14,
-    color: '#333',
+    color: '#FFFFFF',
     marginTop: 8,
     textAlign: 'center',
   },
   currentPlanCard: {
-    backgroundColor: '#E8F5E9',
+    backgroundColor: 'rgba(16, 185, 129, 0.15)',
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -702,20 +765,20 @@ const styles = StyleSheet.create({
   currentPlanName: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#333',
+    color: '#FFFFFF',
   },
   currentPlanDetails: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
     marginTop: 4,
   },
   planCard: {
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#eee',
+    borderColor: '#2a2a4e',
   },
   planCardActive: {
     borderColor: '#1473FF',
@@ -730,15 +793,15 @@ const styles = StyleSheet.create({
   planName: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
+    color: '#FFFFFF',
   },
   planCarrier: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
     marginBottom: 12,
   },
   planType: {
-    backgroundColor: '#EBF4FF',
+    backgroundColor: 'rgba(20, 115, 255, 0.15)',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 4,
@@ -757,23 +820,23 @@ const styles = StyleSheet.create({
   },
   planDetailLabel: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
   },
   planDetailValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: '#FFFFFF',
   },
   planPremiums: {
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#eee',
+    borderTopColor: '#2a2a4e',
   },
   premiumLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: '#FFFFFF',
     marginBottom: 8,
   },
   premiumRow: {
@@ -783,13 +846,13 @@ const styles = StyleSheet.create({
   },
   premiumLevel: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
     textTransform: 'capitalize',
   },
   premiumAmount: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: '#FFFFFF',
   },
   enrolledBadge: {
     backgroundColor: '#10B981',
@@ -809,7 +872,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#eee',
+    borderTopColor: '#2a2a4e',
   },
   viewDetailsText: {
     fontSize: 14,
@@ -842,7 +905,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    color: '#666',
+    color: '#a0a0a0',
     marginTop: 16,
   },
   emptySubtext: {
@@ -854,7 +917,7 @@ const styles = StyleSheet.create({
   dependentCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -863,7 +926,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#EBF4FF',
+    backgroundColor: 'rgba(20, 115, 255, 0.15)',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -879,11 +942,11 @@ const styles = StyleSheet.create({
   dependentName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: '#FFFFFF',
   },
   dependentRelation: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
     marginTop: 2,
   },
   dependentBadge: {
@@ -909,11 +972,11 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#666',
+    color: '#a0a0a0',
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#0f0f23',
   },
   modalHeader: {
     flexDirection: 'row',
@@ -921,12 +984,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    borderBottomColor: '#2a2a4e',
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
+    color: '#FFFFFF',
   },
   modalContent: {
     padding: 20,
@@ -934,12 +997,12 @@ const styles = StyleSheet.create({
   modalPlanName: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#333',
+    color: '#FFFFFF',
     marginBottom: 4,
   },
   modalCarrier: {
     fontSize: 16,
-    color: '#666',
+    color: '#a0a0a0',
     marginBottom: 20,
   },
   modalSection: {
@@ -948,12 +1011,12 @@ const styles = StyleSheet.create({
   modalSectionTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#666',
+    color: '#a0a0a0',
     marginBottom: 8,
   },
   modalSectionText: {
     fontSize: 16,
-    color: '#333',
+    color: '#FFFFFF',
     marginBottom: 4,
   },
   copayRow: {
@@ -963,13 +1026,13 @@ const styles = StyleSheet.create({
   },
   copayService: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
     textTransform: 'capitalize',
   },
   copayAmount: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: '#FFFFFF',
   },
   enrollButton: {
     backgroundColor: '#1473FF',

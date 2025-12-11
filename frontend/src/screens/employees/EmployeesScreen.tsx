@@ -1,6 +1,7 @@
 /**
  * SAURELLIUS EMPLOYEES
  * Employee directory with search, filters, and management
+ * 100% Dynamic - fetches from API
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -13,11 +14,14 @@ import {
   TextInput,
   RefreshControl,
   Image,
+  ActivityIndicator,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import api from '../../services/api';
 
 interface Employee {
   id: number;
@@ -33,26 +37,37 @@ interface Employee {
   salary: number;
 }
 
-// Sample data
-const SAMPLE_EMPLOYEES: Employee[] = [
-  { id: 1, first_name: 'Sarah', last_name: 'Johnson', email: 'sarah.j@company.com', phone: '(555) 123-4567', department: 'Engineering', position: 'Senior Developer', hire_date: '2022-03-15', status: 'active', salary: 95000 },
-  { id: 2, first_name: 'Michael', last_name: 'Chen', email: 'michael.c@company.com', phone: '(555) 234-5678', department: 'Design', position: 'UI/UX Designer', hire_date: '2021-08-01', status: 'active', salary: 78000 },
-  { id: 3, first_name: 'Emily', last_name: 'Davis', email: 'emily.d@company.com', phone: '(555) 345-6789', department: 'Marketing', position: 'Marketing Manager', hire_date: '2020-11-20', status: 'active', salary: 85000 },
-  { id: 4, first_name: 'James', last_name: 'Wilson', email: 'james.w@company.com', phone: '(555) 456-7890', department: 'Sales', position: 'Account Executive', hire_date: '2023-01-10', status: 'active', salary: 72000 },
-  { id: 5, first_name: 'Maria', last_name: 'Garcia', email: 'maria.g@company.com', phone: '(555) 567-8901', department: 'HR', position: 'HR Specialist', hire_date: '2022-06-15', status: 'on_leave', salary: 65000 },
-  { id: 6, first_name: 'David', last_name: 'Brown', email: 'david.b@company.com', phone: '(555) 678-9012', department: 'Finance', position: 'Financial Analyst', hire_date: '2021-04-01', status: 'active', salary: 82000 },
-  { id: 7, first_name: 'Lisa', last_name: 'Anderson', email: 'lisa.a@company.com', phone: '(555) 789-0123', department: 'Engineering', position: 'QA Engineer', hire_date: '2022-09-01', status: 'active', salary: 75000 },
-  { id: 8, first_name: 'Robert', last_name: 'Taylor', email: 'robert.t@company.com', phone: '(555) 890-1234', department: 'Operations', position: 'Operations Lead', hire_date: '2020-02-15', status: 'inactive', salary: 88000 },
-];
-
 const EmployeesScreen: React.FC = () => {
   const navigation = useNavigation<any>();
-  const [employees, setEmployees] = useState<Employee[]>(SAMPLE_EMPLOYEES);
-  const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>(SAMPLE_EMPLOYEES);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch employees from API
+  const fetchEmployees = useCallback(async () => {
+    try {
+      setError(null);
+      const response = await api.get('/api/employees');
+      const data = response.data?.data?.employees || response.data?.employees || response.data || [];
+      setEmployees(Array.isArray(data) ? data : []);
+    } catch (err: any) {
+      // Employee fetch failed
+      setError('Failed to load employees. Pull to refresh.');
+      setEmployees([]);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
+
+  // Load employees on mount
+  useEffect(() => {
+    fetchEmployees();
+  }, [fetchEmployees]);
 
   const departments = [...new Set(employees.map(e => e.department))];
 
@@ -79,9 +94,7 @@ const EmployeesScreen: React.FC = () => {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setRefreshing(false);
+    await fetchEmployees();
   };
 
   const getStatusColor = (status: string) => {
@@ -120,13 +133,19 @@ const EmployeesScreen: React.FC = () => {
       </View>
       
       <View style={styles.employeeActions}>
-        <TouchableOpacity style={styles.actionButton}>
-          <Ionicons name="mail-outline" size={20} color="#666" />
+        <TouchableOpacity 
+          style={styles.actionButton}
+          onPress={() => Linking.openURL(`mailto:${item.email}`)}
+        >
+          <Ionicons name="mail-outline" size={20} color="#a0a0a0" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.actionButton}>
-          <Ionicons name="call-outline" size={20} color="#666" />
+        <TouchableOpacity 
+          style={styles.actionButton}
+          onPress={() => Linking.openURL(`tel:${item.phone}`)}
+        >
+          <Ionicons name="call-outline" size={20} color="#a0a0a0" />
         </TouchableOpacity>
-        <Ionicons name="chevron-forward" size={20} color="#999" />
+        <Ionicons name="chevron-forward" size={20} color="#a0a0a0" />
       </View>
     </TouchableOpacity>
   );
@@ -147,7 +166,7 @@ const EmployeesScreen: React.FC = () => {
         
         {/* Search Bar */}
         <View style={styles.searchContainer}>
-          <Ionicons name="search" size={20} color="#666" />
+          <Ionicons name="search" size={20} color="#a0a0a0" />
           <TextInput
             style={styles.searchInput}
             placeholder="Search employees..."
@@ -157,7 +176,7 @@ const EmployeesScreen: React.FC = () => {
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity onPress={() => setSearchQuery('')}>
-              <Ionicons name="close-circle" size={20} color="#999" />
+              <Ionicons name="close-circle" size={20} color="#a0a0a0" />
             </TouchableOpacity>
           )}
         </View>
@@ -213,7 +232,7 @@ const EmployeesScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#0f0f23',
   },
   header: {
     paddingHorizontal: 20,
@@ -246,30 +265,32 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
     marginTop: 16,
+    borderWidth: 1,
+    borderColor: '#2a2a4e',
   },
   searchInput: {
     flex: 1,
     fontSize: 16,
     marginLeft: 10,
-    color: '#333',
+    color: '#fff',
   },
   filtersContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: '#0f0f23',
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    borderBottomColor: '#1a1a2e',
   },
   filterChip: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#1a1a2e',
     marginRight: 8,
   },
   filterChipActive: {
@@ -277,7 +298,7 @@ const styles = StyleSheet.create({
   },
   filterChipText: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
   },
   filterChipTextActive: {
     color: '#fff',
@@ -289,15 +310,12 @@ const styles = StyleSheet.create({
   employeeCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#2a2a4e',
   },
   avatarContainer: {
     position: 'relative',
@@ -312,7 +330,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#EBF4FF',
+    backgroundColor: '#2a2a4e',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -329,7 +347,7 @@ const styles = StyleSheet.create({
     height: 14,
     borderRadius: 7,
     borderWidth: 2,
-    borderColor: '#fff',
+    borderColor: '#1a1a2e',
   },
   employeeInfo: {
     flex: 1,
@@ -337,16 +355,16 @@ const styles = StyleSheet.create({
   employeeName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: '#fff',
   },
   employeePosition: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
     marginTop: 2,
   },
   employeeDepartment: {
     fontSize: 12,
-    color: '#999',
+    color: '#666',
     marginTop: 2,
   },
   employeeActions: {
@@ -364,12 +382,12 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#666',
+    color: '#a0a0a0',
     marginTop: 16,
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#999',
+    color: '#666',
     marginTop: 8,
   },
 });

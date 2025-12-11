@@ -261,7 +261,7 @@ Attn: Privacy Team
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#0f0f23',
   },
   header: {
     paddingHorizontal: 20,
@@ -298,20 +298,20 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   dateContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
   },
   dateText: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
     marginBottom: 4,
   },
   companyCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
@@ -324,15 +324,15 @@ const styles = StyleSheet.create({
   companyName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: '#FFFFFF',
   },
   companySubtext: {
     fontSize: 13,
-    color: '#666',
+    color: '#a0a0a0',
     marginTop: 2,
   },
   section: {
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
   },
   sectionContent: {
     fontSize: 14,
-    color: '#444',
+    color: '#a0a0a0',
     lineHeight: 22,
   },
   footer: {
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 12,
-    color: '#999',
+    color: '#a0a0a0',
     textAlign: 'center',
     marginBottom: 4,
   },

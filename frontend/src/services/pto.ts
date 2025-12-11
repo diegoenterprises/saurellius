@@ -1,5 +1,5 @@
 /**
- * 🏖️ PTO SERVICE
+ * PTO SERVICE
  * Frontend service for PTO/Leave Management
  */
 

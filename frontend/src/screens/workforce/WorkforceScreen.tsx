@@ -14,6 +14,7 @@ import {
   RefreshControl,
   Dimensions,
   Modal,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -161,9 +162,9 @@ const WorkforceScreen: React.FC = () => {
         week_start: weekStart,
         notify: true,
       });
-      alert('Schedule published and employees notified!');
+      Alert.alert('Success', 'Schedule published and employees notified!');
     } catch (error) {
-      console.error('Error publishing schedule:', error);
+      Alert.alert('Error', 'Failed to publish schedule');
     }
   };
 
@@ -399,7 +400,7 @@ const WorkforceScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#0f0f23',
   },
   header: {
     padding: 16,
@@ -485,7 +486,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   toggleActive: {
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
   },
   toggleText: {
     color: '#94A3B8',
@@ -493,16 +494,16 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   toggleTextActive: {
-    color: '#1E293B',
+    color: '#fff',
     fontSize: 13,
     fontWeight: '600',
   },
   filtersContainer: {
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#fff',
+    backgroundColor: '#0f0f23',
     borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
+    borderBottomColor: '#1a1a2e',
   },
   filterChip: {
     flexDirection: 'row',
@@ -511,9 +512,9 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: '#2a2a4e',
     marginRight: 8,
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
   },
   filterDot: {
     width: 8,
@@ -523,16 +524,16 @@ const styles = StyleSheet.create({
   },
   filterText: {
     fontSize: 13,
-    color: '#64748B',
+    color: '#a0a0a0',
     fontWeight: '500',
   },
   statsBar: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
+    borderBottomColor: '#2a2a4e',
   },
   statItem: {
     flex: 1,
@@ -541,19 +542,19 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1E293B',
+    color: '#fff',
   },
   overtimeValue: {
     color: '#EF4444',
   },
   statLabel: {
     fontSize: 12,
-    color: '#64748B',
+    color: '#a0a0a0',
     marginTop: 2,
   },
   statDivider: {
     width: 1,
-    backgroundColor: '#E2E8F0',
+    backgroundColor: '#2a2a4e',
     marginHorizontal: 16,
   },
   scheduleContainer: {
@@ -573,7 +574,7 @@ const styles = StyleSheet.create({
   headerCellText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#64748B',
+    color: '#a0a0a0',
     textTransform: 'uppercase',
   },
   dayHeaderCell: {
@@ -587,13 +588,13 @@ const styles = StyleSheet.create({
   dayName: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#64748B',
+    color: '#a0a0a0',
     textTransform: 'uppercase',
   },
   dayNumber: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#1E293B',
+    color: '#fff',
     marginTop: 2,
   },
   todayText: {
@@ -603,7 +604,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderBottomColor: '#E2E8F0',
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a2e',
   },
   employeeCell: {
     width: 160,
@@ -616,14 +617,14 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#E2E8F0',
+    backgroundColor: '#2a2a4e',
     justifyContent: 'center',
     alignItems: 'center',
   },
   avatarText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#64748B',
+    color: '#a0a0a0',
   },
   employeeInfo: {
     flex: 1,
@@ -631,7 +632,7 @@ const styles = StyleSheet.create({
   employeeName: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#1E293B',
+    color: '#fff',
   },
   hoursContainer: {
     flexDirection: 'row',
@@ -641,7 +642,7 @@ const styles = StyleSheet.create({
   },
   hoursText: {
     fontSize: 11,
-    color: '#64748B',
+    color: '#a0a0a0',
   },
   overtimeBadge: {
     backgroundColor: '#FEE2E2',
@@ -692,7 +693,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
-    color: '#64748B',
+    color: '#a0a0a0',
   },
 });
 

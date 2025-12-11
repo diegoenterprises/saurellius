@@ -285,7 +285,7 @@ export default function PaystubDetailScreen({ route, navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#1a1a2e',
   },
   loadingContainer: {
     flex: 1,
@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
   errorText: {
     marginTop: 12,
     fontSize: 16,
-    color: '#666',
+    color: '#a0a0a0',
   },
   header: {
     flexDirection: 'row',
@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   card: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
     margin: 16,
     marginBottom: 0,
     padding: 20,
@@ -335,11 +335,11 @@ const styles = StyleSheet.create({
   employeeName: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#FFFFFF',
   },
   employeeId: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
     marginTop: 4,
   },
   periodRow: {
@@ -357,11 +357,11 @@ const styles = StyleSheet.create({
   periodValue: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#333',
+    color: '#FFFFFF',
     marginTop: 2,
   },
   netPayCard: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
     margin: 16,
     marginBottom: 0,
     padding: 20,
@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
   },
   netPayLabel: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
   },
   netPayValue: {
     fontSize: 36,
@@ -381,7 +381,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   section: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
     margin: 16,
     marginBottom: 0,
     borderRadius: 16,
@@ -405,16 +405,16 @@ const styles = StyleSheet.create({
   },
   rowLabel: {
     fontSize: 14,
-    color: '#666',
+    color: '#a0a0a0',
     flex: 1,
   },
   rowLabelBold: {
     fontWeight: '600',
-    color: '#333',
+    color: '#FFFFFF',
   },
   rowValue: {
     fontSize: 14,
-    color: '#333',
+    color: '#FFFFFF',
   },
   rowValueBold: {
     fontWeight: '600',
@@ -427,7 +427,7 @@ const styles = StyleSheet.create({
   actionsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    backgroundColor: '#FFF',
+    backgroundColor: '#1a1a2e',
     margin: 16,
     padding: 16,
     borderRadius: 16,

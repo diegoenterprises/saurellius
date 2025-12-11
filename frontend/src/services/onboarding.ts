@@ -1,5 +1,5 @@
 /**
- * 🚀 ONBOARDING SERVICE
+ * ONBOARDING SERVICE
  * Frontend service for Employee Onboarding Workflows
  */
 

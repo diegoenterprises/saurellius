@@ -1,5 +1,5 @@
 /**
- * 📋 STATE RULES SERVICE
+ * STATE RULES SERVICE
  * API calls for state-by-state payroll compliance rules
  */
 

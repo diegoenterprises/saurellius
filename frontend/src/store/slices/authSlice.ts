@@ -4,8 +4,33 @@
  */
 
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { Platform } from 'react-native';
 import api from '../../services/api';
 import * as SecureStore from 'expo-secure-store';
+
+// Web-compatible storage wrapper
+const storage = {
+  async getItemAsync(key: string): Promise<string | null> {
+    if (Platform.OS === 'web') {
+      return localStorage.getItem(key);
+    }
+    return SecureStore.getItemAsync(key);
+  },
+  async setItemAsync(key: string, value: string): Promise<void> {
+    if (Platform.OS === 'web') {
+      localStorage.setItem(key, value);
+      return;
+    }
+    return SecureStore.setItemAsync(key, value);
+  },
+  async deleteItemAsync(key: string): Promise<void> {
+    if (Platform.OS === 'web') {
+      localStorage.removeItem(key);
+      return;
+    }
+    return SecureStore.deleteItemAsync(key);
+  },
+};
 
 interface User {
   id: number;
@@ -17,6 +42,7 @@ interface User {
   subscription_status: string;
   paystubs_this_month: number;
   reward_points: number;
+  is_admin: boolean;
 }
 
 interface AuthState {
@@ -42,8 +68,8 @@ export const login = createAsyncThunk(
       const { access_token, refresh_token, user } = response.data;
       
       // Store tokens securely
-      await SecureStore.setItemAsync('access_token', access_token);
-      await SecureStore.setItemAsync('refresh_token', refresh_token);
+      await storage.setItemAsync('access_token', access_token);
+      await storage.setItemAsync('refresh_token', refresh_token);
       
       return user;
     } catch (error: any) {
@@ -62,8 +88,8 @@ export const signup = createAsyncThunk(
       const response = await api.post('/api/auth/signup', data);
       const { access_token, refresh_token, user } = response.data;
       
-      await SecureStore.setItemAsync('access_token', access_token);
-      await SecureStore.setItemAsync('refresh_token', refresh_token);
+      await storage.setItemAsync('access_token', access_token);
+      await storage.setItemAsync('refresh_token', refresh_token);
       
       return user;
     } catch (error: any) {
@@ -72,14 +98,39 @@ export const signup = createAsyncThunk(
   }
 );
 
+// Full registration with role selection
+export const register = createAsyncThunk(
+  'auth/register',
+  async (
+    data: { 
+      email: string; 
+      password: string; 
+      first_name: string; 
+      last_name: string;
+      company_name?: string;
+      company_code?: string;
+      role: 'employer' | 'employee';
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await api.post('/api/auth/register', data);
+      // For registration, we may not auto-login - just return success
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || 'Registration failed');
+    }
+  }
+);
+
 export const logout = createAsyncThunk('auth/logout', async () => {
-  await SecureStore.deleteItemAsync('access_token');
-  await SecureStore.deleteItemAsync('refresh_token');
+  await storage.deleteItemAsync('access_token');
+  await storage.deleteItemAsync('refresh_token');
 });
 
 export const checkAuth = createAsyncThunk('auth/checkAuth', async (_, { rejectWithValue }) => {
   try {
-    const token = await SecureStore.getItemAsync('access_token');
+    const token = await storage.getItemAsync('access_token');
     if (!token) {
       throw new Error('No token');
     }
@@ -87,8 +138,8 @@ export const checkAuth = createAsyncThunk('auth/checkAuth', async (_, { rejectWi
     const response = await api.get('/api/auth/me');
     return response.data.user;
   } catch (error) {
-    await SecureStore.deleteItemAsync('access_token');
-    await SecureStore.deleteItemAsync('refresh_token');
+    await storage.deleteItemAsync('access_token');
+    await storage.deleteItemAsync('refresh_token');
     return rejectWithValue('Session expired');
   }
 });
@@ -145,6 +196,19 @@ const authSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(signup.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      // Register (employer/employee)
+      .addCase(register.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(register.fulfilled, (state) => {
+        state.isLoading = false;
+        // Don't auto-login after registration - user needs to verify email
+      })
+      .addCase(register.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })

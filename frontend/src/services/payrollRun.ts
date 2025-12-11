@@ -1,5 +1,5 @@
 /**
- * 💰 PAYROLL RUN SERVICE
+ * PAYROLL RUN SERVICE
  * Frontend service for processing payroll runs
  */
 

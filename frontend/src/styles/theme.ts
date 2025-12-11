@@ -3,9 +3,11 @@
  * Colors, fonts, spacing, and design tokens
  */
 
-// Primary Colors
+import { Platform } from 'react-native';
+
+// Primary Colors - Unified object supporting both flat and nested access
 export const colors = {
-  // Brand colors
+  // Brand colors - flat access (colors.primary) returns string
   primary: '#1473FF',
   secondary: '#BE01FF',
   accent: '#06b6d4',
@@ -21,18 +23,18 @@ export const colors = {
   card: '#1a1a2e',
   cardHover: '#252545',
   
-  // Text
+  // Text - flat access
   text: '#ffffff',
   textSecondary: '#a0a0a0',
   textMuted: '#666666',
   
-  // Status colors
+  // Status colors - flat access
   success: '#10b981',
   warning: '#f59e0b',
   error: '#ef4444',
   info: '#3b82f6',
   
-  // Border
+  // Border - flat access
   border: '#2a2a4e',
   borderLight: '#3a3a5e',
   
@@ -51,6 +53,7 @@ export const gradients = {
   purple: ['#8b5cf6', '#7c3aed'] as [string, string],
   blue: ['#3b82f6', '#2563eb'] as [string, string],
   dark: ['#1a1a2e', '#0f0f23'] as [string, string],
+  rewards: ['#f59e0b', '#f97316'] as [string, string],
 };
 
 // Spacing
@@ -73,6 +76,25 @@ export const borderRadius = {
   full: 9999,
 };
 
+// Font family - Using system fonts for consistency across platforms
+export const fontFamily = {
+  regular: Platform.select({
+    ios: 'System',
+    android: 'Roboto',
+    web: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+  }) as string,
+  medium: Platform.select({
+    ios: 'System',
+    android: 'Roboto-Medium',
+    web: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+  }) as string,
+  bold: Platform.select({
+    ios: 'System',
+    android: 'Roboto-Bold',
+    web: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+  }) as string,
+};
+
 // Font sizes
 export const fontSize = {
   xs: 10,
@@ -93,43 +115,48 @@ export const fontWeight = {
   bold: '700' as const,
 };
 
-// Shadows
+// Shadows (web-compatible)
+const createShadow = (color: string, offsetY: number, opacity: number, radius: number, elevation: number) => {
+  if (Platform.OS === 'web') {
+    return {
+      boxShadow: `0px ${offsetY}px ${radius}px rgba(0, 0, 0, ${opacity})`,
+    };
+  }
+  return {
+    shadowColor: color,
+    shadowOffset: { width: 0, height: offsetY },
+    shadowOpacity: opacity,
+    shadowRadius: radius,
+    elevation: elevation,
+  };
+};
+
 export const shadows = {
-  sm: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  md: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  lg: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-  glow: {
-    shadowColor: '#1473FF',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
-    elevation: 8,
-  },
+  sm: createShadow('#000', 1, 0.05, 2, 1),
+  md: createShadow('#000', 2, 0.1, 4, 3),
+  lg: createShadow('#000', 4, 0.15, 8, 5),
+  glow: Platform.OS === 'web' 
+    ? { boxShadow: '0px 4px 12px rgba(20, 115, 255, 0.3)' }
+    : {
+        shadowColor: '#1473FF',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 12,
+        elevation: 8,
+      },
 };
 
 // Typography (for structured access)
 export const typography = {
+  fontFamily: {
+    regular: fontFamily.regular,
+    medium: fontFamily.medium,
+    bold: fontFamily.bold,
+  },
   fontSize: {
     xs: 10,
     sm: 12,
+    base: 14,
     md: 14,
     lg: 16,
     xl: 18,
@@ -156,6 +183,7 @@ export const extendedColors = {
   text: {
     primary: '#ffffff',
     secondary: '#a0a0a0',
+    tertiary: '#666666',
     muted: '#666666',
   },
   surface: {
@@ -170,13 +198,30 @@ export const extendedColors = {
   },
   status: {
     success: '#10b981',
+    successLight: '#d1fae5',
     warning: '#f59e0b',
+    warningLight: '#fef3c7',
     error: '#ef4444',
+    errorLight: '#fee2e2',
     info: '#3b82f6',
+    infoLight: '#dbeafe',
   },
+  // Flat colors for compatibility
+  white: '#ffffff',
+  black: '#000000',
+  transparent: 'transparent',
+  background: '#0f0f23',
+  backgroundSecondary: '#1a1a2e',
+  card: '#1a1a2e',
+  success: '#10b981',
+  warning: '#f59e0b',
+  error: '#ef4444',
+  info: '#3b82f6',
+  textSecondary: '#a0a0a0',
+  textMuted: '#666666',
 };
 
-// Paystub Theme Colors (25 themes)
+// Paystub Theme Colors - Synced with Backend (12 themes)
 export const PAYSTUB_THEMES = {
   diego_original: {
     name: "Diego's Original",
@@ -187,104 +232,104 @@ export const PAYSTUB_THEMES = {
     gradient_end: '#BE01FF',
     preview_colors: ['#1473FF', '#BE01FF', '#06b6d4'],
   },
-  modern_tech: {
-    name: 'Modern Tech',
-    primary: '#3B82F6',
-    secondary: '#8B5CF6',
-    accent: '#06B6D4',
-    gradient_start: '#3B82F6',
-    gradient_end: '#8B5CF6',
-    preview_colors: ['#3B82F6', '#8B5CF6', '#06B6D4'],
+  anxiety: {
+    name: 'Anxiety',
+    primary: '#2C3E50',
+    secondary: '#16A085',
+    accent: '#27AE60',
+    gradient_start: '#34495E',
+    gradient_end: '#16A085',
+    preview_colors: ['#2C3E50', '#16A085', '#27AE60'],
   },
-  forest_green: {
-    name: 'Forest Green',
-    primary: '#059669',
-    secondary: '#10B981',
-    accent: '#34D399',
-    gradient_start: '#059669',
-    gradient_end: '#10B981',
-    preview_colors: ['#059669', '#10B981', '#34D399'],
+  sodas_skateboards: {
+    name: 'Sodas & Skateboards',
+    primary: '#8B3A8B',
+    secondary: '#00CED1',
+    accent: '#00E5EE',
+    gradient_start: '#9932CC',
+    gradient_end: '#00CED1',
+    preview_colors: ['#8B3A8B', '#00CED1', '#00E5EE'],
   },
-  sunset_orange: {
-    name: 'Sunset Orange',
-    primary: '#EA580C',
-    secondary: '#F97316',
-    accent: '#FB923C',
-    gradient_start: '#EA580C',
-    gradient_end: '#F97316',
-    preview_colors: ['#EA580C', '#F97316', '#FB923C'],
+  sweetest_chill: {
+    name: 'The Sweetest Chill',
+    primary: '#4A4A6A',
+    secondary: '#7B68EE',
+    accent: '#9370DB',
+    gradient_start: '#483D8B',
+    gradient_end: '#B0C4DE',
+    preview_colors: ['#4A4A6A', '#7B68EE', '#9370DB'],
   },
-  ocean_blue: {
-    name: 'Ocean Blue',
-    primary: '#0284C7',
-    secondary: '#0EA5E9',
-    accent: '#38BDF8',
-    gradient_start: '#0284C7',
-    gradient_end: '#0EA5E9',
-    preview_colors: ['#0284C7', '#0EA5E9', '#38BDF8'],
+  high_fashion: {
+    name: 'High Fashion',
+    primary: '#FFD700',
+    secondary: '#FF69B4',
+    accent: '#DA70D6',
+    gradient_start: '#FFA500',
+    gradient_end: '#BA55D3',
+    preview_colors: ['#FFD700', '#FF69B4', '#DA70D6'],
   },
-  royal_purple: {
-    name: 'Royal Purple',
-    primary: '#7C3AED',
-    secondary: '#8B5CF6',
-    accent: '#A78BFA',
-    gradient_start: '#7C3AED',
-    gradient_end: '#8B5CF6',
-    preview_colors: ['#7C3AED', '#8B5CF6', '#A78BFA'],
+  cherry_soda: {
+    name: 'Cherry Soda',
+    primary: '#2F1F1F',
+    secondary: '#DC143C',
+    accent: '#F5F5DC',
+    gradient_start: '#4B0000',
+    gradient_end: '#8B0000',
+    preview_colors: ['#2F1F1F', '#DC143C', '#F5F5DC'],
   },
-  crimson_red: {
-    name: 'Crimson Red',
-    primary: '#DC2626',
-    secondary: '#EF4444',
-    accent: '#F87171',
-    gradient_start: '#DC2626',
-    gradient_end: '#EF4444',
-    preview_colors: ['#DC2626', '#EF4444', '#F87171'],
+  blooming: {
+    name: 'Blooming',
+    primary: '#F5F5DC',
+    secondary: '#98FB98',
+    accent: '#FFB6C1',
+    gradient_start: '#FFFACD',
+    gradient_end: '#FF69B4',
+    preview_colors: ['#F5F5DC', '#98FB98', '#FFB6C1'],
   },
-  golden_hour: {
-    name: 'Golden Hour',
-    primary: '#D97706',
-    secondary: '#F59E0B',
-    accent: '#FBBF24',
-    gradient_start: '#D97706',
-    gradient_end: '#F59E0B',
-    preview_colors: ['#D97706', '#F59E0B', '#FBBF24'],
+  cyberbullies: {
+    name: 'Cyberbullies',
+    primary: '#00CED1',
+    secondary: '#4169E1',
+    accent: '#0000FF',
+    gradient_start: '#00BFFF',
+    gradient_end: '#1E90FF',
+    preview_colors: ['#00CED1', '#4169E1', '#0000FF'],
   },
-  midnight: {
-    name: 'Midnight',
-    primary: '#1E3A5F',
-    secondary: '#2563EB',
-    accent: '#3B82F6',
-    gradient_start: '#1E3A5F',
-    gradient_end: '#2563EB',
-    preview_colors: ['#1E3A5F', '#2563EB', '#3B82F6'],
+  subtle_melancholy: {
+    name: 'Subtle Melancholy',
+    primary: '#9370DB',
+    secondary: '#B0C4DE',
+    accent: '#AFEEEE',
+    gradient_start: '#8A7BA8',
+    gradient_end: '#87CEEB',
+    preview_colors: ['#9370DB', '#B0C4DE', '#AFEEEE'],
   },
-  rose_gold: {
-    name: 'Rose Gold',
-    primary: '#BE185D',
-    secondary: '#EC4899',
-    accent: '#F472B6',
-    gradient_start: '#BE185D',
-    gradient_end: '#EC4899',
-    preview_colors: ['#BE185D', '#EC4899', '#F472B6'],
+  conversation_hearts: {
+    name: 'Conversation Hearts',
+    primary: '#FF1493',
+    secondary: '#FFB6C1',
+    accent: '#7FFFD4',
+    gradient_start: '#FF69B4',
+    gradient_end: '#40E0D0',
+    preview_colors: ['#FF1493', '#FFB6C1', '#7FFFD4'],
   },
-  corporate_blue: {
-    name: 'Corporate Blue',
-    primary: '#1E40AF',
-    secondary: '#3B82F6',
-    accent: '#60A5FA',
-    gradient_start: '#1E40AF',
-    gradient_end: '#3B82F6',
-    preview_colors: ['#1E40AF', '#3B82F6', '#60A5FA'],
+  sylveon: {
+    name: 'Sylveon',
+    primary: '#FFE4E1',
+    secondary: '#FFB6C1',
+    accent: '#B0C4DE',
+    gradient_start: '#FFC0CB',
+    gradient_end: '#87CEEB',
+    preview_colors: ['#FFE4E1', '#FFB6C1', '#B0C4DE'],
   },
-  nature_green: {
-    name: 'Nature Green',
-    primary: '#166534',
-    secondary: '#22C55E',
-    accent: '#4ADE80',
-    gradient_start: '#166534',
-    gradient_end: '#22C55E',
-    preview_colors: ['#166534', '#22C55E', '#4ADE80'],
+  midnight_express: {
+    name: 'Midnight Express',
+    primary: '#191970',
+    secondary: '#4169E1',
+    accent: '#6495ED',
+    gradient_start: '#000080',
+    gradient_end: '#4682B4',
+    preview_colors: ['#191970', '#4169E1', '#6495ED'],
   },
 };
 

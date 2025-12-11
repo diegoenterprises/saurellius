@@ -68,7 +68,7 @@ export const weatherService = {
       }
       return null;
     } catch (error) {
-      console.error('Weather service error:', error);
+      // Weather service unavailable
       return null;
     }
   },

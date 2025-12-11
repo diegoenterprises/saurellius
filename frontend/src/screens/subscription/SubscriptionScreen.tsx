@@ -1,5 +1,5 @@
 /**
- * 💳 SUBSCRIPTION SCREEN
+ * SUBSCRIPTION SCREEN
  * Plan selection and billing management
  */
 
@@ -21,40 +21,31 @@ import Toast from 'react-native-toast-message';
 
 import { AppDispatch, RootState } from '../../store';
 import { 
-  fetchBillingInfo, 
+  fetchSubscription, 
   createCheckoutSession, 
-  createBillingPortal,
-  clearCheckoutUrl 
+  openBillingPortal,
 } from '../../store/slices/billingSlice';
 import { SUBSCRIPTION_PLANS } from '../../services/stripe';
 import PricingCard from '../../components/subscription/PricingCard';
 import UsageTracker from '../../components/subscription/UsageTracker';
-import { colors, gradients, spacing, borderRadius, typography, shadows } from '../../styles/theme';
+import { extendedColors as colors, gradients, spacing, borderRadius, typography, shadows } from '../../styles/theme';
 
 export default function SubscriptionScreen() {
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation();
-  const { currentPlan, usage, subscriptionStatus, isLoading, checkoutUrl } = useSelector(
+  const { subscription, usage, isLoading } = useSelector(
     (state: RootState) => state.billing
   );
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
 
   useEffect(() => {
-    dispatch(fetchBillingInfo());
+    dispatch(fetchSubscription());
   }, [dispatch]);
-
-  useEffect(() => {
-    // Handle checkout URL redirect
-    if (checkoutUrl) {
-      Linking.openURL(checkoutUrl);
-      dispatch(clearCheckoutUrl());
-    }
-  }, [checkoutUrl, dispatch]);
 
   const handleSelectPlan = async (planId: string) => {
     setSelectedPlan(planId);
     
-    if (currentPlan?.tier === planId) {
+    if (subscription?.tier === planId) {
       Toast.show({
         type: 'info',
         text1: 'Current Plan',
@@ -81,7 +72,7 @@ export default function SubscriptionScreen() {
 
   const handleManageBilling = async () => {
     try {
-      const result = await dispatch(createBillingPortal()).unwrap();
+      const result = await dispatch(openBillingPortal()).unwrap();
       if (result.url) {
         Linking.openURL(result.url);
       }
@@ -125,7 +116,7 @@ export default function SubscriptionScreen() {
             <Text style={styles.sectionTitle}>Current Usage</Text>
             <UsageTracker usage={usage} />
             
-            {subscriptionStatus === 'active' && (
+            {subscription?.status === 'active' && (
               <TouchableOpacity 
                 style={styles.manageBillingButton}
                 onPress={handleManageBilling}
@@ -144,7 +135,7 @@ export default function SubscriptionScreen() {
             All plans include complete tax calculations for all 50 states
           </Text>
 
-          {isLoading && !currentPlan ? (
+          {isLoading && !subscription ? (
             <ActivityIndicator size="large" color={colors.primary.purple} />
           ) : (
             <View style={styles.plansContainer}>
@@ -152,7 +143,7 @@ export default function SubscriptionScreen() {
                 <PricingCard
                   key={plan.id}
                   plan={plan}
-                  isCurrentPlan={currentPlan?.tier === plan.id}
+                  isCurrentPlan={subscription?.tier === plan.id}
                   onSelect={handleSelectPlan}
                   disabled={selectedPlan === plan.id}
                 />
@@ -219,7 +210,7 @@ export default function SubscriptionScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#0f0f23',
   },
   header: {
     paddingTop: 60,

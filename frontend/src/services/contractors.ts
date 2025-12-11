@@ -1,5 +1,5 @@
 /**
- * 👷 CONTRACTORS SERVICE
+ * CONTRACTORS SERVICE
  * Frontend service for 1099 Contractor Management
  */
 

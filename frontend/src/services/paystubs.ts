@@ -74,29 +74,47 @@ export interface GeneratePaystubData {
   company: {
     name: string;
     address: string;
-    city: string;
-    state: string;
-    zip: string;
-    ein: string;
+    city?: string;
+    state?: string;
+    zip?: string;
+    ein?: string;
   };
   employee: {
     name: string;
-    address: string;
-    ssn_last_four: string;
-    employee_id: string;
+    address?: string;
+    city?: string;
+    state?: string;
+    zip?: string;
+    ssn_last_four?: string;
+    employee_id?: string;
   };
   pay_period: {
     start: string;
     end: string;
     pay_date: string;
+    pay_frequency?: string;
   };
   earnings: {
     regular_hours: number;
-    regular_rate: number;
+    regular_rate?: number;
+    hourly_rate?: number;
     overtime_hours?: number;
     overtime_rate?: number;
+    bonus?: number;
     bonuses?: number;
+    commission?: number;
     commissions?: number;
+  };
+  tax_info?: {
+    filing_status?: string;
+    allowances?: number;
+    work_state?: string;
+  };
+  taxes?: {
+    federal?: number;
+    state?: number;
+    social_security?: number;
+    medicare?: number;
   };
   deductions?: {
     health_insurance?: number;
@@ -106,6 +124,24 @@ export interface GeneratePaystubData {
     hsa?: number;
     other?: number;
   };
+  ytd?: {
+    gross?: number;
+    federal_tax?: number;
+    state_tax?: number;
+    social_security?: number;
+    medicare?: number;
+  };
+  totals?: {
+    gross_pay?: number;
+    gross_pay_ytd?: number;
+    total_taxes?: number;
+    net_pay?: number;
+    net_pay_ytd?: number;
+    total_deductions?: number;
+  };
+  check_number?: string;
+  earnings_details?: any[];
+  deductions_details?: any[];
   theme?: string;
 }
 
@@ -128,11 +164,13 @@ export const getPaystubById = async (id: number): Promise<PaystubDetail> => {
   return response.data.data;
 };
 
-// Generate paystub
+// Generate paystub with advanced PDF generator
 export const generatePaystub = async (data: GeneratePaystubData): Promise<{
   paystub_id: number;
-  pdf_url: string;
   verification_id: string;
+  pdf_generated: boolean;
+  pdf_base64?: string;
+  theme: string;
 }> => {
   const response = await api.post('/api/paystubs/generate', data);
   return response.data.data;

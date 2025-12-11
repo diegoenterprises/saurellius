@@ -1,5 +1,5 @@
 /**
- * 🔄 SAURELLIUS SWIPE SERVICE
+ * SAURELLIUS SWIPE SERVICE
  * Frontend API client for schedule swap management
  */
 
