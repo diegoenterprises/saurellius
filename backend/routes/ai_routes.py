@@ -520,6 +520,190 @@ def contextual_chat():
 #  AI STATUS
 # =============================================================================
 
+# =============================================================================
+#  TALENT MANAGEMENT INTELLIGENCE
+# =============================================================================
+
+@ai_bp.route('/api/ai/talent/analyze-candidate', methods=['POST'])
+@jwt_required()
+def analyze_candidate():
+    """AI-powered candidate analysis and scoring."""
+    data = request.get_json()
+    candidate_data = data.get('candidate', {})
+    job_data = data.get('job', {})
+    
+    analysis = saurellius_ai.analyze_candidate(candidate_data, job_data)
+    
+    return jsonify({'success': True, 'analysis': analysis}), 200
+
+
+@ai_bp.route('/api/ai/talent/generate-review', methods=['POST'])
+@jwt_required()
+def generate_performance_review():
+    """AI-assisted performance review generation."""
+    data = request.get_json()
+    employee_data = data.get('employee', {})
+    metrics = data.get('metrics', {})
+    
+    review = saurellius_ai.generate_performance_review(employee_data, metrics)
+    
+    return jsonify({'success': True, 'review': review}), 200
+
+
+@ai_bp.route('/api/ai/talent/learning-path', methods=['POST'])
+@jwt_required()
+def suggest_learning_path():
+    """AI-powered learning path recommendations."""
+    data = request.get_json()
+    employee_data = data.get('employee', {})
+    career_goals = data.get('career_goals', [])
+    
+    path = saurellius_ai.suggest_learning_path(employee_data, career_goals)
+    
+    return jsonify({'success': True, 'learning_path': path}), 200
+
+
+# =============================================================================
+#  EMPLOYEE EXPERIENCE INTELLIGENCE
+# =============================================================================
+
+@ai_bp.route('/api/ai/experience/financial-wellness', methods=['POST'])
+@jwt_required()
+def analyze_financial_wellness():
+    """AI analysis of employee financial wellness."""
+    data = request.get_json()
+    employee_data = data.get('employee', {})
+    
+    analysis = saurellius_ai.analyze_financial_wellness(employee_data)
+    
+    return jsonify({'success': True, 'analysis': analysis}), 200
+
+
+@ai_bp.route('/api/ai/experience/survey-analysis', methods=['POST'])
+@jwt_required()
+def analyze_survey():
+    """AI analysis of engagement survey responses."""
+    data = request.get_json()
+    survey_data = data.get('survey', {})
+    
+    analysis = saurellius_ai.analyze_survey_responses(survey_data)
+    
+    return jsonify({'success': True, 'analysis': analysis}), 200
+
+
+# =============================================================================
+#  JOB COSTING & LABOR INTELLIGENCE
+# =============================================================================
+
+@ai_bp.route('/api/ai/labor/project-profitability', methods=['POST'])
+@jwt_required()
+def analyze_project():
+    """AI analysis of project profitability."""
+    data = request.get_json()
+    project_data = data.get('project', {})
+    
+    analysis = saurellius_ai.analyze_project_profitability(project_data)
+    
+    return jsonify({'success': True, 'analysis': analysis}), 200
+
+
+@ai_bp.route('/api/ai/labor/forecast', methods=['POST'])
+@jwt_required()
+def forecast_labor():
+    """AI-powered labor demand forecasting."""
+    data = request.get_json()
+    historical_data = data.get('historical', {})
+    
+    forecast = saurellius_ai.forecast_labor_needs(historical_data)
+    
+    return jsonify({'success': True, 'forecast': forecast}), 200
+
+
+# =============================================================================
+#  BENEFITS & RETIREMENT INTELLIGENCE
+# =============================================================================
+
+@ai_bp.route('/api/ai/benefits/optimize-selection', methods=['POST'])
+@jwt_required()
+def optimize_benefits():
+    """AI-powered benefits selection recommendations."""
+    data = request.get_json()
+    employee_data = data.get('employee', {})
+    available_plans = data.get('plans', [])
+    
+    recommendations = saurellius_ai.optimize_benefits_selection(employee_data, available_plans)
+    
+    return jsonify({'success': True, 'recommendations': recommendations}), 200
+
+
+@ai_bp.route('/api/ai/benefits/retirement-readiness', methods=['POST'])
+@jwt_required()
+def analyze_retirement():
+    """AI analysis of retirement readiness."""
+    data = request.get_json()
+    employee_data = data.get('employee', {})
+    
+    analysis = saurellius_ai.analyze_retirement_readiness(employee_data)
+    
+    return jsonify({'success': True, 'analysis': analysis}), 200
+
+
+# =============================================================================
+#  CONTRACTOR INTELLIGENCE
+# =============================================================================
+
+@ai_bp.route('/api/ai/contractor/analyze', methods=['POST'])
+@jwt_required()
+def analyze_contractor():
+    """AI analysis of contractor relationships and compliance."""
+    data = request.get_json()
+    contractor_data = data.get('contractor', {})
+    
+    analysis = saurellius_ai.analyze_contractor_relationship(contractor_data)
+    
+    return jsonify({'success': True, 'analysis': analysis}), 200
+
+
+# =============================================================================
+#  TAX INTELLIGENCE
+# =============================================================================
+
+@ai_bp.route('/api/ai/tax/analyze', methods=['POST'])
+@jwt_required()
+def analyze_tax_situation():
+    """AI analysis of company tax situation."""
+    data = request.get_json()
+    company_data = data.get('company', {})
+    
+    analysis = saurellius_ai.analyze_tax_situation(company_data)
+    
+    return jsonify({'success': True, 'analysis': analysis}), 200
+
+
+# =============================================================================
+#  UNIVERSAL ASSISTANT
+# =============================================================================
+
+@ai_bp.route('/api/ai/assistant', methods=['POST'])
+@jwt_required()
+def universal_assistant():
+    """Universal AI assistant with full platform awareness."""
+    data = request.get_json()
+    message = data.get('message', '')
+    context = data.get('context', {})
+    
+    if not message:
+        return jsonify({'success': False, 'message': 'Message is required'}), 400
+    
+    response = saurellius_ai.universal_assistant(message, context)
+    
+    return jsonify({'success': True, 'response': response}), 200
+
+
+# =============================================================================
+#  AI STATUS
+# =============================================================================
+
 @ai_bp.route('/api/ai/status', methods=['GET'])
 @jwt_required()
 def ai_status():
@@ -531,12 +715,14 @@ def ai_status():
         'features': [
             'chat_assistant',
             'contextual_chat',
+            'universal_assistant',
             'paystub_validation',
             'paystub_explanation',
             'dashboard_insights',
             'compliance_check',
             'employee_analysis',
             'tax_explanation',
+            'tax_situation_analysis',
             'fraud_detection',
             'natural_queries',
             'document_analysis',
@@ -550,6 +736,16 @@ def ai_status():
             'smart_alerts',
             'notification_preferences',
             'payroll_run_analysis',
-            'payroll_optimizations'
+            'payroll_optimizations',
+            'candidate_analysis',
+            'performance_review_generation',
+            'learning_path_suggestions',
+            'financial_wellness_analysis',
+            'survey_analysis',
+            'project_profitability',
+            'labor_forecasting',
+            'benefits_optimization',
+            'retirement_readiness',
+            'contractor_analysis'
         ] if saurellius_ai.initialized else []
     }), 200

@@ -718,6 +718,226 @@ export const aiService = {
       return 'I apologize, but I could not process your request. Please try again.';
     }
   },
+
+  // ===========================================================================
+  // Talent Management Intelligence
+  // ===========================================================================
+
+  analyzeCandidate: async (candidateData: Record<string, any>, jobData: Record<string, any>): Promise<{
+    match_score: number;
+    strengths: string[];
+    concerns: string[];
+    interview_questions: string[];
+    salary_recommendation: { min: number; max: number };
+    hiring_recommendation: string;
+    next_steps: string[];
+  }> => {
+    try {
+      const response = await api.post('/api/ai/talent/analyze-candidate', { candidate: candidateData, job: jobData });
+      return response.data.analysis;
+    } catch (error) {
+      console.error('Candidate analysis error:', error);
+      return { match_score: 0, strengths: [], concerns: [], interview_questions: [], salary_recommendation: { min: 0, max: 0 }, hiring_recommendation: 'maybe', next_steps: [] };
+    }
+  },
+
+  generatePerformanceReview: async (employeeData: Record<string, any>, metrics: Record<string, any>): Promise<{
+    overall_rating: number;
+    summary: string;
+    strengths: string[];
+    areas_for_improvement: string[];
+    goals_for_next_period: string[];
+    development_recommendations: string[];
+    promotion_readiness: string;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/talent/generate-review', { employee: employeeData, metrics });
+      return response.data.review;
+    } catch (error) {
+      console.error('Performance review generation error:', error);
+      return { overall_rating: 3, summary: '', strengths: [], areas_for_improvement: [], goals_for_next_period: [], development_recommendations: [], promotion_readiness: 'developing' };
+    }
+  },
+
+  suggestLearningPath: async (employeeData: Record<string, any>, careerGoals: string[]): Promise<{
+    recommended_courses: Array<{ title: string; priority: string; duration_hours: number }>;
+    skill_gaps: string[];
+    certifications_to_pursue: string[];
+    timeline_months: number;
+    career_path: string[];
+  }> => {
+    try {
+      const response = await api.post('/api/ai/talent/learning-path', { employee: employeeData, career_goals: careerGoals });
+      return response.data.learning_path;
+    } catch (error) {
+      console.error('Learning path suggestion error:', error);
+      return { recommended_courses: [], skill_gaps: [], certifications_to_pursue: [], timeline_months: 12, career_path: [] };
+    }
+  },
+
+  // ===========================================================================
+  // Employee Experience Intelligence
+  // ===========================================================================
+
+  analyzeFinancialWellness: async (employeeData: Record<string, any>): Promise<{
+    wellness_score: number;
+    risk_indicators: string[];
+    positive_behaviors: string[];
+    recommendations: Array<{ action: string; impact: string }>;
+    resources: string[];
+    retirement_projection: string;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/experience/financial-wellness', { employee: employeeData });
+      return response.data.analysis;
+    } catch (error) {
+      console.error('Financial wellness analysis error:', error);
+      return { wellness_score: 0, risk_indicators: [], positive_behaviors: [], recommendations: [], resources: [], retirement_projection: 'unknown' };
+    }
+  },
+
+  analyzeSurveyResponses: async (surveyData: Record<string, any>): Promise<{
+    overall_sentiment: string;
+    engagement_score: number;
+    top_strengths: string[];
+    top_concerns: string[];
+    action_items: Array<{ priority: string; action: string; owner: string }>;
+    trend_analysis: string;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/experience/survey-analysis', { survey: surveyData });
+      return response.data.analysis;
+    } catch (error) {
+      console.error('Survey analysis error:', error);
+      return { overall_sentiment: 'neutral', engagement_score: 0, top_strengths: [], top_concerns: [], action_items: [], trend_analysis: 'stable' };
+    }
+  },
+
+  // ===========================================================================
+  // Job Costing & Labor Intelligence
+  // ===========================================================================
+
+  analyzeProjectProfitability: async (projectData: Record<string, any>): Promise<{
+    profit_margin: number;
+    health_status: string;
+    budget_variance: number;
+    projected_final_cost: number;
+    risks: string[];
+    recommendations: string[];
+  }> => {
+    try {
+      const response = await api.post('/api/ai/labor/project-profitability', { project: projectData });
+      return response.data.analysis;
+    } catch (error) {
+      console.error('Project profitability analysis error:', error);
+      return { profit_margin: 0, health_status: 'unknown', budget_variance: 0, projected_final_cost: 0, risks: [], recommendations: [] };
+    }
+  },
+
+  forecastLaborNeeds: async (historicalData: Record<string, any>): Promise<{
+    next_week_hours_needed: number;
+    next_month_hours_needed: number;
+    recommended_headcount: number;
+    hiring_recommendations: Array<{ role: string; count: number; urgency: string }>;
+    overtime_forecast: number;
+    confidence_level: number;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/labor/forecast', { historical: historicalData });
+      return response.data.forecast;
+    } catch (error) {
+      console.error('Labor forecast error:', error);
+      return { next_week_hours_needed: 0, next_month_hours_needed: 0, recommended_headcount: 0, hiring_recommendations: [], overtime_forecast: 0, confidence_level: 0 };
+    }
+  },
+
+  // ===========================================================================
+  // Benefits & Retirement Intelligence
+  // ===========================================================================
+
+  optimizeBenefitsSelection: async (employeeData: Record<string, any>, availablePlans: Record<string, any>[]): Promise<{
+    recommended_medical: { plan_id: string; reason: string };
+    recommended_dental: { plan_id: string; reason: string };
+    hsa_recommendation: { contribute: boolean; amount: number };
+    total_annual_cost: number;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/benefits/optimize-selection', { employee: employeeData, plans: availablePlans });
+      return response.data.recommendations;
+    } catch (error) {
+      console.error('Benefits optimization error:', error);
+      return { recommended_medical: { plan_id: '', reason: '' }, recommended_dental: { plan_id: '', reason: '' }, hsa_recommendation: { contribute: false, amount: 0 }, total_annual_cost: 0 };
+    }
+  },
+
+  analyzeRetirementReadiness: async (employeeData: Record<string, any>): Promise<{
+    readiness_score: number;
+    on_track: boolean;
+    projected_balance_at_retirement: number;
+    monthly_retirement_income: number;
+    recommendations: Array<{ action: string; impact: string }>;
+    contribution_suggestion: number;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/benefits/retirement-readiness', { employee: employeeData });
+      return response.data.analysis;
+    } catch (error) {
+      console.error('Retirement readiness error:', error);
+      return { readiness_score: 0, on_track: false, projected_balance_at_retirement: 0, monthly_retirement_income: 0, recommendations: [], contribution_suggestion: 0 };
+    }
+  },
+
+  // ===========================================================================
+  // Contractor Intelligence
+  // ===========================================================================
+
+  analyzeContractor: async (contractorData: Record<string, any>): Promise<{
+    classification_risk: string;
+    misclassification_indicators: string[];
+    compliance_score: number;
+    recommendations: string[];
+  }> => {
+    try {
+      const response = await api.post('/api/ai/contractor/analyze', { contractor: contractorData });
+      return response.data.analysis;
+    } catch (error) {
+      console.error('Contractor analysis error:', error);
+      return { classification_risk: 'unknown', misclassification_indicators: [], compliance_score: 0, recommendations: [] };
+    }
+  },
+
+  // ===========================================================================
+  // Tax Intelligence
+  // ===========================================================================
+
+  analyzeTaxSituation: async (companyData: Record<string, any>): Promise<{
+    compliance_score: number;
+    risk_areas: string[];
+    optimization_opportunities: Array<{ area: string; potential_savings: number }>;
+    upcoming_deadlines: Array<{ deadline: string; item: string; priority: string }>;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/tax/analyze', { company: companyData });
+      return response.data.analysis;
+    } catch (error) {
+      console.error('Tax analysis error:', error);
+      return { compliance_score: 0, risk_areas: [], optimization_opportunities: [], upcoming_deadlines: [] };
+    }
+  },
+
+  // ===========================================================================
+  // Universal Assistant
+  // ===========================================================================
+
+  universalAssistant: async (message: string, context: Record<string, any>): Promise<string> => {
+    try {
+      const response = await api.post('/api/ai/assistant', { message, context });
+      return response.data.response;
+    } catch (error) {
+      console.error('Universal assistant error:', error);
+      return 'I apologize, but I could not process your request. Please try again.';
+    }
+  },
 };
 
 export default aiService;
