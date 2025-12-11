@@ -80,6 +80,13 @@ def create_app(config_name='default'):
     from routes.termination_routes import termination_bp
     from routes.payroll_corrections_routes import corrections_bp
     
+    # Register blueprints - Testing Plan Compliance
+    from routes.w4_routes import w4_bp
+    from routes.i9_routes import i9_bp
+    from routes.timeclock_routes import timeclock_bp
+    from routes.audit_routes import audit_bp
+    from routes.cobra_routes import cobra_bp
+    
     # Core blueprints
     app.register_blueprint(auth_bp)
     app.register_blueprint(stripe_bp)
@@ -113,6 +120,13 @@ def create_app(config_name='default'):
     app.register_blueprint(ach_bp)
     app.register_blueprint(termination_bp)
     app.register_blueprint(corrections_bp)
+    
+    # Testing Plan Compliance blueprints
+    app.register_blueprint(w4_bp)
+    app.register_blueprint(i9_bp)
+    app.register_blueprint(timeclock_bp)
+    app.register_blueprint(audit_bp)
+    app.register_blueprint(cobra_bp)
     
     # Initialize Tax Update Scheduler
     from services.scheduler_service import init_scheduler
