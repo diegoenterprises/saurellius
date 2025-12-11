@@ -1,5 +1,5 @@
 """
-🌤️ WEATHER ROUTES
+WEATHER ROUTES
 Weather and location data endpoints for dashboard
 """
 

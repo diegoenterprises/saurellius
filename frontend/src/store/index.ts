@@ -1,5 +1,5 @@
 /**
- * 🏪 REDUX STORE
+ * REDUX STORE
  * Central state management for the app
  */
 

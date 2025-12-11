@@ -1,5 +1,5 @@
 """
-🏛️ SAURELLIUS TAX ENGINE API ROUTES
+SAURELLIUS TAX ENGINE API ROUTES
 Open API endpoints for enterprise partners
 Enterprise-grade payroll tax calculations
 

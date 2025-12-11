@@ -1,5 +1,5 @@
 """
-👁️ SAURELLIUS WORKFORCE API ROUTES
+SAURELLIUS WORKFORCE API ROUTES
 Real-time workforce monitoring and schedule management endpoints
 """
 

@@ -552,7 +552,7 @@ class PayrollSimulation:
                     self.log_gap("Tax Calculation", 
                         f"SS tax mismatch: expected ~${test['expected_ss']}, got ${ss}", "medium")
                 else:
-                    self.log(f"  SS Tax: ${ss:.2f} ✓", "SUCCESS")
+                    self.log(f"  SS Tax: ${ss:.2f}", "SUCCESS")
                 
                 # Validate Medicare
                 medicare = result.get("employee_taxes", {}).get("medicare", 0)
@@ -560,7 +560,7 @@ class PayrollSimulation:
                     self.log_gap("Tax Calculation",
                         f"Medicare mismatch: expected ~${test['expected_medicare']}, got ${medicare}", "medium")
                 else:
-                    self.log(f"  Medicare: ${medicare:.2f} ✓", "SUCCESS")
+                    self.log(f"  Medicare: ${medicare:.2f}", "SUCCESS")
                     
             except Exception as e:
                 self.log(f"Tax calculation failed: {e}", "ERROR")

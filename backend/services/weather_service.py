@@ -1,5 +1,5 @@
 """
-🌤️ Weather and Location Service
+Weather and Location Service
 Provides real-time weather, season, and timezone data
 """
 

@@ -1,5 +1,5 @@
 """
-👑 ADMIN ROUTES
+ADMIN ROUTES
 Administrative API endpoints for platform owner
 - Platform analytics and KPIs
 - User management

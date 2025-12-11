@@ -1,5 +1,5 @@
 /**
- * 📄 PAYSTUBS SLICE
+ * PAYSTUBS SLICE
  */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { paystubAPI } from '../../services/api';

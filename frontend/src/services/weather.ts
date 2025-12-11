@@ -1,5 +1,5 @@
 /**
- * 🌤️ WEATHER SERVICE
+ * WEATHER SERVICE
  * API calls for weather data
  */
 

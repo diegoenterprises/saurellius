@@ -1,5 +1,5 @@
 /**
- * 🌤️ WEATHER WIDGET
+ * WEATHER WIDGET
  * Displays current weather, location, and time info
  */
 

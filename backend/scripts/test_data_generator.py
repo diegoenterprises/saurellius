@@ -1,5 +1,5 @@
 """
-🏭 SAURELLIUS TEST DATA GENERATOR - 100 Employees
+SAURELLIUS TEST DATA GENERATOR - 100 Employees
 Generates diverse test employees per production testing plan
 """
 

@@ -1,5 +1,5 @@
 /**
- * 🍞 TOAST CONFIGURATION
+ * TOAST CONFIGURATION
  */
 
 import React from 'react';

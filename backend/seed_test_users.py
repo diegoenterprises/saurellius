@@ -133,7 +133,7 @@ def seed_users():
     app = create_app()
     
     with app.app_context():
-        print("\n🌱 Seeding test users...\n")
+        print("\nSeeding test users...\n")
         
         for user_data in TEST_USERS:
             email = user_data['email']

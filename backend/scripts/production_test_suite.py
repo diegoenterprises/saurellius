@@ -1,5 +1,5 @@
 """
-🧪 SAURELLIUS PRODUCTION TEST SUITE - Comprehensive 10-phase testing
+SAURELLIUS PRODUCTION TEST SUITE - Comprehensive 10-phase testing
 Run: python -m scripts.production_test_suite
 """
 import sys, os

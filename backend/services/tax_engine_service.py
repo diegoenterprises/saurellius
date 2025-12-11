@@ -1,5 +1,5 @@
 """
-🏛️ SAURELLIUS TAX ENGINE SERVICE
+SAURELLIUS TAX ENGINE SERVICE
 Enterprise-grade payroll tax calculation engine
 Covers 7,400+ tax jurisdictions with 2025/2026 tax data
 
