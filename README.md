@@ -80,9 +80,9 @@ Complete employee lifecycle administration.
 | **Termination Processing** | Final pay calculation, state-specific rules, exit workflows |
 | **COBRA Administration** | Qualifying events, notices, elections, premium tracking |
 
-### ⏰ Time & Attendance
+### Time & Attendance
 
-Complete workforce time tracking system.
+Complete workforce time tracking system with job costing.
 
 | Feature | Description |
 |---------|-------------|
@@ -92,6 +92,9 @@ Complete workforce time tracking system.
 | **Timesheet Approval** | Manager review and approval workflows |
 | **GPS Location** | Geofenced clock events for field workers |
 | **Meal Break Violations** | Automatic detection and premium calculation |
+| **Job Costing** | Allocate time to projects and job codes |
+| **Project Tracking** | Budget vs actual hours and cost analysis |
+| **Labor Forecasting** | Predict staffing needs based on historical data |
 
 ###  Workforce Scheduling
 
@@ -108,17 +111,19 @@ Employee scheduling and shift management.
 
 ### Benefits Administration
 
-Complete benefits and insurance management.
+Complete benefits and insurance management with 401(k) and FMLA.
 
 | Feature | Description |
 |---------|-------------|
 | **Medical Plans** | PPO, HMO, HDHP with cost comparison |
 | **Dental & Vision** | Preventive, basic, major coverage tiers |
 | **Life & Disability** | Basic, supplemental, AD&D, STD, LTD |
-| **Retirement** | 401(k) with employer matching, Roth option |
+| **401(k) Administration** | Enrollment, contributions, vesting schedules, loans |
 | **FSA/HSA** | Healthcare and dependent care accounts |
 | **Benefits Taxability** | Pre-tax vs post-tax deduction handling |
 | **COBRA Management** | 60-day elections, 102% premiums, grace periods |
+| **FMLA Tracking** | Eligibility checks, case management, time tracking |
+| **Open Enrollment** | Automated enrollment periods with elections |
 
 ###  Garnishment Management
 
@@ -132,9 +137,9 @@ Wage garnishment processing with legal compliance.
 | **Payment Tracking** | Balance tracking and payment history |
 | **Court Orders** | Document storage and compliance tracking |
 
-###  Reporting & Analytics
+### Reporting & Analytics
 
-Comprehensive payroll and HR reporting.
+Comprehensive payroll, HR, and predictive analytics.
 
 | Feature | Description |
 |---------|-------------|
@@ -143,9 +148,12 @@ Comprehensive payroll and HR reporting.
 | **Labor Distribution** | Department and cost center allocation |
 | **Quarterly Reports** | 941, state unemployment filings |
 | **Audit Trail** | Complete change history for compliance |
-| **Custom Reports** | Configurable report builder |
+| **Custom Reports** | Configurable report builder with filters |
+| **Turnover Analytics** | Departure reasons, risk identification, trends |
+| **Headcount Predictions** | AI-powered workforce forecasting |
+| **Labor Cost Analysis** | Department and location cost breakdown |
 
-###  Audit & Compliance
+### Audit & Compliance
 
 Complete audit trail and approval workflows.
 
@@ -157,7 +165,57 @@ Complete audit trail and approval workflows.
 | **Security Events** | Login tracking, failed attempts, IP logging |
 | **Document Retention** | Configurable retention policies |
 
-###  Communications Hub
+### Talent Management
+
+Complete talent acquisition and development suite.
+
+| Feature | Description |
+|---------|-------------|
+| **Applicant Tracking (ATS)** | Job postings, applications, hiring pipeline |
+| **Performance Reviews** | Annual/quarterly reviews with ratings |
+| **Goal Setting & OKRs** | Individual and team goal tracking |
+| **Learning Management (LMS)** | Training courses, certifications, compliance |
+| **360-Degree Feedback** | Multi-source performance feedback |
+| **Succession Planning** | Identify and develop future leaders |
+| **Compensation Benchmarking** | Market salary comparisons |
+
+### Employee Experience
+
+Tools to enhance employee engagement and wellbeing.
+
+| Feature | Description |
+|---------|-------------|
+| **Financial Wellness** | Assessments, goals, educational resources |
+| **Charitable Giving** | Payroll deductions with employer matching |
+| **Engagement Surveys** | Anonymous feedback with analytics |
+| **Recognition & Rewards** | Kudos, points, leaderboards |
+| **Employee Directory** | Searchable org chart and profiles |
+
+### Contractor Management
+
+Complete 1099 contractor administration with multi-currency.
+
+| Feature | Description |
+|---------|-------------|
+| **Contractor Profiles** | W-9 collection, payment setup |
+| **Payment Processing** | ACH payments, check printing |
+| **1099-NEC Filing** | Automatic generation and IRS filing |
+| **Multi-Currency** | USD and CAD payment support |
+| **YTD Tracking** | Payment history and $600 threshold alerts |
+
+### Tax Auto-Updater
+
+Real-time tax rate monitoring and updates.
+
+| Feature | Description |
+|---------|-------------|
+| **Automatic Updates** | Background monitoring of tax rate changes |
+| **USA Coverage** | Federal + 50 states + DC |
+| **Canada Coverage** | Federal + 13 provinces/territories |
+| **Update History** | Complete log of all rate changes |
+| **Force Update** | Manual trigger for immediate updates |
+
+### Communications Hub
 
 Internal messaging and recognition system.
 
@@ -406,7 +464,7 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │   ├── config.py                           # Environment configuration
 │   ├── models.py                           # SQLAlchemy database models
 │   │
-│   ├── routes/                             # API Route Handlers (35 files)
+│   ├── routes/                             # API Route Handlers (38 files)
 │   │   │
 │   │   │── PAYROLL PROCESSING
 │   │   ├── payroll_run_routes.py           # Payroll batch processing
@@ -419,6 +477,7 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │   │   │── TAX COMPLIANCE
 │   │   ├── tax_engine_routes.py            # Tax Engine V1 API
 │   │   ├── tax_engine_v2_routes.py         # Tax Engine V2 (US + Canada)
+│   │   ├── tax_updater_routes.py           # Real-time tax rate updates
 │   │   ├── w4_routes.py                    # W-4 form processing
 │   │   ├── state_rules_routes.py           # State tax rules
 │   │   ├── tax_filing_routes.py            # Tax form filing
@@ -427,38 +486,43 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │   │   │── EMPLOYEE LIFECYCLE
 │   │   ├── onboarding_routes.py            # Employee onboarding
 │   │   ├── i9_routes.py                    # I-9 verification
-│   │   ├── benefits_routes.py              # Benefits administration
+│   │   ├── benefits_routes.py              # Benefits, 401(k), FMLA
 │   │   ├── termination_routes.py           # Termination processing
 │   │   ├── cobra_routes.py                 # COBRA administration
 │   │   │
 │   │   │── WORKFORCE MANAGEMENT
-│   │   ├── timeclock_routes.py             # Clock in/out, breaks
+│   │   ├── timeclock_routes.py             # Time clock, job costing
 │   │   ├── workforce_routes.py             # Scheduling
 │   │   ├── swipe_routes.py                 # Shift swap
 │   │   ├── pto_routes.py                   # PTO tracking
 │   │   │
+│   │   │── TALENT & EXPERIENCE
+│   │   ├── talent_routes.py                # ATS, performance, LMS
+│   │   ├── employee_experience_routes.py   # Wellness, surveys, giving
+│   │   │
 │   │   │── COMPLIANCE & REPORTING
 │   │   ├── audit_routes.py                 # Audit trail
 │   │   ├── compliance_routes.py            # Document compliance
-│   │   ├── reporting_routes.py             # Payroll reports
+│   │   ├── reporting_routes.py             # Reports & analytics
 │   │   ├── admin_routes.py                 # Admin portal
 │   │   │
 │   │   │── PLATFORM SERVICES
 │   │   ├── auth_routes.py                  # Authentication
 │   │   ├── dashboard_routes.py             # Dashboard data
-│   │   ├── ai_routes.py                    # Saurellius AI
+│   │   ├── ai_routes.py                    # Saurellius AI (22 features)
 │   │   ├── messaging_routes.py             # Communications
+│   │   ├── wallet_routes.py                # Digital wallet & EWA
 │   │   ├── stripe_routes.py                # Billing
 │   │   ├── email_routes.py                 # Email sending
-│   │   ├── weather_routes.py               # Weather widget
-│   │   ├── contractor_routes.py            # 1099 contractors
+│   │   ├── contractor_routes.py            # 1099, multi-currency
 │   │   └── accounting_routes.py            # Accounting integrations
 │   │
-│   └── services/                           # Business Logic Layer (20+ files)
+│   └── services/                           # Business Logic Layer (22 files)
 │       ├── tax_engine_service.py           # Tax calculations
+│       ├── tax_auto_updater_service.py     # Real-time tax rate updates
 │       ├── state_payroll_rules.py          # 50 states + DC rules
 │       ├── paystub_generator.py            # PDF rendering
-│       ├── gemini_service.py               # AI integration
+│       ├── gemini_service.py               # AI integration (22 features)
 │       ├── benefits_service.py             # Benefits logic
 │       ├── messaging_service.py            # Communications
 │       ├── scheduler_service.py            # Background jobs
@@ -468,17 +532,19 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │   ├── App.tsx                             # Application entry point
 │   │
 │   └── src/
-│       ├── screens/                        # UI Screens (30+ modules)
+│       ├── screens/                        # UI Screens (35+ modules)
 │       │   ├── payroll/                    # Payroll processing
 │       │   ├── employees/                  # Employee management
 │       │   ├── taxforms/                   # W-4, I-9 forms
 │       │   ├── timeclock/                  # Time & attendance
 │       │   ├── benefits/                   # Benefits enrollment
+│       │   ├── talent/                     # ATS, reviews, LMS
+│       │   ├── wallet/                     # Digital wallet & EWA
+│       │   ├── messaging/                  # Team communications
 │       │   ├── audit/                      # Audit trail viewer
 │       │   ├── corrections/                # Payroll corrections
 │       │   ├── termination/                # Termination processing
 │       │   ├── yearend/                    # Year-end processing
-│       │   ├── directdeposit/              # Bank accounts
 │       │   └── ...
 │       │
 │       ├── services/                       # API Client Services (34 files)
@@ -499,6 +565,7 @@ SAURELLIUS CLOUD PAYROLL MANAGEMENT/
 │
 ├── docs/
 │   ├── TAX_ENGINE_API_V2.md                # Tax Engine API reference
+│   ├── PRICING_RECOMMENDATIONS.md          # Pricing strategy & tiers
 │   ├── DEPLOYMENT_GUIDE.md                 # Deployment instructions
 │   ├── SOCIAL_AUTH_SETUP.md                # OAuth configuration
 │   └── stripe_pricing_guide.md             # Billing setup
@@ -560,6 +627,7 @@ JWT_SECRET_KEY=your_jwt_secret
 
 Full API documentation available at:
 - **Tax Engine API**: [docs/TAX_ENGINE_API_V2.md](docs/TAX_ENGINE_API_V2.md)
+- **Pricing Strategy**: [docs/PRICING_RECOMMENDATIONS.md](docs/PRICING_RECOMMENDATIONS.md)
 - **Deployment Guide**: [docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md)
 
 ---
