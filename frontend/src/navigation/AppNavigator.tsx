@@ -1,15 +1,18 @@
 /**
- * 🧭 APP NAVIGATOR
- * Main navigation structure for the app
+ * 🧭 APP NAVIGATOR V2
+ * Side menu navigation with drawer
  */
 
 import React from 'react';
+import { View, StyleSheet, Platform, Dimensions } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
+
+// Custom Side Menu
+import CustomDrawerContent from '../components/navigation/CustomDrawerContent';
 
 // Auth Screens
 import LoginScreen from '../screens/auth/LoginScreen';
@@ -51,6 +54,9 @@ import { ComplianceScreen } from '../screens/compliance';
 import { GarnishmentScreen } from '../screens/garnishment';
 import BenefitsScreen from '../screens/benefits/BenefitsScreen';
 
+// Wallet Screen
+import { WalletScreen } from '../screens/wallet';
+
 // Legal Screens
 import { PrivacyPolicyScreen, TermsConditionsScreen } from '../screens/legal';
 
@@ -74,7 +80,7 @@ export type RootStackParamList = {
   Profile: undefined;
   Subscription: undefined;
   Timesheet: undefined;
-  // Enterprise Features
+  Wallet: undefined;
   Accounting: undefined;
   Contractors: undefined;
   TaxCenter: undefined;
@@ -82,57 +88,54 @@ export type RootStackParamList = {
   PayrollRun: undefined;
   Onboarding: undefined;
   Reports: undefined;
-  // Additional Enterprise
   Swipe: undefined;
   Workforce: undefined;
   Messages: undefined;
   Compliance: undefined;
   Garnishment: undefined;
   Benefits: undefined;
-  // Admin
   AdminPortal: undefined;
-  // Legal
   PrivacyPolicy: undefined;
   TermsConditions: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
-const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
+
+const { width } = Dimensions.get('window');
+const isLargeScreen = width >= 768;
 
 // Auth Stack
 function AuthStack() {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="SignUp" component={SignUpScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-      {/* Legal */}
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
       <Stack.Screen name="TermsConditions" component={TermsConditionsScreen} />
     </Stack.Navigator>
   );
 }
 
-// Dashboard Stack
-function DashboardStack() {
+// Main Stack with all screens
+function MainStack() {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Dashboard" component={DashboardScreen} />
-      <Stack.Screen name="Subscription" component={SubscriptionScreen} />
-      {/* Quick Actions from Dashboard */}
-      <Stack.Screen name="GeneratePaystub" component={GeneratePaystubScreen} />
+      <Stack.Screen name="Employees" component={EmployeesScreen} />
       <Stack.Screen name="AddEmployee" component={AddEmployeeScreen} />
       <Stack.Screen name="EmployeeDetail" component={EmployeeDetailScreen} />
+      <Stack.Screen name="Paystubs" component={PaystubsScreen} />
+      <Stack.Screen name="GeneratePaystub" component={GeneratePaystubScreen} />
+      <Stack.Screen name="PaystubDetail" component={PaystubDetailScreen} />
+      <Stack.Screen name="StandalonePaystub" component={StandalonePaystubScreen} />
+      <Stack.Screen name="Rewards" component={RewardsScreen} />
+      <Stack.Screen name="Settings" component={SettingsScreen} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
-      {/* Enterprise Features */}
+      <Stack.Screen name="Subscription" component={SubscriptionScreen} />
+      <Stack.Screen name="Timesheet" component={TimesheetScreen} />
+      <Stack.Screen name="Wallet" component={WalletScreen} />
       <Stack.Screen name="Accounting" component={AccountingScreen} />
       <Stack.Screen name="Contractors" component={ContractorsScreen} />
       <Stack.Screen name="TaxCenter" component={TaxCenterScreen} />
@@ -140,142 +143,37 @@ function DashboardStack() {
       <Stack.Screen name="PayrollRun" component={PayrollRunScreen} />
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />
       <Stack.Screen name="Reports" component={ReportsScreen} />
-      {/* Additional Enterprise */}
       <Stack.Screen name="Swipe" component={SwipeScreen} />
       <Stack.Screen name="Workforce" component={WorkforceScreen} />
       <Stack.Screen name="Messages" component={MessagesScreen} />
       <Stack.Screen name="Compliance" component={ComplianceScreen} />
       <Stack.Screen name="Garnishment" component={GarnishmentScreen} />
       <Stack.Screen name="Benefits" component={BenefitsScreen} />
-      {/* Admin */}
       <Stack.Screen name="AdminPortal" component={AdminPortalScreen} />
-      {/* Legal */}
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
       <Stack.Screen name="TermsConditions" component={TermsConditionsScreen} />
     </Stack.Navigator>
   );
 }
 
-// Employees Stack
-function EmployeesStack() {
+// Main Drawer Navigator
+function MainDrawer() {
   return (
-    <Stack.Navigator
+    <Drawer.Navigator
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
       screenOptions={{
         headerShown: false,
+        drawerType: isLargeScreen ? 'permanent' : 'front',
+        drawerStyle: {
+          width: isLargeScreen ? 280 : 300,
+          backgroundColor: '#0F172A',
+        },
+        overlayColor: 'rgba(0,0,0,0.5)',
+        swipeEnabled: !isLargeScreen,
       }}
     >
-      <Stack.Screen name="Employees" component={EmployeesScreen} />
-      <Stack.Screen name="AddEmployee" component={AddEmployeeScreen} />
-      <Stack.Screen name="EmployeeDetail" component={EmployeeDetailScreen} />
-    </Stack.Navigator>
-  );
-}
-
-// Paystubs Stack
-function PaystubsStack() {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="Paystubs" component={PaystubsScreen} />
-      <Stack.Screen name="GeneratePaystub" component={GeneratePaystubScreen} />
-      <Stack.Screen name="PaystubDetail" component={PaystubDetailScreen} />
-      <Stack.Screen name="StandalonePaystub" component={StandalonePaystubScreen} />
-    </Stack.Navigator>
-  );
-}
-
-// Settings Stack
-function SettingsStack() {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Stack.Screen name="Settings" component={SettingsScreen} />
-      <Stack.Screen name="Profile" component={ProfileScreen} />
-      <Stack.Screen name="Subscription" component={SubscriptionScreen} />
-      {/* Legal */}
-      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
-      <Stack.Screen name="TermsConditions" component={TermsConditionsScreen} />
-    </Stack.Navigator>
-  );
-}
-
-// Main Tab Navigator
-function MainTabs() {
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        headerShown: false,
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName: keyof typeof Ionicons.glyphMap;
-
-          switch (route.name) {
-            case 'DashboardTab':
-              iconName = focused ? 'home' : 'home-outline';
-              break;
-            case 'EmployeesTab':
-              iconName = focused ? 'people' : 'people-outline';
-              break;
-            case 'PaystubsTab':
-              iconName = focused ? 'document-text' : 'document-text-outline';
-              break;
-            case 'RewardsTab':
-              iconName = focused ? 'gift' : 'gift-outline';
-              break;
-            case 'SettingsTab':
-              iconName = focused ? 'settings' : 'settings-outline';
-              break;
-            default:
-              iconName = 'ellipse';
-          }
-
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: '#1473FF',
-        tabBarInactiveTintColor: '#888',
-        tabBarStyle: {
-          backgroundColor: '#1a1a2e',
-          borderTopColor: '#2a2a4e',
-          height: 60,
-          paddingBottom: 8,
-        },
-        tabBarLabelStyle: {
-          fontSize: 11,
-          fontWeight: '500',
-        },
-      })}
-    >
-      <Tab.Screen 
-        name="DashboardTab" 
-        component={DashboardStack}
-        options={{ tabBarLabel: 'Home' }}
-      />
-      <Tab.Screen 
-        name="EmployeesTab" 
-        component={EmployeesStack}
-        options={{ tabBarLabel: 'Employees' }}
-      />
-      <Tab.Screen 
-        name="PaystubsTab" 
-        component={PaystubsStack}
-        options={{ tabBarLabel: 'Paystubs' }}
-      />
-      <Tab.Screen 
-        name="RewardsTab" 
-        component={RewardsScreen}
-        options={{ tabBarLabel: 'Rewards' }}
-      />
-      <Tab.Screen 
-        name="SettingsTab" 
-        component={SettingsStack}
-        options={{ tabBarLabel: 'Settings' }}
-      />
-    </Tab.Navigator>
+      <Drawer.Screen name="MainStack" component={MainStack} />
+    </Drawer.Navigator>
   );
 }
 
@@ -287,7 +185,7 @@ export default function AppNavigator() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {isAuthenticated ? (
-          <Stack.Screen name="Main" component={MainTabs} />
+          <Stack.Screen name="Main" component={MainDrawer} />
         ) : (
           <Stack.Screen name="Auth" component={AuthStack} />
         )}
