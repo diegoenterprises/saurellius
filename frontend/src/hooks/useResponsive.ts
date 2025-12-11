@@ -1,5 +1,5 @@
 /**
- * 📱💻 RESPONSIVE HOOK
+ * RESPONSIVE HOOK
  * Detects screen size and provides responsive utilities
  */
 

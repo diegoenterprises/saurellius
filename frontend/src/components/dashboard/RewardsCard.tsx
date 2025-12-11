@@ -1,5 +1,5 @@
 /**
- * 🏆 REWARDS CARD COMPONENT
+ * REWARDS CARD COMPONENT
  */
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
@@ -15,13 +15,7 @@ interface RewardsCardProps {
   onPress?: () => void;
 }
 
-const tierEmoji: Record<string, string> = {
-  Bronze: '🥉',
-  Silver: '🥈',
-  Gold: '🥇',
-  Platinum: '💎',
-  Diamond: '👑',
-};
+// Tier icons removed - using text only
 
 export default function RewardsCard({ tier, points, progress, pointsToNext, nextTier, onPress }: RewardsCardProps) {
   return (
@@ -34,7 +28,7 @@ export default function RewardsCard({ tier, points, progress, pointsToNext, next
       >
         <View style={styles.content}>
           <View style={styles.tierBadge}>
-            <Text style={styles.tierBadgeText}>{tierEmoji[tier] || '🏆'} {tier} Tier</Text>
+            <Text style={styles.tierBadgeText}>{tier} Tier</Text>
           </View>
           
           <Text style={styles.pointsDisplay}>{points.toLocaleString()}</Text>

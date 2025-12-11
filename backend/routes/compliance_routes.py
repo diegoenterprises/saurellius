@@ -1,5 +1,5 @@
 """
-📋 DOCUGINUITY COMPLIANCE API ROUTES
+DOCUGINUITY COMPLIANCE API ROUTES
 Document compliance management endpoints
 
 Features:

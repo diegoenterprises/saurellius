@@ -1,5 +1,5 @@
 """
-📋 SAURELLIUS DOCUGINUITY COMPLIANCE SERVICE
+SAURELLIUS DOCUGINUITY COMPLIANCE SERVICE
 Document compliance and management system
 
 Features:

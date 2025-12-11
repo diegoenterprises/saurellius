@@ -1,5 +1,5 @@
 /**
- * ⚙️ SETTINGS SLICE
+ * SETTINGS SLICE
  */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';

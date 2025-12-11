@@ -1,5 +1,5 @@
 /**
- * 💳 PRICING CARD COMPONENT
+ * PRICING CARD COMPONENT
  * Displays subscription plan details
  */
 

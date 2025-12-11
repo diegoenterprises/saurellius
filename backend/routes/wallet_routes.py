@@ -1,5 +1,5 @@
 """
-💰 SAURELLIUS DIGITAL WALLET ROUTES
+SAURELLIUS DIGITAL WALLET ROUTES
 Employer and Employee wallet system for instant payroll
 """
 

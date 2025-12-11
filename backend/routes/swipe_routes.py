@@ -1,5 +1,5 @@
 """
-🔄 SAURELLIUS SWIPE API ROUTES
+SAURELLIUS SWIPE API ROUTES
 Schedule swap management endpoints
 """
 

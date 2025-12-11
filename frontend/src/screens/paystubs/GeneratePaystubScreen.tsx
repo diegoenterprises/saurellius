@@ -324,7 +324,7 @@ export default function GeneratePaystubScreen({ navigation, route }: any) {
         ? `Paystub generated with ${formData.theme.replace(/_/g, ' ')} theme! PDF ready.`
         : 'Paystub saved! PDF generation may be processing.';
       
-      Alert.alert('Success! 🎉', message, [
+      Alert.alert('Success!', message, [
         { text: 'View Paystub', onPress: () => navigation.navigate('PaystubDetail', { paystubId: result.paystub_id }) },
         { text: 'Done', onPress: () => navigation.goBack() },
       ]);

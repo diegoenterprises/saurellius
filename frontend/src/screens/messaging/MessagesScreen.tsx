@@ -329,7 +329,7 @@ const MessagesScreen: React.FC = () => {
             contentContainerStyle={{ padding: 16 }}
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
-                <Text style={styles.emptyEmoji}>🎉</Text>
+                <Ionicons name="ribbon-outline" size={48} color="#4a4a6e" />
                 <Text style={styles.emptyText}>No recognition yet</Text>
                 <Text style={styles.emptySubtext}>
                   Be the first to send kudos to a teammate!
@@ -480,7 +480,7 @@ const MessagesScreen: React.FC = () => {
             />
             <Text style={styles.badgeLabel}>Select a Badge:</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.badgeScroll}>
-              {['⭐ Star Performer', '🎯 Goal Crusher', '🤝 Team Player', '💡 Innovator', '🚀 Go-Getter'].map((badge, idx) => (
+              {['Star Performer', 'Goal Crusher', 'Team Player', 'Innovator', 'Go-Getter'].map((badge, idx) => (
                 <TouchableOpacity key={idx} style={styles.badgeOption}>
                   <Text style={styles.badgeOptionText}>{badge}</Text>
                 </TouchableOpacity>
@@ -497,7 +497,7 @@ const MessagesScreen: React.FC = () => {
               style={styles.sendButton}
               onPress={() => {
                 setShowKudosModal(false);
-                Alert.alert('Kudos Sent!', 'Your recognition has been shared with the team! 🎉');
+                Alert.alert('Kudos Sent!', 'Your recognition has been shared with the team!');
               }}
             >
               <LinearGradient

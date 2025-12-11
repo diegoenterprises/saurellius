@@ -121,7 +121,7 @@ export default function DashboardScreen() {
           style={styles.hero}
         >
           <View style={styles.heroContent}>
-            <Text style={styles.heroTitle}>Welcome back, {firstName}! 👋</Text>
+            <Text style={styles.heroTitle}>Welcome back, {firstName}!</Text>
             <Text style={styles.heroSubtitle}>
               Your admin dashboard is ready. Monitor platform activity, generate paystubs, and manage your system.
             </Text>

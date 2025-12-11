@@ -1,5 +1,5 @@
 """
-📧 EMAIL ROUTES
+EMAIL ROUTES
 Email notification endpoints
 """
 

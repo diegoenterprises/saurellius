@@ -1,5 +1,5 @@
 /**
- * 🧭 APP NAVIGATOR V2
+ * APP NAVIGATOR V2
  * Side menu navigation with drawer
  */
 

@@ -1,5 +1,5 @@
 """
-🔐 AUTH ROUTES
+AUTH ROUTES
 Authentication endpoints for login, signup, and token management
 """
 

@@ -1,5 +1,5 @@
 /**
- * 🎨 THEME CONFIGURATION
+ * THEME CONFIGURATION
  * Colors, fonts, spacing, and design tokens
  */
 

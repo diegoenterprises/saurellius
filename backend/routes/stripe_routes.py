@@ -1,5 +1,5 @@
 """
-💳 STRIPE ROUTES
+STRIPE ROUTES
 Stripe payment, subscription, and webhook endpoints
 """
 

@@ -1,5 +1,5 @@
 /**
- * 📊 STATS CARD
+ * STATS CARD
  * Dashboard statistics display card
  */
 

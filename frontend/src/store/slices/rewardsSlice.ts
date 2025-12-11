@@ -1,5 +1,5 @@
 /**
- * 🎁 REWARDS SLICE
+ * REWARDS SLICE
  * Rewards and points state management
  */
 

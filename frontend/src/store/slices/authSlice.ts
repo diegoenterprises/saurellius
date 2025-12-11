@@ -1,5 +1,5 @@
 /**
- * 🔐 AUTH SLICE
+ * AUTH SLICE
  * Authentication state management
  */
 

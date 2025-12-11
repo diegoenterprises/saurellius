@@ -1,5 +1,5 @@
 /**
- * 📊 USAGE TRACKER COMPONENT
+ * USAGE TRACKER COMPONENT
  * Displays current billing period usage
  */
 

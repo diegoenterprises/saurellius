@@ -1,5 +1,5 @@
 /**
- * 💳 BILLING SLICE
+ * BILLING SLICE
  * Subscription and billing state management
  */
 

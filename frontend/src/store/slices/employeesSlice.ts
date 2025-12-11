@@ -1,5 +1,5 @@
 /**
- * 👥 EMPLOYEES SLICE
+ * EMPLOYEES SLICE
  */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { employeeAPI } from '../../services/api';

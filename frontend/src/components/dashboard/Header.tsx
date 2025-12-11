@@ -1,5 +1,5 @@
 /**
- * 🧭 DASHBOARD HEADER
+ * DASHBOARD HEADER
  */
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Modal, Pressable } from 'react-native';
