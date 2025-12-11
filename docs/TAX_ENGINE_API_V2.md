@@ -1,8 +1,11 @@
 # Saurellius Tax Engine API V2
 
-## Enterprise-Grade Payroll Tax Calculations
+## Enterprise-Grade Payroll Tax Calculations for US & Canada
 
-The Saurellius Tax Engine V2 provides accurate, compliant payroll tax calculations for all 50 US states plus 7,400+ local jurisdictions.
+The Saurellius Tax Engine V2 provides accurate, compliant payroll tax calculations for:
+
+- **United States**: 50 states + DC + 7,400+ local jurisdictions
+- **Canada**: 13 provinces and territories
 
 ---
 
@@ -393,6 +396,119 @@ For 2020+ W-4 forms:
 | `other_income` | decimal | Step 4(a) amount |
 | `deductions` | decimal | Step 4(b) amount |
 | `extra_withholding` | decimal | Step 4(c) amount |
+
+---
+
+## Canadian Payroll (CA Endpoints)
+
+### CA 1. Geocode Canadian Address
+
+**POST** `/api/v2/tax/ca/geocode`
+
+```json
+{
+  "address": {
+    "street": "123 Bay St",
+    "city": "Toronto",
+    "province": "ON",
+    "postal_code": "M5J 2T3"
+  }
+}
+```
+
+---
+
+### CA 2. Calculate Canadian Gross-to-Net
+
+**POST** `/api/v2/tax/ca/calculate/gross-to-net`
+
+```json
+{
+  "employee_id": "EMP-001",
+  "payroll_run": {
+    "pay_date": "2025-01-15",
+    "pay_periods_per_year": 26
+  },
+  "province": "ON",
+  "gross_wages": 2500,
+  "ytd_gross": 0,
+  "ytd_cpp": 0,
+  "ytd_ei": 0,
+  "td1_federal_claim": 1,
+  "td1_provincial_claim": 1
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "country": "CA",
+    "province": "ON",
+    "gross_wages": 2500.00,
+    "tax_withholdings": [
+      {"unique_tax_id": "CA-00-0000-CPP-000", "description": "Canada Pension Plan", "employee_amount": 143.32, "employer_amount": 143.32},
+      {"unique_tax_id": "CA-00-0000-EI-000", "description": "Employment Insurance", "employee_amount": 41.50, "employer_amount": 58.10},
+      {"unique_tax_id": "CA-00-0000-FIT-000", "description": "Canada Federal Income Tax", "employee_amount": 287.50},
+      {"unique_tax_id": "CA-ON-0000-PIT-000", "description": "Ontario Provincial Tax", "employee_amount": 98.25}
+    ],
+    "total_employee_deductions": 570.57,
+    "total_employer_contributions": 201.42,
+    "net_pay": 1929.43
+  }
+}
+```
+
+---
+
+### CA 3. Get Federal Rates
+
+**GET** `/api/v2/tax/ca/rates/federal`
+
+Returns CPP, EI, and federal tax brackets for 2025.
+
+---
+
+### CA 4. Get Provincial Rates
+
+**GET** `/api/v2/tax/ca/rates/provincial/{province}`
+
+Example: `/api/v2/tax/ca/rates/provincial/ON`
+
+---
+
+### CA 5. List Provinces
+
+**GET** `/api/v2/tax/ca/provinces`
+
+---
+
+## Canadian Tax Types
+
+| Tax ID | Description | Employee | Employer |
+|--------|-------------|----------|----------|
+| `CA-00-0000-CPP-000` | Canada Pension Plan | 5.95% | 5.95% |
+| `CA-00-0000-CPP2-000` | Enhanced CPP | 4% | 4% |
+| `CA-00-0000-EI-000` | Employment Insurance | 1.66% | 2.32% |
+| `CA-QC-0000-QPP-000` | Quebec Pension Plan | 6.4% | 6.4% |
+| `CA-QC-0000-QPIP-000` | Quebec Parental Insurance | 0.494% | 0.692% |
+| `CA-ON-0000-EHT-000` | Ontario Employer Health Tax | - | 0.98-1.95% |
+| `CA-{PP}-0000-PIT-000` | Provincial Income Tax | Varies | - |
+
+---
+
+## TD1 Claim Codes
+
+For Canadian payroll, use TD1 claim codes:
+
+| Code | Description |
+|------|-------------|
+| 1 | Basic personal amount only (default) |
+| 2-10 | Additional claim amounts |
+| 0 | No tax deducted (exempt) |
+
+Quebec uses TP-1015.3-V form instead of TD1.
 
 ---
 

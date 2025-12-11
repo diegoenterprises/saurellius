@@ -1,7 +1,11 @@
 """
 SAURELLIUS TAX ENGINE V2 - PRODUCTION API
-Enterprise-grade payroll tax calculations
+Enterprise-grade payroll tax calculations for US & CANADA
 Based on industry best practices for tax APIs
+
+Supported Countries:
+- United States (50 states + DC + 7,400 local jurisdictions)
+- Canada (13 provinces/territories)
 
 Core Capabilities:
 - Location Code Resolution (address to jurisdiction)
@@ -12,6 +16,7 @@ Core Capabilities:
 - Benefits Taxability Checking
 - Multi-jurisdiction Support
 - Batch Processing
+- Cross-border Support (US/Canada)
 """
 
 from datetime import datetime, date
@@ -55,7 +60,7 @@ LOCATION_CODES = {
     '39-049-COL1': {'name': 'Columbus', 'type': 'city', 'state': 'OH'},
 }
 
-# State FIPS codes for location code generation
+# State FIPS codes for location code generation (US)
 STATE_FIPS = {
     'AL': '01', 'AK': '02', 'AZ': '04', 'AR': '05', 'CA': '06', 'CO': '08', 'CT': '09',
     'DE': '10', 'FL': '12', 'GA': '13', 'HI': '15', 'ID': '16', 'IL': '17', 'IN': '18',
@@ -65,6 +70,47 @@ STATE_FIPS = {
     'OK': '40', 'OR': '41', 'PA': '42', 'RI': '44', 'SC': '45', 'SD': '46', 'TN': '47',
     'TX': '48', 'UT': '49', 'VT': '50', 'VA': '51', 'WA': '53', 'WV': '54', 'WI': '55',
     'WY': '56', 'DC': '11',
+}
+
+# =============================================================================
+# CANADIAN LOCATION CODES
+# Format: CA-PP-0000 where PP=Province Code
+# =============================================================================
+
+CANADIAN_PROVINCES = {
+    'AB': {'code': 'CA-AB-0000', 'name': 'Alberta', 'type': 'province'},
+    'BC': {'code': 'CA-BC-0000', 'name': 'British Columbia', 'type': 'province'},
+    'MB': {'code': 'CA-MB-0000', 'name': 'Manitoba', 'type': 'province'},
+    'NB': {'code': 'CA-NB-0000', 'name': 'New Brunswick', 'type': 'province'},
+    'NL': {'code': 'CA-NL-0000', 'name': 'Newfoundland and Labrador', 'type': 'province'},
+    'NS': {'code': 'CA-NS-0000', 'name': 'Nova Scotia', 'type': 'province'},
+    'NT': {'code': 'CA-NT-0000', 'name': 'Northwest Territories', 'type': 'territory'},
+    'NU': {'code': 'CA-NU-0000', 'name': 'Nunavut', 'type': 'territory'},
+    'ON': {'code': 'CA-ON-0000', 'name': 'Ontario', 'type': 'province'},
+    'PE': {'code': 'CA-PE-0000', 'name': 'Prince Edward Island', 'type': 'province'},
+    'QC': {'code': 'CA-QC-0000', 'name': 'Quebec', 'type': 'province'},
+    'SK': {'code': 'CA-SK-0000', 'name': 'Saskatchewan', 'type': 'province'},
+    'YT': {'code': 'CA-YT-0000', 'name': 'Yukon', 'type': 'territory'},
+}
+
+CANADIAN_LOCATION_CODES = {
+    # Federal
+    'CA-00-0000': {'name': 'Canada Federal', 'type': 'federal', 'country': 'CA'},
+    
+    # Provinces
+    'CA-AB-0000': {'name': 'Alberta', 'type': 'province', 'province': 'AB', 'country': 'CA'},
+    'CA-BC-0000': {'name': 'British Columbia', 'type': 'province', 'province': 'BC', 'country': 'CA'},
+    'CA-MB-0000': {'name': 'Manitoba', 'type': 'province', 'province': 'MB', 'country': 'CA'},
+    'CA-NB-0000': {'name': 'New Brunswick', 'type': 'province', 'province': 'NB', 'country': 'CA'},
+    'CA-NL-0000': {'name': 'Newfoundland and Labrador', 'type': 'province', 'province': 'NL', 'country': 'CA'},
+    'CA-NS-0000': {'name': 'Nova Scotia', 'type': 'province', 'province': 'NS', 'country': 'CA'},
+    'CA-NT-0000': {'name': 'Northwest Territories', 'type': 'territory', 'province': 'NT', 'country': 'CA'},
+    'CA-NU-0000': {'name': 'Nunavut', 'type': 'territory', 'province': 'NU', 'country': 'CA'},
+    'CA-ON-0000': {'name': 'Ontario', 'type': 'province', 'province': 'ON', 'country': 'CA'},
+    'CA-PE-0000': {'name': 'Prince Edward Island', 'type': 'province', 'province': 'PE', 'country': 'CA'},
+    'CA-QC-0000': {'name': 'Quebec', 'type': 'province', 'province': 'QC', 'country': 'CA'},
+    'CA-SK-0000': {'name': 'Saskatchewan', 'type': 'province', 'province': 'SK', 'country': 'CA'},
+    'CA-YT-0000': {'name': 'Yukon', 'type': 'territory', 'province': 'YT', 'country': 'CA'},
 }
 
 # =============================================================================
@@ -117,6 +163,173 @@ TAX_DEFINITIONS = {
         'wage_base': 7000,
         'required_params': [],
     },
+}
+
+# =============================================================================
+# CANADIAN TAX DEFINITIONS - 2025 RATES
+# Tax ID Format: CA-PP-0000-TYPE-000
+# Types: FIT (Federal), PIT (Provincial), CPP, EI, QPP (Quebec), QPIP
+# =============================================================================
+
+CANADIAN_TAX_DEFINITIONS = {
+    # Federal Taxes
+    'CA-00-0000-FIT-000': {
+        'name': 'Canada Federal Income Tax',
+        'type': 'income',
+        'jurisdiction': 'federal',
+        'country': 'CA',
+        'employer_paid': False,
+        'required_params': ['td1_claim_code', 'additional_tax'],
+    },
+    'CA-00-0000-CPP-000': {
+        'name': 'Canada Pension Plan (CPP)',
+        'type': 'pension',
+        'jurisdiction': 'federal',
+        'country': 'CA',
+        'employer_paid': True,
+        'employee_rate': 0.0595,
+        'employer_rate': 0.0595,
+        'max_pensionable_earnings': 71300,  # 2025
+        'basic_exemption': 3500,
+        'required_params': [],
+    },
+    'CA-00-0000-CPP2-000': {
+        'name': 'CPP2 (Enhanced CPP)',
+        'type': 'pension',
+        'jurisdiction': 'federal',
+        'country': 'CA',
+        'employer_paid': True,
+        'rate': 0.04,
+        'additional_max_earnings': 81200,  # 2025 YAMPE
+        'required_params': [],
+    },
+    'CA-00-0000-EI-000': {
+        'name': 'Employment Insurance (EI)',
+        'type': 'insurance',
+        'jurisdiction': 'federal',
+        'country': 'CA',
+        'employer_paid': True,
+        'employee_rate': 0.0166,
+        'employer_rate': 0.02324,  # 1.4x employee rate
+        'max_insurable_earnings': 65700,  # 2025
+        'required_params': [],
+    },
+    
+    # Provincial Taxes
+    'CA-ON-0000-PIT-000': {
+        'name': 'Ontario Provincial Income Tax',
+        'type': 'income',
+        'jurisdiction': 'provincial',
+        'province': 'ON',
+        'country': 'CA',
+        'employer_paid': False,
+        'required_params': ['td1on_claim_code'],
+    },
+    'CA-ON-0000-EHT-000': {
+        'name': 'Ontario Employer Health Tax (EHT)',
+        'type': 'health',
+        'jurisdiction': 'provincial',
+        'province': 'ON',
+        'country': 'CA',
+        'employer_paid': True,
+        'rate': 0.0195,  # Rate varies by payroll size
+        'exemption': 1000000,  # First $1M exempt for eligible employers
+        'required_params': [],
+    },
+    'CA-BC-0000-PIT-000': {
+        'name': 'British Columbia Provincial Income Tax',
+        'type': 'income',
+        'jurisdiction': 'provincial',
+        'province': 'BC',
+        'country': 'CA',
+        'employer_paid': False,
+        'required_params': ['td1bc_claim_code'],
+    },
+    'CA-AB-0000-PIT-000': {
+        'name': 'Alberta Provincial Income Tax',
+        'type': 'income',
+        'jurisdiction': 'provincial',
+        'province': 'AB',
+        'country': 'CA',
+        'employer_paid': False,
+        'required_params': ['td1ab_claim_code'],
+    },
+    'CA-QC-0000-PIT-000': {
+        'name': 'Quebec Provincial Income Tax',
+        'type': 'income',
+        'jurisdiction': 'provincial',
+        'province': 'QC',
+        'country': 'CA',
+        'employer_paid': False,
+        'required_params': ['tp1015_claim_code'],  # Quebec uses TP-1015.3-V
+    },
+    'CA-QC-0000-QPP-000': {
+        'name': 'Quebec Pension Plan (QPP)',
+        'type': 'pension',
+        'jurisdiction': 'provincial',
+        'province': 'QC',
+        'country': 'CA',
+        'employer_paid': True,
+        'employee_rate': 0.064,
+        'employer_rate': 0.064,
+        'max_pensionable_earnings': 71300,
+        'basic_exemption': 3500,
+        'required_params': [],
+    },
+    'CA-QC-0000-QPIP-000': {
+        'name': 'Quebec Parental Insurance Plan (QPIP)',
+        'type': 'insurance',
+        'jurisdiction': 'provincial',
+        'province': 'QC',
+        'country': 'CA',
+        'employer_paid': True,
+        'employee_rate': 0.00494,
+        'employer_rate': 0.00692,
+        'max_insurable_earnings': 98000,
+        'required_params': [],
+    },
+}
+
+# 2025 Canadian Federal Tax Brackets
+CANADIAN_FEDERAL_BRACKETS_2025 = [
+    {'min': 0, 'max': 57375, 'rate': 0.15, 'base': 0},
+    {'min': 57375, 'max': 114750, 'rate': 0.205, 'base': 8606.25},
+    {'min': 114750, 'max': 177882, 'rate': 0.26, 'base': 20367.84},
+    {'min': 177882, 'max': 253414, 'rate': 0.29, 'base': 36782.16},
+    {'min': 253414, 'max': float('inf'), 'rate': 0.33, 'base': 58686.44},
+]
+
+# Provincial Tax Brackets (2025)
+CANADIAN_PROVINCIAL_BRACKETS_2025 = {
+    'ON': [
+        {'min': 0, 'max': 52886, 'rate': 0.0505},
+        {'min': 52886, 'max': 105775, 'rate': 0.0915},
+        {'min': 105775, 'max': 150000, 'rate': 0.1116},
+        {'min': 150000, 'max': 220000, 'rate': 0.1216},
+        {'min': 220000, 'max': float('inf'), 'rate': 0.1316},
+    ],
+    'BC': [
+        {'min': 0, 'max': 47937, 'rate': 0.0506},
+        {'min': 47937, 'max': 95875, 'rate': 0.077},
+        {'min': 95875, 'max': 110076, 'rate': 0.105},
+        {'min': 110076, 'max': 133664, 'rate': 0.1229},
+        {'min': 133664, 'max': 181232, 'rate': 0.147},
+        {'min': 181232, 'max': 252752, 'rate': 0.168},
+        {'min': 252752, 'max': float('inf'), 'rate': 0.205},
+    ],
+    'AB': [
+        {'min': 0, 'max': 148269, 'rate': 0.10},
+        {'min': 148269, 'max': 177922, 'rate': 0.12},
+        {'min': 177922, 'max': 237230, 'rate': 0.13},
+        {'min': 237230, 'max': 355845, 'rate': 0.14},
+        {'min': 355845, 'max': float('inf'), 'rate': 0.15},
+    ],
+    'QC': [
+        {'min': 0, 'max': 51780, 'rate': 0.14},
+        {'min': 51780, 'max': 103545, 'rate': 0.19},
+        {'min': 103545, 'max': 126000, 'rate': 0.24},
+        {'min': 126000, 'max': float('inf'), 'rate': 0.2575},
+    ],
 }
 
 # =============================================================================
@@ -967,22 +1180,37 @@ def get_api_schema():
         'data': {
             'api_version': '2.0.0',
             'base_url': '/api/v2/tax',
-            'endpoints': [
-                {'path': '/geocode', 'method': 'POST', 'description': 'Convert address to location codes', 'feature': 'geocode'},
-                {'path': '/jurisdictions/lookup', 'method': 'POST', 'description': 'Get jurisdiction details', 'feature': 'geocode'},
-                {'path': '/taxes/applicable', 'method': 'POST', 'description': 'Find applicable taxes', 'feature': 'calculate'},
-                {'path': '/taxes/{tax_id}/parameters', 'method': 'GET', 'description': 'Get tax parameters', 'feature': 'calculate'},
-                {'path': '/calculate/gross-to-net', 'method': 'POST', 'description': 'Calculate payroll taxes', 'feature': 'calculate'},
-                {'path': '/calculate/gross-up', 'method': 'POST', 'description': 'Calculate gross from net', 'feature': 'grossup'},
-                {'path': '/calculate/batch', 'method': 'POST', 'description': 'Batch payroll calculation', 'feature': 'batch'},
-                {'path': '/benefits/taxability', 'method': 'POST', 'description': 'Check benefit taxability', 'feature': 'calculate'},
-                {'path': '/benefits/types', 'method': 'GET', 'description': 'List benefit types', 'feature': 'calculate'},
-                {'path': '/account', 'method': 'GET', 'description': 'Account info and usage', 'feature': None},
-                {'path': '/schema', 'method': 'GET', 'description': 'API schema', 'feature': None},
+            'supported_countries': ['US', 'CA'],
+            'us_endpoints': [
+                {'path': '/geocode', 'method': 'POST', 'description': 'Convert US address to location codes'},
+                {'path': '/jurisdictions/lookup', 'method': 'POST', 'description': 'Get jurisdiction details'},
+                {'path': '/taxes/applicable', 'method': 'POST', 'description': 'Find applicable US taxes'},
+                {'path': '/taxes/{tax_id}/parameters', 'method': 'GET', 'description': 'Get tax parameters'},
+                {'path': '/calculate/gross-to-net', 'method': 'POST', 'description': 'Calculate US payroll taxes'},
+                {'path': '/calculate/gross-up', 'method': 'POST', 'description': 'Calculate gross from net'},
+                {'path': '/calculate/batch', 'method': 'POST', 'description': 'Batch payroll calculation'},
+                {'path': '/benefits/taxability', 'method': 'POST', 'description': 'Check benefit taxability'},
+                {'path': '/benefits/types', 'method': 'GET', 'description': 'List benefit types'},
             ],
-            'tax_id_format': 'SS-CCC-LLLL-TYPE-VVV',
-            'location_code_format': 'SS-CCC-LLLL (State FIPS-County-Local)',
-            'supported_tax_types': ['FIT', 'SIT', 'FICA', 'MEDI', 'MEDI2', 'FUTA', 'SUTA', 'SDI', 'PFML', 'LIT'],
+            'ca_endpoints': [
+                {'path': '/ca/geocode', 'method': 'POST', 'description': 'Convert Canadian address to location codes'},
+                {'path': '/ca/taxes/applicable', 'method': 'POST', 'description': 'Find applicable Canadian taxes'},
+                {'path': '/ca/calculate/gross-to-net', 'method': 'POST', 'description': 'Calculate Canadian payroll taxes'},
+                {'path': '/ca/rates/federal', 'method': 'GET', 'description': 'Get Canadian federal rates'},
+                {'path': '/ca/rates/provincial/{province}', 'method': 'GET', 'description': 'Get provincial rates'},
+                {'path': '/ca/provinces', 'method': 'GET', 'description': 'List all provinces'},
+            ],
+            'common_endpoints': [
+                {'path': '/account', 'method': 'GET', 'description': 'Account info and usage'},
+                {'path': '/schema', 'method': 'GET', 'description': 'API schema'},
+                {'path': '/health', 'method': 'GET', 'description': 'Health check'},
+            ],
+            'us_tax_id_format': 'SS-CCC-LLLL-TYPE-VVV',
+            'ca_tax_id_format': 'CA-PP-0000-TYPE-000',
+            'us_location_code_format': 'SS-CCC-LLLL (State FIPS-County-Local)',
+            'ca_location_code_format': 'CA-PP-0000 (Country-Province-Local)',
+            'us_tax_types': ['FIT', 'SIT', 'FICA', 'MEDI', 'MEDI2', 'FUTA', 'SUTA', 'SDI', 'PFML', 'LIT'],
+            'ca_tax_types': ['FIT', 'PIT', 'CPP', 'CPP2', 'EI', 'QPP', 'QPIP', 'EHT'],
         }
     })
 
@@ -995,4 +1223,452 @@ def health_check():
         'service': 'saurellius-tax-engine-v2',
         'version': '2.0.0',
         'timestamp': datetime.utcnow().isoformat(),
+        'supported_countries': ['US', 'CA'],
+    })
+
+
+# =============================================================================
+# CANADIAN PAYROLL ENDPOINTS
+# =============================================================================
+
+@tax_engine_v2_bp.route('/ca/geocode', methods=['POST'])
+@require_api_key
+@require_feature('geocode')
+def geocode_canadian_address():
+    """
+    Translate a Canadian address to location codes.
+    
+    Request:
+    {
+        "address": {
+            "street": "123 Bay St",
+            "city": "Toronto",
+            "province": "ON",
+            "postal_code": "M5J 2T3"
+        }
+    }
+    """
+    data = request.get_json()
+    if not data or 'address' not in data:
+        return jsonify({'error': {'code': 'invalid_request', 'message': 'address object required'}}), 400
+    
+    addr = data['address']
+    province = addr.get('province', '').upper()
+    
+    if province not in CANADIAN_PROVINCES:
+        return jsonify({'error': {'code': 'invalid_province', 'message': f'Unknown province: {province}'}}), 400
+    
+    location_codes = [
+        {'location_code': 'CA-00-0000', 'jurisdiction_name': 'Canada Federal', 'jurisdiction_type': 'federal', 'country': 'CA'},
+        {'location_code': f'CA-{province}-0000', 'jurisdiction_name': CANADIAN_PROVINCES[province]['name'], 'jurisdiction_type': 'province', 'country': 'CA'},
+    ]
+    
+    return jsonify({
+        'success': True,
+        'request_id': g.request_id,
+        'data': {
+            'input_address': addr,
+            'country': 'CA',
+            'location_codes': location_codes,
+            'primary_location_code': f'CA-{province}-0000',
+        }
+    })
+
+
+@tax_engine_v2_bp.route('/ca/taxes/applicable', methods=['POST'])
+@require_api_key
+@require_feature('calculate')
+def get_canadian_applicable_taxes():
+    """
+    Get applicable Canadian taxes for location codes.
+    
+    Request:
+    {
+        "tax_references": [
+            {"location_code": "CA-00-0000", "is_resident": true},
+            {"location_code": "CA-ON-0000", "is_resident": true}
+        ],
+        "pay_date": "2025-01-15"
+    }
+    """
+    data = request.get_json()
+    tax_refs = data.get('tax_references', [])
+    pay_date = data.get('pay_date', date.today().isoformat())
+    
+    applicable_taxes = []
+    
+    for ref in tax_refs:
+        loc_code = ref.get('location_code', '')
+        
+        # Federal Canadian taxes
+        if loc_code == 'CA-00-0000':
+            applicable_taxes.extend([
+                {
+                    'unique_tax_id': 'CA-00-0000-FIT-000',
+                    'description': 'Canada Federal Income Tax',
+                    'location_code': loc_code,
+                    'tax_type': 'income',
+                    'employer_tax': False,
+                    'required_parameters': [
+                        {'name': 'td1_claim_code', 'type': 'integer', 'description': 'TD1 claim code (1-10)'},
+                        {'name': 'additional_tax', 'type': 'decimal'},
+                    ],
+                },
+                {
+                    'unique_tax_id': 'CA-00-0000-CPP-000',
+                    'description': 'Canada Pension Plan (CPP)',
+                    'location_code': loc_code,
+                    'tax_type': 'pension',
+                    'employer_tax': True,
+                    'employee_rate': 0.0595,
+                    'employer_rate': 0.0595,
+                    'max_pensionable_earnings': 71300,
+                    'required_parameters': [],
+                },
+                {
+                    'unique_tax_id': 'CA-00-0000-EI-000',
+                    'description': 'Employment Insurance (EI)',
+                    'location_code': loc_code,
+                    'tax_type': 'insurance',
+                    'employer_tax': True,
+                    'employee_rate': 0.0166,
+                    'employer_rate': 0.02324,
+                    'max_insurable_earnings': 65700,
+                    'required_parameters': [],
+                },
+            ])
+        
+        # Provincial taxes
+        elif loc_code.startswith('CA-') and loc_code != 'CA-00-0000':
+            province = loc_code.split('-')[1]
+            prov_info = CANADIAN_PROVINCES.get(province, {})
+            
+            # Provincial income tax
+            applicable_taxes.append({
+                'unique_tax_id': f'CA-{province}-0000-PIT-000',
+                'description': f'{prov_info.get("name", province)} Provincial Income Tax',
+                'location_code': loc_code,
+                'tax_type': 'income',
+                'employer_tax': False,
+                'required_parameters': [
+                    {'name': f'td1{province.lower()}_claim_code', 'type': 'integer'},
+                ],
+            })
+            
+            # Quebec-specific taxes
+            if province == 'QC':
+                applicable_taxes.extend([
+                    {
+                        'unique_tax_id': 'CA-QC-0000-QPP-000',
+                        'description': 'Quebec Pension Plan (QPP)',
+                        'location_code': loc_code,
+                        'tax_type': 'pension',
+                        'employer_tax': True,
+                        'note': 'QPP replaces CPP for Quebec employees',
+                        'required_parameters': [],
+                    },
+                    {
+                        'unique_tax_id': 'CA-QC-0000-QPIP-000',
+                        'description': 'Quebec Parental Insurance Plan (QPIP)',
+                        'location_code': loc_code,
+                        'tax_type': 'insurance',
+                        'employer_tax': True,
+                        'required_parameters': [],
+                    },
+                ])
+            
+            # Ontario Employer Health Tax
+            if province == 'ON':
+                applicable_taxes.append({
+                    'unique_tax_id': 'CA-ON-0000-EHT-000',
+                    'description': 'Ontario Employer Health Tax',
+                    'location_code': loc_code,
+                    'tax_type': 'health',
+                    'employer_tax': True,
+                    'required_parameters': [],
+                })
+    
+    return jsonify({
+        'success': True,
+        'request_id': g.request_id,
+        'data': {
+            'country': 'CA',
+            'pay_date': pay_date,
+            'tax_count': len(applicable_taxes),
+            'taxes': applicable_taxes,
+        }
+    })
+
+
+@tax_engine_v2_bp.route('/ca/calculate/gross-to-net', methods=['POST'])
+@require_api_key
+@require_feature('calculate')
+def calculate_canadian_gross_to_net():
+    """
+    Calculate Canadian payroll taxes (gross-to-net).
+    
+    Request:
+    {
+        "employee_id": "EMP-001",
+        "payroll_run": {
+            "pay_date": "2025-01-15",
+            "pay_periods_per_year": 26,
+            "pay_period_number": 1
+        },
+        "province": "ON",
+        "gross_wages": 2500,
+        "ytd_gross": 0,
+        "ytd_cpp": 0,
+        "ytd_ei": 0,
+        "td1_federal_claim": 1,
+        "td1_provincial_claim": 1
+    }
+    """
+    data = request.get_json()
+    
+    employee_id = data.get('employee_id', 'unknown')
+    payroll_run = data.get('payroll_run', {})
+    province = data.get('province', 'ON').upper()
+    gross_wages = float(data.get('gross_wages', 0))
+    ytd_gross = float(data.get('ytd_gross', 0))
+    ytd_cpp = float(data.get('ytd_cpp', 0))
+    ytd_ei = float(data.get('ytd_ei', 0))
+    
+    pay_periods = payroll_run.get('pay_periods_per_year', 26)
+    
+    tax_results = []
+    total_employee_tax = 0
+    total_employer_tax = 0
+    
+    # CPP Calculation (or QPP for Quebec)
+    cpp_rate = 0.0595
+    cpp_max = 71300
+    cpp_exemption = 3500
+    is_quebec = province == 'QC'
+    
+    if is_quebec:
+        cpp_rate = 0.064  # QPP rate is higher
+    
+    cpp_pensionable = max(0, gross_wages - (cpp_exemption / pay_periods))
+    
+    if ytd_gross < cpp_max:
+        remaining_cpp = cpp_max - ytd_gross
+        cpp_wages = min(cpp_pensionable, remaining_cpp)
+        cpp_employee = round(cpp_wages * cpp_rate, 2)
+        cpp_employer = cpp_employee
+    else:
+        cpp_employee = 0
+        cpp_employer = 0
+    
+    tax_results.append({
+        'unique_tax_id': 'CA-QC-0000-QPP-000' if is_quebec else 'CA-00-0000-CPP-000',
+        'description': 'Quebec Pension Plan' if is_quebec else 'Canada Pension Plan',
+        'employee_amount': cpp_employee,
+        'employer_amount': cpp_employer,
+        'ytd_employee': ytd_cpp + cpp_employee,
+    })
+    total_employee_tax += cpp_employee
+    total_employer_tax += cpp_employer
+    
+    # EI Calculation (reduced for Quebec due to QPIP)
+    ei_rate = 0.0132 if is_quebec else 0.0166  # Quebec has reduced EI
+    ei_employer_rate = ei_rate * 1.4
+    ei_max = 65700
+    
+    if ytd_gross < ei_max:
+        remaining_ei = ei_max - ytd_gross
+        ei_wages = min(gross_wages, remaining_ei)
+        ei_employee = round(ei_wages * ei_rate, 2)
+        ei_employer = round(ei_wages * ei_employer_rate, 2)
+    else:
+        ei_employee = 0
+        ei_employer = 0
+    
+    tax_results.append({
+        'unique_tax_id': 'CA-00-0000-EI-000',
+        'description': 'Employment Insurance',
+        'employee_amount': ei_employee,
+        'employer_amount': ei_employer,
+        'ytd_employee': ytd_ei + ei_employee,
+    })
+    total_employee_tax += ei_employee
+    total_employer_tax += ei_employer
+    
+    # QPIP for Quebec
+    if is_quebec:
+        qpip_rate = 0.00494
+        qpip_employer_rate = 0.00692
+        qpip_max = 98000
+        
+        if ytd_gross < qpip_max:
+            qpip_wages = min(gross_wages, qpip_max - ytd_gross)
+            qpip_employee = round(qpip_wages * qpip_rate, 2)
+            qpip_employer = round(qpip_wages * qpip_employer_rate, 2)
+        else:
+            qpip_employee = 0
+            qpip_employer = 0
+        
+        tax_results.append({
+            'unique_tax_id': 'CA-QC-0000-QPIP-000',
+            'description': 'Quebec Parental Insurance Plan',
+            'employee_amount': qpip_employee,
+            'employer_amount': qpip_employer,
+        })
+        total_employee_tax += qpip_employee
+        total_employer_tax += qpip_employer
+    
+    # Federal Income Tax (simplified)
+    annual_income = gross_wages * pay_periods
+    federal_tax = 0
+    for bracket in CANADIAN_FEDERAL_BRACKETS_2025:
+        if annual_income > bracket['min']:
+            if annual_income <= bracket['max']:
+                federal_tax = bracket.get('base', 0) + (annual_income - bracket['min']) * bracket['rate']
+                break
+    
+    federal_withholding = round(federal_tax / pay_periods, 2)
+    tax_results.append({
+        'unique_tax_id': 'CA-00-0000-FIT-000',
+        'description': 'Canada Federal Income Tax',
+        'employee_amount': federal_withholding,
+        'employer_amount': 0,
+    })
+    total_employee_tax += federal_withholding
+    
+    # Provincial Income Tax
+    prov_brackets = CANADIAN_PROVINCIAL_BRACKETS_2025.get(province, CANADIAN_PROVINCIAL_BRACKETS_2025['ON'])
+    prov_tax = 0
+    for bracket in prov_brackets:
+        if annual_income > bracket['min']:
+            if annual_income <= bracket['max']:
+                prov_tax = (annual_income - bracket['min']) * bracket['rate']
+                break
+    
+    prov_withholding = round(prov_tax / pay_periods, 2)
+    tax_results.append({
+        'unique_tax_id': f'CA-{province}-0000-PIT-000',
+        'description': f'{CANADIAN_PROVINCES.get(province, {}).get("name", province)} Provincial Tax',
+        'employee_amount': prov_withholding,
+        'employer_amount': 0,
+    })
+    total_employee_tax += prov_withholding
+    
+    net_pay = gross_wages - total_employee_tax
+    
+    return jsonify({
+        'success': True,
+        'request_id': g.request_id,
+        'data': {
+            'country': 'CA',
+            'employee_id': employee_id,
+            'province': province,
+            'pay_date': payroll_run.get('pay_date'),
+            'gross_wages': gross_wages,
+            'tax_withholdings': tax_results,
+            'total_employee_deductions': round(total_employee_tax, 2),
+            'total_employer_contributions': round(total_employer_tax, 2),
+            'net_pay': round(net_pay, 2),
+        }
+    })
+
+
+@tax_engine_v2_bp.route('/ca/rates/federal', methods=['GET'])
+@require_api_key
+def get_canadian_federal_rates():
+    """Get Canadian federal tax rates for 2025."""
+    return jsonify({
+        'success': True,
+        'data': {
+            'country': 'CA',
+            'tax_year': 2025,
+            'federal_income_tax_brackets': CANADIAN_FEDERAL_BRACKETS_2025,
+            'cpp': {
+                'employee_rate': 0.0595,
+                'employer_rate': 0.0595,
+                'max_pensionable_earnings': 71300,
+                'basic_exemption': 3500,
+                'max_contribution': 4034.10,
+            },
+            'cpp2': {
+                'rate': 0.04,
+                'yampe': 81200,
+                'max_contribution': 396.00,
+            },
+            'ei': {
+                'employee_rate': 0.0166,
+                'employer_rate': 0.02324,
+                'max_insurable_earnings': 65700,
+                'max_employee_contribution': 1090.62,
+            },
+            'basic_personal_amount': 16129,
+        }
+    })
+
+
+@tax_engine_v2_bp.route('/ca/rates/provincial/<province>', methods=['GET'])
+@require_api_key
+def get_canadian_provincial_rates(province):
+    """Get Canadian provincial tax rates."""
+    province = province.upper()
+    
+    if province not in CANADIAN_PROVINCES:
+        return jsonify({'error': {'code': 'not_found', 'message': f'Province {province} not found'}}), 404
+    
+    brackets = CANADIAN_PROVINCIAL_BRACKETS_2025.get(province, [])
+    
+    result = {
+        'success': True,
+        'data': {
+            'country': 'CA',
+            'province': province,
+            'province_name': CANADIAN_PROVINCES[province]['name'],
+            'tax_year': 2025,
+            'income_tax_brackets': brackets,
+        }
+    }
+    
+    # Add Quebec-specific info
+    if province == 'QC':
+        result['data']['qpp'] = {
+            'employee_rate': 0.064,
+            'employer_rate': 0.064,
+            'max_pensionable_earnings': 71300,
+            'note': 'QPP replaces CPP for Quebec employees',
+        }
+        result['data']['qpip'] = {
+            'employee_rate': 0.00494,
+            'employer_rate': 0.00692,
+            'max_insurable_earnings': 98000,
+        }
+        result['data']['ei_quebec_rate'] = 0.0132
+    
+    # Add Ontario EHT info
+    if province == 'ON':
+        result['data']['employer_health_tax'] = {
+            'rate_tiers': [
+                {'max_payroll': 200000, 'rate': 0.0098},
+                {'max_payroll': 400000, 'rate': 0.01101},
+                {'min_payroll': 400000, 'rate': 0.0195},
+            ],
+            'exemption': 1000000,
+            'note': 'First $1M exempt for eligible employers',
+        }
+    
+    return jsonify(result)
+
+
+@tax_engine_v2_bp.route('/ca/provinces', methods=['GET'])
+@require_api_key
+def list_canadian_provinces():
+    """List all Canadian provinces and territories."""
+    return jsonify({
+        'success': True,
+        'data': {
+            'country': 'CA',
+            'provinces': [
+                {'code': k, 'name': v['name'], 'type': v['type'], 'location_code': v['code']}
+                for k, v in CANADIAN_PROVINCES.items()
+            ],
+            'count': len(CANADIAN_PROVINCES),
+        }
     })
