@@ -325,6 +325,201 @@ def recommend_plan():
 #  AI STATUS
 # =============================================================================
 
+# =============================================================================
+#  DIGITAL WALLET INTELLIGENCE
+# =============================================================================
+
+@ai_bp.route('/api/ai/wallet/analyze-transaction', methods=['POST'])
+@jwt_required()
+def analyze_wallet_transaction():
+    """AI-powered wallet transaction analysis for fraud detection."""
+    data = request.get_json()
+    transaction = data.get('transaction', {})
+    history = data.get('history', [])
+    
+    result = saurellius_ai.analyze_wallet_transaction(transaction, history)
+    
+    return jsonify({
+        'success': True,
+        'analysis': result
+    }), 200
+
+
+@ai_bp.route('/api/ai/wallet/insights', methods=['POST'])
+@jwt_required()
+def wallet_insights():
+    """Get AI-powered wallet insights and recommendations."""
+    data = request.get_json()
+    wallet_data = data.get('wallet_data', {})
+    
+    insights = saurellius_ai.get_wallet_insights(wallet_data)
+    
+    return jsonify({
+        'success': True,
+        'insights': insights
+    }), 200
+
+
+@ai_bp.route('/api/ai/wallet/analyze-ewa', methods=['POST'])
+@jwt_required()
+def analyze_ewa_request():
+    """AI analysis of Earned Wage Access requests."""
+    data = request.get_json()
+    request_data = data.get('request', {})
+    employee_history = data.get('employee_history', {})
+    
+    analysis = saurellius_ai.analyze_ewa_request(request_data, employee_history)
+    
+    return jsonify({
+        'success': True,
+        'analysis': analysis
+    }), 200
+
+
+# =============================================================================
+#  WORKFORCE SCHEDULING INTELLIGENCE
+# =============================================================================
+
+@ai_bp.route('/api/ai/schedule/optimize', methods=['POST'])
+@jwt_required()
+def optimize_schedule():
+    """AI-powered schedule optimization."""
+    data = request.get_json()
+    schedule_data = data.get('schedule', {})
+    
+    optimization = saurellius_ai.optimize_schedule(schedule_data)
+    
+    return jsonify({
+        'success': True,
+        'optimization': optimization
+    }), 200
+
+
+@ai_bp.route('/api/ai/schedule/predict', methods=['POST'])
+@jwt_required()
+def predict_scheduling_needs():
+    """AI prediction of future scheduling needs."""
+    data = request.get_json()
+    historical_data = data.get('historical_data', {})
+    
+    prediction = saurellius_ai.predict_scheduling_needs(historical_data)
+    
+    return jsonify({
+        'success': True,
+        'prediction': prediction
+    }), 200
+
+
+@ai_bp.route('/api/ai/schedule/analyze-swap', methods=['POST'])
+@jwt_required()
+def analyze_shift_swap():
+    """AI analysis of shift swap requests."""
+    data = request.get_json()
+    swap_request = data.get('swap_request', {})
+    
+    analysis = saurellius_ai.analyze_shift_swap(swap_request)
+    
+    return jsonify({
+        'success': True,
+        'analysis': analysis
+    }), 200
+
+
+# =============================================================================
+#  SMART NOTIFICATIONS & ALERTS
+# =============================================================================
+
+@ai_bp.route('/api/ai/alerts/generate', methods=['POST'])
+@jwt_required()
+def generate_smart_alerts():
+    """Generate AI-powered smart alerts."""
+    data = request.get_json()
+    platform_data = data.get('platform_data', {})
+    
+    alerts = saurellius_ai.generate_smart_alerts(platform_data)
+    
+    return jsonify({
+        'success': True,
+        'alerts': alerts
+    }), 200
+
+
+@ai_bp.route('/api/ai/notifications/preferences', methods=['POST'])
+@jwt_required()
+def analyze_notification_preferences():
+    """AI analysis of notification preferences."""
+    data = request.get_json()
+    user_behavior = data.get('user_behavior', {})
+    
+    preferences = saurellius_ai.analyze_notification_preferences(user_behavior)
+    
+    return jsonify({
+        'success': True,
+        'preferences': preferences
+    }), 200
+
+
+# =============================================================================
+#  ENHANCED PAYROLL INTELLIGENCE
+# =============================================================================
+
+@ai_bp.route('/api/ai/payroll/analyze-run', methods=['POST'])
+@jwt_required()
+def analyze_payroll_run():
+    """Comprehensive AI analysis of payroll run before processing."""
+    data = request.get_json()
+    payroll_data = data.get('payroll_data', {})
+    
+    analysis = saurellius_ai.analyze_payroll_run(payroll_data)
+    
+    return jsonify({
+        'success': True,
+        'analysis': analysis
+    }), 200
+
+
+@ai_bp.route('/api/ai/payroll/optimizations', methods=['POST'])
+@jwt_required()
+def suggest_payroll_optimizations():
+    """AI suggestions for payroll optimizations."""
+    data = request.get_json()
+    company_data = data.get('company_data', {})
+    
+    optimizations = saurellius_ai.suggest_payroll_optimizations(company_data)
+    
+    return jsonify({
+        'success': True,
+        'optimizations': optimizations
+    }), 200
+
+
+# =============================================================================
+#  CONTEXTUAL CHAT (ENHANCED)
+# =============================================================================
+
+@ai_bp.route('/api/ai/chat/contextual', methods=['POST'])
+@jwt_required()
+def contextual_chat():
+    """Enhanced AI chat with full platform context."""
+    data = request.get_json()
+    message = data.get('message', '')
+    full_context = data.get('context', {})
+    
+    if not message:
+        return jsonify({'success': False, 'message': 'Message is required'}), 400
+    
+    response = saurellius_ai.contextual_chat(message, full_context)
+    
+    return jsonify({
+        'success': True,
+        'response': response
+    }), 200
+
+
+# =============================================================================
+#  AI STATUS
+# =============================================================================
+
 @ai_bp.route('/api/ai/status', methods=['GET'])
 @jwt_required()
 def ai_status():
@@ -335,6 +530,7 @@ def ai_status():
         'model': 'gemini-1.5-flash' if saurellius_ai.initialized else None,
         'features': [
             'chat_assistant',
+            'contextual_chat',
             'paystub_validation',
             'paystub_explanation',
             'dashboard_insights',
@@ -344,6 +540,16 @@ def ai_status():
             'fraud_detection',
             'natural_queries',
             'document_analysis',
-            'plan_recommendations'
+            'plan_recommendations',
+            'wallet_transaction_analysis',
+            'wallet_insights',
+            'ewa_analysis',
+            'schedule_optimization',
+            'scheduling_predictions',
+            'shift_swap_analysis',
+            'smart_alerts',
+            'notification_preferences',
+            'payroll_run_analysis',
+            'payroll_optimizations'
         ] if saurellius_ai.initialized else []
     }), 200

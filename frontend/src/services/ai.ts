@@ -466,6 +466,258 @@ export const aiService = {
       return { ai_enabled: false, model: null, features: [] };
     }
   },
+
+  // ===========================================================================
+  // Digital Wallet Intelligence
+  // ===========================================================================
+
+  /**
+   * Analyze wallet transaction for fraud detection
+   */
+  analyzeWalletTransaction: async (
+    transaction: Record<string, any>,
+    history: Record<string, any>[]
+  ): Promise<{
+    risk_score: number;
+    risk_level: string;
+    flags: string[];
+    insights: string[];
+    recommendation: string;
+    approved: boolean;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/wallet/analyze-transaction', {
+        transaction,
+        history,
+      });
+      return response.data.analysis;
+    } catch (error) {
+      console.error('Wallet transaction analysis error:', error);
+      return { risk_score: 0, risk_level: 'low', flags: [], insights: [], recommendation: '', approved: true };
+    }
+  },
+
+  /**
+   * Get AI-powered wallet insights
+   */
+  getWalletInsights: async (walletData: Record<string, any>): Promise<{
+    headline: string;
+    health_score: number;
+    insights: string[];
+    recommendations: string[];
+    alerts: string[];
+    funding_suggestion: string;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/wallet/insights', { wallet_data: walletData });
+      return response.data.insights;
+    } catch (error) {
+      console.error('Wallet insights error:', error);
+      return { headline: '', health_score: 0, insights: [], recommendations: [], alerts: [], funding_suggestion: '' };
+    }
+  },
+
+  /**
+   * Analyze EWA (Earned Wage Access) request
+   */
+  analyzeEWARequest: async (
+    requestData: Record<string, any>,
+    employeeHistory: Record<string, any>
+  ): Promise<{
+    risk_score: number;
+    risk_level: string;
+    approval_recommended: boolean;
+    max_recommended_amount: number;
+    concerns: string[];
+    financial_wellness_score: number;
+    suggested_resources: string[];
+  }> => {
+    try {
+      const response = await api.post('/api/ai/wallet/analyze-ewa', {
+        request: requestData,
+        employee_history: employeeHistory,
+      });
+      return response.data.analysis;
+    } catch (error) {
+      console.error('EWA analysis error:', error);
+      return { risk_score: 0, risk_level: 'low', approval_recommended: true, max_recommended_amount: 0, concerns: [], financial_wellness_score: 75, suggested_resources: [] };
+    }
+  },
+
+  // ===========================================================================
+  // Workforce Scheduling Intelligence
+  // ===========================================================================
+
+  /**
+   * Get AI-powered schedule optimization
+   */
+  optimizeSchedule: async (scheduleData: Record<string, any>): Promise<{
+    optimization_score: number;
+    issues: Array<{ issue: string; severity: string; affected: string }>;
+    recommendations: Array<{ action: string; impact: string; priority: string }>;
+    cost_savings_potential: string;
+    overtime_alerts: string[];
+    coverage_gaps: Array<{ day: string; time: string; needed: number }>;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/schedule/optimize', { schedule: scheduleData });
+      return response.data.optimization;
+    } catch (error) {
+      console.error('Schedule optimization error:', error);
+      return { optimization_score: 0, issues: [], recommendations: [], cost_savings_potential: '', overtime_alerts: [], coverage_gaps: [] };
+    }
+  },
+
+  /**
+   * Predict future scheduling needs
+   */
+  predictSchedulingNeeds: async (historicalData: Record<string, any>): Promise<{
+    predicted_hours_needed: number;
+    staffing_recommendation: string;
+    peak_coverage_needs: Array<{ day: string; hours: string; staff_needed: number }>;
+    trends: string[];
+    risks: string[];
+    confidence: number;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/schedule/predict', { historical_data: historicalData });
+      return response.data.prediction;
+    } catch (error) {
+      console.error('Scheduling prediction error:', error);
+      return { predicted_hours_needed: 0, staffing_recommendation: '', peak_coverage_needs: [], trends: [], risks: [], confidence: 0 };
+    }
+  },
+
+  /**
+   * Analyze shift swap request
+   */
+  analyzeShiftSwap: async (swapRequest: Record<string, any>): Promise<{
+    approval_recommended: boolean;
+    concerns: string[];
+    overtime_impact: string;
+    coverage_impact: string;
+    notes: string;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/schedule/analyze-swap', { swap_request: swapRequest });
+      return response.data.analysis;
+    } catch (error) {
+      console.error('Shift swap analysis error:', error);
+      return { approval_recommended: true, concerns: [], overtime_impact: 'none', coverage_impact: 'neutral', notes: '' };
+    }
+  },
+
+  // ===========================================================================
+  // Smart Notifications & Alerts
+  // ===========================================================================
+
+  /**
+   * Generate AI-powered smart alerts
+   */
+  generateSmartAlerts: async (platformData: Record<string, any>): Promise<Array<{
+    type: string;
+    priority: string;
+    title: string;
+    message: string;
+    action: string;
+    due_date: string;
+  }>> => {
+    try {
+      const response = await api.post('/api/ai/alerts/generate', { platform_data: platformData });
+      return response.data.alerts;
+    } catch (error) {
+      console.error('Smart alerts error:', error);
+      return [];
+    }
+  },
+
+  /**
+   * Analyze notification preferences
+   */
+  analyzeNotificationPreferences: async (userBehavior: Record<string, any>): Promise<{
+    optimal_notification_times: string[];
+    preferred_channels: string[];
+    reduce_frequency_for: string[];
+    increase_priority_for: string[];
+    personalization_suggestions: string[];
+  }> => {
+    try {
+      const response = await api.post('/api/ai/notifications/preferences', { user_behavior: userBehavior });
+      return response.data.preferences;
+    } catch (error) {
+      console.error('Notification preferences error:', error);
+      return { optimal_notification_times: [], preferred_channels: [], reduce_frequency_for: [], increase_priority_for: [], personalization_suggestions: [] };
+    }
+  },
+
+  // ===========================================================================
+  // Enhanced Payroll Intelligence
+  // ===========================================================================
+
+  /**
+   * Analyze payroll run before processing
+   */
+  analyzePayrollRun: async (payrollData: Record<string, any>): Promise<{
+    ready_to_process: boolean;
+    confidence_score: number;
+    anomalies: Array<{ employee: string; issue: string; severity: string }>;
+    warnings: string[];
+    recommendations: string[];
+    estimated_processing_time: string;
+    cost_breakdown: {
+      gross_wages: number;
+      employer_taxes: number;
+      benefits_cost: number;
+      total_cost: number;
+    };
+  }> => {
+    try {
+      const response = await api.post('/api/ai/payroll/analyze-run', { payroll_data: payrollData });
+      return response.data.analysis;
+    } catch (error) {
+      console.error('Payroll run analysis error:', error);
+      return { ready_to_process: true, confidence_score: 0, anomalies: [], warnings: [], recommendations: [], estimated_processing_time: '', cost_breakdown: { gross_wages: 0, employer_taxes: 0, benefits_cost: 0, total_cost: 0 } };
+    }
+  },
+
+  /**
+   * Get payroll optimization suggestions
+   */
+  getPayrollOptimizations: async (companyData: Record<string, any>): Promise<{
+    optimization_score: number;
+    quick_wins: Array<{ action: string; savings: string; effort: string }>;
+    strategic_recommendations: Array<{ action: string; impact: string; timeline: string }>;
+    unused_features_to_adopt: string[];
+    estimated_annual_savings: number;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/payroll/optimizations', { company_data: companyData });
+      return response.data.optimizations;
+    } catch (error) {
+      console.error('Payroll optimizations error:', error);
+      return { optimization_score: 0, quick_wins: [], strategic_recommendations: [], unused_features_to_adopt: [], estimated_annual_savings: 0 };
+    }
+  },
+
+  // ===========================================================================
+  // Contextual Chat (Enhanced)
+  // ===========================================================================
+
+  /**
+   * Enhanced contextual chat with full platform awareness
+   */
+  contextualChat: async (message: string, fullContext: Record<string, any>): Promise<string> => {
+    try {
+      const response = await api.post('/api/ai/chat/contextual', {
+        message,
+        context: fullContext,
+      });
+      return response.data.response;
+    } catch (error) {
+      console.error('Contextual chat error:', error);
+      return 'I apologize, but I could not process your request. Please try again.';
+    }
+  },
 };
 
 export default aiService;

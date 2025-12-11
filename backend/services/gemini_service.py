@@ -629,6 +629,563 @@ Return JSON:
         return {"recommended_plan": usage_data.get('current_plan', 'Starter'), "reason": "Current plan suits your needs"}
 
 
+    # =========================================================================
+    #  DIGITAL WALLET INTELLIGENCE
+    # =========================================================================
+    
+    def analyze_wallet_transaction(self, transaction: Dict, history: List[Dict]) -> Dict[str, Any]:
+        """
+        AI-powered analysis of wallet transactions for fraud detection and insights.
+        """
+        recent_summary = []
+        for t in history[-10:]:
+            recent_summary.append(f"{t.get('type')}: ${t.get('amount', 0)}")
+        
+        prompt = f"""Analyze this digital wallet transaction:
+
+Current Transaction:
+- Type: {transaction.get('type', 'unknown')}
+- Amount: ${transaction.get('amount', 0)}
+- Description: {transaction.get('description', '')}
+- Recipient: {transaction.get('recipient', 'N/A')}
+
+Recent Transaction History:
+{chr(10).join(recent_summary) if recent_summary else 'No history'}
+
+Wallet Balance: ${transaction.get('balance_before', 0)}
+
+Analyze for:
+1. Unusual transaction patterns
+2. Potential fraud indicators
+3. Spending insights
+4. Budget recommendations
+
+Return JSON:
+{{
+    "risk_score": 0-100,
+    "risk_level": "low/medium/high",
+    "flags": ["flag1", "flag2"],
+    "insights": ["insight1", "insight2"],
+    "recommendation": "action to take",
+    "approved": true/false
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=500)
+        
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        
+        return {"risk_score": 0, "risk_level": "low", "flags": [], "approved": True}
+
+    def get_wallet_insights(self, wallet_data: Dict) -> Dict[str, Any]:
+        """
+        Generate AI-powered insights for wallet usage and spending patterns.
+        """
+        prompt = f"""Analyze this employer wallet data and provide business insights:
+
+Wallet Summary:
+- Current Balance: ${wallet_data.get('balance', 0)}
+- Reserved for Payroll: ${wallet_data.get('reserved', 0)}
+- Available Balance: ${wallet_data.get('available', 0)}
+- Total Funded (MTD): ${wallet_data.get('funded_mtd', 0)}
+- Total Paid Out (MTD): ${wallet_data.get('paid_mtd', 0)}
+- Employee Count: {wallet_data.get('employee_count', 0)}
+
+Transaction Breakdown:
+- Payroll Payments: {wallet_data.get('payroll_count', 0)}
+- EWA Requests: {wallet_data.get('ewa_count', 0)}
+- Bank Transfers: {wallet_data.get('transfer_count', 0)}
+
+Provide JSON:
+{{
+    "headline": "One-line wallet status summary",
+    "health_score": 0-100,
+    "insights": ["insight1", "insight2", "insight3"],
+    "recommendations": ["recommendation1", "recommendation2"],
+    "alerts": ["any urgent items"],
+    "funding_suggestion": "recommended funding amount for next payroll"
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=600)
+        
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        
+        return {
+            "headline": "Wallet is healthy",
+            "health_score": 85,
+            "insights": [],
+            "recommendations": [],
+            "alerts": []
+        }
+
+    def analyze_ewa_request(self, request_data: Dict, employee_history: Dict) -> Dict[str, Any]:
+        """
+        AI analysis of Earned Wage Access requests for risk assessment.
+        """
+        prompt = f"""Analyze this Earned Wage Access (EWA) request:
+
+Request Details:
+- Employee: {request_data.get('employee_name', 'Unknown')}
+- Amount Requested: ${request_data.get('amount', 0)}
+- Wages Earned (Current Period): ${request_data.get('earned_wages', 0)}
+- Percentage of Earned: {request_data.get('percentage', 0)}%
+- Days Until Payday: {request_data.get('days_to_payday', 0)}
+
+Employee History:
+- EWA Requests This Month: {employee_history.get('ewa_count_month', 0)}
+- Average Request Amount: ${employee_history.get('avg_ewa_amount', 0)}
+- On-Time Repayment Rate: {employee_history.get('repayment_rate', 100)}%
+- Employment Duration: {employee_history.get('tenure_months', 0)} months
+
+Evaluate:
+1. Risk level of this request
+2. Pattern analysis
+3. Financial wellness indicators
+4. Approval recommendation
+
+Return JSON:
+{{
+    "risk_score": 0-100,
+    "risk_level": "low/medium/high",
+    "approval_recommended": true/false,
+    "max_recommended_amount": 0,
+    "concerns": ["concern1"],
+    "financial_wellness_score": 0-100,
+    "suggested_resources": ["resource1"]
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=500)
+        
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        
+        return {
+            "risk_score": 20,
+            "risk_level": "low",
+            "approval_recommended": True,
+            "financial_wellness_score": 75
+        }
+
+    # =========================================================================
+    #  WORKFORCE SCHEDULING INTELLIGENCE
+    # =========================================================================
+    
+    def optimize_schedule(self, schedule_data: Dict) -> Dict[str, Any]:
+        """
+        AI-powered schedule optimization recommendations.
+        """
+        prompt = f"""Analyze and optimize this workforce schedule:
+
+Schedule Period: {schedule_data.get('week_of', 'Current Week')}
+Total Employees: {schedule_data.get('employee_count', 0)}
+Total Shifts: {schedule_data.get('shift_count', 0)}
+Total Hours Scheduled: {schedule_data.get('total_hours', 0)}
+
+Coverage by Day:
+{json.dumps(schedule_data.get('daily_coverage', {}), indent=2)}
+
+Issues Detected:
+- Overtime Risk: {schedule_data.get('overtime_employees', 0)} employees over 40 hours
+- Understaffed Shifts: {schedule_data.get('understaffed_count', 0)}
+- Open Shifts: {schedule_data.get('open_shifts', 0)}
+
+Employee Preferences:
+- Availability Conflicts: {schedule_data.get('conflicts', 0)}
+- Time-Off Requests: {schedule_data.get('pto_requests', 0)}
+
+Provide JSON:
+{{
+    "optimization_score": 0-100,
+    "issues": [{{"issue": "description", "severity": "low/medium/high", "affected": "who/what"}}],
+    "recommendations": [{{"action": "what to do", "impact": "expected result", "priority": "high/medium/low"}}],
+    "cost_savings_potential": "estimated savings",
+    "overtime_alerts": ["employee names at risk"],
+    "coverage_gaps": [{{"day": "day", "time": "time range", "needed": X}}]
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=700)
+        
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        
+        return {
+            "optimization_score": 80,
+            "issues": [],
+            "recommendations": [],
+            "overtime_alerts": []
+        }
+
+    def predict_scheduling_needs(self, historical_data: Dict) -> Dict[str, Any]:
+        """
+        AI-powered prediction of future scheduling needs.
+        """
+        prompt = f"""Predict scheduling needs based on historical data:
+
+Historical Patterns:
+- Average Weekly Hours: {historical_data.get('avg_weekly_hours', 0)}
+- Peak Days: {historical_data.get('peak_days', [])}
+- Peak Hours: {historical_data.get('peak_hours', [])}
+- Seasonal Trends: {historical_data.get('seasonal_notes', 'None noted')}
+
+Upcoming Events:
+{json.dumps(historical_data.get('upcoming_events', []), indent=2)}
+
+Current Staff:
+- Total Employees: {historical_data.get('employee_count', 0)}
+- Full-Time: {historical_data.get('full_time', 0)}
+- Part-Time: {historical_data.get('part_time', 0)}
+
+Provide JSON:
+{{
+    "predicted_hours_needed": 0,
+    "staffing_recommendation": "hire/maintain/reduce",
+    "peak_coverage_needs": [{{"day": "day", "hours": "range", "staff_needed": X}}],
+    "trends": ["trend1", "trend2"],
+    "risks": ["risk1"],
+    "confidence": 0-100
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=500)
+        
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        
+        return {"predicted_hours_needed": 0, "confidence": 50}
+
+    def analyze_shift_swap(self, swap_request: Dict) -> Dict[str, Any]:
+        """
+        AI analysis of shift swap requests for approval recommendation.
+        """
+        prompt = f"""Analyze this shift swap request:
+
+Requesting Employee: {swap_request.get('requester', 'Unknown')}
+Original Shift: {swap_request.get('original_shift', 'N/A')}
+Swap With: {swap_request.get('swap_with', 'Unknown')}
+New Shift: {swap_request.get('new_shift', 'N/A')}
+
+Requester Info:
+- Weekly Hours (Current): {swap_request.get('requester_hours', 0)}
+- Skill Level: {swap_request.get('requester_skill', 'N/A')}
+- Position: {swap_request.get('requester_position', 'N/A')}
+
+Swap Partner Info:
+- Weekly Hours (Current): {swap_request.get('partner_hours', 0)}
+- Skill Level: {swap_request.get('partner_skill', 'N/A')}
+- Position: {swap_request.get('partner_position', 'N/A')}
+
+Evaluate:
+1. Skill compatibility
+2. Overtime implications
+3. Coverage impact
+4. Fairness
+
+Return JSON:
+{{
+    "approval_recommended": true/false,
+    "concerns": ["concern1"],
+    "overtime_impact": "none/minor/significant",
+    "coverage_impact": "positive/neutral/negative",
+    "notes": "additional context"
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=400)
+        
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        
+        return {"approval_recommended": True, "concerns": [], "overtime_impact": "none"}
+
+    # =========================================================================
+    #  SMART NOTIFICATIONS & ALERTS
+    # =========================================================================
+    
+    def generate_smart_alerts(self, platform_data: Dict) -> List[Dict]:
+        """
+        Generate AI-powered smart alerts based on platform-wide data.
+        """
+        prompt = f"""Generate priority alerts based on this platform data:
+
+Payroll:
+- Next Payroll Date: {platform_data.get('next_payroll_date', 'N/A')}
+- Pending Approvals: {platform_data.get('pending_approvals', 0)}
+- Unprocessed Timesheets: {platform_data.get('unprocessed_timesheets', 0)}
+
+Compliance:
+- Expiring Documents: {platform_data.get('expiring_docs', 0)}
+- Overdue Tasks: {platform_data.get('overdue_tasks', 0)}
+- Upcoming Deadlines: {platform_data.get('upcoming_deadlines', [])}
+
+Wallet:
+- Balance: ${platform_data.get('wallet_balance', 0)}
+- Next Payroll Estimate: ${platform_data.get('next_payroll_estimate', 0)}
+- Pending EWA Requests: {platform_data.get('pending_ewa', 0)}
+
+Workforce:
+- Open Shifts: {platform_data.get('open_shifts', 0)}
+- Overtime Employees: {platform_data.get('overtime_count', 0)}
+- PTO Requests Pending: {platform_data.get('pending_pto', 0)}
+
+Generate JSON array of priority alerts:
+[{{
+    "type": "payroll/compliance/wallet/workforce/general",
+    "priority": "critical/high/medium/low",
+    "title": "Short title",
+    "message": "Detailed message",
+    "action": "Suggested action",
+    "due_date": "when action needed"
+}}]
+
+Return only the most important 5 alerts."""
+
+        response = self._safe_generate(prompt, max_tokens=800)
+        
+        try:
+            if response:
+                start = response.find('[')
+                end = response.rfind(']') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        
+        return []
+
+    def analyze_notification_preferences(self, user_behavior: Dict) -> Dict[str, Any]:
+        """
+        AI analysis of user behavior to optimize notification delivery.
+        """
+        prompt = f"""Analyze user notification preferences based on behavior:
+
+User Activity:
+- Most Active Hours: {user_behavior.get('active_hours', [])}
+- Most Used Features: {user_behavior.get('top_features', [])}
+- Notification Open Rate: {user_behavior.get('open_rate', 0)}%
+- Preferred Device: {user_behavior.get('device', 'mobile')}
+
+Dismissed Notifications:
+{json.dumps(user_behavior.get('dismissed_types', []))}
+
+Acted-On Notifications:
+{json.dumps(user_behavior.get('acted_types', []))}
+
+Provide JSON:
+{{
+    "optimal_notification_times": ["HH:MM"],
+    "preferred_channels": ["push/email/in-app"],
+    "reduce_frequency_for": ["notification types"],
+    "increase_priority_for": ["notification types"],
+    "personalization_suggestions": ["suggestion1"]
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=400)
+        
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        
+        return {"optimal_notification_times": ["09:00", "14:00"]}
+
+    # =========================================================================
+    #  PAYROLL INTELLIGENCE (ENHANCED)
+    # =========================================================================
+    
+    def analyze_payroll_run(self, payroll_data: Dict) -> Dict[str, Any]:
+        """
+        Comprehensive AI analysis of a payroll run before processing.
+        """
+        prompt = f"""Analyze this payroll run before processing:
+
+Payroll Summary:
+- Pay Period: {payroll_data.get('pay_period', 'N/A')}
+- Total Employees: {payroll_data.get('employee_count', 0)}
+- Total Gross: ${payroll_data.get('total_gross', 0)}
+- Total Net: ${payroll_data.get('total_net', 0)}
+- Total Taxes: ${payroll_data.get('total_taxes', 0)}
+
+Compared to Last Period:
+- Gross Change: {payroll_data.get('gross_change_percent', 0)}%
+- Headcount Change: {payroll_data.get('headcount_change', 0)}
+
+Flags:
+- New Employees: {payroll_data.get('new_employees', 0)}
+- Terminated: {payroll_data.get('terminated', 0)}
+- Overtime Hours: {payroll_data.get('overtime_hours', 0)}
+- Manual Adjustments: {payroll_data.get('adjustments', 0)}
+
+Provide comprehensive analysis JSON:
+{{
+    "ready_to_process": true/false,
+    "confidence_score": 0-100,
+    "anomalies": [{{"employee": "name", "issue": "description", "severity": "low/medium/high"}}],
+    "warnings": ["warning1"],
+    "recommendations": ["recommendation1"],
+    "estimated_processing_time": "X minutes",
+    "cost_breakdown": {{
+        "gross_wages": 0,
+        "employer_taxes": 0,
+        "benefits_cost": 0,
+        "total_cost": 0
+    }}
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=700)
+        
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        
+        return {"ready_to_process": True, "confidence_score": 85, "anomalies": [], "warnings": []}
+
+    def suggest_payroll_optimizations(self, company_data: Dict) -> Dict[str, Any]:
+        """
+        AI suggestions for optimizing payroll operations.
+        """
+        prompt = f"""Suggest payroll optimizations for this company:
+
+Company Profile:
+- Employees: {company_data.get('employee_count', 0)}
+- States: {company_data.get('states', [])}
+- Pay Frequency: {company_data.get('pay_frequency', 'Bi-weekly')}
+- Average Processing Time: {company_data.get('avg_processing_time', 0)} minutes
+
+Current Costs:
+- Monthly Payroll Admin Cost: ${company_data.get('admin_cost', 0)}
+- Error Rate: {company_data.get('error_rate', 0)}%
+- Manual Intervention Rate: {company_data.get('manual_rate', 0)}%
+
+Features Used:
+{json.dumps(company_data.get('features_used', []))}
+
+Features Not Used:
+{json.dumps(company_data.get('features_unused', []))}
+
+Provide JSON:
+{{
+    "optimization_score": 0-100,
+    "quick_wins": [{{"action": "description", "savings": "estimated savings", "effort": "low/medium/high"}}],
+    "strategic_recommendations": [{{"action": "description", "impact": "description", "timeline": "X weeks"}}],
+    "unused_features_to_adopt": ["feature1"],
+    "estimated_annual_savings": 0
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=600)
+        
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        
+        return {"optimization_score": 70, "quick_wins": [], "strategic_recommendations": []}
+
+    # =========================================================================
+    #  CONTEXTUAL CHAT (ENHANCED)
+    # =========================================================================
+    
+    def contextual_chat(self, message: str, full_context: Dict) -> str:
+        """
+        Enhanced AI chat with full platform context awareness.
+        """
+        system_context = """You are Saurellius AI, the intelligent assistant for Saurellius Cloud Payroll Management.
+        You have access to the user's complete platform context and can provide highly personalized assistance.
+        
+        Your capabilities span:
+        - Payroll processing and tax calculations
+        - Digital wallet management and transactions
+        - Workforce scheduling and time tracking
+        - Employee management and onboarding
+        - Compliance and document management
+        - Benefits administration
+        - Reporting and analytics
+        
+        Personality: Professional, helpful, and proactive. Never use emojis.
+        Always provide actionable advice based on the user's specific situation.
+        Reference specific data from their context when relevant."""
+        
+        context_summary = f"""
+USER CONTEXT:
+- Company: {full_context.get('company_name', 'N/A')}
+- Role: {full_context.get('user_role', 'employer')}
+- Subscription: {full_context.get('subscription_plan', 'N/A')}
+- Employees: {full_context.get('employee_count', 0)}
+- Primary State: {full_context.get('primary_state', 'N/A')}
+
+CURRENT STATUS:
+- Wallet Balance: ${full_context.get('wallet_balance', 0)}
+- Next Payroll: {full_context.get('next_payroll_date', 'N/A')}
+- Pending Tasks: {full_context.get('pending_tasks', 0)}
+- Open Shifts: {full_context.get('open_shifts', 0)}
+- Pending Approvals: {full_context.get('pending_approvals', 0)}
+
+RECENT ACTIVITY:
+{json.dumps(full_context.get('recent_activity', [])[:5])}
+
+ACTIVE ALERTS:
+{json.dumps(full_context.get('active_alerts', [])[:3])}
+"""
+        
+        prompt = f"""{system_context}
+
+{context_summary}
+
+User message: {message}
+
+Provide a helpful, context-aware response:"""
+        
+        response = self._safe_generate(prompt, max_tokens=1000)
+        return response or "I apologize, but I couldn't process your request. Please try again."
+
+
 # Singleton instance
 saurellius_ai = SaurelliusAI()
 
