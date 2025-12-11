@@ -16,6 +16,7 @@ from .messaging_routes import messaging_bp
 from .swipe_routes import swipe_bp
 from .workforce_routes import workforce_bp
 from .benefits_routes import benefits_bp
+from .wallet_routes import wallet_bp
 
 __all__ = [
     'auth_bp',
@@ -30,5 +31,6 @@ __all__ = [
     'messaging_bp',
     'swipe_bp',
     'workforce_bp',
-    'benefits_bp'
+    'benefits_bp',
+    'wallet_bp',
 ]

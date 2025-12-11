@@ -133,7 +133,40 @@ def stripe_webhook():
         payment_intent = event['data']['object']
         handle_payment_intent_failed(payment_intent)
     
+    elif event_type == 'checkout.session.completed':
+        session = event['data']['object']
+        # Check if this is wallet funding
+        if session.get('metadata', {}).get('type') == 'wallet_funding':
+            handle_wallet_funding(session)
+        else:
+            handle_successful_checkout(session)
+    
     return jsonify({'success': True, 'event': event_type}), 200
+
+
+def handle_wallet_funding(session):
+    """Handle wallet funding from Stripe checkout."""
+    from routes.wallet_routes import get_wallet, record_txn, WALLET_TYPE_EMPLOYER, WALLET_TYPE_EMPLOYEE
+    from decimal import Decimal
+    
+    user_id = session['metadata'].get('user_id')
+    wallet_type = session['metadata'].get('wallet_type', WALLET_TYPE_EMPLOYER)
+    amount_cents = session.get('amount_total', 0)
+    amount = Decimal(str(amount_cents / 100))
+    
+    # Credit the wallet
+    wallet = get_wallet(user_id, wallet_type)
+    wallet['balance'] += amount
+    wallet['available'] += amount
+    
+    # Record transaction
+    key = f"{user_id}:{wallet_type}"
+    record_txn(key, 'deposit', amount, 'Stripe card funding', {
+        'stripe_session_id': session['id'],
+        'payment_intent': session.get('payment_intent'),
+    })
+    
+    current_app.logger.info(f"Wallet funded: {user_id} + ${amount}")
 
 
 def handle_successful_checkout(session):
