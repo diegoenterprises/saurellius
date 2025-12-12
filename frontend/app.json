@@ -1,0 +1,68 @@
+{
+  "expo": {
+    "name": "Saurellius",
+    "slug": "saurellius-cloud-payroll-and-hr-management",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "saurellius",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "icon": "./assets/logo-icon.png",
+    "splash": {
+      "image": "./assets/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0f0f23"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.diegoenterprises.saurellius",
+      "usesAppleSignIn": true,
+      "infoPlist": {
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": [
+              "saurellius"
+            ]
+          }
+        ]
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo-icon.png",
+        "backgroundColor": "#0f0f23"
+      },
+      "package": "com.diegoenterprises.saurellius",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "saurellius"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/logo-icon.png"
+    },
+    "plugins": [
+      "expo-apple-authentication",
+      "expo-secure-store",
+      "expo-font",
+      "expo-asset"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c90e55d5-f8b0-4d97-9a3d-1e9d1596e020"
+      }
+    },
+    "owner": "diego-enterprises-inc"
+  }
+}

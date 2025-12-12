@@ -1,0 +1,46 @@
+graph TD
+    Client[Client Applications] --> API[Saurellius API Gateway]
+    
+    subgraph "API Layer"
+        API --> Auth[Authentication Service]
+        API --> RateLimit[Rate Limiting Service]
+        API --> Endpoints[API Endpoints]
+    end
+    
+    subgraph "Core Services"
+        Endpoints --> TaxCalc[Tax Calculation Service]
+        Endpoints --> LocationService[Location Service]
+        Endpoints --> TaxRateService[Tax Rate Service]
+        Endpoints --> FormulasService[Tax Formulas Service]
+        Endpoints --> ReciprocityService[Reciprocity Service]
+        Endpoints --> WebhookService[Webhook Service]
+    end
+    
+    subgraph "Data Layer"
+        TaxCalc --> TaxDatabase[(Tax Database)]
+        LocationService --> TaxDatabase
+        TaxRateService --> TaxDatabase
+        FormulasService --> TaxDatabase
+        ReciprocityService --> TaxDatabase
+        WebhookService --> TaxDatabase
+        LocationService --> GeocodingService[Geocoding Service]
+    end
+    
+    subgraph "Auxiliary Systems"
+        TaxDatabase --> UpdateService[Tax Update Service]
+        WebhookService --> NotificationQueue[Notification Queue]
+        NotificationQueue --> WebhookDelivery[Webhook Delivery Service]
+        UpdateService --> TaxMonitoring[Tax Monitoring System]
+        TaxMonitoring --> UpdateQueue[Update Queue]
+        UpdateQueue --> TaxDatabase
+    end
+    
+    subgraph "Deployment Options"
+        API --> WebAPI[Web API Deployment]
+        API --> OnPremise[On-Premise SDK]
+        WebAPI --> AWSHosting[AWS Hosting]
+        OnPremise --> ClientServers[Client Servers]
+    end
+    
+    WebhookDelivery --> Client
+    UpdateService --> AdminPortal[Admin Portal]
