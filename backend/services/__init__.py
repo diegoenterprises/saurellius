@@ -39,7 +39,7 @@ from .employee_onboarding_service import EmployeeOnboardingService
 from .contractor_onboarding_service import ContractorOnboardingService
 
 # Self-Service Modules
-from .employee_self_service import EmployeeSelfServiceManager, employee_self_service
+from .employee_self_service import EmployeeSelfServiceModule, employee_self_service
 from .contractor_self_service import ContractorSelfServiceManager, contractor_self_service
 
 # Document Storage
@@ -112,7 +112,7 @@ __all__ = [
     'EmployeeOnboardingService',
     'ContractorOnboardingService',
     # Self-Service Modules
-    'EmployeeSelfServiceManager',
+    'EmployeeSelfServiceModule',
     'employee_self_service',
     'ContractorSelfServiceManager',
     'contractor_self_service',
