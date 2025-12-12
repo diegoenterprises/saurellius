@@ -57,6 +57,11 @@ import BenefitsScreen from '../screens/benefits/BenefitsScreen';
 // Wallet Screen
 import { WalletScreen } from '../screens/wallet';
 
+// Self-Service Screens
+import EmployeePortalDashboard from '../screens/employee/EmployeePortalDashboard';
+import OnboardingWizard from '../screens/employee/OnboardingWizard';
+import ContractorPortalDashboard from '../screens/contractor/ContractorPortalDashboard';
+
 // Legal Screens
 import { PrivacyPolicyScreen, TermsConditionsScreen } from '../screens/legal';
 
@@ -97,6 +102,10 @@ export type RootStackParamList = {
   AdminPortal: undefined;
   PrivacyPolicy: undefined;
   TermsConditions: undefined;
+  // Self-Service Portals
+  EmployeePortal: undefined;
+  EmployeeOnboarding: undefined;
+  ContractorPortal: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -152,6 +161,9 @@ function MainStack() {
       <Stack.Screen name="AdminPortal" component={AdminPortalScreen} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
       <Stack.Screen name="TermsConditions" component={TermsConditionsScreen} />
+      <Stack.Screen name="EmployeePortal" component={EmployeePortalDashboard} />
+      <Stack.Screen name="EmployeeOnboarding" component={OnboardingWizard} />
+      <Stack.Screen name="ContractorPortal" component={ContractorPortalDashboard} />
     </Stack.Navigator>
   );
 }

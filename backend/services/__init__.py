@@ -28,6 +28,20 @@ from .tax_engine_service import SaurelliusTaxEngine, tax_engine
 from .compliance_service import DocuGinuityCompliance, compliance_service
 from .scheduler_service import TaxUpdateScheduler, tax_scheduler, get_scheduler, init_scheduler
 
+# Production Activation Services
+from .production_tax_engine import ProductionTaxEngine
+from .payroll_processing_service import PayrollProcessingService
+from .ach_generation_service import ACHGenerationService
+from .government_forms_service import GovernmentFormsService
+from .security_service import SecurityService
+from .employer_registration_service import EmployerRegistrationService
+from .employee_onboarding_service import EmployeeOnboardingService
+from .contractor_onboarding_service import ContractorOnboardingService
+
+# Self-Service Modules
+from .employee_self_service import EmployeeSelfServiceManager, employee_self_service
+from .contractor_self_service import ContractorSelfServiceManager, contractor_self_service
+
 __all__ = [
     # Core
     'WeatherService',
@@ -82,4 +96,18 @@ __all__ = [
     'tax_scheduler',
     'get_scheduler',
     'init_scheduler',
+    # Production Activation
+    'ProductionTaxEngine',
+    'PayrollProcessingService',
+    'ACHGenerationService',
+    'GovernmentFormsService',
+    'SecurityService',
+    'EmployerRegistrationService',
+    'EmployeeOnboardingService',
+    'ContractorOnboardingService',
+    # Self-Service Modules
+    'EmployeeSelfServiceManager',
+    'employee_self_service',
+    'ContractorSelfServiceManager',
+    'contractor_self_service',
 ]
