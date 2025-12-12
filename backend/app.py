@@ -168,6 +168,10 @@ def create_app(config_name='default'):
     from routes.tax_updater_routes import tax_updater_bp
     app.register_blueprint(tax_updater_bp)
     
+    # Admin Platform Metrics Routes
+    from routes.admin_metrics_routes import admin_metrics_bp
+    app.register_blueprint(admin_metrics_bp)
+    
     # Initialize Tax Update Scheduler
     from services.scheduler_service import init_scheduler
     init_scheduler(app)

@@ -1,6 +1,7 @@
 /**
  * ADMIN DASHBOARD
  * Platform owner dashboard with SaaS metrics, analytics, and subscriber management
+ * Dynamically fetches data from backend API
  */
 
 import React, { useState, useEffect } from 'react';
@@ -12,61 +13,81 @@ import {
   TouchableOpacity,
   RefreshControl,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import Header from '../../components/dashboard/Header';
+import api from '../../services/api';
 
 const { width } = Dimensions.get('window');
 const isLargeScreen = width >= 1024;
 const isMediumScreen = width >= 768;
 
-// Mock data - In production, fetch from API
-const PLATFORM_METRICS = {
-  totalUsers: 1247,
-  activeUsers: 892,
-  newUsersThisMonth: 156,
-  userGrowth: 14.2,
-  totalCompanies: 324,
-  activeCompanies: 298,
-  
-  // Revenue
-  mrr: 48750,
-  arr: 585000,
-  revenueGrowth: 18.5,
-  avgRevenuePerUser: 39.09,
-  
-  // API Usage
-  apiCallsToday: 45892,
-  apiCallsThisMonth: 1247650,
-  avgResponseTime: 42,
-  apiUptime: 99.98,
-  
-  // Subscriptions
-  freeUsers: 412,
-  starterUsers: 298,
-  professionalUsers: 387,
-  businessUsers: 150,
-  churnRate: 2.3,
+interface PlatformMetrics {
+  total_users: number;
+  active_users: number;
+  new_users_this_month: number;
+  user_growth: number;
+  total_companies: number;
+  active_companies: number;
+  mrr: number;
+  arr: number;
+  arpu: number;
+  revenue_growth: number;
+  free_users: number;
+  starter_users: number;
+  professional_users: number;
+  business_users: number;
+  churn_rate: number;
+  conversion_rate: number;
+  api_calls_today: number;
+  api_calls_this_month: number;
+  avg_response_time: number;
+  api_uptime: number;
+}
+
+interface Signup {
+  id: number;
+  company: string;
+  email: string;
+  plan: string;
+  role: string;
+  date: string;
+}
+
+interface Activity {
+  id: number;
+  action: string;
+  detail: string;
+  time: string;
+  type: string;
+}
+
+const DEFAULT_METRICS: PlatformMetrics = {
+  total_users: 0,
+  active_users: 0,
+  new_users_this_month: 0,
+  user_growth: 0,
+  total_companies: 0,
+  active_companies: 0,
+  mrr: 0,
+  arr: 0,
+  arpu: 0,
+  revenue_growth: 0,
+  free_users: 0,
+  starter_users: 0,
+  professional_users: 0,
+  business_users: 0,
+  churn_rate: 0,
+  conversion_rate: 0,
+  api_calls_today: 0,
+  api_calls_this_month: 0,
+  avg_response_time: 0,
+  api_uptime: 99.9,
 };
-
-const RECENT_SIGNUPS = [
-  { id: 1, company: 'TechStart Inc', email: 'admin@techstart.com', plan: 'professional', date: '2 hours ago' },
-  { id: 2, company: 'Green Valley LLC', email: 'hr@greenvalley.com', plan: 'starter', date: '5 hours ago' },
-  { id: 3, company: 'Apex Solutions', email: 'payroll@apex.io', plan: 'business', date: '1 day ago' },
-  { id: 4, company: 'Swift Logistics', email: 'admin@swiftlog.com', plan: 'professional', date: '1 day ago' },
-  { id: 5, company: 'Bloom Marketing', email: 'team@bloom.co', plan: 'starter', date: '2 days ago' },
-];
-
-const RECENT_ACTIVITY = [
-  { id: 1, action: 'New subscription', detail: 'TechStart Inc upgraded to Professional', time: '2 hours ago', type: 'success' },
-  { id: 2, action: 'API key generated', detail: 'Apex Solutions created new API key', time: '4 hours ago', type: 'info' },
-  { id: 3, action: 'Payment received', detail: '$299/mo from Swift Logistics', time: '6 hours ago', type: 'success' },
-  { id: 4, action: 'Support ticket', detail: 'Green Valley LLC - Integration help', time: '8 hours ago', type: 'warning' },
-  { id: 5, action: 'Subscription cancelled', detail: 'Beta Corp downgraded to Free', time: '1 day ago', type: 'error' },
-];
 
 const COLORS = {
   background: '#0F0F23',
@@ -86,12 +107,52 @@ const COLORS = {
 
 export default function AdminDashboard() {
   const { user } = useSelector((state: RootState) => state.auth);
-  const [isLoading, setIsLoading] = useState(false);
-  const [metrics, setMetrics] = useState(PLATFORM_METRICS);
+  const [isLoading, setIsLoading] = useState(true);
+  const [metrics, setMetrics] = useState<PlatformMetrics>(DEFAULT_METRICS);
+  const [signups, setSignups] = useState<Signup[]>([]);
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [systemHealth, setSystemHealth] = useState<any>(null);
+
+  // Fetch all admin data
+  const fetchAdminData = async () => {
+    setIsLoading(true);
+    try {
+      // Fetch metrics
+      const metricsResponse = await api.get('/api/admin/metrics');
+      if (metricsResponse.data.success) {
+        setMetrics(metricsResponse.data.metrics);
+      }
+
+      // Fetch recent signups
+      const signupsResponse = await api.get('/api/admin/recent-signups?limit=5');
+      if (signupsResponse.data.success) {
+        setSignups(signupsResponse.data.signups);
+      }
+
+      // Fetch activity
+      const activityResponse = await api.get('/api/admin/activity');
+      if (activityResponse.data.success) {
+        setActivities(activityResponse.data.activities);
+      }
+
+      // Fetch system health
+      const healthResponse = await api.get('/api/admin/system-health');
+      if (healthResponse.data.success) {
+        setSystemHealth(healthResponse.data.health);
+      }
+    } catch (error) {
+      console.error('Error fetching admin data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAdminData();
+  }, []);
 
   const handleRefresh = () => {
-    setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 1000);
+    fetchAdminData();
   };
 
   const formatCurrency = (amount: number) => {
@@ -152,12 +213,12 @@ export default function AdminDashboard() {
               <Ionicons name="people" size={24} color="#FFF" />
             </LinearGradient>
             <View style={styles.metricContent}>
-              <Text style={styles.metricValue}>{formatNumber(metrics.totalUsers)}</Text>
+              <Text style={styles.metricValue}>{formatNumber(metrics.total_users)}</Text>
               <Text style={styles.metricLabel}>Total Users</Text>
               <View style={styles.metricTrend}>
                 <Ionicons name="trending-up" size={14} color={COLORS.green} />
                 <Text style={[styles.trendText, { color: COLORS.green }]}>
-                  +{metrics.userGrowth}% this month
+                  +{metrics.user_growth}% this month
                 </Text>
               </View>
             </View>
@@ -176,7 +237,7 @@ export default function AdminDashboard() {
               <View style={styles.metricTrend}>
                 <Ionicons name="trending-up" size={14} color={COLORS.green} />
                 <Text style={[styles.trendText, { color: COLORS.green }]}>
-                  +{metrics.revenueGrowth}% growth
+                  +{metrics.revenue_growth}% growth
                 </Text>
               </View>
             </View>
@@ -190,11 +251,11 @@ export default function AdminDashboard() {
               <Ionicons name="business" size={24} color="#FFF" />
             </LinearGradient>
             <View style={styles.metricContent}>
-              <Text style={styles.metricValue}>{formatNumber(metrics.activeCompanies)}</Text>
+              <Text style={styles.metricValue}>{formatNumber(metrics.active_companies)}</Text>
               <Text style={styles.metricLabel}>Active Companies</Text>
               <View style={styles.metricTrend}>
                 <Text style={styles.trendTextMuted}>
-                  of {metrics.totalCompanies} total
+                  of {metrics.total_companies} total
                 </Text>
               </View>
             </View>
@@ -208,11 +269,11 @@ export default function AdminDashboard() {
               <Ionicons name="code-slash" size={24} color="#FFF" />
             </LinearGradient>
             <View style={styles.metricContent}>
-              <Text style={styles.metricValue}>{formatNumber(metrics.apiCallsToday)}</Text>
+              <Text style={styles.metricValue}>{formatNumber(metrics.api_calls_today)}</Text>
               <Text style={styles.metricLabel}>API Calls Today</Text>
               <View style={styles.metricTrend}>
                 <Text style={styles.trendTextMuted}>
-                  {metrics.avgResponseTime}ms avg response
+                  {metrics.avg_response_time}ms avg response
                 </Text>
               </View>
             </View>
@@ -226,15 +287,15 @@ export default function AdminDashboard() {
             <Text style={styles.smallMetricLabel}>Annual Revenue (ARR)</Text>
           </View>
           <View style={styles.smallMetricCard}>
-            <Text style={styles.smallMetricValue}>{formatCurrency(metrics.avgRevenuePerUser)}</Text>
+            <Text style={styles.smallMetricValue}>{formatCurrency(metrics.arpu)}</Text>
             <Text style={styles.smallMetricLabel}>Avg Revenue Per User</Text>
           </View>
           <View style={styles.smallMetricCard}>
-            <Text style={styles.smallMetricValue}>{metrics.apiUptime}%</Text>
+            <Text style={styles.smallMetricValue}>{metrics.api_uptime}%</Text>
             <Text style={styles.smallMetricLabel}>API Uptime</Text>
           </View>
           <View style={styles.smallMetricCard}>
-            <Text style={[styles.smallMetricValue, { color: COLORS.yellow }]}>{metrics.churnRate}%</Text>
+            <Text style={[styles.smallMetricValue, { color: COLORS.yellow }]}>{metrics.churn_rate}%</Text>
             <Text style={styles.smallMetricLabel}>Churn Rate</Text>
           </View>
         </View>
@@ -256,47 +317,47 @@ export default function AdminDashboard() {
                 <View style={styles.subBar}>
                   <View style={styles.subBarHeader}>
                     <Text style={styles.subBarLabel}>Free</Text>
-                    <Text style={styles.subBarCount}>{metrics.freeUsers}</Text>
+                    <Text style={styles.subBarCount}>{metrics.free_users}</Text>
                   </View>
                   <View style={styles.subBarTrack}>
-                    <View style={[styles.subBarFill, { width: `${(metrics.freeUsers / metrics.totalUsers) * 100}%`, backgroundColor: '#6B7280' }]} />
+                    <View style={[styles.subBarFill, { width: `${metrics.total_users > 0 ? (metrics.free_users / metrics.total_users) * 100 : 0}%`, backgroundColor: '#6B7280' }]} />
                   </View>
                 </View>
 
                 <View style={styles.subBar}>
                   <View style={styles.subBarHeader}>
                     <Text style={styles.subBarLabel}>Starter ($29/mo)</Text>
-                    <Text style={styles.subBarCount}>{metrics.starterUsers}</Text>
+                    <Text style={styles.subBarCount}>{metrics.starter_users}</Text>
                   </View>
                   <View style={styles.subBarTrack}>
-                    <View style={[styles.subBarFill, { width: `${(metrics.starterUsers / metrics.totalUsers) * 100}%`, backgroundColor: COLORS.blue }]} />
+                    <View style={[styles.subBarFill, { width: `${metrics.total_users > 0 ? (metrics.starter_users / metrics.total_users) * 100 : 0}%`, backgroundColor: COLORS.blue }]} />
                   </View>
                 </View>
 
                 <View style={styles.subBar}>
                   <View style={styles.subBarHeader}>
                     <Text style={styles.subBarLabel}>Professional ($79/mo)</Text>
-                    <Text style={styles.subBarCount}>{metrics.professionalUsers}</Text>
+                    <Text style={styles.subBarCount}>{metrics.professional_users}</Text>
                   </View>
                   <View style={styles.subBarTrack}>
-                    <View style={[styles.subBarFill, { width: `${(metrics.professionalUsers / metrics.totalUsers) * 100}%`, backgroundColor: COLORS.primary }]} />
+                    <View style={[styles.subBarFill, { width: `${metrics.total_users > 0 ? (metrics.professional_users / metrics.total_users) * 100 : 0}%`, backgroundColor: COLORS.primary }]} />
                   </View>
                 </View>
 
                 <View style={styles.subBar}>
                   <View style={styles.subBarHeader}>
                     <Text style={styles.subBarLabel}>Business ($199/mo)</Text>
-                    <Text style={styles.subBarCount}>{metrics.businessUsers}</Text>
+                    <Text style={styles.subBarCount}>{metrics.business_users}</Text>
                   </View>
                   <View style={styles.subBarTrack}>
-                    <View style={[styles.subBarFill, { width: `${(metrics.businessUsers / metrics.totalUsers) * 100}%`, backgroundColor: COLORS.green }]} />
+                    <View style={[styles.subBarFill, { width: `${metrics.total_users > 0 ? (metrics.business_users / metrics.total_users) * 100 : 0}%`, backgroundColor: COLORS.green }]} />
                   </View>
                 </View>
               </View>
 
               <View style={styles.subscriptionSummary}>
                 <Text style={styles.summaryText}>
-                  Paid Conversion Rate: <Text style={styles.summaryHighlight}>{((metrics.totalUsers - metrics.freeUsers) / metrics.totalUsers * 100).toFixed(1)}%</Text>
+                  Paid Conversion Rate: <Text style={styles.summaryHighlight}>{metrics.conversion_rate.toFixed(1)}%</Text>
                 </Text>
               </View>
             </View>
@@ -313,25 +374,31 @@ export default function AdminDashboard() {
                 </TouchableOpacity>
               </View>
 
-              {RECENT_SIGNUPS.map((signup) => (
-                <View key={signup.id} style={styles.signupItem}>
-                  <View style={styles.signupAvatar}>
-                    <Text style={styles.signupAvatarText}>
-                      {signup.company.charAt(0)}
-                    </Text>
-                  </View>
-                  <View style={styles.signupInfo}>
-                    <Text style={styles.signupCompany}>{signup.company}</Text>
-                    <Text style={styles.signupEmail}>{signup.email}</Text>
-                  </View>
-                  <View style={styles.signupMeta}>
-                    <View style={[styles.planBadge, { backgroundColor: getPlanColor(signup.plan) }]}>
-                      <Text style={styles.planBadgeText}>{signup.plan}</Text>
+              {signups.length > 0 ? (
+                signups.map((signup) => (
+                  <View key={signup.id} style={styles.signupItem}>
+                    <View style={styles.signupAvatar}>
+                      <Text style={styles.signupAvatarText}>
+                        {signup.company.charAt(0).toUpperCase()}
+                      </Text>
                     </View>
-                    <Text style={styles.signupDate}>{signup.date}</Text>
+                    <View style={styles.signupInfo}>
+                      <Text style={styles.signupCompany}>{signup.company}</Text>
+                      <Text style={styles.signupEmail}>{signup.email}</Text>
+                    </View>
+                    <View style={styles.signupMeta}>
+                      <View style={[styles.planBadge, { backgroundColor: getPlanColor(signup.plan) }]}>
+                        <Text style={styles.planBadgeText}>{signup.plan}</Text>
+                      </View>
+                      <Text style={styles.signupDate}>{signup.date}</Text>
+                    </View>
                   </View>
+                ))
+              ) : (
+                <View style={styles.emptyState}>
+                  <Text style={styles.emptyStateText}>No recent signups</Text>
                 </View>
-              ))}
+              )}
             </View>
           </View>
 
@@ -346,16 +413,22 @@ export default function AdminDashboard() {
                 </View>
               </View>
 
-              {RECENT_ACTIVITY.map((activity) => (
-                <View key={activity.id} style={styles.activityItem}>
-                  <View style={[styles.activityDot, { backgroundColor: getActivityColor(activity.type) }]} />
-                  <View style={styles.activityContent}>
-                    <Text style={styles.activityAction}>{activity.action}</Text>
-                    <Text style={styles.activityDetail}>{activity.detail}</Text>
-                    <Text style={styles.activityTime}>{activity.time}</Text>
+              {activities.length > 0 ? (
+                activities.map((activity) => (
+                  <View key={activity.id} style={styles.activityItem}>
+                    <View style={[styles.activityDot, { backgroundColor: getActivityColor(activity.type) }]} />
+                    <View style={styles.activityContent}>
+                      <Text style={styles.activityAction}>{activity.action}</Text>
+                      <Text style={styles.activityDetail}>{activity.detail}</Text>
+                      <Text style={styles.activityTime}>{activity.time}</Text>
+                    </View>
                   </View>
+                ))
+              ) : (
+                <View style={styles.emptyState}>
+                  <Text style={styles.emptyStateText}>No recent activity</Text>
                 </View>
-              ))}
+              )}
             </View>
 
             {/* Quick Actions */}
@@ -832,5 +905,13 @@ const styles = StyleSheet.create({
   healthStatus: {
     fontSize: 14,
     fontWeight: '600',
+  },
+  emptyState: {
+    padding: 20,
+    alignItems: 'center',
+  },
+  emptyStateText: {
+    fontSize: 14,
+    color: COLORS.textMuted,
   },
 });

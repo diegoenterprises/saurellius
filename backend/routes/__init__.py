@@ -58,6 +58,9 @@ from .contractor_self_service_routes import contractor_ss_bp
 from .document_routes import document_bp
 from .regulatory_filing_routes import regulatory_bp
 
+# Admin Platform Routes
+from .admin_metrics_routes import admin_metrics_bp
+
 __all__ = [
     # Core
     'auth_bp',
@@ -109,4 +112,6 @@ __all__ = [
     # Document & Regulatory
     'document_bp',
     'regulatory_bp',
+    # Admin Platform
+    'admin_metrics_bp',
 ]
