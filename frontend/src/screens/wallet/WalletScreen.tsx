@@ -31,11 +31,11 @@ const COLORS = {
   success: '#22C55E',
   warning: '#F59E0B',
   danger: '#EF4444',
-  background: '#F8FAFC',
-  card: '#FFFFFF',
-  text: '#1E293B',
-  textLight: '#64748B',
-  border: '#E2E8F0',
+  background: '#0F0F23',
+  card: '#1A1A2E',
+  text: '#FFFFFF',
+  textLight: '#9CA3AF',
+  border: '#2A2A4E',
 };
 
 type WalletType = 'employer' | 'employee';
