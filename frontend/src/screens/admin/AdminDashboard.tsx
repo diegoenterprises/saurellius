@@ -18,6 +18,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 import { RootState } from '../../store';
 import Header from '../../components/dashboard/Header';
 import api from '../../services/api';
@@ -107,11 +108,17 @@ const COLORS = {
 
 export default function AdminDashboard() {
   const { user } = useSelector((state: RootState) => state.auth);
+  const navigation = useNavigation<any>();
   const [isLoading, setIsLoading] = useState(true);
   const [metrics, setMetrics] = useState<PlatformMetrics>(DEFAULT_METRICS);
   const [signups, setSignups] = useState<Signup[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [systemHealth, setSystemHealth] = useState<any>(null);
+
+  // Navigation helpers
+  const navigateTo = (screen: string) => {
+    navigation.navigate(screen);
+  };
 
   // Fetch all admin data
   const fetchAdminData = async () => {
@@ -440,31 +447,31 @@ export default function AdminDashboard() {
                 </View>
               </View>
 
-              <TouchableOpacity style={styles.quickAction}>
+              <TouchableOpacity style={styles.quickAction} onPress={() => navigateTo('AdminSupport')}>
                 <View style={[styles.quickActionIcon, { backgroundColor: COLORS.primary + '20' }]}>
                   <Ionicons name="people" size={20} color={COLORS.primary} />
                 </View>
-                <Text style={styles.quickActionText}>Manage Users</Text>
+                <Text style={styles.quickActionText}>Manage Customers</Text>
                 <Ionicons name="chevron-forward" size={16} color={COLORS.textMuted} />
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.quickAction}>
+              <TouchableOpacity style={styles.quickAction} onPress={() => navigateTo('AdminPortal')}>
                 <View style={[styles.quickActionIcon, { backgroundColor: COLORS.green + '20' }]}>
                   <Ionicons name="card" size={20} color={COLORS.green} />
                 </View>
-                <Text style={styles.quickActionText}>Billing & Invoices</Text>
+                <Text style={styles.quickActionText}>Billing & Subscriptions</Text>
                 <Ionicons name="chevron-forward" size={16} color={COLORS.textMuted} />
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.quickAction}>
+              <TouchableOpacity style={styles.quickAction} onPress={() => navigateTo('AdminPortal')}>
                 <View style={[styles.quickActionIcon, { backgroundColor: COLORS.blue + '20' }]}>
                   <Ionicons name="key" size={20} color={COLORS.blue} />
                 </View>
-                <Text style={styles.quickActionText}>API Keys</Text>
+                <Text style={styles.quickActionText}>API Keys & Subscribers</Text>
                 <Ionicons name="chevron-forward" size={16} color={COLORS.textMuted} />
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.quickAction}>
+              <TouchableOpacity style={styles.quickAction} onPress={() => navigateTo('Reports')}>
                 <View style={[styles.quickActionIcon, { backgroundColor: COLORS.cyan + '20' }]}>
                   <Ionicons name="analytics" size={20} color={COLORS.cyan} />
                 </View>
@@ -472,7 +479,7 @@ export default function AdminDashboard() {
                 <Ionicons name="chevron-forward" size={16} color={COLORS.textMuted} />
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.quickAction}>
+              <TouchableOpacity style={styles.quickAction} onPress={() => navigateTo('AdminSupport')}>
                 <View style={[styles.quickActionIcon, { backgroundColor: COLORS.yellow + '20' }]}>
                   <Ionicons name="help-buoy" size={20} color={COLORS.yellow} />
                 </View>
@@ -480,7 +487,7 @@ export default function AdminDashboard() {
                 <Ionicons name="chevron-forward" size={16} color={COLORS.textMuted} />
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.quickAction}>
+              <TouchableOpacity style={styles.quickAction} onPress={() => navigateTo('Settings')}>
                 <View style={[styles.quickActionIcon, { backgroundColor: COLORS.red + '20' }]}>
                   <Ionicons name="settings" size={20} color={COLORS.red} />
                 </View>
