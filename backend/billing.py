@@ -20,7 +20,10 @@ class BillingManager:
             'employee_self_service', 'basic_reporting', 'email_support',
             'employee_management', 'paystub_generation', 'tax_calculations',
             # Self-Service
-            'employee_portal', 'contractor_portal', 'w9_collection'
+            'employee_portal', 'contractor_portal', 'w9_collection',
+            # Regulatory Filing - Basic
+            'federal_filing', 'state_filing', 'form_941', 'form_940',
+            'eftps_deposits', 'new_hire_reporting', 'filing_calendar'
         ],
         'professional': [
             # Everything in Starter
@@ -34,7 +37,11 @@ class BillingManager:
             'benefits_administration', 'digital_wallet', 'earned_wage_access',
             'hr_document_storage', 'onboarding_workflows', 'priority_support',
             'custom_reporting', 'messaging', 'swipe_shift_swap', 'timeclock',
-            'expense_tracking', 'mileage_tracking', 'invoicing'
+            'expense_tracking', 'mileage_tracking', 'invoicing',
+            # Regulatory Filing - Professional
+            'federal_filing', 'state_filing', 'form_941', 'form_940',
+            'eftps_deposits', 'new_hire_reporting', 'filing_calendar',
+            'multi_state_filing', 'local_filing', 'compliance_alerts'
         ],
         'business': [
             # Everything in Professional
@@ -54,7 +61,12 @@ class BillingManager:
             'advanced_analytics', 'predictive_insights', 'job_costing',
             'labor_allocation', 'fmla_tracking', '401k_administration',
             'dedicated_account_manager', 'phone_support', 'garnishment_management',
-            'cobra_administration', 'audit_trail', 'compliance_tools'
+            'cobra_administration', 'audit_trail', 'compliance_tools',
+            # Regulatory Filing - Business
+            'federal_filing', 'state_filing', 'form_941', 'form_940',
+            'eftps_deposits', 'new_hire_reporting', 'filing_calendar',
+            'multi_state_filing', 'local_filing', 'compliance_alerts',
+            'compliance_verification', 'audit_trail_export', 'filing_history'
         ],
         'enterprise': [
             # Everything - Full platform access
@@ -79,7 +91,14 @@ class BillingManager:
             'full_api_access', 'advanced_compliance', 'succession_planning',
             'compensation_benchmarking', 'dedicated_implementation',
             '24_7_support', 'sla_guarantees', 'white_label', 'sso_integration',
-            'ai_insights', 'gemini_ai', 'workforce_forecasting'
+            'ai_insights', 'gemini_ai', 'workforce_forecasting',
+            # Regulatory Filing - Enterprise
+            'federal_filing', 'state_filing', 'form_941', 'form_940',
+            'eftps_deposits', 'new_hire_reporting', 'filing_calendar',
+            'multi_state_filing', 'local_filing', 'compliance_alerts',
+            'compliance_verification', 'audit_trail_export', 'filing_history',
+            'automated_filing', 'irs_fire_direct', 'ssa_bso_direct',
+            'bulk_filing', 'filing_api_access'
         ]
     }
     

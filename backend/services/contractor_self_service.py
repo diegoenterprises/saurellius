@@ -1142,6 +1142,57 @@ class ContractorSelfServiceManager:
             'total_compensation': float(total_paid)
         }
 
+    def file_1099_to_irs(self, client_id: str, year: int) -> Dict:
+        """
+        File all 1099-NEC forms for a client to IRS FIRE system.
+        Automatically collects all contractor 1099s for the year.
+        """
+        from services.regulatory_filing_service import regulatory_filing_service
+        
+        # Collect all 1099 forms for this client
+        forms_to_file = []
+        
+        for contractor_id, forms in self.form_1099s.items():
+            for form in forms:
+                if form['client_id'] == client_id and form['tax_year'] == year:
+                    if form['status'] == 'generated':
+                        forms_to_file.append({
+                            'form_id': form['id'],
+                            'recipient_tin': form.get('recipient_tin_masked', ''),
+                            'recipient_name': form['recipient_name'],
+                            'recipient_address': form['recipient_address'],
+                            'amount': form['box_1_nonemployee_compensation'],
+                            'payer_tin': client_id  # Would be actual EIN
+                        })
+        
+        if not forms_to_file:
+            return {'success': False, 'error': 'No 1099 forms ready for filing'}
+        
+        # Submit to IRS FIRE
+        result = regulatory_filing_service.submit_1099_fire(
+            company_id=client_id,
+            forms=forms_to_file,
+            tax_year=year,
+            is_correction=False
+        )
+        
+        # Update form statuses
+        if result.get('success'):
+            for contractor_id, forms in self.form_1099s.items():
+                for form in forms:
+                    if form['client_id'] == client_id and form['tax_year'] == year:
+                        form['status'] = 'filed'
+                        form['filed_at'] = datetime.utcnow().isoformat()
+                        form['filing_confirmation'] = result.get('confirmation_number')
+        
+        return {
+            'success': result.get('success', False),
+            'forms_filed': len(forms_to_file),
+            'confirmation_number': result.get('confirmation_number'),
+            'filing_id': result.get('filing_id'),
+            'message': result.get('message')
+        }
+
     def get_1099_forms(self, contractor_id: str, year: int = None) -> List[Dict]:
         """Get contractor's 1099 forms."""
         forms = self.form_1099s.get(contractor_id, [])

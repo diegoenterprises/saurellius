@@ -489,6 +489,22 @@ def generate_1099():
     return jsonify(result)
 
 
+@contractor_ss_bp.route('/1099/file', methods=['POST'])
+@jwt_required()
+def file_1099_to_irs():
+    """File all 1099-NEC forms to IRS FIRE system."""
+    client_id = get_jwt_identity()
+    data = request.get_json()
+    
+    year = data.get('year', datetime.utcnow().year - 1)
+    
+    result = contractor_self_service.file_1099_to_irs(client_id, year)
+    if not result.get('success'):
+        return jsonify(result), 400
+    
+    return jsonify(result)
+
+
 # ============================================================================
 # TAX CENTER
 # ============================================================================

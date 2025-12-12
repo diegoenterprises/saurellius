@@ -773,11 +773,50 @@ class EmployeeOnboardingService:
         onboarding['approved_at'] = datetime.utcnow().isoformat()
         onboarding['updated_at'] = datetime.utcnow().isoformat()
         
+        # =====================================================================
+        # REGULATORY FILING INTEGRATION - Auto-submit new hire report
+        # =====================================================================
+        new_hire_result = self._submit_new_hire_report(onboarding)
+        onboarding['new_hire_filing'] = new_hire_result
+        
         return {
             'success': True,
             'onboarding': onboarding,
-            'message': 'Employee onboarding complete. Employee is ready for payroll.'
+            'message': 'Employee onboarding complete. Employee is ready for payroll.',
+            'new_hire_filing': new_hire_result
         }
+    
+    def _submit_new_hire_report(self, onboarding: Dict) -> Dict:
+        """Auto-submit new hire report to state after onboarding approval."""
+        from services.regulatory_filing_service import regulatory_filing_service
+        
+        employee_data = onboarding.get('steps', {}).get(1, {}).get('data', {})
+        employment_data = onboarding.get('steps', {}).get(2, {}).get('data', {})
+        
+        # Extract work state from employment details
+        work_state = employment_data.get('work_state', employee_data.get('state', ''))
+        
+        if not work_state:
+            return {'success': False, 'error': 'Work state not specified'}
+        
+        new_hire_data = {
+            'first_name': employee_data.get('first_name', ''),
+            'last_name': employee_data.get('last_name', ''),
+            'ssn': employee_data.get('ssn', ''),
+            'hire_date': employment_data.get('hire_date', datetime.utcnow().strftime('%Y-%m-%d')),
+            'address': employee_data.get('address', ''),
+            'city': employee_data.get('city', ''),
+            'state': employee_data.get('state', ''),
+            'zip': employee_data.get('zip', '')
+        }
+        
+        result = regulatory_filing_service.submit_state_new_hire(
+            company_id=onboarding.get('company_id', ''),
+            state=work_state,
+            employee_data=new_hire_data
+        )
+        
+        return result
 
 
 # Singleton instance

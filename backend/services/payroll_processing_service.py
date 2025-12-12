@@ -579,11 +579,80 @@ class PayrollProcessingService:
         payroll_run['status'] = 'complete'
         payroll_run['completed_at'] = datetime.utcnow().isoformat()
         
+        # =====================================================================
+        # REGULATORY FILING INTEGRATION - Auto-queue tax deposits
+        # =====================================================================
+        regulatory_data = self._prepare_regulatory_data(payroll_run)
+        payroll_run['regulatory'] = regulatory_data
+        
         return {
             'success': True,
             'payroll_run': payroll_run,
-            'message': 'Payroll processed successfully'
+            'message': 'Payroll processed successfully',
+            'regulatory': regulatory_data
         }
+    
+    def _prepare_regulatory_data(self, payroll_run: Dict) -> Dict:
+        """Prepare regulatory filing data after payroll processing."""
+        from services.regulatory_filing_service import regulatory_filing_service
+        
+        company_id = payroll_run['company_id']
+        pay_date = payroll_run['pay_date']
+        tax_summary = payroll_run['tax_summary']
+        
+        # Calculate total federal liability (941 taxes)
+        federal_liability = (
+            tax_summary.get('federal_income_tax', 0) +
+            tax_summary.get('social_security_employee', 0) +
+            tax_summary.get('social_security_employer', 0) +
+            tax_summary.get('medicare_employee', 0) +
+            tax_summary.get('medicare_employer', 0)
+        )
+        
+        # Determine quarter for tax period
+        pay_date_obj = datetime.fromisoformat(pay_date) if isinstance(pay_date, str) else pay_date
+        quarter = (pay_date_obj.month - 1) // 3 + 1
+        tax_period = f"{pay_date_obj.year}-Q{quarter}"
+        
+        return {
+            'federal_liability': round(federal_liability, 2),
+            'futa_liability': round(tax_summary.get('futa', 0), 2),
+            'state_liabilities': tax_summary.get('state_taxes', {}),
+            'suta_liabilities': tax_summary.get('suta', {}),
+            'tax_period': tax_period,
+            'pay_date': pay_date,
+            'deposit_due': self._calculate_deposit_due_date(pay_date),
+            'filing_actions': [
+                {
+                    'type': 'eftps_deposit',
+                    'amount': round(federal_liability, 2),
+                    'tax_type': '941',
+                    'status': 'pending'
+                }
+            ]
+        }
+    
+    def _calculate_deposit_due_date(self, pay_date: str) -> str:
+        """Calculate EFTPS deposit due date based on deposit schedule."""
+        pay_date_obj = datetime.fromisoformat(pay_date) if isinstance(pay_date, str) else pay_date
+        
+        # Default to semi-weekly (3 business days)
+        # Wednesday, Thursday, Friday paydays: Due following Wednesday
+        # Saturday, Sunday, Monday, Tuesday paydays: Due following Friday
+        
+        weekday = pay_date_obj.weekday()
+        if weekday in [2, 3, 4]:  # Wed, Thu, Fri
+            days_until_wed = (2 - weekday + 7) % 7
+            if days_until_wed == 0:
+                days_until_wed = 7
+            due_date = pay_date_obj + timedelta(days=days_until_wed)
+        else:  # Sat, Sun, Mon, Tue
+            days_until_fri = (4 - weekday + 7) % 7
+            if days_until_fri == 0:
+                days_until_fri = 7
+            due_date = pay_date_obj + timedelta(days=days_until_fri)
+        
+        return due_date.strftime('%Y-%m-%d')
     
     def _validate_payroll(self, payroll_run: Dict) -> List[Dict]:
         """Validate payroll before processing."""
