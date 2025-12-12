@@ -203,6 +203,55 @@ Complete 1099 contractor administration with multi-currency.
 | **Multi-Currency** | USD and CAD payment support |
 | **YTD Tracking** | Payment history and $600 threshold alerts |
 
+### Employee Self-Service Portal
+
+Complete self-service employee registration and portal - zero-touch HR.
+
+| Feature | Description |
+|---------|-------------|
+| **Self-Service Registration** | Independent sign-up with email/phone verification |
+| **Employer-Invited Path** | Secure invitation links with pre-filled data |
+| **10-Section Onboarding** | Personal info, W-4, state tax, I-9, direct deposit, benefits, policies |
+| **Portal Dashboard** | Quick stats, upcoming events, notifications |
+| **Paystub Access** | View and download paystubs, YTD summary |
+| **Tax Document Center** | W-2 access, W-4 updates with preview |
+| **Benefits Management** | Current enrollments, life event reporting |
+| **PTO Requests** | Request time off, view balances and history |
+| **Direct Deposit Updates** | Self-service bank account management |
+| **Document Vault** | Personal document storage and access |
+
+### Contractor Self-Service Portal
+
+Complete self-service contractor registration and portal - IRS compliant.
+
+| Feature | Description |
+|---------|-------------|
+| **Self-Service Registration** | Independent sign-up with business classification |
+| **Client-Invited Path** | Accept client invitations with auto-connection |
+| **W-9 Wizard** | Guided IRS W-9 with digital signature |
+| **Payment Setup** | ACH, check, wire, or digital wallet |
+| **Invoice Creation** | Professional invoices with line items and tax |
+| **Expense Tracking** | 13 categories with receipt upload |
+| **Mileage Tracking** | IRS rate ($0.67/mile), auto-deduction |
+| **1099-NEC Access** | View and download 1099 forms |
+| **Tax Calculator** | Estimated quarterly tax with deadlines |
+| **Portal Dashboard** | YTD earnings, outstanding invoices, clients |
+
+### Production Activation Services
+
+Enterprise-grade backend services for production deployment.
+
+| Service | Description |
+|---------|-------------|
+| **Production Tax Engine** | 50-state + DC tax calculations, all jurisdictions |
+| **Payroll Processing** | Gross-to-net with deductions, garnishments |
+| **ACH Generation** | NACHA-compliant direct deposit files |
+| **Government Forms** | W-2, 1099-NEC, 941, 940, state wage reports |
+| **Security Service** | RBAC, AES-256 encryption, audit logging |
+| **Employer Registration** | Zero-touch company onboarding |
+| **Employee Onboarding** | Complete regulatory workflow |
+| **Contractor Onboarding** | W-9, TIN validation, 1099 tracking |
+
 ### Tax Auto-Updater
 
 Real-time tax rate monitoring and updates.
