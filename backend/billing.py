@@ -11,6 +11,78 @@ from config import Config
 class BillingManager:
     """Manages subscription billing logic and usage tracking."""
     
+    # Feature access by subscription tier
+    FEATURE_ACCESS = {
+        'starter': [
+            # Core Features
+            'payroll_processing', 'unlimited_payroll_runs', 'tax_filing', 
+            'w2_preparation', '1099_preparation', 'direct_deposit',
+            'employee_self_service', 'basic_reporting', 'email_support',
+            'employee_management', 'paystub_generation', 'tax_calculations',
+            # Self-Service
+            'employee_portal', 'contractor_portal', 'w9_collection'
+        ],
+        'professional': [
+            # Everything in Starter
+            'payroll_processing', 'unlimited_payroll_runs', 'tax_filing',
+            'w2_preparation', '1099_preparation', 'direct_deposit',
+            'employee_self_service', 'basic_reporting', 'email_support',
+            'employee_management', 'paystub_generation', 'tax_calculations',
+            'employee_portal', 'contractor_portal', 'w9_collection',
+            # Professional additions
+            'same_day_deposit', 'time_tracking', 'scheduling', 'pto_management',
+            'benefits_administration', 'digital_wallet', 'earned_wage_access',
+            'hr_document_storage', 'onboarding_workflows', 'priority_support',
+            'custom_reporting', 'messaging', 'swipe_shift_swap', 'timeclock',
+            'expense_tracking', 'mileage_tracking', 'invoicing'
+        ],
+        'business': [
+            # Everything in Professional
+            'payroll_processing', 'unlimited_payroll_runs', 'tax_filing',
+            'w2_preparation', '1099_preparation', 'direct_deposit',
+            'employee_self_service', 'basic_reporting', 'email_support',
+            'employee_management', 'paystub_generation', 'tax_calculations',
+            'employee_portal', 'contractor_portal', 'w9_collection',
+            'same_day_deposit', 'time_tracking', 'scheduling', 'pto_management',
+            'benefits_administration', 'digital_wallet', 'earned_wage_access',
+            'hr_document_storage', 'onboarding_workflows', 'priority_support',
+            'custom_reporting', 'messaging', 'swipe_shift_swap', 'timeclock',
+            'expense_tracking', 'mileage_tracking', 'invoicing',
+            # Business additions
+            'talent_management', 'applicant_tracking', 'performance_reviews',
+            'learning_management', 'goal_setting', 'okrs', '360_feedback',
+            'advanced_analytics', 'predictive_insights', 'job_costing',
+            'labor_allocation', 'fmla_tracking', '401k_administration',
+            'dedicated_account_manager', 'phone_support', 'garnishment_management',
+            'cobra_administration', 'audit_trail', 'compliance_tools'
+        ],
+        'enterprise': [
+            # Everything - Full platform access
+            'payroll_processing', 'unlimited_payroll_runs', 'tax_filing',
+            'w2_preparation', '1099_preparation', 'direct_deposit',
+            'employee_self_service', 'basic_reporting', 'email_support',
+            'employee_management', 'paystub_generation', 'tax_calculations',
+            'employee_portal', 'contractor_portal', 'w9_collection',
+            'same_day_deposit', 'time_tracking', 'scheduling', 'pto_management',
+            'benefits_administration', 'digital_wallet', 'earned_wage_access',
+            'hr_document_storage', 'onboarding_workflows', 'priority_support',
+            'custom_reporting', 'messaging', 'swipe_shift_swap', 'timeclock',
+            'expense_tracking', 'mileage_tracking', 'invoicing',
+            'talent_management', 'applicant_tracking', 'performance_reviews',
+            'learning_management', 'goal_setting', 'okrs', '360_feedback',
+            'advanced_analytics', 'predictive_insights', 'job_costing',
+            'labor_allocation', 'fmla_tracking', '401k_administration',
+            'dedicated_account_manager', 'phone_support', 'garnishment_management',
+            'cobra_administration', 'audit_trail', 'compliance_tools',
+            # Enterprise additions
+            'canadian_payroll', 'multi_currency', 'custom_integrations',
+            'full_api_access', 'advanced_compliance', 'succession_planning',
+            'compensation_benchmarking', 'dedicated_implementation',
+            '24_7_support', 'sla_guarantees', 'white_label', 'sso_integration',
+            'ai_insights', 'gemini_ai', 'workforce_forecasting'
+        ]
+    }
+    
     # Plan configurations based on competitor analysis
     PLANS = {
         'starter': {
@@ -262,6 +334,83 @@ class BillingManager:
             'current_plan': self.user.subscription_tier,
             'employee_count': employee_count,
             'estimated_cost': self.calculate_monthly_cost(recommended, employee_count)
+        }
+
+    # =========================================================================
+    # FEATURE ACCESS CONTROL - Dynamic feature gating by subscription
+    # =========================================================================
+
+    @classmethod
+    def can_access_feature(cls, subscription_tier: str, feature: str) -> bool:
+        """Check if a subscription tier can access a specific feature."""
+        tier = subscription_tier.lower() if subscription_tier else 'starter'
+        features = cls.FEATURE_ACCESS.get(tier, cls.FEATURE_ACCESS['starter'])
+        return feature.lower() in features
+
+    @classmethod
+    def get_accessible_features(cls, subscription_tier: str) -> list:
+        """Get list of all features accessible for a subscription tier."""
+        tier = subscription_tier.lower() if subscription_tier else 'starter'
+        return cls.FEATURE_ACCESS.get(tier, cls.FEATURE_ACCESS['starter'])
+
+    @classmethod
+    def get_upgrade_features(cls, current_tier: str) -> Dict:
+        """Get features available in higher tiers for upgrade prompts."""
+        tier_order = ['starter', 'professional', 'business', 'enterprise']
+        current = current_tier.lower() if current_tier else 'starter'
+        current_idx = tier_order.index(current) if current in tier_order else 0
+        
+        upgrades = {}
+        current_features = set(cls.FEATURE_ACCESS.get(current, []))
+        
+        for i in range(current_idx + 1, len(tier_order)):
+            next_tier = tier_order[i]
+            next_features = set(cls.FEATURE_ACCESS.get(next_tier, []))
+            new_features = next_features - current_features
+            if new_features:
+                upgrades[next_tier] = {
+                    'tier': next_tier,
+                    'plan_name': cls.PLANS.get(next_tier, {}).get('name', next_tier.title()),
+                    'new_features': list(new_features),
+                    'monthly_price': cls.PLANS.get(next_tier, {}).get('monthly_price', 0)
+                }
+            current_features = next_features
+        
+        return upgrades
+
+    def check_feature_access(self, feature: str) -> Tuple[bool, str]:
+        """
+        Check if user can access a feature based on subscription.
+        Returns (can_access, message)
+        """
+        if not self.user:
+            return False, "User not authenticated"
+        
+        tier = getattr(self.user, 'subscription_tier', 'starter') or 'starter'
+        
+        if self.can_access_feature(tier, feature):
+            return True, f"Access granted to {feature}"
+        
+        # Find which tier unlocks this feature
+        for upgrade_tier in ['professional', 'business', 'enterprise']:
+            if self.can_access_feature(upgrade_tier, feature):
+                plan_name = self.PLANS.get(upgrade_tier, {}).get('name', upgrade_tier.title())
+                return False, f"Upgrade to {plan_name} to access {feature}"
+        
+        return False, f"Feature {feature} not available"
+
+    def get_user_features(self) -> Dict:
+        """Get all feature access info for current user."""
+        if not self.user:
+            return {'tier': 'starter', 'features': self.FEATURE_ACCESS['starter']}
+        
+        tier = getattr(self.user, 'subscription_tier', 'starter') or 'starter'
+        return {
+            'tier': tier,
+            'plan_name': self.PLANS.get(tier, {}).get('name', tier.title()),
+            'features': self.get_accessible_features(tier),
+            'feature_count': len(self.get_accessible_features(tier)),
+            'upgrades_available': self.get_upgrade_features(tier)
         }
 
 

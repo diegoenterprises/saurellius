@@ -4,6 +4,7 @@ Stripe payment, subscription, and webhook endpoints
 """
 
 import stripe
+from functools import wraps
 from flask import Blueprint, request, jsonify, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from models import User, Subscription, Invoice, db
@@ -11,6 +12,134 @@ from services.email_service import email_service
 from billing import BillingManager
 
 stripe_bp = Blueprint('stripe', __name__)
+
+
+# ============================================================================
+# FEATURE ACCESS DECORATOR - Use to protect routes by subscription tier
+# ============================================================================
+
+def require_feature(feature_name: str):
+    """
+    Decorator to require a specific feature based on subscription tier.
+    Usage: @require_feature('talent_management')
+    """
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            user_id = get_jwt_identity()
+            user = User.query.get(user_id)
+            
+            if not user:
+                return jsonify({
+                    'success': False, 
+                    'error': 'User not found'
+                }), 404
+            
+            billing = BillingManager(user)
+            can_access, message = billing.check_feature_access(feature_name)
+            
+            if not can_access:
+                return jsonify({
+                    'success': False,
+                    'error': 'Feature not available',
+                    'message': message,
+                    'feature': feature_name,
+                    'current_tier': user.subscription_tier or 'starter',
+                    'upgrade_required': True
+                }), 403
+            
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
+
+
+# ============================================================================
+# FEATURE ACCESS ENDPOINTS
+# ============================================================================
+
+@stripe_bp.route('/api/subscription/features', methods=['GET'])
+@jwt_required()
+def get_user_features():
+    """Get all features available to the current user's subscription."""
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    
+    if not user:
+        return jsonify({'success': False, 'error': 'User not found'}), 404
+    
+    billing = BillingManager(user)
+    features = billing.get_user_features()
+    
+    return jsonify({
+        'success': True,
+        **features
+    })
+
+
+@stripe_bp.route('/api/subscription/check-feature', methods=['POST'])
+@jwt_required()
+def check_feature_access():
+    """Check if user can access a specific feature."""
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    
+    if not user:
+        return jsonify({'success': False, 'error': 'User not found'}), 404
+    
+    data = request.get_json()
+    feature = data.get('feature', '')
+    
+    if not feature:
+        return jsonify({'success': False, 'error': 'Feature name required'}), 400
+    
+    billing = BillingManager(user)
+    can_access, message = billing.check_feature_access(feature)
+    
+    return jsonify({
+        'success': True,
+        'can_access': can_access,
+        'feature': feature,
+        'message': message,
+        'current_tier': user.subscription_tier or 'starter'
+    })
+
+
+@stripe_bp.route('/api/subscription/upgrade-options', methods=['GET'])
+@jwt_required()
+def get_upgrade_options():
+    """Get available upgrade options with new features."""
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    
+    if not user:
+        return jsonify({'success': False, 'error': 'User not found'}), 404
+    
+    current_tier = user.subscription_tier or 'starter'
+    upgrades = BillingManager.get_upgrade_features(current_tier)
+    
+    return jsonify({
+        'success': True,
+        'current_tier': current_tier,
+        'upgrades': upgrades
+    })
+
+
+@stripe_bp.route('/api/subscription/all-features', methods=['GET'])
+def get_all_features():
+    """Get all features by tier (public endpoint for pricing page)."""
+    return jsonify({
+        'success': True,
+        'tiers': {
+            tier: {
+                'name': BillingManager.PLANS.get(tier, {}).get('name', tier.title()),
+                'features': features,
+                'feature_count': len(features),
+                'monthly_price': BillingManager.PLANS.get(tier, {}).get('monthly_price', 0),
+                'price_per_employee': BillingManager.PLANS.get(tier, {}).get('price_per_employee', 0)
+            }
+            for tier, features in BillingManager.FEATURE_ACCESS.items()
+        }
+    })
 
 
 @stripe_bp.route('/api/stripe/create-checkout-session', methods=['POST'])

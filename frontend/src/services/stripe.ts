@@ -257,83 +257,221 @@ export interface PaystubLimitCheck {
 }
 
 // ============================================================================
-// PRICING UTILITIES
 // ============================================================================
 
 export const pricingUtils = {
   /**
    * Calculate total monthly cost for a given number of employees
    */
-  calculateMonthlyCost: (plan: string, employeeCount: number): number => {
-    const planConfig = SUBSCRIPTION_PLANS[plan];
-    if (!planConfig) return 0;
-
-    if (planConfig.price === 0) {
-      // Enterprise - custom pricing
-      return employeeCount * planConfig.pricePerEmployee;
-    }
-
+  calculateMonthlyCost: (planId: PlanId, employeeCount: number): number => {
+    const plan = SUBSCRIPTION_PLANS[planId];
+    if (!plan || plan.price === 0) return employeeCount * (plan?.pricePerEmployee || 12);
+    
     const discount = pricingUtils.getVolumeDiscount(employeeCount);
-    const employeeCost = employeeCount * planConfig.pricePerEmployee * (1 - discount / 100);
-    return planConfig.price + employeeCost;
+    const employeeCost = employeeCount * plan.pricePerEmployee * (1 - discount / 100);
+    return plan.price + employeeCost;
   },
 
-  /**
-   * Get volume discount percentage based on employee count
-   */
   getVolumeDiscount: (employeeCount: number): number => {
-    const tier = VOLUME_DISCOUNTS.find(
-      t => employeeCount >= t.minEmployees && employeeCount <= t.maxEmployees
-    );
+    const tier = VOLUME_DISCOUNTS.find(t => employeeCount >= t.min && employeeCount <= t.max);
     return tier?.discount || 0;
   },
 
-  /**
-   * Calculate annual savings with prepayment
-   */
-  calculateAnnualSavings: (plan: string, employeeCount: number): number => {
-    const planConfig = SUBSCRIPTION_PLANS[plan];
-    if (!planConfig || !planConfig.annualSavings) return 0;
-    return planConfig.annualSavings;
+  calculateAnnualSavings: (planId: PlanId): number => {
+    const plan = SUBSCRIPTION_PLANS[planId];
+    return plan?.annualSavings || 0;
   },
 
-  /**
-   * Recommend best plan based on employee count
-   */
-  recommendPlan: (employeeCount: number): string => {
+  recommendPlan: (employeeCount: number): PlanId => {
     if (employeeCount <= 25) return 'starter';
     if (employeeCount <= 100) return 'professional';
     if (employeeCount <= 500) return 'business';
     return 'enterprise';
   },
 
-  /**
-   * Format price for display
-   */
   formatPrice: (amount: number): string => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
     }).format(amount);
   },
 
+  getPricingText: (planId: PlanId): string => {
+    const plan = SUBSCRIPTION_PLANS[planId];
+    if (!plan) return '';
+    if (plan.price === 0) return 'Custom pricing';
+    return `$${plan.price}/mo + $${plan.pricePerEmployee}/employee`;
+  },
+
+  getTargetText: (planId: PlanId): string => {
+    const plan = SUBSCRIPTION_PLANS[planId];
+    return plan?.targetEmployees || '';
+  },
+};
+
+// ============================================================================
+// FEATURE ACCESS SERVICE - Check subscription-based feature access
+// ============================================================================
+
+export interface FeatureAccessResponse {
+  success: boolean;
+  can_access: boolean;
+  feature: string;
+  message: string;
+  current_tier: string;
+}
+
+export interface UserFeaturesResponse {
+  success: boolean;
+  tier: string;
+  plan_name: string;
+  features: string[];
+  feature_count: number;
+  upgrades_available: Record<string, {
+    tier: string;
+    plan_name: string;
+    new_features: string[];
+    monthly_price: number;
+  }>;
+}
+
+export const featureAccessService = {
   /**
-   * Get pricing display text for a plan
+   * Get all features available to the current user
    */
-  getPricingText: (plan: string): string => {
-    const planConfig = SUBSCRIPTION_PLANS[plan];
-    if (!planConfig) return '';
-    if (planConfig.price === 0) return 'Custom pricing';
-    return `$${planConfig.price}/mo + $${planConfig.pricePerEmployee}/employee`;
+  getUserFeatures: async (): Promise<UserFeaturesResponse> => {
+    const response = await api.get('/api/subscription/features');
+    return response.data;
   },
 
   /**
-   * Get target employee range for a plan
+   * Check if user can access a specific feature
    */
-  getTargetText: (plan: string): string => {
-    const planConfig = SUBSCRIPTION_PLANS[plan];
-    return planConfig?.targetEmployees || '';
+  checkFeatureAccess: async (feature: string): Promise<FeatureAccessResponse> => {
+    const response = await api.post('/api/subscription/check-feature', { feature });
+    return response.data;
   },
+
+  /**
+   * Get upgrade options with new features
+   */
+  getUpgradeOptions: async () => {
+    const response = await api.get('/api/subscription/upgrade-options');
+    return response.data;
+  },
+
+  /**
+   * Get all features by tier (for pricing page)
+   */
+  getAllFeaturesByTier: async () => {
+    const response = await api.get('/api/subscription/all-features');
+    return response.data;
+  },
+
+  /**
+   * Check feature access locally (without API call)
+   * Uses cached tier from auth state
+   */
+  canAccessFeature: (userTier: string, feature: string): boolean => {
+    const tierFeatures: Record<string, string[]> = {
+      starter: [
+        'payroll_processing', 'unlimited_payroll_runs', 'tax_filing',
+        'w2_preparation', '1099_preparation', 'direct_deposit',
+        'employee_self_service', 'basic_reporting', 'employee_portal',
+        'contractor_portal', 'w9_collection'
+      ],
+      professional: [
+        'payroll_processing', 'unlimited_payroll_runs', 'tax_filing',
+        'w2_preparation', '1099_preparation', 'direct_deposit',
+        'employee_self_service', 'basic_reporting', 'employee_portal',
+        'contractor_portal', 'w9_collection', 'same_day_deposit',
+        'time_tracking', 'scheduling', 'pto_management', 'benefits_administration',
+        'digital_wallet', 'earned_wage_access', 'hr_document_storage',
+        'onboarding_workflows', 'custom_reporting', 'messaging',
+        'swipe_shift_swap', 'timeclock', 'expense_tracking', 'mileage_tracking',
+        'invoicing'
+      ],
+      business: [
+        'payroll_processing', 'unlimited_payroll_runs', 'tax_filing',
+        'w2_preparation', '1099_preparation', 'direct_deposit',
+        'employee_self_service', 'basic_reporting', 'employee_portal',
+        'contractor_portal', 'w9_collection', 'same_day_deposit',
+        'time_tracking', 'scheduling', 'pto_management', 'benefits_administration',
+        'digital_wallet', 'earned_wage_access', 'hr_document_storage',
+        'onboarding_workflows', 'custom_reporting', 'messaging',
+        'swipe_shift_swap', 'timeclock', 'expense_tracking', 'mileage_tracking',
+        'invoicing', 'talent_management', 'applicant_tracking', 'performance_reviews',
+        'learning_management', 'goal_setting', 'okrs', '360_feedback',
+        'advanced_analytics', 'predictive_insights', 'job_costing',
+        'labor_allocation', 'fmla_tracking', '401k_administration',
+        'garnishment_management', 'cobra_administration', 'audit_trail',
+        'compliance_tools'
+      ],
+      enterprise: [
+        'payroll_processing', 'unlimited_payroll_runs', 'tax_filing',
+        'w2_preparation', '1099_preparation', 'direct_deposit',
+        'employee_self_service', 'basic_reporting', 'employee_portal',
+        'contractor_portal', 'w9_collection', 'same_day_deposit',
+        'time_tracking', 'scheduling', 'pto_management', 'benefits_administration',
+        'digital_wallet', 'earned_wage_access', 'hr_document_storage',
+        'onboarding_workflows', 'custom_reporting', 'messaging',
+        'swipe_shift_swap', 'timeclock', 'expense_tracking', 'mileage_tracking',
+        'invoicing', 'talent_management', 'applicant_tracking', 'performance_reviews',
+        'learning_management', 'goal_setting', 'okrs', '360_feedback',
+        'advanced_analytics', 'predictive_insights', 'job_costing',
+        'labor_allocation', 'fmla_tracking', '401k_administration',
+        'garnishment_management', 'cobra_administration', 'audit_trail',
+        'compliance_tools', 'canadian_payroll', 'multi_currency',
+        'custom_integrations', 'full_api_access', 'advanced_compliance',
+        'succession_planning', 'compensation_benchmarking', 'ai_insights',
+        'gemini_ai', 'workforce_forecasting'
+      ]
+    };
+
+    const tier = userTier?.toLowerCase() || 'starter';
+    const features = tierFeatures[tier] || tierFeatures.starter;
+    return features.includes(feature.toLowerCase());
+  },
+
+  /**
+   * Get required tier for a feature
+   */
+  getRequiredTier: (feature: string): string => {
+    const featureTiers: Record<string, string> = {
+      // Professional features
+      'time_tracking': 'professional',
+      'scheduling': 'professional',
+      'pto_management': 'professional',
+      'benefits_administration': 'professional',
+      'digital_wallet': 'professional',
+      'messaging': 'professional',
+      'timeclock': 'professional',
+      'expense_tracking': 'professional',
+      'mileage_tracking': 'professional',
+      'invoicing': 'professional',
+      // Business features
+      'talent_management': 'business',
+      'applicant_tracking': 'business',
+      'performance_reviews': 'business',
+      'learning_management': 'business',
+      'goal_setting': 'business',
+      'advanced_analytics': 'business',
+      'job_costing': 'business',
+      '401k_administration': 'business',
+      'garnishment_management': 'business',
+      'cobra_administration': 'business',
+      // Enterprise features
+      'canadian_payroll': 'enterprise',
+      'multi_currency': 'enterprise',
+      'custom_integrations': 'enterprise',
+      'full_api_access': 'enterprise',
+      'ai_insights': 'enterprise',
+      'gemini_ai': 'enterprise',
+    };
+    return featureTiers[feature.toLowerCase()] || 'starter';
+  }
 };
 
 export default stripeService;
