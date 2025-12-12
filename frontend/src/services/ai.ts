@@ -926,6 +926,265 @@ export const aiService = {
   },
 
   // ===========================================================================
+  // Regulatory Filing Intelligence
+  // ===========================================================================
+
+  analyzeComplianceStatus: async (companyData: Record<string, any>): Promise<{
+    overall_compliance_score: number;
+    risk_level: string;
+    immediate_actions: Array<{ action: string; deadline: string; penalty_risk: string }>;
+    upcoming_deadlines: Array<{ form: string; due_date: string; status: string }>;
+    audit_risk_factors: string[];
+    recommendations: Array<{ area: string; priority: string; impact: string }>;
+    estimated_penalty_exposure: number;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/regulatory/compliance-analysis', { company: companyData });
+      return response.data.analysis;
+    } catch (error) {
+      console.error('Compliance analysis error:', error);
+      return { overall_compliance_score: 0, risk_level: 'unknown', immediate_actions: [], upcoming_deadlines: [], audit_risk_factors: [], recommendations: [], estimated_penalty_exposure: 0 };
+    }
+  },
+
+  getDeadlineGuidance: async (deadlineData: Record<string, any>): Promise<{
+    urgency_level: string;
+    preparation_checklist: string[];
+    common_errors_to_avoid: string[];
+    late_filing_penalty: string;
+    extension_available: boolean;
+    tips: string[];
+  }> => {
+    try {
+      const response = await api.post('/api/ai/regulatory/deadline-guidance', { deadline: deadlineData });
+      return response.data.guidance;
+    } catch (error) {
+      console.error('Deadline guidance error:', error);
+      return { urgency_level: 'unknown', preparation_checklist: [], common_errors_to_avoid: [], late_filing_penalty: '', extension_available: false, tips: [] };
+    }
+  },
+
+  explainTaxForm: async (formType: string, formData?: Record<string, any>): Promise<string> => {
+    try {
+      const response = await api.post('/api/ai/regulatory/explain-form', { form_type: formType, form_data: formData });
+      return response.data.explanation;
+    } catch (error) {
+      console.error('Tax form explanation error:', error);
+      return 'Unable to explain this form. Please consult a tax professional.';
+    }
+  },
+
+  analyzeDepositSchedule: async (payrollData: Record<string, any>): Promise<{
+    required_deposit: number;
+    deposit_due_date: string;
+    deposit_rule_applied: string;
+    rule_explanation: string;
+    penalty_if_late: string;
+    recommended_actions: string[];
+  }> => {
+    try {
+      const response = await api.post('/api/ai/regulatory/deposit-analysis', { payroll: payrollData });
+      return response.data.analysis;
+    } catch (error) {
+      console.error('Deposit analysis error:', error);
+      return { required_deposit: 0, deposit_due_date: '', deposit_rule_applied: '', rule_explanation: '', penalty_if_late: '', recommended_actions: [] };
+    }
+  },
+
+  analyze1099Readiness: async (contractorData: Record<string, any>): Promise<{
+    readiness_score: number;
+    ready_to_file: boolean;
+    blockers: string[];
+    filing_checklist: Array<{ item: string; status: string }>;
+    penalty_risk: string;
+    recommendations: string[];
+  }> => {
+    try {
+      const response = await api.post('/api/ai/regulatory/1099-readiness', { contractors: contractorData });
+      return response.data.analysis;
+    } catch (error) {
+      console.error('1099 readiness error:', error);
+      return { readiness_score: 0, ready_to_file: false, blockers: [], filing_checklist: [], penalty_risk: '', recommendations: [] };
+    }
+  },
+
+  // ===========================================================================
+  // Document Intelligence
+  // ===========================================================================
+
+  analyzeDocument: async (documentData: Record<string, any>): Promise<{
+    document_type: string;
+    confidence: number;
+    suggested_category: string;
+    extracted_data: Record<string, any>;
+    requires_review: boolean;
+    compliance_relevant: boolean;
+    retention_period: string;
+    action_items: string[];
+  }> => {
+    try {
+      const response = await api.post('/api/ai/document/analyze', { document: documentData });
+      return response.data.analysis;
+    } catch (error) {
+      console.error('Document analysis error:', error);
+      return { document_type: 'unknown', confidence: 0, suggested_category: '', extracted_data: {}, requires_review: true, compliance_relevant: false, retention_period: '', action_items: [] };
+    }
+  },
+
+  extractReceiptData: async (receiptData: Record<string, any>): Promise<{
+    vendor_name: string;
+    date: string;
+    total_amount: number;
+    expense_category: string;
+    tax_deductible: boolean;
+    line_items: Array<{ description: string; amount: number }>;
+    confidence: number;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/document/extract-receipt', { receipt: receiptData });
+      return response.data.extraction;
+    } catch (error) {
+      console.error('Receipt extraction error:', error);
+      return { vendor_name: '', date: '', total_amount: 0, expense_category: '', tax_deductible: false, line_items: [], confidence: 0 };
+    }
+  },
+
+  classifyDocument: async (documentInfo: Record<string, any>): Promise<{
+    primary_category: string;
+    confidence: number;
+    is_tax_document: boolean;
+    is_pii_sensitive: boolean;
+    suggested_tags: string[];
+    auto_categorize: boolean;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/document/classify', { document: documentInfo });
+      return response.data.classification;
+    } catch (error) {
+      console.error('Document classification error:', error);
+      return { primary_category: 'personal', confidence: 0, is_tax_document: false, is_pii_sensitive: false, suggested_tags: [], auto_categorize: false };
+    }
+  },
+
+  // ===========================================================================
+  // Contractor Expense Intelligence
+  // ===========================================================================
+
+  analyzeContractorExpenses: async (expenseData: Record<string, any>): Promise<{
+    deduction_optimization_score: number;
+    potential_missed_deductions: Array<{ category: string; estimated_amount: number; description: string }>;
+    audit_risk_areas: string[];
+    documentation_gaps: string[];
+    tax_savings_potential: number;
+    recommendations: Array<{ action: string; priority: string; tax_impact: string }>;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/contractor/expense-analysis', { expenses: expenseData });
+      return response.data.analysis;
+    } catch (error) {
+      console.error('Contractor expense analysis error:', error);
+      return { deduction_optimization_score: 0, potential_missed_deductions: [], audit_risk_areas: [], documentation_gaps: [], tax_savings_potential: 0, recommendations: [] };
+    }
+  },
+
+  // ===========================================================================
+  // Payroll Optimization Intelligence
+  // ===========================================================================
+
+  optimizePayrollRun: async (payrollData: Record<string, any>): Promise<{
+    optimization_score: number;
+    cost_saving_opportunities: Array<{ area: string; potential_savings: number; action: string }>;
+    compliance_flags: string[];
+    efficiency_recommendations: string[];
+    tax_efficiency_score: number;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/payroll/optimize', { payroll: payrollData });
+      return response.data.optimization;
+    } catch (error) {
+      console.error('Payroll optimization error:', error);
+      return { optimization_score: 0, cost_saving_opportunities: [], compliance_flags: [], efficiency_recommendations: [], tax_efficiency_score: 0 };
+    }
+  },
+
+  analyzeLaborCosts: async (laborData: Record<string, any>): Promise<{
+    efficiency_score: number;
+    labor_cost_rating: string;
+    benchmark_comparison: { your_ratio: number; industry_avg: number; status: string };
+    cost_drivers: Array<{ factor: string; impact: string; controllable: boolean }>;
+    reduction_opportunities: Array<{ area: string; potential_savings: number; risk: string }>;
+    forecasted_costs_next_quarter: number;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/payroll/labor-analysis', { labor: laborData });
+      return response.data.analysis;
+    } catch (error) {
+      console.error('Labor cost analysis error:', error);
+      return { efficiency_score: 0, labor_cost_rating: 'unknown', benchmark_comparison: { your_ratio: 0, industry_avg: 0, status: '' }, cost_drivers: [], reduction_opportunities: [], forecasted_costs_next_quarter: 0 };
+    }
+  },
+
+  // ===========================================================================
+  // Employee Self-Service Intelligence
+  // ===========================================================================
+
+  analyzePortalEngagement: async (usageData: Record<string, any>): Promise<{
+    engagement_score: number;
+    adoption_status: string;
+    hr_time_saved_hours: number;
+    cost_savings_monthly: number;
+    underutilized_features: string[];
+    engagement_recommendations: Array<{ action: string; expected_impact: string }>;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/employee/portal-engagement', { usage: usageData });
+      return response.data.analysis;
+    } catch (error) {
+      console.error('Portal engagement error:', error);
+      return { engagement_score: 0, adoption_status: 'unknown', hr_time_saved_hours: 0, cost_savings_monthly: 0, underutilized_features: [], engagement_recommendations: [] };
+    }
+  },
+
+  personalizeEmployeeDashboard: async (employeeData: Record<string, any>): Promise<{
+    priority_actions: Array<{ action: string; reason: string; link: string }>;
+    personalized_insights: string[];
+    financial_tips: string[];
+    upcoming_deadlines: Array<{ item: string; date: string }>;
+    recommended_features: string[];
+    wellness_score: number;
+  }> => {
+    try {
+      const response = await api.post('/api/ai/employee/personalized-dashboard', { employee: employeeData });
+      return response.data.recommendations;
+    } catch (error) {
+      console.error('Dashboard personalization error:', error);
+      return { priority_actions: [], personalized_insights: [], financial_tips: [], upcoming_deadlines: [], recommended_features: [], wellness_score: 0 };
+    }
+  },
+
+  // ===========================================================================
+  // Onboarding Intelligence
+  // ===========================================================================
+
+  analyzeOnboardingProgress: async (onboardingData: Record<string, any>): Promise<{
+    onboarding_health: string;
+    estimated_completion: string;
+    bottleneck_analysis: Array<{ step: string; issue: string; resolution: string }>;
+    priority_items: string[];
+    compliance_status: { i9_compliant: boolean; w4_compliant: boolean; state_forms: boolean };
+    new_hire_reporting_status: string;
+    recommendations: string[];
+  }> => {
+    try {
+      const response = await api.post('/api/ai/onboarding/analyze', { onboarding: onboardingData });
+      return response.data.analysis;
+    } catch (error) {
+      console.error('Onboarding analysis error:', error);
+      return { onboarding_health: 'unknown', estimated_completion: '', bottleneck_analysis: [], priority_items: [], compliance_status: { i9_compliant: false, w4_compliant: false, state_forms: false }, new_hire_reporting_status: '', recommendations: [] };
+    }
+  },
+
+  // ===========================================================================
   // Universal Assistant
   // ===========================================================================
 
