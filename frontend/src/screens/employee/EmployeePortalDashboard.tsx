@@ -179,17 +179,17 @@ export default function EmployeePortalDashboard() {
           <QuickAction
             icon="time"
             label="Request PTO"
-            onPress={() => navigation.navigate('RequestPTO' as never)}
+            onPress={() => navigation.navigate('PTO' as never)}
           />
           <QuickAction
             icon="card"
             label="Direct Deposit"
-            onPress={() => navigation.navigate('DirectDeposit' as never)}
+            onPress={() => navigation.navigate('Settings' as never)}
           />
           <QuickAction
             icon="receipt"
             label="Tax Documents"
-            onPress={() => navigation.navigate('TaxDocuments' as never)}
+            onPress={() => navigation.navigate('TaxCenter' as never)}
           />
           <QuickAction
             icon="heart"
@@ -246,7 +246,7 @@ export default function EmployeePortalDashboard() {
       {dashboard?.notifications && dashboard.notifications.filter(n => !n.read).length > 0 && (
         <TouchableOpacity
           style={styles.notificationBanner}
-          onPress={() => navigation.navigate('Notifications' as never)}
+          onPress={() => navigation.navigate('Messages' as never)}
         >
           <Ionicons name="notifications" size={24} color="white" />
           <Text style={styles.notificationBannerText}>

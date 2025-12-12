@@ -149,7 +149,7 @@ export default function ContractorPortalDashboard() {
       {!dashboard?.onboarding_complete && (
         <TouchableOpacity
           style={styles.alertBanner}
-          onPress={() => navigation.navigate('ContractorOnboarding' as never)}
+          onPress={() => navigation.navigate('Onboarding' as never)}
         >
           <Ionicons name="alert-circle" size={24} color="#F59E0B" />
           <View style={styles.alertContent}>
@@ -170,7 +170,7 @@ export default function ContractorPortalDashboard() {
           subtitle={`${stats?.outstanding_invoices || 0} invoices`}
           icon="receipt"
           color={colors.status.warning}
-          onPress={() => navigation.navigate('Invoices' as never)}
+          onPress={() => navigation.navigate('Paystubs' as never)}
         />
         <StatCard
           title="Clients"
@@ -178,7 +178,7 @@ export default function ContractorPortalDashboard() {
           subtitle="Active clients"
           icon="people"
           color={colors.primary.blue}
-          onPress={() => navigation.navigate('Clients' as never)}
+          onPress={() => navigation.navigate('Employees' as never)}
         />
         <StatCard
           title="Draft Invoices"
@@ -186,7 +186,7 @@ export default function ContractorPortalDashboard() {
           subtitle="Ready to send"
           icon="document-text"
           color={colors.primary.purple}
-          onPress={() => navigation.navigate('Invoices' as never)}
+          onPress={() => navigation.navigate('Paystubs' as never)}
         />
         <StatCard
           title="W-9 Status"
@@ -194,7 +194,7 @@ export default function ContractorPortalDashboard() {
           subtitle={dashboard?.w9_status === 'complete' ? 'Complete' : 'Required'}
           icon="document-attach"
           color={dashboard?.w9_status === 'complete' ? colors.status.success : colors.status.error}
-          onPress={() => navigation.navigate('W9Form' as never)}
+          onPress={() => navigation.navigate('Compliance' as never)}
         />
       </View>
 
@@ -205,19 +205,19 @@ export default function ContractorPortalDashboard() {
           <QuickAction
             icon="add-circle"
             label="New Invoice"
-            onPress={() => navigation.navigate('CreateInvoice' as never)}
+            onPress={() => navigation.navigate('GeneratePaystub' as never)}
             color={colors.status.success}
           />
           <QuickAction
             icon="receipt"
             label="Log Expense"
-            onPress={() => navigation.navigate('AddExpense' as never)}
+            onPress={() => navigation.navigate('Accounting' as never)}
             color={colors.primary.purple}
           />
           <QuickAction
             icon="car"
             label="Log Mileage"
-            onPress={() => navigation.navigate('LogMileage' as never)}
+            onPress={() => navigation.navigate('Accounting' as never)}
             color={colors.primary.blue}
           />
           <QuickAction
@@ -229,12 +229,12 @@ export default function ContractorPortalDashboard() {
           <QuickAction
             icon="document-text"
             label="1099 Forms"
-            onPress={() => navigation.navigate('Form1099' as never)}
+            onPress={() => navigation.navigate('TaxCenter' as never)}
           />
           <QuickAction
             icon="person"
             label="Profile"
-            onPress={() => navigation.navigate('ContractorProfile' as never)}
+            onPress={() => navigation.navigate('Profile' as never)}
           />
         </View>
       </View>
@@ -243,7 +243,7 @@ export default function ContractorPortalDashboard() {
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Recent Invoices</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Invoices' as never)}>
+          <TouchableOpacity onPress={() => navigation.navigate('Paystubs' as never)}>
             <Text style={styles.seeAllText}>See All</Text>
           </TouchableOpacity>
         </View>
@@ -276,7 +276,7 @@ export default function ContractorPortalDashboard() {
             <Text style={styles.emptyText}>No invoices yet</Text>
             <TouchableOpacity
               style={styles.createButton}
-              onPress={() => navigation.navigate('CreateInvoice' as never)}
+              onPress={() => navigation.navigate('GeneratePaystub' as never)}
             >
               <Text style={styles.createButtonText}>Create First Invoice</Text>
             </TouchableOpacity>
@@ -288,7 +288,7 @@ export default function ContractorPortalDashboard() {
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Recent Payments</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Payments' as never)}>
+          <TouchableOpacity onPress={() => navigation.navigate('Wallet' as never)}>
             <Text style={styles.seeAllText}>See All</Text>
           </TouchableOpacity>
         </View>
