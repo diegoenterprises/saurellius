@@ -48,7 +48,7 @@ from .cobra_routes import cobra_bp
 from .tax_engine_v2_routes import tax_engine_v2_bp
 
 # Self-Service Routes
-from .employer_registration_routes import employer_reg_bp
+from .employer_registration_routes import employer_registration_bp
 from .employee_onboarding_routes import employee_onboarding_bp
 from .contractor_onboarding_routes import contractor_onboarding_bp
 from .employee_self_service_routes import employee_ss_bp
@@ -101,7 +101,7 @@ __all__ = [
     'cobra_bp',
     'tax_engine_v2_bp',
     # Self-Service
-    'employer_reg_bp',
+    'employer_registration_bp',
     'employee_onboarding_bp',
     'contractor_onboarding_bp',
     'employee_ss_bp',
