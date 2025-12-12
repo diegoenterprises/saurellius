@@ -3,7 +3,7 @@
 
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from ..services.tax_auto_updater_service import tax_auto_updater
+from services.tax_auto_updater_service import tax_auto_updater
 
 tax_updater_bp = Blueprint('tax_updater', __name__)
 
