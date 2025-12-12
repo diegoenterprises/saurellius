@@ -13,7 +13,10 @@ import {
   Switch,
   Alert,
   Image,
+  Platform,
+  ActivityIndicator,
 } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -46,8 +49,63 @@ const SettingsScreen: React.FC = () => {
   const userInitials = `${user?.first_name?.[0] || 'U'}${user?.last_name?.[0] || ''}`.toUpperCase();
 
   const pickImage = async () => {
-    // Profile picture upload - coming soon
-    Alert.alert('Coming Soon', 'Profile picture upload will be available in the next update.');
+    try {
+      // Request permission
+      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      
+      if (!permissionResult.granted) {
+        Alert.alert('Permission Required', 'Please allow access to your photo library to upload a profile picture.');
+        return;
+      }
+
+      // Launch image picker
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.8,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        await uploadProfilePicture(result.assets[0].uri);
+      }
+    } catch (error) {
+      console.error('Image picker error:', error);
+      Alert.alert('Error', 'Failed to open image picker.');
+    }
+  };
+
+  const uploadProfilePicture = async (imageUri: string) => {
+    setIsUploading(true);
+    try {
+      // Create form data
+      const formData = new FormData();
+      const filename = imageUri.split('/').pop() || 'profile.jpg';
+      const match = /\.([\w]+)$/.exec(filename);
+      const type = match ? `image/${match[1]}` : 'image/jpeg';
+
+      formData.append('profile_picture', {
+        uri: Platform.OS === 'ios' ? imageUri.replace('file://', '') : imageUri,
+        name: filename,
+        type,
+      } as any);
+
+      const response = await api.post('/api/auth/profile-picture', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.data.success) {
+        dispatch(updateUser(response.data.user));
+        Alert.alert('Success', 'Profile picture updated!');
+      }
+    } catch (error: any) {
+      console.error('Upload error:', error);
+      Alert.alert('Error', error.response?.data?.message || 'Failed to upload profile picture.');
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const removeProfilePicture = async () => {
