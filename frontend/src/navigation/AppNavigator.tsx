@@ -31,6 +31,14 @@ import StandalonePaystubScreen from '../screens/paystubs/StandalonePaystubScreen
 import RewardsScreen from '../screens/rewards/RewardsScreen';
 import SettingsScreen from '../screens/settings/SettingsScreen';
 import ProfileScreen from '../screens/settings/ProfileScreen';
+import NotificationSettingsScreen from '../screens/settings/NotificationSettingsScreen';
+import LanguageSettingsScreen from '../screens/settings/LanguageSettingsScreen';
+import TimezoneSettingsScreen from '../screens/settings/TimezoneSettingsScreen';
+import PaymentMethodsScreen from '../screens/settings/PaymentMethodsScreen';
+import CompanyInfoScreen from '../screens/settings/CompanyInfoScreen';
+import ChangePasswordScreen from '../screens/settings/ChangePasswordScreen';
+import SecuritySettingsScreen from '../screens/settings/SecuritySettingsScreen';
+import HelpCenterScreen from '../screens/settings/HelpCenterScreen';
 import SubscriptionScreen from '../screens/subscription/SubscriptionScreen';
 import TimesheetScreen from '../screens/timesheet/TimesheetScreen';
 
@@ -107,6 +115,14 @@ export type RootStackParamList = {
   EmployeePortal: undefined;
   EmployeeOnboarding: undefined;
   ContractorPortal: undefined;
+  NotificationSettings: undefined;
+  LanguageSettings: undefined;
+  TimezoneSettings: undefined;
+  PaymentMethods: undefined;
+  CompanyInfo: undefined;
+  ChangePassword: undefined;
+  SecuritySettings: undefined;
+  HelpCenter: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -166,6 +182,14 @@ function MainStack() {
       <Stack.Screen name="EmployeePortal" component={EmployeePortalDashboard} />
       <Stack.Screen name="EmployeeOnboarding" component={OnboardingWizard} />
       <Stack.Screen name="ContractorPortal" component={ContractorPortalDashboard} />
+      <Stack.Screen name="NotificationSettings" component={NotificationSettingsScreen} />
+      <Stack.Screen name="LanguageSettings" component={LanguageSettingsScreen} />
+      <Stack.Screen name="TimezoneSettings" component={TimezoneSettingsScreen} />
+      <Stack.Screen name="PaymentMethods" component={PaymentMethodsScreen} />
+      <Stack.Screen name="CompanyInfo" component={CompanyInfoScreen} />
+      <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
+      <Stack.Screen name="SecuritySettings" component={SecuritySettingsScreen} />
+      <Stack.Screen name="HelpCenter" component={HelpCenterScreen} />
     </Stack.Navigator>
   );
 }

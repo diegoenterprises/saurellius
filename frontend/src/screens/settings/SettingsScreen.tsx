@@ -184,38 +184,35 @@ const SettingsScreen: React.FC = () => {
 
   const accountSettings: SettingItem[] = [
     { icon: 'person-outline', title: 'Profile', subtitle: 'Edit your personal information', type: 'link', onPress: () => navigation.navigate('Profile') },
-    { icon: 'card-outline', title: 'Payment Methods', subtitle: 'Manage your payment options', type: 'link', onPress: () => navigation.navigate('Subscription') },
-    { icon: 'business-outline', title: 'Company Info', subtitle: 'View company details', type: 'link', onPress: () => navigation.navigate('Compliance' as any) },
+    { icon: 'card-outline', title: 'Payment Methods', subtitle: 'Manage your payment options', type: 'link', onPress: () => navigation.navigate('PaymentMethods' as any) },
+    { icon: 'business-outline', title: 'Company Info', subtitle: 'View company details', type: 'link', onPress: () => navigation.navigate('CompanyInfo' as any) },
   ];
 
   const notificationSettings: SettingItem[] = [
-    { icon: 'notifications-outline', title: 'Push Notifications', type: 'toggle', value: notifications, onPress: () => setNotifications(!notifications) },
-    { icon: 'mail-outline', title: 'Email Alerts', type: 'toggle', value: emailAlerts, onPress: () => setEmailAlerts(!emailAlerts) },
+    { icon: 'notifications-outline', title: 'Notification Preferences', subtitle: 'Manage all notifications', type: 'link', onPress: () => navigation.navigate('NotificationSettings' as any) },
   ];
 
   const securitySettings: SettingItem[] = [
-    { icon: 'finger-print-outline', title: 'Biometric Login', subtitle: 'Use Face ID or Touch ID', type: 'toggle', value: biometrics, onPress: () => setBiometrics(!biometrics) },
-    { icon: 'lock-closed-outline', title: 'Change Password', type: 'link', onPress: () => Alert.alert('Change Password', 'Password change email sent to your registered email address.') },
-    { icon: 'shield-checkmark-outline', title: 'Two-Factor Auth', subtitle: 'Enabled', type: 'link', onPress: () => Alert.alert('Two-Factor Auth', 'Two-factor authentication is currently enabled for your account.') },
+    { icon: 'shield-checkmark-outline', title: 'Security Settings', subtitle: '2FA, login activity, sessions', type: 'link', onPress: () => navigation.navigate('SecuritySettings' as any) },
+    { icon: 'lock-closed-outline', title: 'Change Password', subtitle: 'Update your password', type: 'link', onPress: () => navigation.navigate('ChangePassword' as any) },
   ];
 
   const appSettings: SettingItem[] = [
     { icon: 'moon-outline', title: 'Dark Mode', type: 'toggle', value: darkMode, onPress: handleDarkModeToggle },
     { icon: 'time-outline', title: 'Auto Clock-Out', subtitle: 'Clock out at end of day', type: 'toggle', value: autoClockOut, onPress: () => setAutoClockOut(!autoClockOut) },
-    { icon: 'language-outline', title: 'Language', type: 'value', value: 'English' },
-    { icon: 'location-outline', title: 'Timezone', type: 'value', value: 'CST' },
+    { icon: 'language-outline', title: 'Language', subtitle: 'English', type: 'link', onPress: () => navigation.navigate('LanguageSettings' as any) },
+    { icon: 'location-outline', title: 'Timezone', subtitle: 'CST', type: 'link', onPress: () => navigation.navigate('TimezoneSettings' as any) },
   ];
 
   const supportSettings: SettingItem[] = [
-    { icon: 'help-circle-outline', title: 'Help Center', type: 'link', onPress: () => Alert.alert('Help Center', 'Visit help.saurellius.com for documentation and FAQs.') },
-    { icon: 'chatbubble-outline', title: 'Contact Support', type: 'link', onPress: () => Alert.alert('Contact Support', 'Email: support@saurellius.com\nPhone: 1-800-PAY-STUB') },
+    { icon: 'help-circle-outline', title: 'Help Center', subtitle: 'FAQs and support', type: 'link', onPress: () => navigation.navigate('HelpCenter' as any) },
     { icon: 'document-text-outline', title: 'Terms of Service', type: 'link', onPress: () => navigation.navigate('TermsConditions') },
     { icon: 'shield-outline', title: 'Privacy Policy', type: 'link', onPress: () => navigation.navigate('PrivacyPolicy') },
   ];
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      <LinearGradient colors={['#1473FF', '#BE01FF']} style={styles.header}>
+      <LinearGradient colors={['#0F172A', '#1E293B']} style={styles.header}>
         <View style={styles.headerRow}>
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" size={24} color="#fff" />

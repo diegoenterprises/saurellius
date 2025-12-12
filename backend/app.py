@@ -176,6 +176,10 @@ def create_app(config_name='default'):
     from routes.admin_support_routes import admin_support_bp
     app.register_blueprint(admin_support_bp)
     
+    # Settings Routes
+    from routes.settings_routes import settings_bp
+    app.register_blueprint(settings_bp)
+    
     # Initialize Tax Update Scheduler
     from services.scheduler_service import init_scheduler
     init_scheduler(app)

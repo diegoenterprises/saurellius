@@ -62,6 +62,9 @@ from .regulatory_filing_routes import regulatory_bp
 from .admin_metrics_routes import admin_metrics_bp
 from .admin_support_routes import admin_support_bp
 
+# Settings Routes
+from .settings_routes import settings_bp
+
 __all__ = [
     # Core
     'auth_bp',
@@ -116,4 +119,6 @@ __all__ = [
     # Admin Platform
     'admin_metrics_bp',
     'admin_support_bp',
+    # Settings
+    'settings_bp',
 ]
