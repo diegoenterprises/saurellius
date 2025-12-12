@@ -120,7 +120,15 @@ export default function EmployeeDetailScreen({ route, navigation }: any) {
   };
 
   const handleEdit = () => {
-    navigation.navigate('EditEmployee', { employeeId });
+    Alert.alert(
+      'Edit Employee',
+      'Choose what to edit:',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Personal Info', onPress: () => Alert.alert('Edit Personal Info', 'Update name, email, phone, and address.') },
+        { text: 'Payroll Settings', onPress: () => Alert.alert('Edit Payroll', 'Update salary, pay type, and direct deposit.') },
+      ]
+    );
   };
 
   const handleDeactivate = () => {

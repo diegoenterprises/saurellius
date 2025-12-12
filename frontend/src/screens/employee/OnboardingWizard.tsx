@@ -225,7 +225,7 @@ export default function OnboardingWizard() {
                 Alert.alert(
                   'Success!',
                   'Your onboarding has been submitted. Your employer will review your information.',
-                  [{ text: 'OK', onPress: () => navigation.navigate('EmployeeDashboard' as never) }]
+                  [{ text: 'OK', onPress: () => navigation.navigate('EmployeePortal' as never) }]
                 );
               }
             } catch (error) {
