@@ -133,13 +133,13 @@ def create_app(config_name='default'):
     app.register_blueprint(tax_engine_v2_bp)
     
     # Production Activation - Self-Service Modules
-    from routes.employer_registration_routes import employer_reg_bp
+    from routes.employer_registration_routes import employer_registration_bp
     from routes.employee_onboarding_routes import employee_onboarding_bp
     from routes.contractor_onboarding_routes import contractor_onboarding_bp
     from routes.employee_self_service_routes import employee_ss_bp
     from routes.contractor_self_service_routes import contractor_ss_bp
     
-    app.register_blueprint(employer_reg_bp)
+    app.register_blueprint(employer_registration_bp)
     app.register_blueprint(employee_onboarding_bp)
     app.register_blueprint(contractor_onboarding_bp)
     app.register_blueprint(employee_ss_bp)
@@ -147,10 +147,10 @@ def create_app(config_name='default'):
     
     # Talent & Employee Experience Routes
     from routes.talent_routes import talent_bp
-    from routes.employee_experience_routes import employee_experience_bp
+    from routes.employee_experience_routes import employee_exp_bp
     
     app.register_blueprint(talent_bp)
-    app.register_blueprint(employee_experience_bp)
+    app.register_blueprint(employee_exp_bp)
     
     # Document Management Routes
     from routes.document_routes import document_bp
