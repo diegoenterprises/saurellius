@@ -61,13 +61,19 @@ export default function Header() {
         <View style={styles.userMenu}>
           <TouchableOpacity 
             style={styles.iconButton}
-            onPress={() => setShowNotifications(!showNotifications)}
+            onPress={() => {
+              setShowNotifications(!showNotifications);
+              setShowUserMenu(false);
+            }}
           >
             <Ionicons name="notifications-outline" size={20} color="#fff" />
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.avatar}
-            onPress={() => setShowUserMenu(!showUserMenu)}
+            onPress={() => {
+              setShowUserMenu(!showUserMenu);
+              setShowNotifications(false);
+            }}
           >
             <Text style={styles.avatarText}>{initials}</Text>
           </TouchableOpacity>
@@ -216,7 +222,7 @@ const styles = StyleSheet.create({
     zIndex: 99999,
   },
   notificationsDropdown: {
-    right: 50,
+    right: 52,
     minWidth: 280,
   },
   dropdownHeader: {
