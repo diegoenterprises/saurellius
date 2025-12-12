@@ -116,9 +116,11 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
       {/* Logo Header */}
       <View style={styles.header}>
         <View style={styles.logoContainer}>
-          <View style={styles.logoIcon}>
-            <Text style={styles.logoText}>S</Text>
-          </View>
+          <Image
+            source={require('../../../assets/logo-icon.png')}
+            style={styles.logoImage}
+            resizeMode="contain"
+          />
           <View style={styles.logoTextContainer}>
             <Text style={styles.brandName}>SAURELLIUS</Text>
             <Text style={styles.brandTagline}>Cloud Payroll</Text>
@@ -223,6 +225,11 @@ const styles = StyleSheet.create({
   logoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  logoImage: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
   },
   logoIcon: {
     width: 44,

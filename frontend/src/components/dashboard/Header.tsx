@@ -38,37 +38,13 @@ export default function Header() {
   return (
     <View style={styles.nav}>
       <View style={styles.navContainer}>
-        {/* Menu Button + Logo */}
-        <View style={styles.logoSection}>
+        {/* Menu Button - shows on mobile/tablet to open drawer */}
+        <View style={styles.leftSection}>
           {!isLargeScreen && (
             <TouchableOpacity style={styles.menuButton} onPress={openDrawer}>
               <Ionicons name="menu" size={24} color="#fff" />
             </TouchableOpacity>
           )}
-          <View style={styles.logo}>
-            <Image
-              source={require('../../../assets/logo-icon.png')}
-              style={styles.logoImage}
-              resizeMode="contain"
-            />
-            <Text style={styles.logoText}>Saurellius</Text>
-          </View>
-        </View>
-
-        {/* Nav Links - Desktop only */}
-        <View style={styles.navLinks}>
-          <TouchableOpacity style={styles.navLinkActive}>
-            <Text style={styles.navLinkTextActive}>Dashboard</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.navLink}>
-            <Text style={styles.navLinkText}>Employees</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.navLink}>
-            <Text style={styles.navLinkText}>Reports</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.navLink}>
-            <Text style={styles.navLinkText}>Settings</Text>
-          </TouchableOpacity>
         </View>
 
         {/* User Menu */}
@@ -160,6 +136,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
+  },
+  leftSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   menuButton: {
     width: 40,
