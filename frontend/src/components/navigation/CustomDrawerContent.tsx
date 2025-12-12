@@ -16,6 +16,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { useNavigation, CommonActions } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 
 const COLORS = {
   background: '#0F172A',
@@ -101,6 +103,12 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
   const [activeScreen, setActiveScreen] = useState('Dashboard');
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
+  const { user } = useSelector((state: RootState) => state.auth);
+  
+  // Get user display info
+  const userName = user ? `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'User' : 'User';
+  const userEmail = user?.email || '';
+  const userInitials = `${user?.first_name?.[0] || 'U'}${user?.last_name?.[0] || ''}`.toUpperCase();
 
   const handleNavigation = (screen: string) => {
     setActiveScreen(screen);
@@ -199,11 +207,11 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
           onPress={() => handleNavigation('Profile')}
         >
           <View style={styles.userAvatar}>
-            <Text style={styles.userAvatarText}>JD</Text>
+            <Text style={styles.userAvatarText}>{userInitials}</Text>
           </View>
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>John Doe</Text>
-            <Text style={styles.userEmail}>john@company.com</Text>
+            <Text style={styles.userName}>{userName}</Text>
+            <Text style={styles.userEmail}>{userEmail}</Text>
           </View>
           <Ionicons name="chevron-forward" size={16} color={COLORS.textMuted} />
         </TouchableOpacity>
