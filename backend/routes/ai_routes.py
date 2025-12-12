@@ -280,29 +280,6 @@ def natural_query():
 
 
 # =============================================================================
-#  DOCUMENT ANALYSIS
-# =============================================================================
-
-@ai_bp.route('/api/ai/document/analyze', methods=['POST'])
-@jwt_required()
-def analyze_document():
-    """AI-powered document analysis."""
-    data = request.get_json()
-    document_text = data.get('document_text', '')
-    doc_type = data.get('doc_type', 'unknown')
-    
-    if not document_text:
-        return jsonify({'success': False, 'message': 'Document text is required'}), 400
-    
-    result = saurellius_ai.analyze_uploaded_document(document_text, doc_type)
-    
-    return jsonify({
-        'success': True,
-        'analysis': result
-    }), 200
-
-
-# =============================================================================
 #  RECOMMENDATIONS
 # =============================================================================
 
