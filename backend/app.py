@@ -156,6 +156,10 @@ def create_app(config_name='default'):
     from routes.document_routes import document_bp
     app.register_blueprint(document_bp)
     
+    # Regulatory Filing Routes
+    from routes.regulatory_filing_routes import regulatory_bp
+    app.register_blueprint(regulatory_bp)
+    
     # Initialize Tax Update Scheduler
     from services.scheduler_service import init_scheduler
     init_scheduler(app)

@@ -45,6 +45,9 @@ from .contractor_self_service import ContractorSelfServiceManager, contractor_se
 # Document Storage
 from .document_storage_service import DocumentStorageService, document_storage
 
+# Regulatory Filing
+from .regulatory_filing_service import RegulatoryFilingService, regulatory_filing_service
+
 __all__ = [
     # Core
     'WeatherService',
@@ -116,4 +119,7 @@ __all__ = [
     # Document Storage
     'DocumentStorageService',
     'document_storage',
+    # Regulatory Filing
+    'RegulatoryFilingService',
+    'regulatory_filing_service',
 ]
