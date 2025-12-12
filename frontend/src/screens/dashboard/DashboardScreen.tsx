@@ -1,6 +1,6 @@
 /**
  * DASHBOARD SCREEN
- * Matches the dashboard.html design with hero, stats, employees, rewards
+ * Routes to Admin Dashboard for platform admins, regular dashboard for others
  */
 
 import React, { useEffect } from 'react';
@@ -33,6 +33,9 @@ import ActivityItem from '../../components/dashboard/ActivityItem';
 import SubscriptionCard from '../../components/dashboard/SubscriptionCard';
 import AIInsightsCard from '../../components/ai/AIInsightsCard';
 import WeatherWidget from '../../components/dashboard/WeatherWidget';
+
+// Admin Dashboard for platform owners
+import AdminDashboard from '../admin/AdminDashboard';
 
 type DashboardNavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -67,6 +70,11 @@ export default function DashboardScreen() {
   const isAdmin = user?.is_admin === true;
   const userRole = (user as any)?.role || 'employee';
   const isEmployer = userRole === 'admin' || userRole === 'employer' || userRole === 'manager' || isAdmin;
+
+  // If user is platform admin, show the admin dashboard
+  if (isAdmin) {
+    return <AdminDashboard />;
+  }
 
   // Responsive design
   const { isMobile, isTablet, isDesktop, horizontalPadding, gridColumns } = useResponsive();
