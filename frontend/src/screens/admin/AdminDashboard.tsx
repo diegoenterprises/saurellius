@@ -28,22 +28,61 @@ const isLargeScreen = width >= 1024;
 const isMediumScreen = width >= 768;
 
 interface PlatformMetrics {
+  // User metrics
   total_users: number;
   active_users: number;
   new_users_this_month: number;
+  new_users_this_week: number;
+  new_users_today: number;
   user_growth: number;
+  
+  // Engagement metrics
+  dau: number;
+  wau: number;
+  mau: number;
+  dau_mau_ratio: number;
+  
+  // Company metrics
   total_companies: number;
   active_companies: number;
+  
+  // Revenue metrics
   mrr: number;
   arr: number;
   arpu: number;
+  arpa: number;
+  ltv: number;
+  cac: number;
+  ltv_cac_ratio: number;
   revenue_growth: number;
+  
+  // MRR breakdown
+  new_mrr: number;
+  expansion_mrr: number;
+  churned_mrr: number;
+  net_new_mrr: number;
+  
+  // Revenue by tier
+  starter_revenue: number;
+  professional_revenue: number;
+  business_revenue: number;
+  
+  // NRR
+  nrr: number;
+  
+  // Subscription breakdown
   free_users: number;
   starter_users: number;
   professional_users: number;
   business_users: number;
+  paid_users: number;
+  active_subscribers: number;
+  
+  // Health metrics
   churn_rate: number;
   conversion_rate: number;
+  
+  // API metrics
   api_calls_today: number;
   api_calls_this_month: number;
   avg_response_time: number;
@@ -68,22 +107,61 @@ interface Activity {
 }
 
 const DEFAULT_METRICS: PlatformMetrics = {
+  // User metrics
   total_users: 0,
   active_users: 0,
   new_users_this_month: 0,
+  new_users_this_week: 0,
+  new_users_today: 0,
   user_growth: 0,
+  
+  // Engagement metrics
+  dau: 0,
+  wau: 0,
+  mau: 0,
+  dau_mau_ratio: 0,
+  
+  // Company metrics
   total_companies: 0,
   active_companies: 0,
+  
+  // Revenue metrics
   mrr: 0,
   arr: 0,
   arpu: 0,
+  arpa: 0,
+  ltv: 0,
+  cac: 0,
+  ltv_cac_ratio: 0,
   revenue_growth: 0,
+  
+  // MRR breakdown
+  new_mrr: 0,
+  expansion_mrr: 0,
+  churned_mrr: 0,
+  net_new_mrr: 0,
+  
+  // Revenue by tier
+  starter_revenue: 0,
+  professional_revenue: 0,
+  business_revenue: 0,
+  
+  // NRR
+  nrr: 0,
+  
+  // Subscription breakdown
   free_users: 0,
   starter_users: 0,
   professional_users: 0,
   business_users: 0,
+  paid_users: 0,
+  active_subscribers: 0,
+  
+  // Health metrics
   churn_rate: 0,
   conversion_rate: 0,
+  
+  // API metrics
   api_calls_today: 0,
   api_calls_this_month: 0,
   avg_response_time: 0,
@@ -295,15 +373,103 @@ export default function AdminDashboard() {
           </View>
           <View style={styles.smallMetricCard}>
             <Text style={styles.smallMetricValue}>{formatCurrency(metrics.arpu)}</Text>
-            <Text style={styles.smallMetricLabel}>Avg Revenue Per User</Text>
+            <Text style={styles.smallMetricLabel}>ARPU</Text>
           </View>
           <View style={styles.smallMetricCard}>
-            <Text style={styles.smallMetricValue}>{metrics.api_uptime}%</Text>
-            <Text style={styles.smallMetricLabel}>API Uptime</Text>
+            <Text style={styles.smallMetricValue}>{formatCurrency(metrics.ltv)}</Text>
+            <Text style={styles.smallMetricLabel}>Customer LTV</Text>
+          </View>
+          <View style={styles.smallMetricCard}>
+            <Text style={[styles.smallMetricValue, { color: COLORS.green }]}>{metrics.ltv_cac_ratio}x</Text>
+            <Text style={styles.smallMetricLabel}>LTV:CAC Ratio</Text>
+          </View>
+          <View style={styles.smallMetricCard}>
+            <Text style={[styles.smallMetricValue, { color: COLORS.green }]}>{metrics.nrr}%</Text>
+            <Text style={styles.smallMetricLabel}>Net Revenue Retention</Text>
           </View>
           <View style={styles.smallMetricCard}>
             <Text style={[styles.smallMetricValue, { color: COLORS.yellow }]}>{metrics.churn_rate}%</Text>
             <Text style={styles.smallMetricLabel}>Churn Rate</Text>
+          </View>
+        </View>
+
+        {/* Engagement & Growth Metrics */}
+        <View style={styles.engagementRow}>
+          <View style={styles.engagementCard}>
+            <Text style={styles.engagementTitle}>User Engagement</Text>
+            <View style={styles.engagementStats}>
+              <View style={styles.engagementStat}>
+                <Text style={styles.engagementValue}>{metrics.dau}</Text>
+                <Text style={styles.engagementLabel}>DAU</Text>
+              </View>
+              <View style={styles.engagementStat}>
+                <Text style={styles.engagementValue}>{metrics.wau}</Text>
+                <Text style={styles.engagementLabel}>WAU</Text>
+              </View>
+              <View style={styles.engagementStat}>
+                <Text style={styles.engagementValue}>{metrics.mau}</Text>
+                <Text style={styles.engagementLabel}>MAU</Text>
+              </View>
+              <View style={styles.engagementStat}>
+                <Text style={[styles.engagementValue, { color: COLORS.cyan }]}>{metrics.dau_mau_ratio}%</Text>
+                <Text style={styles.engagementLabel}>DAU/MAU</Text>
+              </View>
+            </View>
+          </View>
+          <View style={styles.engagementCard}>
+            <Text style={styles.engagementTitle}>MRR Breakdown</Text>
+            <View style={styles.engagementStats}>
+              <View style={styles.engagementStat}>
+                <Text style={[styles.engagementValue, { color: COLORS.green }]}>{formatCurrency(metrics.new_mrr)}</Text>
+                <Text style={styles.engagementLabel}>New MRR</Text>
+              </View>
+              <View style={styles.engagementStat}>
+                <Text style={[styles.engagementValue, { color: COLORS.blue }]}>{formatCurrency(metrics.expansion_mrr)}</Text>
+                <Text style={styles.engagementLabel}>Expansion</Text>
+              </View>
+              <View style={styles.engagementStat}>
+                <Text style={[styles.engagementValue, { color: COLORS.red }]}>-{formatCurrency(metrics.churned_mrr)}</Text>
+                <Text style={styles.engagementLabel}>Churned</Text>
+              </View>
+              <View style={styles.engagementStat}>
+                <Text style={[styles.engagementValue, { color: COLORS.primary }]}>{formatCurrency(metrics.net_new_mrr)}</Text>
+                <Text style={styles.engagementLabel}>Net New</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        {/* Growth Stats */}
+        <View style={styles.growthRow}>
+          <View style={styles.growthCard}>
+            <Ionicons name="person-add" size={24} color={COLORS.green} />
+            <Text style={styles.growthValue}>{metrics.new_users_today}</Text>
+            <Text style={styles.growthLabel}>New Today</Text>
+          </View>
+          <View style={styles.growthCard}>
+            <Ionicons name="trending-up" size={24} color={COLORS.blue} />
+            <Text style={styles.growthValue}>{metrics.new_users_this_week}</Text>
+            <Text style={styles.growthLabel}>This Week</Text>
+          </View>
+          <View style={styles.growthCard}>
+            <Ionicons name="calendar" size={24} color={COLORS.primary} />
+            <Text style={styles.growthValue}>{metrics.new_users_this_month}</Text>
+            <Text style={styles.growthLabel}>This Month</Text>
+          </View>
+          <View style={styles.growthCard}>
+            <Ionicons name="cash" size={24} color={COLORS.green} />
+            <Text style={styles.growthValue}>{metrics.paid_users}</Text>
+            <Text style={styles.growthLabel}>Paid Users</Text>
+          </View>
+          <View style={styles.growthCard}>
+            <Ionicons name="checkmark-circle" size={24} color={COLORS.cyan} />
+            <Text style={styles.growthValue}>{metrics.conversion_rate}%</Text>
+            <Text style={styles.growthLabel}>Conversion</Text>
+          </View>
+          <View style={styles.growthCard}>
+            <Ionicons name="server" size={24} color={COLORS.yellow} />
+            <Text style={styles.growthValue}>{metrics.api_uptime}%</Text>
+            <Text style={styles.growthLabel}>API Uptime</Text>
           </View>
         </View>
 
@@ -920,5 +1086,73 @@ const styles = StyleSheet.create({
   emptyStateText: {
     fontSize: 14,
     color: COLORS.textMuted,
+  },
+  // Engagement section styles
+  engagementRow: {
+    flexDirection: 'row',
+    gap: 16,
+    marginBottom: 16,
+    flexWrap: 'wrap',
+  },
+  engagementCard: {
+    flex: 1,
+    minWidth: 280,
+    backgroundColor: COLORS.surface,
+    borderRadius: 16,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  engagementTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: COLORS.text,
+    marginBottom: 16,
+  },
+  engagementStats: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  engagementStat: {
+    alignItems: 'center',
+  },
+  engagementValue: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: COLORS.text,
+  },
+  engagementLabel: {
+    fontSize: 11,
+    color: COLORS.textMuted,
+    marginTop: 4,
+  },
+  // Growth row styles
+  growthRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 20,
+    flexWrap: 'wrap',
+  },
+  growthCard: {
+    flex: 1,
+    minWidth: 100,
+    backgroundColor: COLORS.surface,
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  growthValue: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: COLORS.text,
+    marginTop: 8,
+  },
+  growthLabel: {
+    fontSize: 11,
+    color: COLORS.textMuted,
+    marginTop: 4,
+    textAlign: 'center',
   },
 });

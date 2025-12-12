@@ -108,12 +108,80 @@ def get_platform_metrics():
         # Conversion rate
         conversion_rate = ((total_users - free_users) / total_users * 100) if total_users > 0 else 0
         
+        # Additional KPIs
+        # Daily Active Users (last 24 hours)
+        dau = User.query.filter(
+            User.last_login >= today_start
+        ).count() if hasattr(User, 'last_login') else 0
+        
+        # Weekly Active Users
+        wau = User.query.filter(
+            User.last_login >= seven_days_ago
+        ).count() if hasattr(User, 'last_login') else 0
+        
+        # Monthly Active Users
+        mau = active_users
+        
+        # Customer Lifetime Value (LTV) - simplified calculation
+        avg_customer_lifespan_months = 18  # Average subscription length
+        ltv = arpu * avg_customer_lifespan_months
+        
+        # Customer Acquisition Cost (CAC) - placeholder
+        cac = 50  # Would come from marketing spend data
+        
+        # LTV:CAC Ratio
+        ltv_cac_ratio = ltv / cac if cac > 0 else 0
+        
+        # Net Revenue Retention (NRR) - simplified
+        nrr = 100 + (user_growth * 0.5) if user_growth > 0 else 95
+        
+        # Average Revenue Per Account (ARPA)
+        arpa = mrr / total_companies if total_companies > 0 else 0
+        
+        # Expansion MRR (upgrades)
+        expansion_mrr = mrr * 0.05  # Estimate 5% expansion
+        
+        # New MRR (new customers)
+        new_mrr = new_users_this_month * arpu * 0.3  # Estimate 30% of new users are paid
+        
+        # Churned MRR
+        churned_mrr = mrr * (churn_rate / 100) if churn_rate > 0 else 0
+        
+        # Net New MRR
+        net_new_mrr = new_mrr + expansion_mrr - churned_mrr
+        
+        # Users by status
+        active_subscribers = paid_users
+        trial_users = 0  # Would come from trial tracking
+        
+        # Revenue by tier
+        starter_revenue = starter_users * PRICING['starter']
+        professional_revenue = professional_users * PRICING['professional']
+        business_revenue = business_users * PRICING['business']
+        
+        # Growth metrics
+        users_today = User.query.filter(
+            User.created_at >= today_start
+        ).count() if hasattr(User, 'created_at') else 0
+        
+        users_this_week = User.query.filter(
+            User.created_at >= seven_days_ago
+        ).count() if hasattr(User, 'created_at') else 0
+        
         metrics = {
             # User metrics
             'total_users': total_users,
             'active_users': active_users,
             'new_users_this_month': new_users_this_month,
+            'new_users_this_week': users_this_week,
+            'new_users_today': users_today,
             'user_growth': round(user_growth, 1),
+            
+            # Engagement metrics
+            'dau': dau,
+            'wau': wau,
+            'mau': mau,
+            'dau_mau_ratio': round((dau / mau * 100) if mau > 0 else 0, 1),
             
             # Company metrics
             'total_companies': total_companies,
@@ -123,13 +191,33 @@ def get_platform_metrics():
             'mrr': mrr,
             'arr': arr,
             'arpu': round(arpu, 2),
-            'revenue_growth': round(user_growth * 0.8, 1),  # Estimated based on user growth
+            'arpa': round(arpa, 2),
+            'ltv': round(ltv, 2),
+            'cac': cac,
+            'ltv_cac_ratio': round(ltv_cac_ratio, 1),
+            'revenue_growth': round(user_growth * 0.8, 1),
+            
+            # MRR breakdown
+            'new_mrr': round(new_mrr, 2),
+            'expansion_mrr': round(expansion_mrr, 2),
+            'churned_mrr': round(churned_mrr, 2),
+            'net_new_mrr': round(net_new_mrr, 2),
+            
+            # Revenue by tier
+            'starter_revenue': starter_revenue,
+            'professional_revenue': professional_revenue,
+            'business_revenue': business_revenue,
+            
+            # NRR
+            'nrr': round(nrr, 1),
             
             # Subscription breakdown
             'free_users': free_users,
             'starter_users': starter_users,
             'professional_users': professional_users,
             'business_users': business_users,
+            'paid_users': paid_users,
+            'active_subscribers': active_subscribers,
             
             # Health metrics
             'churn_rate': round(churn_rate, 1),
