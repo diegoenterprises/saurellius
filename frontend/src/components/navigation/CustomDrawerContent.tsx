@@ -47,7 +47,43 @@ interface MenuSection {
   items: MenuItem[];
 }
 
-const MENU_SECTIONS: MenuSection[] = [
+// ADMIN MENU - Platform owner sees everything
+const ADMIN_MENU_SECTIONS: MenuSection[] = [
+  {
+    title: 'PLATFORM OVERVIEW',
+    items: [
+      { id: 'dashboard', label: 'Dashboard', icon: 'grid-outline', screen: 'Dashboard' },
+      { id: 'analytics', label: 'Analytics & KPIs', icon: 'stats-chart-outline', screen: 'AdminPortal' },
+      { id: 'revenue', label: 'Revenue', icon: 'cash-outline', screen: 'AdminPortal', color: COLORS.success },
+    ],
+  },
+  {
+    title: 'CUSTOMER MANAGEMENT',
+    items: [
+      { id: 'customers', label: 'Customers', icon: 'people-outline', screen: 'AdminSupport' },
+      { id: 'subscriptions', label: 'Subscriptions', icon: 'card-outline', screen: 'AdminPortal' },
+      { id: 'apisubscribers', label: 'API Subscribers', icon: 'code-slash-outline', screen: 'AdminPortal' },
+    ],
+  },
+  {
+    title: 'SUPPORT',
+    items: [
+      { id: 'tickets', label: 'Support Tickets', icon: 'ticket-outline', screen: 'AdminSupport' },
+      { id: 'messages', label: 'Messages', icon: 'chatbubbles-outline', screen: 'Messages', badge: 3 },
+    ],
+  },
+  {
+    title: 'SYSTEM',
+    items: [
+      { id: 'apikeys', label: 'API Keys', icon: 'key-outline', screen: 'AdminPortal' },
+      { id: 'compliance', label: 'Compliance', icon: 'shield-checkmark-outline', screen: 'Compliance' },
+      { id: 'reports', label: 'Reports', icon: 'bar-chart-outline', screen: 'Reports' },
+    ],
+  },
+];
+
+// EMPLOYER MENU - Business owners managing their company
+const EMPLOYER_MENU_SECTIONS: MenuSection[] = [
   {
     title: 'MAIN',
     items: [
@@ -99,6 +135,88 @@ const MENU_SECTIONS: MenuSection[] = [
   },
 ];
 
+// EMPLOYEE MENU - Workers viewing their info
+const EMPLOYEE_MENU_SECTIONS: MenuSection[] = [
+  {
+    title: 'MY DASHBOARD',
+    items: [
+      { id: 'dashboard', label: 'Dashboard', icon: 'grid-outline', screen: 'EmployeePortal' },
+      { id: 'paystubs', label: 'My Paystubs', icon: 'document-text-outline', screen: 'Paystubs' },
+      { id: 'wallet', label: 'Wallet', icon: 'wallet-outline', screen: 'Wallet', color: COLORS.success },
+    ],
+  },
+  {
+    title: 'TIME & SCHEDULE',
+    items: [
+      { id: 'timesheet', label: 'Time Clock', icon: 'time-outline', screen: 'Timesheet' },
+      { id: 'schedule', label: 'My Schedule', icon: 'calendar-outline', screen: 'Workforce' },
+      { id: 'pto', label: 'Time Off', icon: 'airplane-outline', screen: 'PTO' },
+    ],
+  },
+  {
+    title: 'BENEFITS',
+    items: [
+      { id: 'benefits', label: 'My Benefits', icon: 'heart-outline', screen: 'Benefits' },
+      { id: 'rewards', label: 'Rewards', icon: 'trophy-outline', screen: 'Rewards', color: COLORS.warning },
+    ],
+  },
+  {
+    title: 'COMMUNICATION',
+    items: [
+      { id: 'messages', label: 'Messages', icon: 'chatbubbles-outline', screen: 'Messages', badge: 3 },
+      { id: 'swipe', label: 'Shift Swap', icon: 'swap-horizontal-outline', screen: 'Swipe' },
+    ],
+  },
+];
+
+// CONTRACTOR MENU - Independent contractors
+const CONTRACTOR_MENU_SECTIONS: MenuSection[] = [
+  {
+    title: 'MY DASHBOARD',
+    items: [
+      { id: 'dashboard', label: 'Dashboard', icon: 'grid-outline', screen: 'ContractorPortal' },
+      { id: 'invoices', label: 'Invoices', icon: 'document-text-outline', screen: 'Paystubs' },
+      { id: 'wallet', label: 'Wallet', icon: 'wallet-outline', screen: 'Wallet', color: COLORS.success },
+    ],
+  },
+  {
+    title: 'WORK',
+    items: [
+      { id: 'timesheet', label: 'Time Tracking', icon: 'time-outline', screen: 'Timesheet' },
+      { id: 'projects', label: 'Projects', icon: 'folder-outline', screen: 'Workforce' },
+    ],
+  },
+  {
+    title: 'TAX',
+    items: [
+      { id: 'taxforms', label: 'Tax Forms', icon: 'calculator-outline', screen: 'TaxCenter' },
+    ],
+  },
+  {
+    title: 'COMMUNICATION',
+    items: [
+      { id: 'messages', label: 'Messages', icon: 'chatbubbles-outline', screen: 'Messages' },
+    ],
+  },
+];
+
+// Get menu sections based on user role
+const getMenuSections = (isAdmin: boolean, role: string): MenuSection[] => {
+  if (isAdmin) return ADMIN_MENU_SECTIONS;
+  
+  switch (role) {
+    case 'employee':
+      return EMPLOYEE_MENU_SECTIONS;
+    case 'contractor':
+      return CONTRACTOR_MENU_SECTIONS;
+    case 'employer':
+    case 'admin':
+    case 'manager':
+    default:
+      return EMPLOYER_MENU_SECTIONS;
+  }
+};
+
 export default function CustomDrawerContent(props: DrawerContentComponentProps) {
   const [activeScreen, setActiveScreen] = useState('Dashboard');
   const insets = useSafeAreaInsets();
@@ -109,6 +227,11 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
   const userName = user ? `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'User' : 'User';
   const userEmail = user?.email || '';
   const userInitials = `${user?.first_name?.[0] || 'U'}${user?.last_name?.[0] || ''}`.toUpperCase();
+  
+  // Get role-based menu
+  const isAdmin = user?.is_admin === true;
+  const userRole = (user as any)?.role || 'employer';
+  const menuSections = getMenuSections(isAdmin, userRole);
 
   const handleNavigation = (screen: string) => {
     setActiveScreen(screen);
@@ -142,10 +265,10 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.menuContent}
       >
-        {MENU_SECTIONS.map((section) => (
+        {menuSections.map((section: MenuSection) => (
           <View key={section.title} style={styles.section}>
             <Text style={styles.sectionTitle}>{section.title}</Text>
-            {section.items.map((item) => {
+            {section.items.map((item: MenuItem) => {
               const isActive = activeScreen === item.screen;
               return (
                 <TouchableOpacity
@@ -179,29 +302,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
 
       {/* Bottom Section */}
       <View style={[styles.bottomSection, { paddingBottom: insets.bottom + 16 }]}>
-        {/* Support Center - Admin Only */}
-        <TouchableOpacity
-          style={styles.menuItem}
-          onPress={() => handleNavigation('AdminSupport')}
-        >
-          <View style={styles.iconWrapper}>
-            <Ionicons name="headset-outline" size={20} color={COLORS.warning} />
-          </View>
-          <Text style={styles.menuLabel}>Support Center</Text>
-        </TouchableOpacity>
-
-        {/* Admin Portal */}
-        <TouchableOpacity
-          style={styles.menuItem}
-          onPress={() => handleNavigation('AdminPortal')}
-        >
-          <View style={styles.iconWrapper}>
-            <Ionicons name="shield-outline" size={20} color={COLORS.accent} />
-          </View>
-          <Text style={styles.menuLabel}>Admin Portal</Text>
-        </TouchableOpacity>
-
-        {/* Settings */}
+        {/* Settings - All users */}
         <TouchableOpacity
           style={styles.menuItem}
           onPress={() => handleNavigation('Settings')}
