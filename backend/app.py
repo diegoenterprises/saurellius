@@ -160,6 +160,14 @@ def create_app(config_name='default'):
     from routes.regulatory_filing_routes import regulatory_bp
     app.register_blueprint(regulatory_bp)
     
+    # Wallet Routes
+    from routes.wallet_routes import wallet_bp
+    app.register_blueprint(wallet_bp)
+    
+    # Tax Updater Routes
+    from routes.tax_updater_routes import tax_updater_bp
+    app.register_blueprint(tax_updater_bp)
+    
     # Initialize Tax Update Scheduler
     from services.scheduler_service import init_scheduler
     init_scheduler(app)
