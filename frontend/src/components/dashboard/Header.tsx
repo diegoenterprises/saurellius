@@ -2,13 +2,16 @@
  * DASHBOARD HEADER
  */
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, Modal, Pressable } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Modal, Pressable, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, DrawerActions } from '@react-navigation/native';
 import { RootState, AppDispatch } from '../../store';
 import { logout } from '../../store/slices/authSlice';
 import { extendedColors as colors, spacing, typography, shadows } from '../../styles/theme';
+
+const { width } = Dimensions.get('window');
+const isLargeScreen = width >= 768;
 
 export default function Header() {
   const navigation = useNavigation<any>();
@@ -17,6 +20,10 @@ export default function Header() {
   const initials = `${user?.first_name?.[0] || 'U'}${user?.last_name?.[0] || ''}`;
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+
+  const openDrawer = () => {
+    navigation.dispatch(DrawerActions.openDrawer());
+  };
 
   const handleLogout = () => {
     setShowUserMenu(false);
@@ -31,14 +38,21 @@ export default function Header() {
   return (
     <View style={styles.nav}>
       <View style={styles.navContainer}>
-        {/* Logo */}
-        <View style={styles.logo}>
-          <Image
-            source={require('../../../assets/logo-icon.png')}
-            style={styles.logoImage}
-            resizeMode="contain"
-          />
-          <Text style={styles.logoText}>Saurellius</Text>
+        {/* Menu Button + Logo */}
+        <View style={styles.logoSection}>
+          {!isLargeScreen && (
+            <TouchableOpacity style={styles.menuButton} onPress={openDrawer}>
+              <Ionicons name="menu" size={24} color="#fff" />
+            </TouchableOpacity>
+          )}
+          <View style={styles.logo}>
+            <Image
+              source={require('../../../assets/logo-icon.png')}
+              style={styles.logoImage}
+              resizeMode="contain"
+            />
+            <Text style={styles.logoText}>Saurellius</Text>
+          </View>
         </View>
 
         {/* Nav Links - Desktop only */}
@@ -141,6 +155,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 'auto',
     width: '100%',
     zIndex: 9999,
+  },
+  logoSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  menuButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   logo: {
     flexDirection: 'row',
