@@ -230,7 +230,7 @@ export default function DashboardScreen() {
                   <Ionicons name="people" size={20} color={colors.primary.purple} />
                   <Text style={styles.cardTitle}>Recent Employees</Text>
                 </View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('Employees')}>
                   <Text style={styles.viewAllLink}>View All</Text>
                 </TouchableOpacity>
               </View>

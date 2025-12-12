@@ -572,7 +572,7 @@ export default function AdminPortalScreen({ navigation }: any) {
               <Text style={styles.adminBadgeText}>Owner Access</Text>
             </View>
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => Alert.alert('Notifications', 'No new notifications')}>
             <Ionicons name="notifications-outline" size={24} color="#FFF" />
           </TouchableOpacity>
         </View>
