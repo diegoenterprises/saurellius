@@ -23,8 +23,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, updateUser } from '../../store/slices/authSlice';
+import { toggleDarkMode } from '../../store/slices/settingsSlice';
 import { AppDispatch, RootState } from '../../store';
 import api from '../../services/api';
+import { useTheme } from '../../context/ThemeContext';
 
 interface SettingItem {
   icon: string;
@@ -39,12 +41,17 @@ const SettingsScreen: React.FC = () => {
   const navigation = useNavigation<any>();
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
+  const { darkMode } = useSelector((state: RootState) => state.settings);
+  const { colors } = useTheme();
   const [notifications, setNotifications] = useState(true);
   const [emailAlerts, setEmailAlerts] = useState(true);
   const [biometrics, setBiometrics] = useState(false);
-  const [darkMode, setDarkMode] = useState(true);
   const [autoClockOut, setAutoClockOut] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
+
+  const handleDarkModeToggle = () => {
+    dispatch(toggleDarkMode(!darkMode));
+  };
 
   const userInitials = `${user?.first_name?.[0] || 'U'}${user?.last_name?.[0] || ''}`.toUpperCase();
 
@@ -136,30 +143,30 @@ const SettingsScreen: React.FC = () => {
   const renderSettingItem = (item: SettingItem) => (
     <TouchableOpacity 
       key={item.title}
-      style={styles.settingItem}
+      style={[styles.settingItem, { borderBottomColor: colors.border }]}
       onPress={item.onPress}
       disabled={item.type === 'toggle'}
     >
       <View style={styles.settingIcon}>
-        <Ionicons name={item.icon as any} size={22} color="#1473FF" />
+        <Ionicons name={item.icon as any} size={22} color={colors.primary} />
       </View>
       <View style={styles.settingContent}>
-        <Text style={styles.settingTitle}>{item.title}</Text>
-        {item.subtitle && <Text style={styles.settingSubtitle}>{item.subtitle}</Text>}
+        <Text style={[styles.settingTitle, { color: colors.text }]}>{item.title}</Text>
+        {item.subtitle && <Text style={[styles.settingSubtitle, { color: colors.textSecondary }]}>{item.subtitle}</Text>}
       </View>
       {item.type === 'toggle' && (
         <Switch
           value={item.value as boolean}
           onValueChange={item.onPress}
-          trackColor={{ false: '#ddd', true: '#1473FF' }}
+          trackColor={{ false: colors.border, true: colors.primary }}
           thumbColor="#fff"
         />
       )}
       {item.type === 'link' && (
-        <Ionicons name="chevron-forward" size={20} color="#ccc" />
+        <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
       )}
       {item.type === 'value' && (
-        <Text style={styles.settingValue}>{item.value as string}</Text>
+        <Text style={[styles.settingValue, { color: colors.textSecondary }]}>{item.value as string}</Text>
       )}
     </TouchableOpacity>
   );
@@ -193,7 +200,7 @@ const SettingsScreen: React.FC = () => {
   ];
 
   const appSettings: SettingItem[] = [
-    { icon: 'moon-outline', title: 'Dark Mode', type: 'toggle', value: darkMode, onPress: () => setDarkMode(!darkMode) },
+    { icon: 'moon-outline', title: 'Dark Mode', type: 'toggle', value: darkMode, onPress: handleDarkModeToggle },
     { icon: 'time-outline', title: 'Auto Clock-Out', subtitle: 'Clock out at end of day', type: 'toggle', value: autoClockOut, onPress: () => setAutoClockOut(!autoClockOut) },
     { icon: 'language-outline', title: 'Language', type: 'value', value: 'English' },
     { icon: 'location-outline', title: 'Timezone', type: 'value', value: 'CST' },
@@ -207,15 +214,21 @@ const SettingsScreen: React.FC = () => {
   ];
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <LinearGradient colors={['#1473FF', '#BE01FF']} style={styles.header}>
-        <Text style={styles.headerTitle}>Settings</Text>
+        <View style={styles.headerRow}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={24} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Settings</Text>
+          <View style={{ width: 40 }} />
+        </View>
       </LinearGradient>
 
       <ScrollView style={styles.content}>
         {/* Profile Picture Section */}
-        <Text style={styles.sectionTitle}>Profile Picture</Text>
-        <View style={styles.profileSection}>
+        <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>Profile Picture</Text>
+        <View style={[styles.profileSection, { backgroundColor: colors.card, borderColor: colors.border }]}>
           <View style={styles.profilePictureContainer}>
             {user?.profile_picture ? (
               <Image source={{ uri: user.profile_picture }} style={styles.profilePicture} />
@@ -242,28 +255,28 @@ const SettingsScreen: React.FC = () => {
           </View>
         </View>
 
-        <Text style={styles.sectionTitle}>Account</Text>
-        <View style={styles.section}>
+        <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>Account</Text>
+        <View style={[styles.section, { backgroundColor: colors.card, borderColor: colors.border }]}>
           {accountSettings.map(renderSettingItem)}
         </View>
 
-        <Text style={styles.sectionTitle}>Notifications</Text>
-        <View style={styles.section}>
+        <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>Notifications</Text>
+        <View style={[styles.section, { backgroundColor: colors.card, borderColor: colors.border }]}>
           {notificationSettings.map(renderSettingItem)}
         </View>
 
-        <Text style={styles.sectionTitle}>Security</Text>
-        <View style={styles.section}>
+        <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>Security</Text>
+        <View style={[styles.section, { backgroundColor: colors.card, borderColor: colors.border }]}>
           {securitySettings.map(renderSettingItem)}
         </View>
 
-        <Text style={styles.sectionTitle}>App Preferences</Text>
-        <View style={styles.section}>
+        <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>App Preferences</Text>
+        <View style={[styles.section, { backgroundColor: colors.card, borderColor: colors.border }]}>
           {appSettings.map(renderSettingItem)}
         </View>
 
-        <Text style={styles.sectionTitle}>Support</Text>
-        <View style={styles.section}>
+        <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>Support</Text>
+        <View style={[styles.section, { backgroundColor: colors.card, borderColor: colors.border }]}>
           {supportSettings.map(renderSettingItem)}
         </View>
 
@@ -272,7 +285,7 @@ const SettingsScreen: React.FC = () => {
           <Text style={styles.logoutText}>Log Out</Text>
         </TouchableOpacity>
 
-        <Text style={styles.version}>Version 1.0.0</Text>
+        <Text style={[styles.version, { color: colors.textMuted }]}>Version 1.0.0</Text>
       </ScrollView>
     </SafeAreaView>
   );
@@ -280,8 +293,10 @@ const SettingsScreen: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0f0f23' },
-  header: { paddingHorizontal: 20, paddingVertical: 20 },
-  headerTitle: { fontSize: 28, fontWeight: '700', color: '#fff' },
+  header: { paddingHorizontal: 16, paddingVertical: 16 },
+  headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  backButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.2)', justifyContent: 'center', alignItems: 'center' },
+  headerTitle: { fontSize: 24, fontWeight: '700', color: '#fff' },
   content: { flex: 1 },
   sectionTitle: { fontSize: 14, fontWeight: '600', color: '#a0a0a0', marginTop: 24, marginBottom: 8, marginHorizontal: 16 },
   section: { backgroundColor: '#1a1a2e', borderRadius: 12, marginHorizontal: 16, overflow: 'hidden', borderWidth: 1, borderColor: '#2a2a4e' },

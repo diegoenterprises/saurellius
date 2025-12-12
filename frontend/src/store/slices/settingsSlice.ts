@@ -7,6 +7,7 @@ import { themesAPI } from '../../services/api';
 
 interface SettingsState {
   selectedTheme: string;
+  darkMode: boolean;
   notifications: {
     paystub_ready: boolean;
     rewards_milestones: boolean;
@@ -24,6 +25,7 @@ interface SettingsState {
 
 const initialState: SettingsState = {
   selectedTheme: 'diego_original',
+  darkMode: true,
   notifications: {
     paystub_ready: true,
     rewards_milestones: true,
@@ -43,11 +45,21 @@ export const loadSettings = createAsyncThunk(
   'settings/loadSettings',
   async () => {
     const theme = await AsyncStorage.getItem('selected_theme');
+    const darkModeStr = await AsyncStorage.getItem('dark_mode');
     const notificationsStr = await AsyncStorage.getItem('notifications');
     return {
       theme: theme || 'diego_original',
+      darkMode: darkModeStr !== null ? JSON.parse(darkModeStr) : true,
       notifications: notificationsStr ? JSON.parse(notificationsStr) : initialState.notifications,
     };
+  }
+);
+
+export const toggleDarkMode = createAsyncThunk(
+  'settings/toggleDarkMode',
+  async (darkMode: boolean) => {
+    await AsyncStorage.setItem('dark_mode', JSON.stringify(darkMode));
+    return darkMode;
   }
 );
 
@@ -83,7 +95,11 @@ const settingsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(loadSettings.fulfilled, (state, action) => {
       state.selectedTheme = action.payload.theme;
+      state.darkMode = action.payload.darkMode;
       state.notifications = action.payload.notifications;
+    });
+    builder.addCase(toggleDarkMode.fulfilled, (state, action) => {
+      state.darkMode = action.payload;
     });
     builder.addCase(setTheme.fulfilled, (state, action) => {
       state.selectedTheme = action.payload;

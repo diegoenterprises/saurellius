@@ -13,7 +13,9 @@ import Toast from 'react-native-toast-message';
 
 import { store, AppDispatch, RootState } from './src/store';
 import { checkAuth } from './src/store/slices/authSlice';
+import { loadSettings } from './src/store/slices/settingsSlice';
 import AppNavigator from './src/navigation/AppNavigator';
+import { ThemeProvider } from './src/context/ThemeContext';
 import AIChat from './src/components/ai/AIChat';
 import { useSelector } from 'react-redux';
 
@@ -26,7 +28,10 @@ function AuthInitializer({ children }: { children: React.ReactNode }) {
     // Step 1-5: Check for existing auth tokens on app launch
     const initAuth = async () => {
       try {
-        await dispatch(checkAuth()).unwrap();
+        await Promise.all([
+          dispatch(checkAuth()).unwrap(),
+          dispatch(loadSettings()),
+        ]);
       } catch (error) {
         // No valid session - user will see login screen
       } finally {
@@ -70,16 +75,18 @@ export default function App() {
   if (Platform.OS === 'web') {
     return (
       <Provider store={store}>
-        <SafeAreaProvider>
-          <View style={styles.container}>
-            <StatusBar style="light" />
-            <AuthInitializer>
-              <AppNavigator />
-              <AIChatWrapper />
-            </AuthInitializer>
-            <Toast />
-          </View>
-        </SafeAreaProvider>
+        <ThemeProvider>
+          <SafeAreaProvider>
+            <View style={styles.container}>
+              <StatusBar style="light" />
+              <AuthInitializer>
+                <AppNavigator />
+                <AIChatWrapper />
+              </AuthInitializer>
+              <Toast />
+            </View>
+          </SafeAreaProvider>
+        </ThemeProvider>
       </Provider>
     );
   }
@@ -88,14 +95,16 @@ export default function App() {
   return (
     <GestureHandlerRootView style={styles.container}>
       <Provider store={store}>
-        <SafeAreaProvider>
-          <StatusBar style="light" />
-          <AuthInitializer>
-            <AppNavigator />
-            <AIChatWrapper />
-          </AuthInitializer>
-          <Toast />
-        </SafeAreaProvider>
+        <ThemeProvider>
+          <SafeAreaProvider>
+            <StatusBar style="light" />
+            <AuthInitializer>
+              <AppNavigator />
+              <AIChatWrapper />
+            </AuthInitializer>
+            <Toast />
+          </SafeAreaProvider>
+        </ThemeProvider>
       </Provider>
     </GestureHandlerRootView>
   );
