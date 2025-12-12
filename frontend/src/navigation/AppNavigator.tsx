@@ -73,6 +73,16 @@ import ContractorPortalDashboard from '../screens/contractor/ContractorPortalDas
 // Legal Screens
 import { PrivacyPolicyScreen, TermsConditionsScreen } from '../screens/legal';
 
+// Missing Screens - Added in Audit
+import { AuditTrailScreen } from '../screens/audit';
+import { DirectDepositScreen } from '../screens/directdeposit';
+import { W4FormScreen, I9VerificationScreen } from '../screens/taxforms';
+import { PayrollCorrectionsScreen } from '../screens/corrections';
+import { TalentScreen } from '../screens/talent';
+import { TerminationScreen } from '../screens/termination';
+import { TimeClockScreen } from '../screens/timeclock';
+import { YearEndScreen } from '../screens/yearend';
+
 // Types
 export type RootStackParamList = {
   Auth: undefined;
@@ -123,6 +133,16 @@ export type RootStackParamList = {
   ChangePassword: undefined;
   SecuritySettings: undefined;
   HelpCenter: undefined;
+  // Added in Audit
+  AuditTrail: undefined;
+  DirectDeposit: undefined;
+  W4Form: undefined;
+  I9Verification: undefined;
+  PayrollCorrections: undefined;
+  Talent: undefined;
+  Termination: undefined;
+  TimeClock: undefined;
+  YearEnd: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -190,6 +210,15 @@ function MainStack() {
       <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
       <Stack.Screen name="SecuritySettings" component={SecuritySettingsScreen} />
       <Stack.Screen name="HelpCenter" component={HelpCenterScreen} />
+      <Stack.Screen name="AuditTrail" component={AuditTrailScreen} />
+      <Stack.Screen name="DirectDeposit" component={DirectDepositScreen} />
+      <Stack.Screen name="W4Form" component={W4FormScreen} />
+      <Stack.Screen name="I9Verification" component={I9VerificationScreen} />
+      <Stack.Screen name="PayrollCorrections" component={PayrollCorrectionsScreen} />
+      <Stack.Screen name="Talent" component={TalentScreen} />
+      <Stack.Screen name="Termination" component={TerminationScreen} />
+      <Stack.Screen name="TimeClock" component={TimeClockScreen} />
+      <Stack.Screen name="YearEnd" component={YearEndScreen} />
     </Stack.Navigator>
   );
 }
