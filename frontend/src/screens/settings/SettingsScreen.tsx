@@ -13,7 +13,6 @@ import {
   Switch,
   Alert,
   Image,
-  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -22,7 +21,6 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, updateUser } from '../../store/slices/authSlice';
 import { AppDispatch, RootState } from '../../store';
-import * as ImagePicker from 'expo-image-picker';
 import api from '../../services/api';
 
 interface SettingItem {
@@ -48,43 +46,8 @@ const SettingsScreen: React.FC = () => {
   const userInitials = `${user?.first_name?.[0] || 'U'}${user?.last_name?.[0] || ''}`.toUpperCase();
 
   const pickImage = async () => {
-    try {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert('Permission Required', 'Please allow access to your photo library to upload a profile picture.');
-        return;
-      }
-
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 0.5,
-        base64: true,
-      });
-
-      if (!result.canceled && result.assets[0].base64) {
-        setIsUploading(true);
-        const base64Image = `data:image/jpeg;base64,${result.assets[0].base64}`;
-        
-        try {
-          const response = await api.post('/api/auth/profile-picture', {
-            profile_picture: base64Image,
-          });
-          
-          if (response.data.success) {
-            dispatch(updateUser(response.data.user));
-            Alert.alert('Success', 'Profile picture updated!');
-          }
-        } catch (error) {
-          Alert.alert('Error', 'Failed to upload profile picture. Please try again.');
-        } finally {
-          setIsUploading(false);
-        }
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Failed to pick image. Please try again.');
-    }
+    // Profile picture upload - coming soon
+    Alert.alert('Coming Soon', 'Profile picture upload will be available in the next update.');
   };
 
   const removeProfilePicture = async () => {
