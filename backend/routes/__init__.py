@@ -60,6 +60,7 @@ from .regulatory_filing_routes import regulatory_bp
 
 # Admin Platform Routes
 from .admin_metrics_routes import admin_metrics_bp
+from .admin_support_routes import admin_support_bp
 
 __all__ = [
     # Core
@@ -114,4 +115,5 @@ __all__ = [
     'regulatory_bp',
     # Admin Platform
     'admin_metrics_bp',
+    'admin_support_bp',
 ]

@@ -44,7 +44,7 @@ import { OnboardingScreen } from '../screens/onboarding';
 import { ReportsScreen } from '../screens/reports';
 
 // Admin Portal
-import { AdminPortalScreen } from '../screens/admin';
+import { AdminPortalScreen, AdminSupportScreen } from '../screens/admin';
 
 // Additional Enterprise Screens
 import { SwipeScreen } from '../screens/swipe';
@@ -100,6 +100,7 @@ export type RootStackParamList = {
   Garnishment: undefined;
   Benefits: undefined;
   AdminPortal: undefined;
+  AdminSupport: undefined;
   PrivacyPolicy: undefined;
   TermsConditions: undefined;
   // Self-Service Portals
@@ -159,6 +160,7 @@ function MainStack() {
       <Stack.Screen name="Garnishment" component={GarnishmentScreen} />
       <Stack.Screen name="Benefits" component={BenefitsScreen} />
       <Stack.Screen name="AdminPortal" component={AdminPortalScreen} />
+      <Stack.Screen name="AdminSupport" component={AdminSupportScreen} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
       <Stack.Screen name="TermsConditions" component={TermsConditionsScreen} />
       <Stack.Screen name="EmployeePortal" component={EmployeePortalDashboard} />

@@ -179,6 +179,17 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
 
       {/* Bottom Section */}
       <View style={[styles.bottomSection, { paddingBottom: insets.bottom + 16 }]}>
+        {/* Support Center - Admin Only */}
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => handleNavigation('AdminSupport')}
+        >
+          <View style={styles.iconWrapper}>
+            <Ionicons name="headset-outline" size={20} color={COLORS.warning} />
+          </View>
+          <Text style={styles.menuLabel}>Support Center</Text>
+        </TouchableOpacity>
+
         {/* Admin Portal */}
         <TouchableOpacity
           style={styles.menuItem}
