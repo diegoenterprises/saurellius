@@ -717,14 +717,21 @@ def update_direct_deposit():
 @jwt_required()
 def get_documents():
     """Get employee documents."""
+    from services.document_storage_service import document_storage
+    
     employee_id = get_jwt_identity()
     category = request.args.get('category')
     
-    # In production: Fetch from document storage
+    result = document_storage.get_user_documents(
+        user_id=employee_id,
+        category=category
+    )
+    
     return jsonify({
         'success': True,
-        'documents': [],
-        'categories': ['paystubs', 'tax_documents', 'benefits', 'policies', 'certifications']
+        'documents': result['documents'],
+        'total': result['total'],
+        'categories': document_storage.get_document_categories('employee')
     })
 
 
@@ -732,13 +739,110 @@ def get_documents():
 @jwt_required()
 def upload_document():
     """Upload document."""
+    from services.document_storage_service import document_storage
+    
     employee_id = get_jwt_identity()
     
-    # In production: Handle file upload
-    return jsonify({
-        'success': True,
-        'message': 'Document uploaded successfully'
-    })
+    # Handle file upload
+    if 'file' in request.files:
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({'success': False, 'error': 'No file selected'}), 400
+        
+        category = request.form.get('category', 'personal')
+        metadata = {
+            'description': request.form.get('description', ''),
+            'document_date': request.form.get('document_date', '')
+        }
+        
+        result = document_storage.upload_document(
+            user_id=employee_id,
+            user_type='employee',
+            category=category,
+            filename=file.filename,
+            file_data=file.read(),
+            metadata=metadata
+        )
+        
+        if not result.get('success'):
+            return jsonify(result), 400
+        
+        return jsonify(result), 201
+    
+    # Handle base64 upload
+    elif request.is_json:
+        data = request.get_json()
+        
+        if not data.get('file_data') or not data.get('filename'):
+            return jsonify({'success': False, 'error': 'file_data and filename required'}), 400
+        
+        result = document_storage.upload_base64_document(
+            user_id=employee_id,
+            user_type='employee',
+            category=data.get('category', 'personal'),
+            filename=data['filename'],
+            base64_data=data['file_data'],
+            metadata=data.get('metadata', {})
+        )
+        
+        if not result.get('success'):
+            return jsonify(result), 400
+        
+        return jsonify(result), 201
+    
+    return jsonify({'success': False, 'error': 'No file provided'}), 400
+
+
+@employee_ss_bp.route('/portal/documents/<document_id>', methods=['GET'])
+@jwt_required()
+def get_document_detail(document_id):
+    """Get document details."""
+    from services.document_storage_service import document_storage
+    
+    employee_id = get_jwt_identity()
+    document = document_storage.get_document(document_id, employee_id)
+    
+    if 'error' in document:
+        return jsonify({'success': False, 'error': document['error']}), 404
+    
+    return jsonify({'success': True, 'document': document})
+
+
+@employee_ss_bp.route('/portal/documents/<document_id>/download', methods=['GET'])
+@jwt_required()
+def download_document(document_id):
+    """Download document."""
+    from services.document_storage_service import document_storage
+    from flask import send_file
+    from io import BytesIO
+    
+    employee_id = get_jwt_identity()
+    file_data, filename, content_type = document_storage.download_document(document_id, employee_id)
+    
+    if file_data is None:
+        return jsonify({'success': False, 'error': content_type}), 404
+    
+    return send_file(
+        BytesIO(file_data),
+        mimetype=content_type,
+        as_attachment=True,
+        download_name=filename
+    )
+
+
+@employee_ss_bp.route('/portal/documents/<document_id>', methods=['DELETE'])
+@jwt_required()
+def delete_document(document_id):
+    """Delete document."""
+    from services.document_storage_service import document_storage
+    
+    employee_id = get_jwt_identity()
+    result = document_storage.delete_document(document_id, employee_id)
+    
+    if not result.get('success'):
+        return jsonify(result), 400
+    
+    return jsonify(result)
 
 
 # ============================================================================

@@ -152,6 +152,10 @@ def create_app(config_name='default'):
     app.register_blueprint(talent_bp)
     app.register_blueprint(employee_experience_bp)
     
+    # Document Management Routes
+    from routes.document_routes import document_bp
+    app.register_blueprint(document_bp)
+    
     # Initialize Tax Update Scheduler
     from services.scheduler_service import init_scheduler
     init_scheduler(app)

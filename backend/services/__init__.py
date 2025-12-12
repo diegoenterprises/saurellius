@@ -42,6 +42,9 @@ from .contractor_onboarding_service import ContractorOnboardingService
 from .employee_self_service import EmployeeSelfServiceManager, employee_self_service
 from .contractor_self_service import ContractorSelfServiceManager, contractor_self_service
 
+# Document Storage
+from .document_storage_service import DocumentStorageService, document_storage
+
 __all__ = [
     # Core
     'WeatherService',
@@ -110,4 +113,7 @@ __all__ = [
     'employee_self_service',
     'ContractorSelfServiceManager',
     'contractor_self_service',
+    # Document Storage
+    'DocumentStorageService',
+    'document_storage',
 ]
