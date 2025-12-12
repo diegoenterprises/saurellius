@@ -1641,6 +1641,595 @@ Provide JSON:
         return {"compliance_score": 85, "risk_areas": [], "optimization_opportunities": []}
 
     # =========================================================================
+    #  REGULATORY FILING INTELLIGENCE
+    # =========================================================================
+    
+    def analyze_compliance_status(self, company_data: Dict) -> Dict[str, Any]:
+        """AI analysis of regulatory compliance status and risk assessment."""
+        prompt = f"""Analyze this company's regulatory filing compliance:
+
+Company Profile:
+- EIN: {company_data.get('ein_masked', 'XX-XXXXXXX')}
+- Employees: {company_data.get('employee_count', 0)}
+- Contractors: {company_data.get('contractor_count', 0)}
+- States Operating: {json.dumps(company_data.get('states', []))}
+- Industry: {company_data.get('industry', 'General')}
+
+Filing Status:
+- Last 941 Filed: {company_data.get('last_941_filed', 'N/A')}
+- Last 940 Filed: {company_data.get('last_940_filed', 'N/A')}
+- W-2s Filed: {company_data.get('w2s_filed', 0)}
+- 1099s Filed: {company_data.get('1099s_filed', 0)}
+- New Hires Reported: {company_data.get('new_hires_reported', 0)}
+
+Deposit History:
+- EFTPS Deposits Made: {company_data.get('eftps_deposits', 0)}
+- Late Deposits: {company_data.get('late_deposits', 0)}
+- Deposit Schedule: {company_data.get('deposit_schedule', 'monthly')}
+
+Outstanding Items:
+- Pending Filings: {json.dumps(company_data.get('pending_filings', []))}
+- Overdue Items: {company_data.get('overdue_count', 0)}
+
+Provide JSON:
+{{
+    "overall_compliance_score": 0-100,
+    "risk_level": "low/medium/high/critical",
+    "immediate_actions": [{{"action": "description", "deadline": "date", "penalty_risk": "$amount"}}],
+    "upcoming_deadlines": [{{"form": "name", "due_date": "date", "status": "pending/ready/overdue"}}],
+    "audit_risk_factors": ["factor1"],
+    "recommendations": [{{"area": "description", "priority": "high/medium/low", "impact": "description"}}],
+    "estimated_penalty_exposure": 0,
+    "state_specific_issues": [{{"state": "XX", "issue": "description"}}]
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=800)
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        return {"overall_compliance_score": 80, "risk_level": "low", "immediate_actions": [], "recommendations": []}
+
+    def analyze_filing_deadline(self, deadline_data: Dict) -> Dict[str, Any]:
+        """AI analysis of filing deadline with preparation guidance."""
+        prompt = f"""Provide guidance for this upcoming filing deadline:
+
+Filing Details:
+- Form: {deadline_data.get('form_type', 'Unknown')}
+- Due Date: {deadline_data.get('due_date', 'N/A')}
+- Days Until Due: {deadline_data.get('days_until', 0)}
+- Agency: {deadline_data.get('agency', 'IRS')}
+- Period: {deadline_data.get('tax_period', 'N/A')}
+
+Company Status:
+- Data Ready: {deadline_data.get('data_ready', False)}
+- Prior Year Filed: {deadline_data.get('prior_filed', True)}
+- Amendment Required: {deadline_data.get('needs_amendment', False)}
+
+Provide JSON:
+{{
+    "urgency_level": "low/medium/high/critical",
+    "preparation_checklist": ["item1", "item2"],
+    "common_errors_to_avoid": ["error1"],
+    "late_filing_penalty": "$amount or description",
+    "extension_available": true/false,
+    "extension_deadline": "date or N/A",
+    "filing_method": "electronic/paper/either",
+    "estimated_preparation_time": "X hours",
+    "tips": ["tip1"]
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=500)
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        return {"urgency_level": "medium", "preparation_checklist": [], "tips": []}
+
+    def explain_tax_form(self, form_type: str, form_data: Optional[Dict] = None) -> str:
+        """AI explanation of tax forms in plain language."""
+        prompt = f"""Explain {form_type} tax form in plain language for a business owner:
+
+Form: {form_type}
+{f"Form Data: {json.dumps(form_data)}" if form_data else ""}
+
+Provide:
+1. What this form is for (2-3 sentences)
+2. Who must file it
+3. When it's due
+4. Key sections/boxes to understand
+5. Common mistakes to avoid
+6. How Saurellius helps with this form
+
+Keep the explanation clear and practical. No emojis."""
+
+        response = self._safe_generate(prompt, max_tokens=600)
+        return response or f"{form_type} is a required tax form. Please consult with a tax professional for specific guidance."
+
+    def analyze_deposit_schedule(self, payroll_data: Dict) -> Dict[str, Any]:
+        """AI analysis of EFTPS deposit requirements."""
+        prompt = f"""Analyze EFTPS deposit requirements:
+
+Payroll Summary:
+- Pay Date: {payroll_data.get('pay_date', 'N/A')}
+- Total Federal Liability: ${payroll_data.get('federal_liability', 0)}
+- Employees Paid: {payroll_data.get('employee_count', 0)}
+
+Tax Breakdown:
+- Federal Withholding: ${payroll_data.get('federal_withheld', 0)}
+- Social Security (Total): ${payroll_data.get('social_security_total', 0)}
+- Medicare (Total): ${payroll_data.get('medicare_total', 0)}
+
+Company Status:
+- Current Schedule: {payroll_data.get('deposit_schedule', 'monthly')}
+- Lookback Period Liability: ${payroll_data.get('lookback_liability', 0)}
+- Accumulated This Period: ${payroll_data.get('accumulated', 0)}
+
+Provide JSON:
+{{
+    "required_deposit": 0,
+    "deposit_due_date": "YYYY-MM-DD",
+    "deposit_rule_applied": "monthly/semi_weekly/next_day",
+    "rule_explanation": "brief explanation",
+    "next_day_threshold_warning": true/false,
+    "schedule_change_recommended": true/false,
+    "penalty_if_late": "$amount",
+    "recommended_actions": ["action1"]
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=500)
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        return {"required_deposit": 0, "deposit_rule_applied": "monthly", "recommended_actions": []}
+
+    # =========================================================================
+    #  DOCUMENT INTELLIGENCE
+    # =========================================================================
+    
+    def analyze_document(self, document_data: Dict) -> Dict[str, Any]:
+        """AI analysis of uploaded documents for classification and extraction."""
+        prompt = f"""Analyze this uploaded document:
+
+Document Info:
+- Filename: {document_data.get('filename', 'unknown')}
+- File Type: {document_data.get('file_type', 'unknown')}
+- Category: {document_data.get('category', 'uncategorized')}
+- File Size: {document_data.get('file_size', 0)} bytes
+- Upload Context: {document_data.get('context', 'general')}
+
+{f"Extracted Text Sample: {document_data.get('text_sample', '')[:500]}" if document_data.get('text_sample') else ""}
+
+Provide JSON:
+{{
+    "document_type": "w4/i9/w9/paystub/tax_form/receipt/contract/other",
+    "confidence": 0-100,
+    "suggested_category": "category_name",
+    "extracted_data": {{"field1": "value1"}},
+    "requires_review": true/false,
+    "compliance_relevant": true/false,
+    "retention_period": "X years",
+    "action_items": ["action1"],
+    "warnings": ["warning1"]
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=500)
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        return {"document_type": "other", "confidence": 50, "requires_review": True}
+
+    def extract_receipt_data(self, receipt_data: Dict) -> Dict[str, Any]:
+        """AI extraction of data from receipt images/documents."""
+        prompt = f"""Extract expense data from this receipt:
+
+Receipt Info:
+- Filename: {receipt_data.get('filename', 'receipt')}
+- Context: {receipt_data.get('context', 'business expense')}
+
+{f"Text Content: {receipt_data.get('text_content', '')}" if receipt_data.get('text_content') else ""}
+
+Extract and return JSON:
+{{
+    "vendor_name": "name",
+    "date": "YYYY-MM-DD",
+    "total_amount": 0.00,
+    "subtotal": 0.00,
+    "tax_amount": 0.00,
+    "tip_amount": 0.00,
+    "payment_method": "cash/credit/debit/other",
+    "expense_category": "meals/travel/supplies/equipment/other",
+    "tax_deductible": true/false,
+    "line_items": [{{"description": "item", "amount": 0.00}}],
+    "confidence": 0-100
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=500)
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        return {"vendor_name": "Unknown", "total_amount": 0, "confidence": 0}
+
+    def classify_document(self, document_info: Dict) -> Dict[str, Any]:
+        """AI classification of documents into appropriate categories."""
+        prompt = f"""Classify this document:
+
+Document: {document_info.get('filename', 'unknown')}
+Type: {document_info.get('file_type', 'unknown')}
+User Type: {document_info.get('user_type', 'employee')}
+Upload Source: {document_info.get('source', 'manual')}
+
+Available Categories for {document_info.get('user_type', 'employee')}:
+{json.dumps(document_info.get('available_categories', []))}
+
+{f"Content Preview: {document_info.get('preview', '')[:300]}" if document_info.get('preview') else ""}
+
+Return JSON:
+{{
+    "primary_category": "category_name",
+    "secondary_category": "category_name or null",
+    "confidence": 0-100,
+    "is_tax_document": true/false,
+    "is_pii_sensitive": true/false,
+    "suggested_tags": ["tag1", "tag2"],
+    "auto_categorize": true/false
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=300)
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        return {"primary_category": "personal", "confidence": 50, "auto_categorize": False}
+
+    # =========================================================================
+    #  CONTRACTOR EXPENSE INTELLIGENCE
+    # =========================================================================
+    
+    def analyze_contractor_expenses(self, expense_data: Dict) -> Dict[str, Any]:
+        """AI analysis of contractor expenses for tax optimization."""
+        prompt = f"""Analyze contractor expenses for tax optimization:
+
+Contractor Profile:
+- Business Type: {expense_data.get('business_type', 'sole_proprietor')}
+- Industry: {expense_data.get('industry', 'consulting')}
+- YTD Income: ${expense_data.get('ytd_income', 0)}
+
+Expense Summary:
+- Total Expenses YTD: ${expense_data.get('total_expenses', 0)}
+- Categories: {json.dumps(expense_data.get('expense_breakdown', {}))}
+- Mileage Logged: {expense_data.get('mileage_miles', 0)} miles
+- Mileage Deduction: ${expense_data.get('mileage_deduction', 0)}
+
+Missing Documentation:
+- Receipts Needed: {expense_data.get('receipts_missing', 0)}
+- Categories Without Receipts: {json.dumps(expense_data.get('undocumented_categories', []))}
+
+Provide JSON:
+{{
+    "deduction_optimization_score": 0-100,
+    "potential_missed_deductions": [{{"category": "name", "estimated_amount": 0, "description": "explanation"}}],
+    "audit_risk_areas": ["area1"],
+    "documentation_gaps": ["gap1"],
+    "tax_savings_potential": 0,
+    "quarterly_estimate_adjustment": 0,
+    "recommendations": [{{"action": "description", "priority": "high/medium/low", "tax_impact": "$amount"}}],
+    "expense_ratio_analysis": {{"category": "healthy/review/concerning"}}
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=600)
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        return {"deduction_optimization_score": 70, "recommendations": [], "potential_missed_deductions": []}
+
+    def analyze_1099_readiness(self, contractor_data: Dict) -> Dict[str, Any]:
+        """AI analysis of 1099 filing readiness."""
+        prompt = f"""Analyze 1099 filing readiness:
+
+Contractor Summary:
+- Total Contractors: {contractor_data.get('contractor_count', 0)}
+- Above $600 Threshold: {contractor_data.get('above_threshold', 0)}
+- Total Payments: ${contractor_data.get('total_payments', 0)}
+
+W-9 Status:
+- W-9s on File: {contractor_data.get('w9_complete', 0)}
+- W-9s Missing: {contractor_data.get('w9_missing', 0)}
+- TIN Verification Pending: {contractor_data.get('tin_pending', 0)}
+
+Filing Status:
+- 1099s Generated: {contractor_data.get('generated', 0)}
+- 1099s Sent to Recipients: {contractor_data.get('sent_recipients', 0)}
+- 1099s Filed to IRS: {contractor_data.get('filed_irs', 0)}
+
+Deadline: January 31
+
+Provide JSON:
+{{
+    "readiness_score": 0-100,
+    "ready_to_file": true/false,
+    "blockers": ["blocker1"],
+    "missing_w9_action": {{"count": 0, "deadline": "date", "template_available": true}},
+    "filing_checklist": [{{"item": "description", "status": "complete/pending/blocked"}}],
+    "estimated_completion_time": "X hours",
+    "penalty_risk": "$amount if not filed by deadline",
+    "recommendations": ["recommendation1"]
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=500)
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        return {"readiness_score": 75, "ready_to_file": False, "blockers": [], "recommendations": []}
+
+    # =========================================================================
+    #  PAYROLL OPTIMIZATION INTELLIGENCE
+    # =========================================================================
+    
+    def optimize_payroll_run(self, payroll_data: Dict) -> Dict[str, Any]:
+        """AI optimization suggestions for payroll runs."""
+        prompt = f"""Analyze payroll run for optimization opportunities:
+
+Payroll Summary:
+- Pay Period: {payroll_data.get('pay_period', 'N/A')}
+- Total Employees: {payroll_data.get('employee_count', 0)}
+- Total Gross: ${payroll_data.get('total_gross', 0)}
+- Total Net: ${payroll_data.get('total_net', 0)}
+- Total Employer Taxes: ${payroll_data.get('employer_taxes', 0)}
+
+Deductions:
+- Pre-Tax Deductions: ${payroll_data.get('pretax_deductions', 0)}
+- Post-Tax Deductions: ${payroll_data.get('posttax_deductions', 0)}
+- 401(k) Participation: {payroll_data.get('401k_participation', 0)}%
+- HSA Participation: {payroll_data.get('hsa_participation', 0)}%
+
+Issues Detected:
+- Zero Net Pay Employees: {payroll_data.get('zero_net_count', 0)}
+- High Overtime: {payroll_data.get('high_overtime_count', 0)}
+- Manual Adjustments: {payroll_data.get('manual_adjustments', 0)}
+
+Provide JSON:
+{{
+    "optimization_score": 0-100,
+    "cost_saving_opportunities": [{{"area": "description", "potential_savings": 0, "action": "how to achieve"}}],
+    "compliance_flags": ["flag1"],
+    "efficiency_recommendations": ["recommendation1"],
+    "benefit_optimization": [{{"benefit": "name", "current_participation": 0, "target": 0, "employer_savings": 0}}],
+    "overtime_analysis": {{"excessive": true/false, "recommendation": "description"}},
+    "tax_efficiency_score": 0-100
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=600)
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        return {"optimization_score": 80, "cost_saving_opportunities": [], "efficiency_recommendations": []}
+
+    def analyze_labor_costs(self, labor_data: Dict) -> Dict[str, Any]:
+        """AI analysis of labor costs and workforce efficiency."""
+        prompt = f"""Analyze labor costs and workforce efficiency:
+
+Company Profile:
+- Industry: {labor_data.get('industry', 'General')}
+- Total Employees: {labor_data.get('employee_count', 0)}
+- Revenue: ${labor_data.get('revenue', 0)}
+
+Labor Costs (Monthly):
+- Total Payroll: ${labor_data.get('total_payroll', 0)}
+- Benefits Cost: ${labor_data.get('benefits_cost', 0)}
+- Employer Taxes: ${labor_data.get('employer_taxes', 0)}
+- Workers Comp: ${labor_data.get('workers_comp', 0)}
+- Total Labor: ${labor_data.get('total_labor', 0)}
+
+Metrics:
+- Labor as % of Revenue: {labor_data.get('labor_percent', 0)}%
+- Average Hourly Cost: ${labor_data.get('avg_hourly_cost', 0)}
+- Overtime Ratio: {labor_data.get('overtime_ratio', 0)}%
+- Turnover Rate: {labor_data.get('turnover_rate', 0)}%
+
+Provide JSON:
+{{
+    "efficiency_score": 0-100,
+    "labor_cost_rating": "excellent/good/average/concerning/critical",
+    "benchmark_comparison": {{"your_ratio": 0, "industry_avg": 0, "status": "above/at/below"}},
+    "cost_drivers": [{{"factor": "description", "impact": "high/medium/low", "controllable": true/false}}],
+    "reduction_opportunities": [{{"area": "description", "potential_savings": 0, "risk": "low/medium/high"}}],
+    "headcount_recommendations": {{"current": 0, "optimal": 0, "action": "hire/maintain/reduce"}},
+    "overtime_optimization": {{"current_cost": 0, "optimal_cost": 0, "strategy": "description"}},
+    "forecasted_costs_next_quarter": 0
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=600)
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        return {"efficiency_score": 75, "labor_cost_rating": "average", "cost_drivers": [], "reduction_opportunities": []}
+
+    # =========================================================================
+    #  EMPLOYEE SELF-SERVICE INTELLIGENCE
+    # =========================================================================
+    
+    def analyze_employee_portal_usage(self, usage_data: Dict) -> Dict[str, Any]:
+        """AI analysis of employee self-service portal usage."""
+        prompt = f"""Analyze employee self-service portal engagement:
+
+Portal Metrics:
+- Total Employees: {usage_data.get('total_employees', 0)}
+- Active Users (30 days): {usage_data.get('active_users', 0)}
+- Adoption Rate: {usage_data.get('adoption_rate', 0)}%
+
+Feature Usage:
+- Paystub Views: {usage_data.get('paystub_views', 0)}
+- Direct Deposit Changes: {usage_data.get('dd_changes', 0)}
+- PTO Requests: {usage_data.get('pto_requests', 0)}
+- Document Downloads: {usage_data.get('doc_downloads', 0)}
+- Profile Updates: {usage_data.get('profile_updates', 0)}
+
+HR Efficiency:
+- HR Tickets Before Portal: {usage_data.get('tickets_before', 0)}/month
+- HR Tickets After Portal: {usage_data.get('tickets_after', 0)}/month
+- Self-Service Resolution Rate: {usage_data.get('self_service_rate', 0)}%
+
+Provide JSON:
+{{
+    "engagement_score": 0-100,
+    "adoption_status": "excellent/good/needs_improvement/poor",
+    "hr_time_saved_hours": 0,
+    "cost_savings_monthly": 0,
+    "underutilized_features": ["feature1"],
+    "engagement_recommendations": [{{"action": "description", "expected_impact": "description"}}],
+    "communication_suggestions": ["suggestion1"],
+    "training_needs": ["need1"]
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=500)
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        return {"engagement_score": 70, "adoption_status": "good", "engagement_recommendations": []}
+
+    def personalize_employee_dashboard(self, employee_data: Dict) -> Dict[str, Any]:
+        """AI-powered personalized dashboard recommendations for employees."""
+        prompt = f"""Generate personalized dashboard recommendations:
+
+Employee Profile:
+- Tenure: {employee_data.get('tenure_months', 0)} months
+- Department: {employee_data.get('department', 'General')}
+- Role Level: {employee_data.get('role_level', 'individual_contributor')}
+
+Current Status:
+- PTO Balance: {employee_data.get('pto_balance', 0)} hours
+- Next Review: {employee_data.get('next_review', 'N/A')}
+- Open Goals: {employee_data.get('open_goals', 0)}
+- Training Due: {employee_data.get('training_due', 0)}
+
+Financial:
+- 401(k) Contribution: {employee_data.get('contribution_401k', 0)}%
+- HSA Balance: ${employee_data.get('hsa_balance', 0)}
+- Direct Deposit: {employee_data.get('has_direct_deposit', False)}
+
+Provide JSON:
+{{
+    "priority_actions": [{{"action": "description", "reason": "why important", "link": "module_name"}}],
+    "personalized_insights": ["insight1"],
+    "financial_tips": ["tip1"],
+    "upcoming_deadlines": [{{"item": "description", "date": "date"}}],
+    "recommended_features": ["feature1"],
+    "wellness_score": 0-100,
+    "career_development_suggestions": ["suggestion1"]
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=500)
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        return {"priority_actions": [], "personalized_insights": [], "wellness_score": 75}
+
+    # =========================================================================
+    #  ONBOARDING INTELLIGENCE
+    # =========================================================================
+    
+    def analyze_onboarding_progress(self, onboarding_data: Dict) -> Dict[str, Any]:
+        """AI analysis of employee onboarding progress and recommendations."""
+        prompt = f"""Analyze employee onboarding progress:
+
+Onboarding Status:
+- Employee: {onboarding_data.get('employee_name', 'New Employee')}
+- Start Date: {onboarding_data.get('start_date', 'N/A')}
+- Days Since Start: {onboarding_data.get('days_elapsed', 0)}
+- Current Step: {onboarding_data.get('current_step', 1)}/8
+- Progress: {onboarding_data.get('progress_percent', 0)}%
+
+Completed Items:
+{json.dumps(onboarding_data.get('completed_items', []))}
+
+Pending Items:
+{json.dumps(onboarding_data.get('pending_items', []))}
+
+Blockers:
+{json.dumps(onboarding_data.get('blockers', []))}
+
+Provide JSON:
+{{
+    "onboarding_health": "on_track/at_risk/delayed",
+    "estimated_completion": "date",
+    "bottleneck_analysis": [{{"step": "name", "issue": "description", "resolution": "action"}}],
+    "priority_items": ["item1"],
+    "compliance_status": {{"i9_compliant": true/false, "w4_compliant": true/false, "state_forms": true/false}},
+    "new_hire_reporting_status": "filed/pending/overdue",
+    "recommendations": ["recommendation1"],
+    "manager_actions_needed": ["action1"]
+}}"""
+
+        response = self._safe_generate(prompt, max_tokens=500)
+        try:
+            if response:
+                start = response.find('{')
+                end = response.rfind('}') + 1
+                if start >= 0 and end > start:
+                    return json.loads(response[start:end])
+        except json.JSONDecodeError:
+            pass
+        return {"onboarding_health": "on_track", "recommendations": [], "compliance_status": {}}
+
+    # =========================================================================
     #  UNIVERSAL PLATFORM ASSISTANT (ENHANCED)
     # =========================================================================
     
@@ -1656,6 +2245,22 @@ Provide JSON:
         - Payroll Processing: Gross-to-net calculations, tax withholding, direct deposit
         - Tax Compliance: Federal, state, local taxes for US and Canada
         - Employee Management: Onboarding, profiles, termination, COBRA
+        
+        REGULATORY FILING (NEW):
+        - IRS FIRE System: 1099-NEC, 1099-MISC electronic filing
+        - SSA BSO: W-2/W-3 electronic submission
+        - EFTPS: Federal tax deposits (941, 944, 940)
+        - State Filings: All 50 states quarterly withholding, SUTA
+        - New Hire Reporting: Automatic state submission
+        - Filing Calendar: Deadline tracking and alerts
+        - Compliance Verification: Audit trail and status checks
+        
+        DOCUMENT MANAGEMENT (NEW):
+        - Secure Upload: Employee, contractor, employer documents
+        - Auto-Classification: AI-powered document categorization
+        - Receipt Extraction: Expense data from receipts
+        - Compliance Documents: W-4, I-9, W-9 storage
+        - Signed URLs: Secure document access
         
         WORKFORCE MODULES:
         - Time & Attendance: Clock in/out, overtime, meal breaks, job costing
@@ -1679,6 +2284,11 @@ Provide JSON:
         - Earned Wage Access: Early wage requests
         - Contractor Payments: 1099, multi-currency USD/CAD
         
+        SELF-SERVICE PORTALS (NEW):
+        - Employee Portal: Paystubs, PTO, direct deposit, documents
+        - Contractor Portal: W-9, invoicing, expenses, mileage, 1099s
+        - Tax Center: Estimated taxes, quarterly deadlines
+        
         EXPERIENCE MODULES:
         - Financial Wellness: Assessments, goals, resources
         - Engagement Surveys: Anonymous feedback, analytics
@@ -1698,15 +2308,26 @@ CURRENT CONTEXT:
 - Company: {context.get('company_name', 'Your Company')}
 - User Role: {context.get('role', 'employer')}
 - Employees: {context.get('employee_count', 0)}
+- Contractors: {context.get('contractor_count', 0)}
 - Primary State: {context.get('primary_state', 'N/A')}
+- States Operating: {json.dumps(context.get('states', []))}
 - Subscription: {context.get('plan', 'Professional')}
 - Current Module: {context.get('current_module', 'Dashboard')}
+
+REGULATORY STATUS:
+- Upcoming Deadlines: {context.get('upcoming_deadlines', 0)}
+- Overdue Filings: {context.get('overdue_filings', 0)}
+- Compliance Score: {context.get('compliance_score', 'N/A')}
+- Last 941 Filed: {context.get('last_941', 'N/A')}
+- EFTPS Deposits Due: {context.get('deposits_due', 0)}
 
 ACTIVE STATUS:
 - Wallet Balance: ${context.get('wallet_balance', 0)}
 - Next Payroll: {context.get('next_payroll', 'N/A')}
 - Open Tasks: {context.get('open_tasks', 0)}
 - Pending Approvals: {context.get('pending_approvals', 0)}
+- Pending Onboarding: {context.get('pending_onboarding', 0)}
+- Documents Awaiting Review: {context.get('docs_pending', 0)}
 - Active Job Postings: {context.get('active_jobs', 0)}
 - Pending Reviews: {context.get('pending_reviews', 0)}
 """

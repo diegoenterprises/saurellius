@@ -701,6 +701,202 @@ def universal_assistant():
 
 
 # =============================================================================
+#  REGULATORY FILING INTELLIGENCE
+# =============================================================================
+
+@ai_bp.route('/api/ai/regulatory/compliance-analysis', methods=['POST'])
+@jwt_required()
+def analyze_compliance():
+    """AI analysis of regulatory compliance status."""
+    data = request.get_json()
+    company_data = data.get('company', {})
+    
+    analysis = saurellius_ai.analyze_compliance_status(company_data)
+    
+    return jsonify({'success': True, 'analysis': analysis}), 200
+
+
+@ai_bp.route('/api/ai/regulatory/deadline-guidance', methods=['POST'])
+@jwt_required()
+def deadline_guidance():
+    """AI guidance for filing deadlines."""
+    data = request.get_json()
+    deadline_data = data.get('deadline', {})
+    
+    guidance = saurellius_ai.analyze_filing_deadline(deadline_data)
+    
+    return jsonify({'success': True, 'guidance': guidance}), 200
+
+
+@ai_bp.route('/api/ai/regulatory/explain-form', methods=['POST'])
+@jwt_required()
+def explain_form():
+    """AI explanation of tax forms."""
+    data = request.get_json()
+    form_type = data.get('form_type', '')
+    form_data = data.get('form_data')
+    
+    if not form_type:
+        return jsonify({'success': False, 'error': 'Form type required'}), 400
+    
+    explanation = saurellius_ai.explain_tax_form(form_type, form_data)
+    
+    return jsonify({'success': True, 'explanation': explanation}), 200
+
+
+@ai_bp.route('/api/ai/regulatory/deposit-analysis', methods=['POST'])
+@jwt_required()
+def analyze_deposit():
+    """AI analysis of EFTPS deposit requirements."""
+    data = request.get_json()
+    payroll_data = data.get('payroll', {})
+    
+    analysis = saurellius_ai.analyze_deposit_schedule(payroll_data)
+    
+    return jsonify({'success': True, 'analysis': analysis}), 200
+
+
+@ai_bp.route('/api/ai/regulatory/1099-readiness', methods=['POST'])
+@jwt_required()
+def analyze_1099_readiness():
+    """AI analysis of 1099 filing readiness."""
+    data = request.get_json()
+    contractor_data = data.get('contractors', {})
+    
+    analysis = saurellius_ai.analyze_1099_readiness(contractor_data)
+    
+    return jsonify({'success': True, 'analysis': analysis}), 200
+
+
+# =============================================================================
+#  DOCUMENT INTELLIGENCE
+# =============================================================================
+
+@ai_bp.route('/api/ai/document/analyze', methods=['POST'])
+@jwt_required()
+def analyze_document():
+    """AI analysis and classification of uploaded documents."""
+    data = request.get_json()
+    document_data = data.get('document', {})
+    
+    analysis = saurellius_ai.analyze_document(document_data)
+    
+    return jsonify({'success': True, 'analysis': analysis}), 200
+
+
+@ai_bp.route('/api/ai/document/extract-receipt', methods=['POST'])
+@jwt_required()
+def extract_receipt():
+    """AI extraction of data from receipts."""
+    data = request.get_json()
+    receipt_data = data.get('receipt', {})
+    
+    extraction = saurellius_ai.extract_receipt_data(receipt_data)
+    
+    return jsonify({'success': True, 'extraction': extraction}), 200
+
+
+@ai_bp.route('/api/ai/document/classify', methods=['POST'])
+@jwt_required()
+def classify_document():
+    """AI classification of documents."""
+    data = request.get_json()
+    document_info = data.get('document', {})
+    
+    classification = saurellius_ai.classify_document(document_info)
+    
+    return jsonify({'success': True, 'classification': classification}), 200
+
+
+# =============================================================================
+#  CONTRACTOR EXPENSE INTELLIGENCE
+# =============================================================================
+
+@ai_bp.route('/api/ai/contractor/expense-analysis', methods=['POST'])
+@jwt_required()
+def analyze_contractor_expenses():
+    """AI analysis of contractor expenses for tax optimization."""
+    data = request.get_json()
+    expense_data = data.get('expenses', {})
+    
+    analysis = saurellius_ai.analyze_contractor_expenses(expense_data)
+    
+    return jsonify({'success': True, 'analysis': analysis}), 200
+
+
+# =============================================================================
+#  PAYROLL OPTIMIZATION INTELLIGENCE
+# =============================================================================
+
+@ai_bp.route('/api/ai/payroll/optimize', methods=['POST'])
+@jwt_required()
+def optimize_payroll():
+    """AI optimization suggestions for payroll runs."""
+    data = request.get_json()
+    payroll_data = data.get('payroll', {})
+    
+    optimization = saurellius_ai.optimize_payroll_run(payroll_data)
+    
+    return jsonify({'success': True, 'optimization': optimization}), 200
+
+
+@ai_bp.route('/api/ai/payroll/labor-analysis', methods=['POST'])
+@jwt_required()
+def analyze_labor():
+    """AI analysis of labor costs and workforce efficiency."""
+    data = request.get_json()
+    labor_data = data.get('labor', {})
+    
+    analysis = saurellius_ai.analyze_labor_costs(labor_data)
+    
+    return jsonify({'success': True, 'analysis': analysis}), 200
+
+
+# =============================================================================
+#  EMPLOYEE SELF-SERVICE INTELLIGENCE
+# =============================================================================
+
+@ai_bp.route('/api/ai/employee/portal-engagement', methods=['POST'])
+@jwt_required()
+def analyze_portal_engagement():
+    """AI analysis of employee portal engagement."""
+    data = request.get_json()
+    usage_data = data.get('usage', {})
+    
+    analysis = saurellius_ai.analyze_employee_portal_usage(usage_data)
+    
+    return jsonify({'success': True, 'analysis': analysis}), 200
+
+
+@ai_bp.route('/api/ai/employee/personalized-dashboard', methods=['POST'])
+@jwt_required()
+def personalize_dashboard():
+    """AI-powered personalized dashboard for employees."""
+    data = request.get_json()
+    employee_data = data.get('employee', {})
+    
+    recommendations = saurellius_ai.personalize_employee_dashboard(employee_data)
+    
+    return jsonify({'success': True, 'recommendations': recommendations}), 200
+
+
+# =============================================================================
+#  ONBOARDING INTELLIGENCE
+# =============================================================================
+
+@ai_bp.route('/api/ai/onboarding/analyze', methods=['POST'])
+@jwt_required()
+def analyze_onboarding():
+    """AI analysis of employee onboarding progress."""
+    data = request.get_json()
+    onboarding_data = data.get('onboarding', {})
+    
+    analysis = saurellius_ai.analyze_onboarding_progress(onboarding_data)
+    
+    return jsonify({'success': True, 'analysis': analysis}), 200
+
+
+# =============================================================================
 #  AI STATUS
 # =============================================================================
 
@@ -713,39 +909,68 @@ def ai_status():
         'ai_enabled': saurellius_ai.initialized,
         'model': 'gemini-1.5-flash' if saurellius_ai.initialized else None,
         'features': [
+            # Core
             'chat_assistant',
             'contextual_chat',
             'universal_assistant',
             'paystub_validation',
             'paystub_explanation',
             'dashboard_insights',
+            # Compliance
             'compliance_check',
-            'employee_analysis',
             'tax_explanation',
             'tax_situation_analysis',
             'fraud_detection',
-            'natural_queries',
+            # Regulatory Filing (NEW)
+            'regulatory_compliance_analysis',
+            'filing_deadline_guidance',
+            'tax_form_explanation',
+            'eftps_deposit_analysis',
+            '1099_readiness_analysis',
+            # Document Intelligence (NEW)
             'document_analysis',
+            'document_classification',
+            'receipt_extraction',
+            # Employee
+            'employee_analysis',
+            'employee_portal_engagement',
+            'personalized_dashboard',
+            'onboarding_analysis',
+            # Payroll (NEW)
+            'payroll_optimization',
+            'labor_cost_analysis',
+            # Contractor (NEW)
+            'contractor_analysis',
+            'contractor_expense_analysis',
+            # Scheduling
+            'natural_queries',
             'plan_recommendations',
-            'wallet_transaction_analysis',
-            'wallet_insights',
-            'ewa_analysis',
             'schedule_optimization',
             'scheduling_predictions',
             'shift_swap_analysis',
+            # Wallet
+            'wallet_transaction_analysis',
+            'wallet_insights',
+            'ewa_analysis',
+            # Alerts
             'smart_alerts',
             'notification_preferences',
+            # Payroll Run
             'payroll_run_analysis',
             'payroll_optimizations',
+            # Talent
             'candidate_analysis',
             'performance_review_generation',
             'learning_path_suggestions',
+            # Experience
             'financial_wellness_analysis',
             'survey_analysis',
+            # Labor
             'project_profitability',
             'labor_forecasting',
+            # Benefits
             'benefits_optimization',
-            'retirement_readiness',
-            'contractor_analysis'
-        ] if saurellius_ai.initialized else []
+            'retirement_readiness'
+        ] if saurellius_ai.initialized else [],
+        'total_features': 50 if saurellius_ai.initialized else 0
     }), 200
