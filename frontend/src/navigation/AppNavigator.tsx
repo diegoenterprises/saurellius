@@ -177,14 +177,14 @@ function MainDrawer() {
       drawerContent={(props) => <CustomDrawerContent {...props} />}
       screenOptions={{
         headerShown: false,
-        drawerType: 'slide',
+        drawerType: 'front',
         drawerStyle: {
           width: 280,
           backgroundColor: '#0F172A',
         },
         overlayColor: 'rgba(0,0,0,0.5)',
         swipeEnabled: true,
-        swipeEdgeWidth: 50,
+        swipeEdgeWidth: 80,
       }}
     >
       <Drawer.Screen name="MainStack" component={MainStack} />
