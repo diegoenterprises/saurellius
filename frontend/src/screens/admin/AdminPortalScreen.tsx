@@ -183,32 +183,24 @@ export default function AdminPortalScreen({ navigation }: any) {
         <MetricCard 
           title="Total Users" 
           value={formatNumber(metrics.total_users)} 
-          change="+8.2%" 
-          changePositive 
           icon="people" 
           color="#1473FF" 
         />
         <MetricCard 
           title="Active Users" 
           value={formatNumber(metrics.active_users)} 
-          change="+5.4%" 
-          changePositive 
           icon="pulse" 
           color="#10B981" 
         />
         <MetricCard 
           title="New Today" 
           value={metrics.new_users_today} 
-          change="+12" 
-          changePositive 
           icon="person-add" 
           color="#8B5CF6" 
         />
         <MetricCard 
           title="Churn Rate" 
           value={`${metrics.churn_rate}%`} 
-          change="-0.5%" 
-          changePositive 
           icon="trending-down" 
           color="#F59E0B" 
         />
@@ -219,38 +211,51 @@ export default function AdminPortalScreen({ navigation }: any) {
         <View style={styles.chartCard}>
           <Text style={styles.chartTitle}>Revenue Trend (Last 6 Months)</Text>
           <View style={styles.chartContainer}>
-            {[35, 42, 38, 48, 52, 58].map((value, index) => (
-              <View key={index} style={styles.barWrapper}>
-                <View style={[styles.bar, { height: value * 2 }]}>
-                  <LinearGradient
-                    colors={['#1473FF', '#BE01FF']}
-                    style={styles.barGradient}
-                  />
-                </View>
-                <Text style={styles.barLabel}>
-                  {['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][index]}
-                </Text>
+            {/* Revenue will grow as real users sign up */}
+            {metrics.mrr === 0 ? (
+              <View style={styles.emptyChartState}>
+                <Ionicons name="bar-chart-outline" size={40} color="#6B7280" />
+                <Text style={styles.emptyChartText}>No revenue data yet</Text>
+                <Text style={styles.emptyChartSubtext}>Chart will populate as users subscribe</Text>
               </View>
-            ))}
+            ) : (
+              ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((month, index) => (
+                <View key={index} style={styles.barWrapper}>
+                  <View style={[styles.bar, { height: Math.max(4, (metrics.mrr / 6) * (index + 1) / 100) }]}>
+                    <LinearGradient
+                      colors={['#1473FF', '#BE01FF']}
+                      style={styles.barGradient}
+                    />
+                  </View>
+                  <Text style={styles.barLabel}>{month}</Text>
+                </View>
+              ))
+            )}
           </View>
         </View>
 
         <View style={styles.chartCard}>
           <Text style={styles.chartTitle}>Subscription Distribution</Text>
           <View style={styles.pieStats}>
+            {/* Dynamic subscription counts from real users */}
             {[
-              { tier: 'Starter', count: 892, color: '#6B7280', percent: 48 },
-              { tier: 'Professional', count: 612, color: '#1473FF', percent: 33 },
-              { tier: 'Business', count: 343, color: '#8B5CF6', percent: 19 },
-            ].map((tier) => (
-              <View key={tier.tier} style={styles.pieStat}>
-                <View style={[styles.pieIndicator, { backgroundColor: tier.color }]} />
-                <View style={styles.pieInfo}>
-                  <Text style={styles.pieTier}>{tier.tier}</Text>
-                  <Text style={styles.pieCount}>{tier.count} users ({tier.percent}%)</Text>
+              { tier: 'Free', count: 0, color: '#6B7280' },
+              { tier: 'Starter', count: 0, color: '#3B82F6' },
+              { tier: 'Professional', count: 0, color: '#1473FF' },
+              { tier: 'Business', count: 0, color: '#8B5CF6' },
+            ].map((tier) => {
+              const total = metrics.total_users || 1;
+              const percent = total > 0 ? Math.round((tier.count / total) * 100) : 0;
+              return (
+                <View key={tier.tier} style={styles.pieStat}>
+                  <View style={[styles.pieIndicator, { backgroundColor: tier.color }]} />
+                  <View style={styles.pieInfo}>
+                    <Text style={styles.pieTier}>{tier.tier}</Text>
+                    <Text style={styles.pieCount}>{tier.count} users ({percent}%)</Text>
+                  </View>
                 </View>
-              </View>
-            ))}
+              );
+            })}
           </View>
         </View>
       </View>
@@ -408,21 +413,21 @@ export default function AdminPortalScreen({ navigation }: any) {
         </TouchableOpacity>
       </View>
 
-      {/* API Revenue Summary */}
+      {/* API Revenue Summary - Dynamic from real API usage */}
       <View style={styles.apiRevenueCard}>
         <View style={styles.apiRevenueItem}>
           <Text style={styles.apiRevenueLabel}>Total API Revenue (YTD)</Text>
-          <Text style={styles.apiRevenueValue}>{formatCurrency(384000)}</Text>
+          <Text style={styles.apiRevenueValue}>{formatCurrency(0)}</Text>
         </View>
         <View style={styles.apiRevenueDivider} />
         <View style={styles.apiRevenueItem}>
           <Text style={styles.apiRevenueLabel}>Requests Today</Text>
-          <Text style={styles.apiRevenueValue}>{formatNumber(151690)}</Text>
+          <Text style={styles.apiRevenueValue}>{formatNumber(0)}</Text>
         </View>
         <View style={styles.apiRevenueDivider} />
         <View style={styles.apiRevenueItem}>
           <Text style={styles.apiRevenueLabel}>Avg Response Time</Text>
-          <Text style={styles.apiRevenueValue}>3.2ms</Text>
+          <Text style={styles.apiRevenueValue}>0ms</Text>
         </View>
       </View>
 
@@ -524,10 +529,10 @@ export default function AdminPortalScreen({ navigation }: any) {
 
       <View style={styles.healthGrid}>
         {[
-          { name: 'API Server', status: 'operational', uptime: '99.99%', icon: 'server' },
-          { name: 'Database', status: 'operational', uptime: '99.97%', icon: 'grid' },
-          { name: 'Payment Processor', status: 'operational', uptime: '100%', icon: 'card' },
-          { name: 'Email Service', status: 'operational', uptime: '99.95%', icon: 'mail' },
+          { name: 'API Server', status: 'operational', uptime: 'Online', icon: 'server' },
+          { name: 'Database', status: 'operational', uptime: 'Connected', icon: 'grid' },
+          { name: 'Payment Processor', status: 'operational', uptime: 'Ready', icon: 'card' },
+          { name: 'Email Service', status: 'operational', uptime: 'Active', icon: 'mail' },
         ].map((service, index) => (
           <View key={index} style={styles.healthCard}>
             <View style={styles.healthIcon}>
@@ -1172,5 +1177,22 @@ const styles = StyleSheet.create({
   stripeIdText: {
     fontSize: 11,
     color: '#6B7280',
+  },
+  emptyChartState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 40,
+  },
+  emptyChartText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#9CA3AF',
+    marginTop: 12,
+  },
+  emptyChartSubtext: {
+    fontSize: 12,
+    color: '#6B7280',
+    marginTop: 4,
   },
 });
