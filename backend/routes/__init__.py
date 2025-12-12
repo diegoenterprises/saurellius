@@ -20,7 +20,7 @@ from .benefits_routes import benefits_bp
 from .wallet_routes import wallet_bp
 from .tax_updater_routes import tax_updater_bp
 from .talent_routes import talent_bp
-from .employee_experience_routes import employee_experience_bp
+from .employee_experience_routes import employee_exp_bp
 
 # Enterprise Routes
 from .accounting_routes import accounting_bp
@@ -76,7 +76,7 @@ __all__ = [
     'wallet_bp',
     'tax_updater_bp',
     'talent_bp',
-    'employee_experience_bp',
+    'employee_exp_bp',
     # Enterprise
     'accounting_bp',
     'contractor_bp',
