@@ -177,13 +177,14 @@ function MainDrawer() {
       drawerContent={(props) => <CustomDrawerContent {...props} />}
       screenOptions={{
         headerShown: false,
-        drawerType: isLargeScreen ? 'permanent' : 'front',
+        drawerType: 'slide',
         drawerStyle: {
-          width: isLargeScreen ? 280 : 300,
+          width: 280,
           backgroundColor: '#0F172A',
         },
         overlayColor: 'rgba(0,0,0,0.5)',
-        swipeEnabled: !isLargeScreen,
+        swipeEnabled: true,
+        swipeEdgeWidth: 50,
       }}
     >
       <Drawer.Screen name="MainStack" component={MainStack} />

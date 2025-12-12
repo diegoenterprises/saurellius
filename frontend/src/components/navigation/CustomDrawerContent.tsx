@@ -319,7 +319,14 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
           onPress={() => handleNavigation('Profile')}
         >
           <View style={styles.userAvatar}>
-            <Text style={styles.userAvatarText}>{userInitials}</Text>
+            {user?.profile_picture ? (
+              <Image 
+                source={{ uri: user.profile_picture }} 
+                style={styles.userAvatarImage} 
+              />
+            ) : (
+              <Text style={styles.userAvatarText}>{userInitials}</Text>
+            )}
           </View>
           <View style={styles.userInfo}>
             <Text style={styles.userName}>{userName}</Text>
@@ -484,6 +491,11 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 16,
     fontWeight: '700',
+  },
+  userAvatarImage: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
   },
   userInfo: {
     flex: 1,

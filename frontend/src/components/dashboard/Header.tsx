@@ -38,13 +38,11 @@ export default function Header() {
   return (
     <View style={styles.nav}>
       <View style={styles.navContainer}>
-        {/* Menu Button - shows on mobile/tablet to open drawer */}
+        {/* Menu Button - always visible to toggle sidebar */}
         <View style={styles.leftSection}>
-          {!isLargeScreen && (
-            <TouchableOpacity style={styles.menuButton} onPress={openDrawer}>
-              <Ionicons name="menu" size={24} color="#fff" />
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity style={styles.menuButton} onPress={openDrawer}>
+            <Ionicons name="menu" size={24} color="#fff" />
+          </TouchableOpacity>
         </View>
 
         {/* User Menu */}
@@ -65,7 +63,14 @@ export default function Header() {
               setShowNotifications(false);
             }}
           >
-            <Text style={styles.avatarText}>{initials}</Text>
+            {user?.profile_picture ? (
+              <Image 
+                source={{ uri: user.profile_picture }} 
+                style={styles.avatarImage} 
+              />
+            ) : (
+              <Text style={styles.avatarText}>{initials}</Text>
+            )}
           </TouchableOpacity>
         </View>
 
@@ -211,6 +216,11 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: typography.fontSize.sm,
     fontWeight: '600',
+  },
+  avatarImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
   },
   dropdownMenu: {
     position: 'absolute',

@@ -43,6 +43,8 @@ interface User {
   paystubs_this_month: number;
   reward_points: number;
   is_admin: boolean;
+  profile_picture: string | null;
+  role?: string;
 }
 
 interface AuthState {

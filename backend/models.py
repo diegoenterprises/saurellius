@@ -39,6 +39,10 @@ class User(db.Model):
     role = db.Column(db.String(50), default='employer')  # employer, manager, employee
     is_admin = db.Column(db.Boolean, default=False)  # Platform admin (you)
     
+    # Profile
+    profile_picture = db.Column(db.Text)  # Base64 encoded image or URL
+    is_active = db.Column(db.Boolean, default=True)
+    
     # Timestamps
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -75,6 +79,7 @@ class User(db.Model):
             'paystubs_this_month': self.paystubs_this_month,
             'reward_points': self.reward_points,
             'is_admin': self.is_admin or False,
+            'profile_picture': self.profile_picture,
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
 

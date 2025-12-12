@@ -268,3 +268,72 @@ def forgot_password():
         'success': True,
         'message': 'If an account exists, a reset link will be sent'
     }), 200
+
+
+@auth_bp.route('/api/auth/profile-picture', methods=['POST'])
+@jwt_required()
+def update_profile_picture():
+    """Update user's profile picture."""
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    
+    if not user:
+        return jsonify({
+            'success': False,
+            'message': 'User not found'
+        }), 404
+    
+    data = request.get_json()
+    profile_picture = data.get('profile_picture')  # Base64 encoded image
+    
+    if not profile_picture:
+        return jsonify({
+            'success': False,
+            'message': 'Profile picture data is required'
+        }), 400
+    
+    # Validate base64 image (basic check)
+    if not profile_picture.startswith('data:image'):
+        return jsonify({
+            'success': False,
+            'message': 'Invalid image format. Must be base64 encoded image.'
+        }), 400
+    
+    # Check size (limit to ~2MB base64)
+    if len(profile_picture) > 2 * 1024 * 1024:
+        return jsonify({
+            'success': False,
+            'message': 'Image too large. Maximum size is 2MB.'
+        }), 400
+    
+    user.profile_picture = profile_picture
+    db.session.commit()
+    
+    return jsonify({
+        'success': True,
+        'message': 'Profile picture updated successfully',
+        'user': user.to_dict()
+    }), 200
+
+
+@auth_bp.route('/api/auth/profile-picture', methods=['DELETE'])
+@jwt_required()
+def delete_profile_picture():
+    """Remove user's profile picture."""
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    
+    if not user:
+        return jsonify({
+            'success': False,
+            'message': 'User not found'
+        }), 404
+    
+    user.profile_picture = None
+    db.session.commit()
+    
+    return jsonify({
+        'success': True,
+        'message': 'Profile picture removed',
+        'user': user.to_dict()
+    }), 200
