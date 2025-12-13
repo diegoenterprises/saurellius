@@ -839,7 +839,7 @@ export default function ContractorRegisterScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <LinearGradient colors={['#0F172A', '#1E293B']} style={styles.header}>
+      <LinearGradient colors={gradients.header} style={styles.header}>
         <View style={styles.headerContent}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" size={24} color="#FFF" />

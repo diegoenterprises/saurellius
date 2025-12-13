@@ -49,7 +49,7 @@ const SignUpScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <LinearGradient colors={['#0F172A', '#1E293B']} style={styles.header}>
+        <LinearGradient colors={gradients.header} style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color="#fff" />
           </TouchableOpacity>
