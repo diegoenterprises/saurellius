@@ -13,7 +13,7 @@ class EmailService:
     
     def __init__(self):
         resend.api_key = os.getenv('RESEND_API_KEY', 're_MJmYFw3j_NQ1cEVAJ3t5zqVVw3UJ439D5')
-        self.sender_email = os.getenv('SENDER_EMAIL', 'noreply@saurellius.com')
+        self.sender_email = os.getenv('SENDER_EMAIL', 'noreply@saurellius.drpaystub.com')
         self.sender_name = "Saurellius Cloud Payroll"
 
     def send_email(
@@ -148,7 +148,7 @@ class EmailService:
                         <span>Earn rewards with every paystub generated</span>
                     </div>
                     
-                    <a href="https://app.saurellius.com/dashboard" class="button">Go to Dashboard</a>
+                    <a href="https://saurellius.drpaystub.com/dashboard" class="button">Go to Dashboard</a>
                 </div>
                 <div class="footer">
                     <p>© 2025 Saurellius. All rights reserved.</p>
@@ -158,7 +158,7 @@ class EmailService:
         </html>
         """
         
-        body_text = f"Hello {user_name}, Welcome to Saurellius! Visit your dashboard to get started: https://app.saurellius.com/dashboard"
+        body_text = f"Hello {user_name}, Welcome to Saurellius! Visit your dashboard to get started: https://saurellius.drpaystub.com/dashboard"
         
         return self.send_email(recipient, subject, body_html, body_text)
 
@@ -316,7 +316,7 @@ class EmailService:
                         </div>
                     </div>
                     
-                    <p>View full details in your <a href="https://app.saurellius.com/dashboard">dashboard</a>.</p>
+                    <p>View full details in your <a href="https://saurellius.drpaystub.com/dashboard">dashboard</a>.</p>
                 </div>
                 <div class="footer">
                     <p>© 2025 Saurellius. All rights reserved.</p>
@@ -424,7 +424,7 @@ class EmailService:
                         <div class="doc-year">Tax Year {tax_year}</div>
                     </div>
                     
-                    <a href="https://app.saurellius.com/tax-documents" class="button">View Document</a>
+                    <a href="https://saurellius.drpaystub.com/tax-documents" class="button">View Document</a>
                     
                     <p style="margin-top: 20px; color: #666; font-size: 14px;">
                         You'll need this document for filing your taxes. Please keep it for your records.
@@ -438,7 +438,7 @@ class EmailService:
         </html>
         """
         
-        body_text = f"Hello {employee_name}, Your {document_type} for tax year {tax_year} is ready. View it at https://app.saurellius.com/tax-documents"
+        body_text = f"Hello {employee_name}, Your {document_type} for tax year {tax_year} is ready. View it at https://saurellius.drpaystub.com/tax-documents"
         
         return self.send_email(recipient, subject, body_html, body_text)
 
