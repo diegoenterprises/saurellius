@@ -75,6 +75,7 @@ import BenefitsEnrollmentScreen from '../screens/employee/BenefitsEnrollmentScre
 import TimeOffRequestScreen from '../screens/employee/TimeOffRequestScreen';
 import PayHistoryScreen from '../screens/employee/PayHistoryScreen';
 import DirectDepositSetupScreen from '../screens/employee/DirectDepositSetupScreen';
+import W4WizardScreen from '../screens/employee/W4WizardScreen';
 import ContractorPortalDashboard from '../screens/contractor/ContractorPortalDashboard';
 import ContractorInvoiceScreen from '../screens/contractor/ContractorInvoiceScreen';
 import ContractorExpenseScreen from '../screens/contractor/ContractorExpenseScreen';
@@ -170,6 +171,7 @@ export type RootStackParamList = {
   // Employer Screens
   YearEndDashboard: undefined;
   DirectDepositSetup: undefined;
+  W4Wizard: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -235,6 +237,7 @@ function MainStack() {
       <Stack.Screen name="TimeOffRequest" component={TimeOffRequestScreen} />
       <Stack.Screen name="PayHistory" component={PayHistoryScreen} />
       <Stack.Screen name="DirectDepositSetup" component={DirectDepositSetupScreen} />
+      <Stack.Screen name="W4Wizard" component={W4WizardScreen} />
       <Stack.Screen name="ContractorPortal" component={ContractorPortalDashboard} />
       <Stack.Screen name="ContractorInvoices" component={ContractorInvoiceScreen} />
       <Stack.Screen name="ContractorExpenses" component={ContractorExpenseScreen} />
