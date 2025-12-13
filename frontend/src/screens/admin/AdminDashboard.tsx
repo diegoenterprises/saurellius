@@ -22,6 +22,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RootState } from '../../store';
 import Header from '../../components/dashboard/Header';
 import api from '../../services/api';
+import { useTheme } from '../../context/ThemeContext';
 
 const { width } = Dimensions.get('window');
 const isLargeScreen = width >= 1024;
@@ -187,6 +188,7 @@ const COLORS = {
 export default function AdminDashboard() {
   const { user } = useSelector((state: RootState) => state.auth);
   const navigation = useNavigation<any>();
+  const { colors, gradients, isDark } = useTheme();
   const [isLoading, setIsLoading] = useState(true);
   const [metrics, setMetrics] = useState<PlatformMetrics>(DEFAULT_METRICS);
   const [signups, setSignups] = useState<Signup[]>([]);
@@ -267,7 +269,7 @@ export default function AdminDashboard() {
       >
         {/* Admin Hero */}
         <LinearGradient
-          colors={['#1E1B4B', '#312E81', '#4C1D95']}
+          colors={gradients.header}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.hero}
