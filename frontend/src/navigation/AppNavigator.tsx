@@ -99,6 +99,9 @@ import RecognitionScreen from '../screens/employee/RecognitionScreen';
 import InternalJobsScreen from '../screens/employee/InternalJobsScreen';
 import PulseSurveysScreen from '../screens/employee/PulseSurveysScreen';
 import KudosWallScreen from '../screens/employee/KudosWallScreen';
+import CompanyEventsScreen from '../screens/employee/CompanyEventsScreen';
+import ResourceLibraryScreen from '../screens/employee/ResourceLibraryScreen';
+import AskHRScreen from '../screens/employee/AskHRScreen';
 import ContractorPortalDashboard from '../screens/contractor/ContractorPortalDashboard';
 import ContractorInvoiceScreen from '../screens/contractor/ContractorInvoiceScreen';
 import ContractorExpenseScreen from '../screens/contractor/ContractorExpenseScreen';
@@ -126,6 +129,9 @@ import ContractorMileageTrackerScreen from '../screens/contractor/ContractorMile
 import ContractorClientPortalScreen from '../screens/contractor/ContractorClientPortalScreen';
 import ContractorRateCalculatorScreen from '../screens/contractor/ContractorRateCalculatorScreen';
 import ContractorAvailabilityCalendarScreen from '../screens/contractor/ContractorAvailabilityCalendarScreen';
+import ContractorInvoiceTemplatesScreen from '../screens/contractor/ContractorInvoiceTemplatesScreen';
+import ContractorPaymentSchedulesScreen from '../screens/contractor/ContractorPaymentSchedulesScreen';
+import ContractorTaxDocumentsScreen from '../screens/contractor/ContractorTaxDocumentsScreen';
 import YearEndDashboardScreen from '../screens/employer/YearEndDashboardScreen';
 import PayrollSummaryDashboard from '../screens/employer/PayrollSummaryDashboard';
 import CompanySettingsScreen from '../screens/employer/CompanySettingsScreen';
@@ -150,6 +156,9 @@ import CompensationPlanningScreen from '../screens/employer/CompensationPlanning
 import OrgChartScreen from '../screens/employer/OrgChartScreen';
 import ExitInterviewsScreen from '../screens/employer/ExitInterviewsScreen';
 import TrainingAdminScreen from '../screens/employer/TrainingAdminScreen';
+import DocumentTemplatesScreen from '../screens/employer/DocumentTemplatesScreen';
+import PolicyLibraryScreen from '../screens/employer/PolicyLibraryScreen';
+import WorkforceAnalyticsScreen from '../screens/employer/WorkforceAnalyticsScreen';
 
 // Legal Screens
 import { PrivacyPolicyScreen, TermsConditionsScreen } from '../screens/legal';
@@ -310,6 +319,15 @@ export type RootStackParamList = {
   ContractorClientPortal: undefined;
   ContractorRateCalculator: undefined;
   ContractorAvailabilityCalendar: undefined;
+  CompanyEvents: undefined;
+  ResourceLibrary: undefined;
+  AskHR: undefined;
+  DocumentTemplates: undefined;
+  PolicyLibrary: undefined;
+  WorkforceAnalytics: undefined;
+  ContractorInvoiceTemplates: undefined;
+  ContractorPaymentSchedules: undefined;
+  ContractorTaxDocuments: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -399,6 +417,9 @@ function MainStack() {
       <Stack.Screen name="InternalJobs" component={InternalJobsScreen} />
       <Stack.Screen name="PulseSurveys" component={PulseSurveysScreen} />
       <Stack.Screen name="KudosWall" component={KudosWallScreen} />
+      <Stack.Screen name="CompanyEvents" component={CompanyEventsScreen} />
+      <Stack.Screen name="ResourceLibrary" component={ResourceLibraryScreen} />
+      <Stack.Screen name="AskHR" component={AskHRScreen} />
       <Stack.Screen name="ContractorPortal" component={ContractorPortalDashboard} />
       <Stack.Screen name="ContractorInvoices" component={ContractorInvoiceScreen} />
       <Stack.Screen name="ContractorExpenses" component={ContractorExpenseScreen} />
@@ -426,6 +447,9 @@ function MainStack() {
       <Stack.Screen name="ContractorClientPortal" component={ContractorClientPortalScreen} />
       <Stack.Screen name="ContractorRateCalculator" component={ContractorRateCalculatorScreen} />
       <Stack.Screen name="ContractorAvailabilityCalendar" component={ContractorAvailabilityCalendarScreen} />
+      <Stack.Screen name="ContractorInvoiceTemplates" component={ContractorInvoiceTemplatesScreen} />
+      <Stack.Screen name="ContractorPaymentSchedules" component={ContractorPaymentSchedulesScreen} />
+      <Stack.Screen name="ContractorTaxDocuments" component={ContractorTaxDocumentsScreen} />
       <Stack.Screen name="YearEndDashboard" component={YearEndDashboardScreen} />
       <Stack.Screen name="PayrollSummaryDashboard" component={PayrollSummaryDashboard} />
       <Stack.Screen name="CompanySettings" component={CompanySettingsScreen} />
@@ -450,6 +474,9 @@ function MainStack() {
       <Stack.Screen name="OrgChart" component={OrgChartScreen} />
       <Stack.Screen name="ExitInterviews" component={ExitInterviewsScreen} />
       <Stack.Screen name="TrainingAdmin" component={TrainingAdminScreen} />
+      <Stack.Screen name="DocumentTemplates" component={DocumentTemplatesScreen} />
+      <Stack.Screen name="PolicyLibrary" component={PolicyLibraryScreen} />
+      <Stack.Screen name="WorkforceAnalytics" component={WorkforceAnalyticsScreen} />
       <Stack.Screen name="NotificationSettings" component={NotificationSettingsScreen} />
       <Stack.Screen name="LanguageSettings" component={LanguageSettingsScreen} />
       <Stack.Screen name="TimezoneSettings" component={TimezoneSettingsScreen} />
