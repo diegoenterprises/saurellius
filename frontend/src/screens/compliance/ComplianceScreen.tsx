@@ -119,7 +119,7 @@ export default function ComplianceScreen({ navigation }: any) {
 
   const tabs: { id: TabType; label: string; icon: keyof typeof Ionicons.glyphMap }[] = [
     { id: 'overview', label: 'Overview', icon: 'analytics-outline' },
-    { id: 'documents', label: 'Documents', icon: 'document-text-outline' },
+    { id: 'documents', label: 'DocuGinuity', icon: 'document-text-outline' },
     { id: 'deadlines', label: 'Deadlines', icon: 'calendar-outline' },
     { id: 'onboarding', label: 'Onboarding', icon: 'person-add-outline' },
   ];

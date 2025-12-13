@@ -58,6 +58,7 @@ const QUARTERLY_DUE_DATES = [
 
 export default function Contractor1099Screen() {
   const navigation = useNavigation<any>();
+  const { colors, gradients } = useTheme();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [forms1099, setForms1099] = useState<Form1099[]>([]);
@@ -398,7 +399,7 @@ export default function Contractor1099Screen() {
             <Ionicons name="arrow-back" size={24} color="#FFF" />
           </TouchableOpacity>
           <View style={styles.headerCenter}>
-            <Text style={styles.headerTitle}>Tax Documents</Text>
+            <Text style={styles.headerTitle}>DocuGinuity Tax</Text>
             <TouchableOpacity style={styles.yearSelector}>
               <Text style={styles.yearText}>{selectedYear}</Text>
               <Ionicons name="chevron-down" size={16} color="#FFF" />

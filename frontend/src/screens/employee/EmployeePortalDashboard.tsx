@@ -188,7 +188,7 @@ export default function EmployeePortalDashboard() {
           />
           <QuickAction
             icon="receipt"
-            label="Tax Documents"
+            label="DocuGinuity Tax"
             onPress={() => navigation.navigate('TaxCenter' as never)}
           />
           <QuickAction
