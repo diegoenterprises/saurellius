@@ -18,6 +18,9 @@ import CustomDrawerContent from '../components/navigation/CustomDrawerContent';
 import LoginScreen from '../screens/auth/LoginScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen';
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
+import EmployerRegisterScreen from '../screens/auth/EmployerRegisterScreen';
+import EmployeeRegisterScreen from '../screens/auth/EmployeeRegisterScreen';
+import ContractorRegisterScreen from '../screens/auth/ContractorRegisterScreen';
 
 // Main Screens
 import DashboardScreen from '../screens/dashboard/DashboardScreen';
@@ -68,7 +71,10 @@ import { WalletScreen } from '../screens/wallet';
 // Self-Service Screens
 import EmployeePortalDashboard from '../screens/employee/EmployeePortalDashboard';
 import OnboardingWizard from '../screens/employee/OnboardingWizard';
+import BenefitsEnrollmentScreen from '../screens/employee/BenefitsEnrollmentScreen';
 import ContractorPortalDashboard from '../screens/contractor/ContractorPortalDashboard';
+import ContractorInvoiceScreen from '../screens/contractor/ContractorInvoiceScreen';
+import ContractorExpenseScreen from '../screens/contractor/ContractorExpenseScreen';
 
 // Legal Screens
 import { PrivacyPolicyScreen, TermsConditionsScreen } from '../screens/legal';
@@ -143,6 +149,15 @@ export type RootStackParamList = {
   Termination: undefined;
   TimeClock: undefined;
   YearEnd: undefined;
+  // New Registration Screens
+  EmployerRegister: undefined;
+  EmployeeRegister: { token?: string };
+  ContractorRegister: { token?: string };
+  // Contractor Portal Screens
+  ContractorInvoices: undefined;
+  ContractorExpenses: undefined;
+  // Employee Self-Service Screens
+  BenefitsEnrollment: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -158,6 +173,9 @@ function AuthStack() {
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="SignUp" component={SignUpScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+      <Stack.Screen name="EmployerRegister" component={EmployerRegisterScreen} />
+      <Stack.Screen name="EmployeeRegister" component={EmployeeRegisterScreen} />
+      <Stack.Screen name="ContractorRegister" component={ContractorRegisterScreen} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
       <Stack.Screen name="TermsConditions" component={TermsConditionsScreen} />
     </Stack.Navigator>
@@ -201,7 +219,10 @@ function MainStack() {
       <Stack.Screen name="TermsConditions" component={TermsConditionsScreen} />
       <Stack.Screen name="EmployeePortal" component={EmployeePortalDashboard} />
       <Stack.Screen name="EmployeeOnboarding" component={OnboardingWizard} />
+      <Stack.Screen name="BenefitsEnrollment" component={BenefitsEnrollmentScreen} />
       <Stack.Screen name="ContractorPortal" component={ContractorPortalDashboard} />
+      <Stack.Screen name="ContractorInvoices" component={ContractorInvoiceScreen} />
+      <Stack.Screen name="ContractorExpenses" component={ContractorExpenseScreen} />
       <Stack.Screen name="NotificationSettings" component={NotificationSettingsScreen} />
       <Stack.Screen name="LanguageSettings" component={LanguageSettingsScreen} />
       <Stack.Screen name="TimezoneSettings" component={TimezoneSettingsScreen} />
