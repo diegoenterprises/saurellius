@@ -1,8 +1,10 @@
 /**
  * ACTIVITY ITEM COMPONENT
+ * With staggered entrance animation
  */
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import Animated, { FadeInLeft, FadeInUp } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { extendedColors as colors, spacing, borderRadius, typography } from '../../styles/theme';
 
@@ -10,11 +12,15 @@ interface ActivityItemProps {
   icon: keyof typeof Ionicons.glyphMap;
   title: string;
   time: string;
+  index?: number;
 }
 
-export default function ActivityItem({ icon, title, time }: ActivityItemProps) {
+export default function ActivityItem({ icon, title, time, index = 0 }: ActivityItemProps) {
   return (
-    <View style={styles.container}>
+    <Animated.View 
+      entering={FadeInLeft.delay(index * 60).springify()}
+      style={styles.container}
+    >
       <View style={styles.iconContainer}>
         <Ionicons name={icon} size={18} color={colors.primary.purple} />
       </View>
@@ -22,7 +28,7 @@ export default function ActivityItem({ icon, title, time }: ActivityItemProps) {
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.time}>{time}</Text>
       </View>
-    </View>
+    </Animated.View>
   );
 }
 
