@@ -6,7 +6,7 @@
 import React from 'react';
 import { View, StyleSheet, Platform, Dimensions } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator, NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
@@ -365,7 +365,13 @@ const isLargeScreen = width >= 768;
 // Auth Stack
 function AuthStack() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator 
+        screenOptions={{ 
+          headerShown: false,
+          animation: 'fade_from_bottom',
+          animationDuration: 300,
+        }}
+      >
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="SignUp" component={SignUpScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
@@ -381,7 +387,15 @@ function AuthStack() {
 // Main Stack with all screens
 function MainStack() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator 
+        screenOptions={{ 
+          headerShown: false,
+          animation: 'slide_from_right',
+          animationDuration: 250,
+          gestureEnabled: true,
+          gestureDirection: 'horizontal',
+        }}
+      >
       <Stack.Screen name="Dashboard" component={DashboardScreen} />
       <Stack.Screen name="Employees" component={EmployeesScreen} />
       <Stack.Screen name="AddEmployee" component={AddEmployeeScreen} />
