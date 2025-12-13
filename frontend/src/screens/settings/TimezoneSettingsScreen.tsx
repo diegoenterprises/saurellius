@@ -59,7 +59,7 @@ const TIMEZONES: Timezone[] = [
 
 const TimezoneSettingsScreen: React.FC = () => {
   const navigation = useNavigation();
-  const { colors } = useTheme();
+  const { colors, gradients } = useTheme();
   const [selectedTimezone, setSelectedTimezone] = useState('America/Chicago');
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
@@ -103,7 +103,7 @@ const TimezoneSettingsScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      <LinearGradient colors={['#0F172A', '#1E293B']} style={styles.header}>
+      <LinearGradient colors={gradients.header} style={styles.header}>
         <View style={styles.headerRow}>
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" size={24} color="#fff" />
