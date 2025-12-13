@@ -1,13 +1,25 @@
 /**
  * STATS CARD
- * Dashboard statistics display card
+ * Dashboard statistics display card with animations
  */
 
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useCallback, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withDelay,
+  withTiming,
+  FadeInUp,
+} from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, spacing, borderRadius, fontSize } from '../../styles/theme';
+import { haptics } from '../../utils/haptics';
+
+const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
+const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
 interface StatsCardProps {
   title?: string;
@@ -20,6 +32,8 @@ interface StatsCardProps {
   };
   trendUp?: boolean; // Simplified trend direction
   gradientColors?: [string, string];
+  index?: number; // For staggered animation
+  onPress?: () => void;
 }
 
 export default function StatsCard({
@@ -30,7 +44,23 @@ export default function StatsCard({
   trend,
   trendUp = true,
   gradientColors = ['#1473FF', '#BE01FF'],
+  index = 0,
+  onPress,
 }: StatsCardProps) {
+  const scale = useSharedValue(1);
+  
+  const handlePressIn = useCallback(() => {
+    scale.value = withSpring(0.95, { damping: 15, stiffness: 300 });
+    haptics.light();
+  }, []);
+  
+  const handlePressOut = useCallback(() => {
+    scale.value = withSpring(1, { damping: 12, stiffness: 200 });
+  }, []);
+  
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
   // Support both title and label props
   const displayTitle = title || label || '';
   
@@ -44,8 +74,9 @@ export default function StatsCard({
   };
   
   const trendInfo = getTrendInfo();
-  return (
-    <LinearGradient
+  
+  const CardContent = (
+    <AnimatedLinearGradient
       colors={gradientColors}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
@@ -75,7 +106,24 @@ export default function StatsCard({
           </Text>
         </View>
       )}
-    </LinearGradient>
+    </AnimatedLinearGradient>
+  );
+  
+  return (
+    <Animated.View
+      entering={FadeInUp.delay(index * 100).springify()}
+      style={[{ flex: 1 }, animatedStyle]}
+    >
+      <TouchableOpacity
+        activeOpacity={1}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        onPress={onPress}
+        style={{ flex: 1 }}
+      >
+        {CardContent}
+      </TouchableOpacity>
+    </Animated.View>
   );
 }
 
