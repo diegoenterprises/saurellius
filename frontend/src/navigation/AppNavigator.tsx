@@ -82,6 +82,9 @@ import TimesheetEntryScreen from '../screens/employee/TimesheetEntryScreen';
 import EmergencyInfoScreen from '../screens/employee/EmergencyInfoScreen';
 import TaxDocumentsScreen from '../screens/employee/TaxDocumentsScreen';
 import TrainingProgressScreen from '../screens/employee/TrainingProgressScreen';
+import PerformanceReviewsScreen from '../screens/employee/PerformanceReviewsScreen';
+import GoalsTrackingScreen from '../screens/employee/GoalsTrackingScreen';
+import NotificationsCenterScreen from '../screens/employee/NotificationsCenterScreen';
 import ContractorPortalDashboard from '../screens/contractor/ContractorPortalDashboard';
 import ContractorInvoiceScreen from '../screens/contractor/ContractorInvoiceScreen';
 import ContractorExpenseScreen from '../screens/contractor/ContractorExpenseScreen';
@@ -92,6 +95,9 @@ import ContractorContractsScreen from '../screens/contractor/ContractorContracts
 import ContractorAvailabilityScreen from '../screens/contractor/ContractorAvailabilityScreen';
 import ContractorProjectsScreen from '../screens/contractor/ContractorProjectsScreen';
 import ContractorClientsScreen from '../screens/contractor/ContractorClientsScreen';
+import ContractorRetainersScreen from '../screens/contractor/ContractorRetainersScreen';
+import ContractorProposalsScreen from '../screens/contractor/ContractorProposalsScreen';
+import ContractorTimeTrackerScreen from '../screens/contractor/ContractorTimeTrackerScreen';
 import YearEndDashboardScreen from '../screens/employer/YearEndDashboardScreen';
 import PayrollSummaryDashboard from '../screens/employer/PayrollSummaryDashboard';
 import CompanySettingsScreen from '../screens/employer/CompanySettingsScreen';
@@ -99,6 +105,9 @@ import ReportsDashboardScreen from '../screens/employer/ReportsDashboardScreen';
 import EmployeeManagementScreen from '../screens/employer/EmployeeManagementScreen';
 import PayrollHistoryScreen from '../screens/employer/PayrollHistoryScreen';
 import OnboardingChecklistScreen from '../screens/employer/OnboardingChecklistScreen';
+import TaxDepositsScreen from '../screens/employer/TaxDepositsScreen';
+import ComplianceDashboardScreen from '../screens/employer/ComplianceDashboardScreen';
+import DepartmentManagementScreen from '../screens/employer/DepartmentManagementScreen';
 
 // Legal Screens
 import { PrivacyPolicyScreen, TermsConditionsScreen } from '../screens/legal';
@@ -208,6 +217,15 @@ export type RootStackParamList = {
   TrainingProgress: undefined;
   OnboardingChecklist: undefined;
   ContractorClients: undefined;
+  PerformanceReviews: undefined;
+  GoalsTracking: undefined;
+  NotificationsCenter: undefined;
+  TaxDeposits: undefined;
+  ComplianceDashboard: undefined;
+  DepartmentManagement: undefined;
+  ContractorRetainers: undefined;
+  ContractorProposals: undefined;
+  ContractorTimeTracker: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -280,6 +298,9 @@ function MainStack() {
       <Stack.Screen name="EmergencyInfo" component={EmergencyInfoScreen} />
       <Stack.Screen name="TaxDocuments" component={TaxDocumentsScreen} />
       <Stack.Screen name="TrainingProgress" component={TrainingProgressScreen} />
+      <Stack.Screen name="PerformanceReviews" component={PerformanceReviewsScreen} />
+      <Stack.Screen name="GoalsTracking" component={GoalsTrackingScreen} />
+      <Stack.Screen name="NotificationsCenter" component={NotificationsCenterScreen} />
       <Stack.Screen name="ContractorPortal" component={ContractorPortalDashboard} />
       <Stack.Screen name="ContractorInvoices" component={ContractorInvoiceScreen} />
       <Stack.Screen name="ContractorExpenses" component={ContractorExpenseScreen} />
@@ -290,6 +311,9 @@ function MainStack() {
       <Stack.Screen name="ContractorAvailability" component={ContractorAvailabilityScreen} />
       <Stack.Screen name="ContractorProjects" component={ContractorProjectsScreen} />
       <Stack.Screen name="ContractorClients" component={ContractorClientsScreen} />
+      <Stack.Screen name="ContractorRetainers" component={ContractorRetainersScreen} />
+      <Stack.Screen name="ContractorProposals" component={ContractorProposalsScreen} />
+      <Stack.Screen name="ContractorTimeTracker" component={ContractorTimeTrackerScreen} />
       <Stack.Screen name="YearEndDashboard" component={YearEndDashboardScreen} />
       <Stack.Screen name="PayrollSummaryDashboard" component={PayrollSummaryDashboard} />
       <Stack.Screen name="CompanySettings" component={CompanySettingsScreen} />
@@ -297,6 +321,9 @@ function MainStack() {
       <Stack.Screen name="EmployeeManagement" component={EmployeeManagementScreen} />
       <Stack.Screen name="PayrollHistory" component={PayrollHistoryScreen} />
       <Stack.Screen name="OnboardingChecklist" component={OnboardingChecklistScreen} />
+      <Stack.Screen name="TaxDeposits" component={TaxDepositsScreen} />
+      <Stack.Screen name="ComplianceDashboard" component={ComplianceDashboardScreen} />
+      <Stack.Screen name="DepartmentManagement" component={DepartmentManagementScreen} />
       <Stack.Screen name="NotificationSettings" component={NotificationSettingsScreen} />
       <Stack.Screen name="LanguageSettings" component={LanguageSettingsScreen} />
       <Stack.Screen name="TimezoneSettings" component={TimezoneSettingsScreen} />
