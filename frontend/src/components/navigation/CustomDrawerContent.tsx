@@ -82,14 +82,15 @@ const ADMIN_MENU_SECTIONS: MenuSection[] = [
   },
 ];
 
-// EMPLOYER MENU - Business owners managing their company
+// EMPLOYER MENU - Business owners managing their company (32 screens)
 const EMPLOYER_MENU_SECTIONS: MenuSection[] = [
   {
     title: 'MAIN',
     items: [
       { id: 'dashboard', label: 'Dashboard', icon: 'grid-outline', screen: 'Dashboard' },
-      { id: 'employees', label: 'Employees', icon: 'people-outline', screen: 'Employees' },
+      { id: 'employees', label: 'Employees', icon: 'people-outline', screen: 'EmployeeManagement' },
       { id: 'paystubs', label: 'Paystubs', icon: 'document-text-outline', screen: 'Paystubs' },
+      { id: 'orgchart', label: 'Org Chart', icon: 'git-network-outline', screen: 'OrgChart' },
     ],
   },
   {
@@ -99,23 +100,50 @@ const EMPLOYER_MENU_SECTIONS: MenuSection[] = [
       { id: 'wallet', label: 'Wallet', icon: 'wallet-outline', screen: 'Wallet', color: COLORS.success },
       { id: 'timesheet', label: 'Time Clock', icon: 'time-outline', screen: 'Timesheet' },
       { id: 'workforce', label: 'Scheduling', icon: 'calendar-outline', screen: 'Workforce' },
+      { id: 'paygrades', label: 'Pay Grades', icon: 'trending-up-outline', screen: 'PayGrades' },
+      { id: 'compensation', label: 'Compensation', icon: 'cash-outline', screen: 'CompensationPlanning' },
     ],
   },
   {
     title: 'HR & BENEFITS',
     items: [
       { id: 'onboarding', label: 'Onboarding', icon: 'person-add-outline', screen: 'Onboarding' },
-      { id: 'benefits', label: 'Benefits', icon: 'heart-outline', screen: 'Benefits' },
-      { id: 'pto', label: 'Time Off', icon: 'airplane-outline', screen: 'PTO' },
+      { id: 'benefits', label: 'Benefits Admin', icon: 'heart-outline', screen: 'BenefitsAdmin' },
+      { id: 'pto', label: 'PTO Management', icon: 'airplane-outline', screen: 'PTOManagement' },
       { id: 'garnishment', label: 'Garnishments', icon: 'remove-circle-outline', screen: 'Garnishment' },
+      { id: 'training', label: 'Training Admin', icon: 'school-outline', screen: 'TrainingAdmin' },
+      { id: 'exitinterviews', label: 'Exit Interviews', icon: 'exit-outline', screen: 'ExitInterviews' },
+    ],
+  },
+  {
+    title: 'RECRUITING',
+    items: [
+      { id: 'jobpostings', label: 'Job Postings', icon: 'megaphone-outline', screen: 'JobPostings' },
+      { id: 'applicants', label: 'Applicant Tracking', icon: 'people-circle-outline', screen: 'ApplicantTracking' },
     ],
   },
   {
     title: 'TAX & COMPLIANCE',
     items: [
       { id: 'taxcenter', label: 'Tax Center', icon: 'calculator-outline', screen: 'TaxCenter' },
-      { id: 'compliance', label: 'Compliance', icon: 'shield-checkmark-outline', screen: 'Compliance' },
-      { id: 'reports', label: 'Reports', icon: 'bar-chart-outline', screen: 'Reports' },
+      { id: 'compliance', label: 'Compliance', icon: 'shield-checkmark-outline', screen: 'ComplianceDashboard' },
+      { id: 'reports', label: 'Reports', icon: 'bar-chart-outline', screen: 'ReportsDashboard' },
+      { id: 'analytics', label: 'Workforce Analytics', icon: 'analytics-outline', screen: 'WorkforceAnalytics' },
+    ],
+  },
+  {
+    title: 'DOCUMENTS & POLICIES',
+    items: [
+      { id: 'documents', label: 'Document Templates', icon: 'documents-outline', screen: 'DocumentTemplates' },
+      { id: 'policies', label: 'Policy Library', icon: 'library-outline', screen: 'PolicyLibrary' },
+    ],
+  },
+  {
+    title: 'WORKPLACE',
+    items: [
+      { id: 'emergency', label: 'Emergency Contacts', icon: 'call-outline', screen: 'EmergencyContacts' },
+      { id: 'equipment', label: 'Equipment Checkout', icon: 'laptop-outline', screen: 'EquipmentCheckout' },
+      { id: 'visitors', label: 'Visitor Log', icon: 'people-outline', screen: 'VisitorLog' },
     ],
   },
   {
@@ -135,7 +163,7 @@ const EMPLOYER_MENU_SECTIONS: MenuSection[] = [
   },
 ];
 
-// EMPLOYEE MENU - Workers viewing their info
+// EMPLOYEE MENU - Workers viewing their info (37 screens)
 const EMPLOYEE_MENU_SECTIONS: MenuSection[] = [
   {
     title: 'MY DASHBOARD',
@@ -143,6 +171,7 @@ const EMPLOYEE_MENU_SECTIONS: MenuSection[] = [
       { id: 'dashboard', label: 'Dashboard', icon: 'grid-outline', screen: 'EmployeePortal' },
       { id: 'paystubs', label: 'My Paystubs', icon: 'document-text-outline', screen: 'Paystubs' },
       { id: 'wallet', label: 'Wallet', icon: 'wallet-outline', screen: 'Wallet', color: COLORS.success },
+      { id: 'profile', label: 'My Profile', icon: 'person-outline', screen: 'Profile' },
     ],
   },
   {
@@ -151,45 +180,134 @@ const EMPLOYEE_MENU_SECTIONS: MenuSection[] = [
       { id: 'timesheet', label: 'Time Clock', icon: 'time-outline', screen: 'Timesheet' },
       { id: 'schedule', label: 'My Schedule', icon: 'calendar-outline', screen: 'Workforce' },
       { id: 'pto', label: 'Time Off', icon: 'airplane-outline', screen: 'PTO' },
+      { id: 'shiftswap', label: 'Shift Swap', icon: 'swap-horizontal-outline', screen: 'ShiftSwap' },
     ],
   },
   {
-    title: 'BENEFITS',
+    title: 'BENEFITS & WELLNESS',
     items: [
       { id: 'benefits', label: 'My Benefits', icon: 'heart-outline', screen: 'Benefits' },
+      { id: 'wellness', label: 'Wellness', icon: 'fitness-outline', screen: 'Wellness' },
       { id: 'rewards', label: 'Rewards', icon: 'trophy-outline', screen: 'Rewards', color: COLORS.warning },
+    ],
+  },
+  {
+    title: 'CAREER & LEARNING',
+    items: [
+      { id: 'careerpath', label: 'Career Path', icon: 'trending-up-outline', screen: 'CareerPath' },
+      { id: 'learning', label: 'Learning Center', icon: 'school-outline', screen: 'LearningCenter' },
+      { id: 'certificates', label: 'Certificates', icon: 'ribbon-outline', screen: 'Certificates' },
+      { id: 'mentorship', label: 'Mentorship', icon: 'people-outline', screen: 'Mentorship' },
+      { id: 'internaljobs', label: 'Internal Jobs', icon: 'briefcase-outline', screen: 'InternalJobs' },
+    ],
+  },
+  {
+    title: 'RECOGNITION',
+    items: [
+      { id: 'recognition', label: 'Recognition', icon: 'medal-outline', screen: 'Recognition' },
+      { id: 'kudos', label: 'Kudos Wall', icon: 'heart-circle-outline', screen: 'KudosWall' },
+    ],
+  },
+  {
+    title: 'WORKPLACE',
+    items: [
+      { id: 'officemap', label: 'Office Map', icon: 'map-outline', screen: 'OfficeMap' },
+      { id: 'parking', label: 'Parking', icon: 'car-outline', screen: 'Parking' },
+      { id: 'itsupport', label: 'IT Support', icon: 'hardware-chip-outline', screen: 'ITSupport' },
+    ],
+  },
+  {
+    title: 'RESOURCES',
+    items: [
+      { id: 'events', label: 'Company Events', icon: 'calendar-outline', screen: 'CompanyEvents' },
+      { id: 'resources', label: 'Resource Library', icon: 'library-outline', screen: 'ResourceLibrary' },
+      { id: 'askhr', label: 'Ask HR', icon: 'help-circle-outline', screen: 'AskHR' },
     ],
   },
   {
     title: 'COMMUNICATION',
     items: [
       { id: 'messages', label: 'Messages', icon: 'chatbubbles-outline', screen: 'Messages', badge: 3 },
-      { id: 'swipe', label: 'Shift Swap', icon: 'swap-horizontal-outline', screen: 'Swipe' },
+      { id: 'feedback', label: 'Feedback', icon: 'chatbox-outline', screen: 'Feedback' },
+      { id: 'surveys', label: 'Pulse Surveys', icon: 'clipboard-outline', screen: 'PulseSurveys' },
+    ],
+  },
+  {
+    title: 'EXPENSES',
+    items: [
+      { id: 'expenses', label: 'Expense Claims', icon: 'receipt-outline', screen: 'ExpenseClaims' },
     ],
   },
 ];
 
-// CONTRACTOR MENU - Independent contractors
+// CONTRACTOR MENU - Independent contractors (35 screens)
 const CONTRACTOR_MENU_SECTIONS: MenuSection[] = [
   {
     title: 'MY DASHBOARD',
     items: [
       { id: 'dashboard', label: 'Dashboard', icon: 'grid-outline', screen: 'ContractorPortal' },
-      { id: 'invoices', label: 'Invoices', icon: 'document-text-outline', screen: 'Paystubs' },
+      { id: 'invoices', label: 'Invoices', icon: 'document-text-outline', screen: 'ContractorInvoices' },
       { id: 'wallet', label: 'Wallet', icon: 'wallet-outline', screen: 'Wallet', color: COLORS.success },
+      { id: 'payments', label: 'Payment History', icon: 'card-outline', screen: 'ContractorPaymentHistory' },
     ],
   },
   {
-    title: 'WORK',
+    title: 'WORK & PROJECTS',
     items: [
       { id: 'timesheet', label: 'Time Tracking', icon: 'time-outline', screen: 'Timesheet' },
-      { id: 'projects', label: 'Projects', icon: 'folder-outline', screen: 'Workforce' },
+      { id: 'projects', label: 'Projects', icon: 'folder-outline', screen: 'ContractorProjects' },
+      { id: 'clients', label: 'Clients', icon: 'people-outline', screen: 'ContractorClients' },
+      { id: 'milestones', label: 'Milestones', icon: 'flag-outline', screen: 'ContractorMilestones' },
+      { id: 'availability', label: 'Availability', icon: 'calendar-outline', screen: 'ContractorAvailabilityCalendar' },
     ],
   },
   {
-    title: 'TAX',
+    title: 'BILLING & INVOICING',
     items: [
-      { id: 'taxforms', label: 'Tax Forms', icon: 'calculator-outline', screen: 'TaxCenter' },
+      { id: 'templates', label: 'Invoice Templates', icon: 'document-outline', screen: 'ContractorInvoiceTemplates' },
+      { id: 'schedules', label: 'Payment Schedules', icon: 'timer-outline', screen: 'ContractorPaymentSchedules' },
+      { id: 'ratecalc', label: 'Rate Calculator', icon: 'calculator-outline', screen: 'ContractorRateCalculator' },
+    ],
+  },
+  {
+    title: 'TAX & FINANCE',
+    items: [
+      { id: 'taxplanner', label: 'Tax Planner', icon: 'calculator-outline', screen: 'ContractorTaxPlanner' },
+      { id: 'taxdocs', label: 'Tax Documents', icon: 'documents-outline', screen: 'ContractorTaxDocuments' },
+      { id: 'expenses', label: 'Business Expenses', icon: 'receipt-outline', screen: 'ContractorBusinessExpenses' },
+      { id: 'mileage', label: 'Mileage Tracker', icon: 'car-outline', screen: 'ContractorMileageTracker' },
+      { id: '1099', label: '1099 Forms', icon: 'document-text-outline', screen: 'Contractor1099' },
+      { id: 'w9', label: 'W-9 Form', icon: 'clipboard-outline', screen: 'ContractorW9' },
+    ],
+  },
+  {
+    title: 'AGREEMENTS & LEGAL',
+    items: [
+      { id: 'contracts', label: 'Contracts', icon: 'document-attach-outline', screen: 'ContractorContracts' },
+      { id: 'ndas', label: 'NDAs & Agreements', icon: 'shield-outline', screen: 'ContractorNDAs' },
+    ],
+  },
+  {
+    title: 'PROFESSIONAL',
+    items: [
+      { id: 'certifications', label: 'Certifications', icon: 'ribbon-outline', screen: 'ContractorSkillCertifications' },
+      { id: 'portfolio', label: 'Portfolio', icon: 'images-outline', screen: 'ContractorPortfolio' },
+      { id: 'reviews', label: 'Reviews', icon: 'star-outline', screen: 'ContractorReviews' },
+    ],
+  },
+  {
+    title: 'BUSINESS',
+    items: [
+      { id: 'subcontractors', label: 'Subcontractors', icon: 'people-outline', screen: 'ContractorSubcontractors' },
+      { id: 'equipment', label: 'Equipment', icon: 'laptop-outline', screen: 'ContractorEquipment' },
+      { id: 'insurance', label: 'Insurance', icon: 'shield-checkmark-outline', screen: 'ContractorInsurance' },
+      { id: 'clientportal', label: 'Client Portal', icon: 'globe-outline', screen: 'ContractorClientPortal' },
+    ],
+  },
+  {
+    title: 'REFERRALS',
+    items: [
+      { id: 'referrals', label: 'Referral Program', icon: 'gift-outline', screen: 'ContractorReferralProgram', color: COLORS.warning },
     ],
   },
   {

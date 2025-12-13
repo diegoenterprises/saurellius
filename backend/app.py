@@ -180,6 +180,15 @@ def create_app(config_name='default'):
     from routes.settings_routes import settings_bp
     app.register_blueprint(settings_bp)
     
+    # Full Portal Routes (Phases 1-32 Complete Coverage)
+    from routes.employer_portal_routes import employer_portal_bp
+    from routes.employee_portal_routes import employee_portal_bp
+    from routes.contractor_portal_routes import contractor_portal_bp
+    
+    app.register_blueprint(employer_portal_bp)
+    app.register_blueprint(employee_portal_bp)
+    app.register_blueprint(contractor_portal_bp)
+    
     # Initialize Tax Update Scheduler
     from services.scheduler_service import init_scheduler
     init_scheduler(app)
