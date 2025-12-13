@@ -189,6 +189,10 @@ def create_app(config_name='default'):
     app.register_blueprint(employee_portal_bp)
     app.register_blueprint(contractor_portal_bp)
     
+    # Admin Dashboard Routes
+    from routes.admin_dashboard_routes import admin_dashboard_bp
+    app.register_blueprint(admin_dashboard_bp)
+    
     # Initialize Tax Update Scheduler
     from services.scheduler_service import init_scheduler
     init_scheduler(app)
