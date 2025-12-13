@@ -4,7 +4,7 @@
  * Dynamically fetches data from backend API
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -14,7 +14,12 @@ import {
   RefreshControl,
   Dimensions,
   ActivityIndicator,
+  Modal,
+  TextInput,
+  Alert,
 } from 'react-native';
+import Animated, { FadeIn, FadeOut, SlideInUp } from 'react-native-reanimated';
+import { haptics } from '../../utils/haptics';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
@@ -194,6 +199,43 @@ export default function AdminDashboard() {
   const [signups, setSignups] = useState<Signup[]>([]);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [systemHealth, setSystemHealth] = useState<any>(null);
+  
+  // Beta invite state
+  const [showBetaModal, setShowBetaModal] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState('');
+  const [inviteName, setInviteName] = useState('');
+  const [isSendingInvite, setIsSendingInvite] = useState(false);
+  const [invitesSent, setInvitesSent] = useState(0);
+
+  // Send beta invitation
+  const sendBetaInvite = useCallback(async () => {
+    if (!inviteEmail.trim()) {
+      Alert.alert('Error', 'Please enter an email address');
+      return;
+    }
+    
+    setIsSendingInvite(true);
+    haptics.medium();
+    
+    try {
+      const response = await api.post('/api/beta/invite', {
+        email: inviteEmail.trim(),
+        name: inviteName.trim() || 'there',
+      });
+      
+      haptics.success();
+      setInvitesSent(prev => prev + 1);
+      Alert.alert('Success! 🎉', `Beta invitation sent to ${inviteEmail}`);
+      setInviteEmail('');
+      setInviteName('');
+      setShowBetaModal(false);
+    } catch (error: any) {
+      haptics.error();
+      Alert.alert('Error', error.response?.data?.error || 'Failed to send invitation');
+    } finally {
+      setIsSendingInvite(false);
+    }
+  }, [inviteEmail, inviteName]);
 
   // Navigation helpers
   const navigateTo = (screen: string) => {
@@ -664,6 +706,44 @@ export default function AdminDashboard() {
               </TouchableOpacity>
             </View>
 
+            {/* Beta Invite Card */}
+            <View style={[styles.card, { marginTop: 16 }]}>
+              <LinearGradient
+                colors={['#8B5CF6', '#6366F1']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.betaInviteGradient}
+              >
+                <View style={styles.betaInviteContent}>
+                  <View style={styles.betaInviteHeader}>
+                    <Ionicons name="rocket" size={28} color="#FFFFFF" />
+                    <View style={styles.betaInviteBadge}>
+                      <Text style={styles.betaInviteBadgeText}>BETA</Text>
+                    </View>
+                  </View>
+                  <Text style={styles.betaInviteTitle}>Invite Beta Testers</Text>
+                  <Text style={styles.betaInviteSubtitle}>
+                    Send exclusive invites to early adopters
+                  </Text>
+                  {invitesSent > 0 && (
+                    <Text style={styles.betaInviteCount}>
+                      {invitesSent} invite{invitesSent !== 1 ? 's' : ''} sent today
+                    </Text>
+                  )}
+                  <TouchableOpacity 
+                    style={styles.betaInviteButton}
+                    onPress={() => {
+                      haptics.medium();
+                      setShowBetaModal(true);
+                    }}
+                  >
+                    <Ionicons name="mail" size={18} color="#8B5CF6" />
+                    <Text style={styles.betaInviteButtonText}>Send Invite</Text>
+                  </TouchableOpacity>
+                </View>
+              </LinearGradient>
+            </View>
+
             {/* System Health */}
             <View style={[styles.card, { marginTop: 16 }]}>
               <View style={styles.cardHeader}>
@@ -697,6 +777,77 @@ export default function AdminDashboard() {
           </View>
         </View>
       </ScrollView>
+      
+      {/* Beta Invite Modal */}
+      <Modal
+        visible={showBetaModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowBetaModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>🚀 Send Beta Invite</Text>
+              <TouchableOpacity onPress={() => setShowBetaModal(false)}>
+                <Ionicons name="close" size={24} color={COLORS.textMuted} />
+              </TouchableOpacity>
+            </View>
+            
+            <Text style={styles.modalDescription}>
+              Send an exclusive beta invitation with signup link and perks info.
+            </Text>
+            
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Recipient Name</Text>
+              <TextInput
+                style={styles.textInput}
+                placeholder="John Doe"
+                placeholderTextColor={COLORS.textMuted}
+                value={inviteName}
+                onChangeText={setInviteName}
+              />
+            </View>
+            
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Email Address *</Text>
+              <TextInput
+                style={styles.textInput}
+                placeholder="user@company.com"
+                placeholderTextColor={COLORS.textMuted}
+                value={inviteEmail}
+                onChangeText={setInviteEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+            </View>
+            
+            <View style={styles.modalButtons}>
+              <TouchableOpacity 
+                style={styles.cancelButton}
+                onPress={() => setShowBetaModal(false)}
+              >
+                <Text style={styles.cancelButtonText}>Cancel</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity 
+                style={[styles.sendButton, isSendingInvite && styles.sendButtonDisabled]}
+                onPress={sendBetaInvite}
+                disabled={isSendingInvite}
+              >
+                {isSendingInvite ? (
+                  <ActivityIndicator size="small" color="#FFFFFF" />
+                ) : (
+                  <>
+                    <Ionicons name="send" size={16} color="#FFFFFF" />
+                    <Text style={styles.sendButtonText}>Send Invite</Text>
+                  </>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -1156,5 +1307,151 @@ const styles = StyleSheet.create({
     color: COLORS.textMuted,
     marginTop: 4,
     textAlign: 'center',
+  },
+  // Beta Invite Card Styles
+  betaInviteGradient: {
+    borderRadius: 16,
+    overflow: 'hidden',
+  },
+  betaInviteContent: {
+    padding: 20,
+  },
+  betaInviteHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  betaInviteBadge: {
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginLeft: 10,
+  },
+  betaInviteBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 1,
+  },
+  betaInviteTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    marginBottom: 4,
+  },
+  betaInviteSubtitle: {
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.8)',
+    marginBottom: 8,
+  },
+  betaInviteCount: {
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.7)',
+    marginBottom: 12,
+  },
+  betaInviteButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 25,
+    gap: 8,
+    marginTop: 8,
+  },
+  betaInviteButtonText: {
+    color: '#8B5CF6',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  // Modal Styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  modalContent: {
+    backgroundColor: COLORS.surface,
+    borderRadius: 20,
+    padding: 24,
+    width: '100%',
+    maxWidth: 400,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: COLORS.text,
+  },
+  modalDescription: {
+    fontSize: 14,
+    color: COLORS.textMuted,
+    marginBottom: 20,
+    lineHeight: 20,
+  },
+  inputGroup: {
+    marginBottom: 16,
+  },
+  inputLabel: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: COLORS.text,
+    marginBottom: 8,
+  },
+  textInput: {
+    backgroundColor: COLORS.surfaceLight,
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    fontSize: 15,
+    color: COLORS.text,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    gap: 12,
+    marginTop: 8,
+  },
+  cancelButton: {
+    flex: 1,
+    paddingVertical: 14,
+    borderRadius: 12,
+    backgroundColor: COLORS.surfaceLight,
+    alignItems: 'center',
+  },
+  cancelButtonText: {
+    color: COLORS.textMuted,
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  sendButton: {
+    flex: 1,
+    flexDirection: 'row',
+    paddingVertical: 14,
+    borderRadius: 12,
+    backgroundColor: COLORS.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  sendButtonDisabled: {
+    opacity: 0.6,
+  },
+  sendButtonText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '600',
   },
 });

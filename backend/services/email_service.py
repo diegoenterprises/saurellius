@@ -13,7 +13,7 @@ class EmailService:
     
     def __init__(self):
         resend.api_key = os.getenv('RESEND_API_KEY', 're_MJmYFw3j_NQ1cEVAJ3t5zqVVw3UJ439D5')
-        self.sender_email = os.getenv('SENDER_EMAIL', 'noreply@saurellius.drpaystub.com')
+        self.sender_email = os.getenv('SENDER_EMAIL', 'noreply@drpaystub.com')
         self.sender_name = "Saurellius Cloud Payroll"
 
     def send_email(
