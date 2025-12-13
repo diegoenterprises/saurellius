@@ -56,6 +56,10 @@ import { ReportsScreen } from '../screens/reports';
 
 // Admin Portal
 import { AdminPortalScreen, AdminSupportScreen } from '../screens/admin';
+import AdminUsersScreen from '../screens/admin/AdminUsersScreen';
+import AdminRevenueScreen from '../screens/admin/AdminRevenueScreen';
+import AdminAPIScreen from '../screens/admin/AdminAPIScreen';
+import AdminSystemScreen from '../screens/admin/AdminSystemScreen';
 
 // Additional Enterprise Screens
 import { SwipeScreen } from '../screens/swipe';
@@ -218,6 +222,10 @@ export type RootStackParamList = {
   Benefits: undefined;
   AdminPortal: undefined;
   AdminSupport: undefined;
+  AdminUsers: undefined;
+  AdminRevenue: undefined;
+  AdminAPI: undefined;
+  AdminSystem: undefined;
   PrivacyPolicy: undefined;
   TermsConditions: undefined;
   // Self-Service Portals
@@ -403,6 +411,10 @@ function MainStack() {
       <Stack.Screen name="Benefits" component={BenefitsScreen} />
       <Stack.Screen name="AdminPortal" component={AdminPortalScreen} />
       <Stack.Screen name="AdminSupport" component={AdminSupportScreen} />
+      <Stack.Screen name="AdminUsers" component={AdminUsersScreen} />
+      <Stack.Screen name="AdminRevenue" component={AdminRevenueScreen} />
+      <Stack.Screen name="AdminAPI" component={AdminAPIScreen} />
+      <Stack.Screen name="AdminSystem" component={AdminSystemScreen} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
       <Stack.Screen name="TermsConditions" component={TermsConditionsScreen} />
       <Stack.Screen name="EmployeePortal" component={EmployeePortalDashboard} />
