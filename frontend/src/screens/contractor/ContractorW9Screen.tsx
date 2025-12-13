@@ -21,6 +21,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
+import { useTheme } from '../../context/ThemeContext';
 
 interface W9Info {
   id: string;
@@ -430,7 +431,7 @@ export default function ContractorW9Screen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <LinearGradient colors={['#0F172A', '#1E293B']} style={styles.header}>
+      <LinearGradient colors={gradients.header} style={styles.header}>
         <View style={styles.headerContent}>
           <TouchableOpacity onPress={() => editMode ? setEditMode(false) : navigation.goBack()}>
             <Ionicons name={editMode ? "close" : "arrow-back"} size={24} color="#FFF" />
