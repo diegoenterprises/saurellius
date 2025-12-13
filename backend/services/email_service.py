@@ -442,6 +442,174 @@ class EmailService:
         
         return self.send_email(recipient, subject, body_html, body_text)
 
+    def send_beta_invitation(
+        self,
+        recipient: str,
+        recipient_name: str,
+        invite_code: str = None
+    ) -> bool:
+        """Send beta tester invitation email."""
+        subject = "🚀 You're Invited to Beta Test Saurellius!"
+        
+        signup_url = "https://saurellius.drpaystub.com/signup"
+        if invite_code:
+            signup_url += f"?invite={invite_code}"
+        
+        body_html = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {{ font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }}
+                .container {{ max-width: 600px; margin: 0 auto; background: white; border-radius: 16px; overflow: hidden; }}
+                .header {{ background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #3B82F6 100%); color: white; padding: 40px 30px; text-align: center; }}
+                .header h1 {{ margin: 0; font-size: 28px; }}
+                .header p {{ margin: 10px 0 0; opacity: 0.9; }}
+                .badge {{ display: inline-block; background: rgba(255,255,255,0.2); padding: 6px 16px; border-radius: 20px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }}
+                .content {{ padding: 40px 30px; }}
+                .feature-list {{ margin: 24px 0; }}
+                .feature {{ display: flex; align-items: center; margin-bottom: 16px; padding: 12px; background: #F8FAFC; border-radius: 8px; }}
+                .feature-icon {{ width: 40px; height: 40px; background: linear-gradient(135deg, #3B82F6, #1D4ED8); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 16px; color: white; font-size: 18px; }}
+                .feature-text {{ flex: 1; }}
+                .feature-title {{ font-weight: 600; color: #1F2937; margin-bottom: 2px; }}
+                .feature-desc {{ font-size: 13px; color: #6B7280; }}
+                .cta-button {{ display: inline-block; background: linear-gradient(135deg, #3B82F6, #1D4ED8); color: white; padding: 16px 40px; border-radius: 30px; text-decoration: none; font-weight: 600; font-size: 16px; margin: 20px 0; }}
+                .cta-button:hover {{ background: linear-gradient(135deg, #2563EB, #1E40AF); }}
+                .perks {{ background: #FEF3C7; border-radius: 12px; padding: 20px; margin: 24px 0; }}
+                .perks-title {{ color: #92400E; font-weight: 600; margin-bottom: 8px; }}
+                .perks-list {{ color: #B45309; font-size: 14px; margin: 0; padding-left: 20px; }}
+                .footer {{ background: #F8FAFC; padding: 24px; text-align: center; color: #6B7280; font-size: 12px; }}
+                .social {{ margin: 16px 0; }}
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <div class="badge">🎯 Exclusive Beta Access</div>
+                    <h1>Welcome to Saurellius!</h1>
+                    <p>The Future of Cloud Payroll Management</p>
+                </div>
+                <div class="content">
+                    <p>Hi {recipient_name},</p>
+                    <p>You've been selected to join our exclusive beta program! We're building the most powerful, intuitive payroll platform for modern businesses, and we want <strong>you</strong> to be part of shaping it.</p>
+                    
+                    <div class="feature-list">
+                        <div class="feature">
+                            <div class="feature-icon">💰</div>
+                            <div class="feature-text">
+                                <div class="feature-title">Effortless Payroll</div>
+                                <div class="feature-desc">Generate professional paystubs in seconds with automated tax calculations</div>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">👥</div>
+                            <div class="feature-text">
+                                <div class="feature-title">Employee Portal</div>
+                                <div class="feature-desc">Give your team access to their paystubs, tax docs, and more</div>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">📊</div>
+                            <div class="feature-text">
+                                <div class="feature-title">Smart Analytics</div>
+                                <div class="feature-desc">AI-powered insights to optimize your payroll operations</div>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">🔒</div>
+                            <div class="feature-text">
+                                <div class="feature-title">Bank-Level Security</div>
+                                <div class="feature-desc">Enterprise-grade encryption and compliance built-in</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <a href="{signup_url}" class="cta-button">Start Your Free Trial →</a>
+                    </div>
+                    
+                    <div class="perks">
+                        <div class="perks-title">🎁 Beta Tester Perks</div>
+                        <ul class="perks-list">
+                            <li>Free access during beta period</li>
+                            <li>50% off your first year when we launch</li>
+                            <li>Direct line to our founding team</li>
+                            <li>Shape product features with your feedback</li>
+                        </ul>
+                    </div>
+                    
+                    <p style="color: #6B7280; font-size: 14px;">Questions? Just reply to this email - I personally read every message.</p>
+                    <p style="margin-top: 24px;">
+                        Best,<br/>
+                        <strong>Diego</strong><br/>
+                        <span style="color: #6B7280;">Founder, Saurellius</span>
+                    </p>
+                </div>
+                <div class="footer">
+                    <p>© 2025 Saurellius by Diego Enterprises. All rights reserved.</p>
+                    <p>You're receiving this because you were invited to our beta program.</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+        
+        body_text = f"""
+Hi {recipient_name},
+
+You've been selected to join our exclusive beta program for Saurellius - The Future of Cloud Payroll Management!
+
+🚀 What you get:
+- Effortless Payroll: Generate professional paystubs in seconds
+- Employee Portal: Give your team access to their documents
+- Smart Analytics: AI-powered insights for your business
+- Bank-Level Security: Enterprise-grade protection
+
+🎁 Beta Tester Perks:
+- Free access during beta period
+- 50% off your first year when we launch
+- Direct line to our founding team
+- Shape product features with your feedback
+
+Start your free trial: {signup_url}
+
+Questions? Just reply to this email!
+
+Best,
+Diego
+Founder, Saurellius
+        """
+        
+        return self.send_email(recipient, subject, body_html, body_text)
+
+    def send_bulk_beta_invitations(self, recipients: list) -> dict:
+        """
+        Send beta invitations to multiple recipients.
+        
+        Args:
+            recipients: List of dicts with 'email' and 'name' keys
+            
+        Returns:
+            Dict with 'sent' and 'failed' counts
+        """
+        results = {'sent': 0, 'failed': 0, 'emails': []}
+        
+        for recipient in recipients:
+            email = recipient.get('email')
+            name = recipient.get('name', 'there')
+            invite_code = recipient.get('invite_code')
+            
+            success = self.send_beta_invitation(email, name, invite_code)
+            
+            if success:
+                results['sent'] += 1
+                results['emails'].append({'email': email, 'status': 'sent'})
+            else:
+                results['failed'] += 1
+                results['emails'].append({'email': email, 'status': 'failed'})
+        
+        return results
+
 
 # Singleton instance for easy import
 email_service = EmailService()

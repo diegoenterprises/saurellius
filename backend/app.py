@@ -193,6 +193,10 @@ def create_app(config_name='default'):
     from routes.admin_dashboard_routes import admin_dashboard_bp
     app.register_blueprint(admin_dashboard_bp)
     
+    # Beta Invitation Routes
+    from routes.beta_invite_routes import beta_invite_bp
+    app.register_blueprint(beta_invite_bp)
+    
     # Initialize Tax Update Scheduler
     from services.scheduler_service import init_scheduler
     init_scheduler(app)
