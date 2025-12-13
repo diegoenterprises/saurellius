@@ -77,13 +77,16 @@ import PayHistoryScreen from '../screens/employee/PayHistoryScreen';
 import DirectDepositSetupScreen from '../screens/employee/DirectDepositSetupScreen';
 import W4WizardScreen from '../screens/employee/W4WizardScreen';
 import EmployeeProfileScreen from '../screens/employee/EmployeeProfileScreen';
+import DocumentCenterScreen from '../screens/employee/DocumentCenterScreen';
 import ContractorPortalDashboard from '../screens/contractor/ContractorPortalDashboard';
 import ContractorInvoiceScreen from '../screens/contractor/ContractorInvoiceScreen';
 import ContractorExpenseScreen from '../screens/contractor/ContractorExpenseScreen';
 import Contractor1099Screen from '../screens/contractor/Contractor1099Screen';
 import ContractorPaymentHistoryScreen from '../screens/contractor/ContractorPaymentHistoryScreen';
+import ContractorW9Screen from '../screens/contractor/ContractorW9Screen';
 import YearEndDashboardScreen from '../screens/employer/YearEndDashboardScreen';
 import PayrollSummaryDashboard from '../screens/employer/PayrollSummaryDashboard';
+import CompanySettingsScreen from '../screens/employer/CompanySettingsScreen';
 
 // Legal Screens
 import { PrivacyPolicyScreen, TermsConditionsScreen } from '../screens/legal';
@@ -178,6 +181,9 @@ export type RootStackParamList = {
   EmployeeProfile: undefined;
   PayrollSummaryDashboard: undefined;
   ContractorPaymentHistory: undefined;
+  DocumentCenter: undefined;
+  CompanySettings: undefined;
+  ContractorW9: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -245,13 +251,16 @@ function MainStack() {
       <Stack.Screen name="DirectDepositSetup" component={DirectDepositSetupScreen} />
       <Stack.Screen name="W4Wizard" component={W4WizardScreen} />
       <Stack.Screen name="EmployeeProfile" component={EmployeeProfileScreen} />
+      <Stack.Screen name="DocumentCenter" component={DocumentCenterScreen} />
       <Stack.Screen name="ContractorPortal" component={ContractorPortalDashboard} />
       <Stack.Screen name="ContractorInvoices" component={ContractorInvoiceScreen} />
       <Stack.Screen name="ContractorExpenses" component={ContractorExpenseScreen} />
       <Stack.Screen name="Contractor1099" component={Contractor1099Screen} />
       <Stack.Screen name="ContractorPaymentHistory" component={ContractorPaymentHistoryScreen} />
+      <Stack.Screen name="ContractorW9" component={ContractorW9Screen} />
       <Stack.Screen name="YearEndDashboard" component={YearEndDashboardScreen} />
       <Stack.Screen name="PayrollSummaryDashboard" component={PayrollSummaryDashboard} />
+      <Stack.Screen name="CompanySettings" component={CompanySettingsScreen} />
       <Stack.Screen name="NotificationSettings" component={NotificationSettingsScreen} />
       <Stack.Screen name="LanguageSettings" component={LanguageSettingsScreen} />
       <Stack.Screen name="TimezoneSettings" component={TimezoneSettingsScreen} />
