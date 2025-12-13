@@ -76,11 +76,14 @@ import TimeOffRequestScreen from '../screens/employee/TimeOffRequestScreen';
 import PayHistoryScreen from '../screens/employee/PayHistoryScreen';
 import DirectDepositSetupScreen from '../screens/employee/DirectDepositSetupScreen';
 import W4WizardScreen from '../screens/employee/W4WizardScreen';
+import EmployeeProfileScreen from '../screens/employee/EmployeeProfileScreen';
 import ContractorPortalDashboard from '../screens/contractor/ContractorPortalDashboard';
 import ContractorInvoiceScreen from '../screens/contractor/ContractorInvoiceScreen';
 import ContractorExpenseScreen from '../screens/contractor/ContractorExpenseScreen';
 import Contractor1099Screen from '../screens/contractor/Contractor1099Screen';
+import ContractorPaymentHistoryScreen from '../screens/contractor/ContractorPaymentHistoryScreen';
 import YearEndDashboardScreen from '../screens/employer/YearEndDashboardScreen';
+import PayrollSummaryDashboard from '../screens/employer/PayrollSummaryDashboard';
 
 // Legal Screens
 import { PrivacyPolicyScreen, TermsConditionsScreen } from '../screens/legal';
@@ -172,6 +175,9 @@ export type RootStackParamList = {
   YearEndDashboard: undefined;
   DirectDepositSetup: undefined;
   W4Wizard: undefined;
+  EmployeeProfile: undefined;
+  PayrollSummaryDashboard: undefined;
+  ContractorPaymentHistory: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -238,11 +244,14 @@ function MainStack() {
       <Stack.Screen name="PayHistory" component={PayHistoryScreen} />
       <Stack.Screen name="DirectDepositSetup" component={DirectDepositSetupScreen} />
       <Stack.Screen name="W4Wizard" component={W4WizardScreen} />
+      <Stack.Screen name="EmployeeProfile" component={EmployeeProfileScreen} />
       <Stack.Screen name="ContractorPortal" component={ContractorPortalDashboard} />
       <Stack.Screen name="ContractorInvoices" component={ContractorInvoiceScreen} />
       <Stack.Screen name="ContractorExpenses" component={ContractorExpenseScreen} />
       <Stack.Screen name="Contractor1099" component={Contractor1099Screen} />
+      <Stack.Screen name="ContractorPaymentHistory" component={ContractorPaymentHistoryScreen} />
       <Stack.Screen name="YearEndDashboard" component={YearEndDashboardScreen} />
+      <Stack.Screen name="PayrollSummaryDashboard" component={PayrollSummaryDashboard} />
       <Stack.Screen name="NotificationSettings" component={NotificationSettingsScreen} />
       <Stack.Screen name="LanguageSettings" component={LanguageSettingsScreen} />
       <Stack.Screen name="TimezoneSettings" component={TimezoneSettingsScreen} />
