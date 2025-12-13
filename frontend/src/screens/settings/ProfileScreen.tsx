@@ -23,10 +23,12 @@ import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import api from '../../services/api';
+import { useTheme } from '../../context/ThemeContext';
 
 const ProfileScreen: React.FC = () => {
   const navigation = useNavigation<any>();
   const user = useSelector((state: RootState) => state.auth.user);
+  const { colors, gradients } = useTheme();
   
   const [firstName, setFirstName] = useState(user?.first_name || '');
   const [lastName, setLastName] = useState(user?.last_name || '');
@@ -86,7 +88,7 @@ const ProfileScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <LinearGradient colors={['#1473FF', '#BE01FF']} style={styles.header}>
+      <LinearGradient colors={gradients.header} style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#fff" />
         </TouchableOpacity>
