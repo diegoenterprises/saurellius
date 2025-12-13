@@ -132,9 +132,9 @@ const EMPLOYER_MENU_SECTIONS: MenuSection[] = [
     ],
   },
   {
-    title: 'DOCUMENTS & POLICIES',
+    title: 'DOCUGINUITY & POLICIES',
     items: [
-      { id: 'documents', label: 'Document Templates', icon: 'documents-outline', screen: 'DocumentTemplates' },
+      { id: 'documents', label: 'DocuGinuity Templates', icon: 'documents-outline', screen: 'DocumentTemplates' },
       { id: 'policies', label: 'Policy Library', icon: 'library-outline', screen: 'PolicyLibrary' },
     ],
   },
@@ -273,7 +273,7 @@ const CONTRACTOR_MENU_SECTIONS: MenuSection[] = [
     title: 'TAX & FINANCE',
     items: [
       { id: 'taxplanner', label: 'Tax Planner', icon: 'calculator-outline', screen: 'ContractorTaxPlanner' },
-      { id: 'taxdocs', label: 'Tax Documents', icon: 'documents-outline', screen: 'ContractorTaxDocuments' },
+      { id: 'taxdocs', label: 'DocuGinuity Tax', icon: 'documents-outline', screen: 'ContractorTaxDocuments' },
       { id: 'expenses', label: 'Business Expenses', icon: 'receipt-outline', screen: 'ContractorBusinessExpenses' },
       { id: 'mileage', label: 'Mileage Tracker', icon: 'car-outline', screen: 'ContractorMileageTracker' },
       { id: '1099', label: '1099 Forms', icon: 'document-text-outline', screen: 'Contractor1099' },

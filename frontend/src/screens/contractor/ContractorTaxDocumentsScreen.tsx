@@ -1,5 +1,5 @@
 /**
- * CONTRACTOR TAX DOCUMENTS SCREEN
+ * CONTRACTOR DOCUGINUITY TAX SCREEN
  * Manage and access tax documents
  * 1099s, W-9s, receipts, deduction records
  */
@@ -156,7 +156,7 @@ export default function ContractorTaxDocumentsScreen() {
       <LinearGradient colors={gradients.header} style={styles.header}>
         <View style={styles.headerContent}>
           <TouchableOpacity onPress={() => navigation.goBack()}><Ionicons name="arrow-back" size={24} color="#FFF" /></TouchableOpacity>
-          <Text style={styles.headerTitle}>Tax Documents</Text>
+          <Text style={styles.headerTitle}>DocuGinuity Tax</Text>
           <TouchableOpacity onPress={handleUpload}><Ionicons name="cloud-upload-outline" size={24} color="#FFF" /></TouchableOpacity>
         </View>
         <View style={styles.yearSelector}>

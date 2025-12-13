@@ -1,5 +1,5 @@
 /**
- * EMPLOYEE DOCUMENT CENTER SCREEN
+ * EMPLOYEE DOCUGINUITY SCREEN
  * Access and manage employment documents
  * Tax forms, paystubs, benefits documents, company policies
  */
@@ -58,6 +58,7 @@ const DOCUMENT_CATEGORIES: DocumentCategory[] = [
 
 export default function DocumentCenterScreen() {
   const navigation = useNavigation<any>();
+  const { colors, gradients } = useTheme();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [documents, setDocuments] = useState<Document[]>([]);
@@ -270,7 +271,7 @@ export default function DocumentCenterScreen() {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" size={24} color="#FFF" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Document Center</Text>
+          <Text style={styles.headerTitle}>DocuGinuity</Text>
           <TouchableOpacity>
             <Ionicons name="search" size={24} color="#FFF" />
           </TouchableOpacity>

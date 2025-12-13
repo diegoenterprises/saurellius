@@ -1,5 +1,5 @@
 /**
- * EMPLOYEE TAX DOCUMENTS SCREEN
+ * EMPLOYEE DOCUGINUITY TAX SCREEN
  * Access W-2s, 1095-Cs, and other tax forms
  * Download and view historical tax documents
  */
@@ -62,6 +62,7 @@ const DOCUMENT_TYPES = {
 
 export default function TaxDocumentsScreen() {
   const navigation = useNavigation<any>();
+  const { colors, gradients } = useTheme();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [yearData, setYearData] = useState<YearData[]>([]);
@@ -293,7 +294,7 @@ export default function TaxDocumentsScreen() {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" size={24} color="#FFF" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Tax Documents</Text>
+          <Text style={styles.headerTitle}>DocuGinuity Tax</Text>
           <View style={{ width: 24 }} />
         </View>
 

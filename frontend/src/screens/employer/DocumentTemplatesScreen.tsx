@@ -1,6 +1,6 @@
 /**
- * EMPLOYER DOCUMENT TEMPLATES SCREEN
- * Manage HR document templates
+ * EMPLOYER DOCUGINUITY TEMPLATES SCREEN
+ * Manage HR DocuGinuity templates
  * Create, edit, and share standardized documents
  */
 
@@ -55,6 +55,7 @@ const CATEGORIES = [
 
 export default function DocumentTemplatesScreen() {
   const navigation = useNavigation<any>();
+  const { colors, gradients } = useTheme();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [templates, setTemplates] = useState<DocumentTemplate[]>([]);
@@ -170,7 +171,7 @@ export default function DocumentTemplatesScreen() {
       <LinearGradient colors={gradients.header} style={styles.header}>
         <View style={styles.headerContent}>
           <TouchableOpacity onPress={() => navigation.goBack()}><Ionicons name="arrow-back" size={24} color="#FFF" /></TouchableOpacity>
-          <Text style={styles.headerTitle}>Document Templates</Text>
+          <Text style={styles.headerTitle}>DocuGinuity Templates</Text>
           <TouchableOpacity><Ionicons name="add-circle-outline" size={24} color="#FFF" /></TouchableOpacity>
         </View>
         {stats && (
