@@ -20,6 +20,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
+import { useTheme } from '../../context/ThemeContext';
 
 interface Milestone {
   id: string;
@@ -46,8 +47,9 @@ interface MilestoneStats {
   total_value: number;
 }
 
-export default function ContractorMilestonesScreen() {
-  const navigation = useNavigation<any>();
+export default function ContractorMilestonesScreen(): React.ReactElement {
+  const navigation = useNavigation();
+  const { colors, gradients } = useTheme();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [milestones, setMilestones] = useState<Milestone[]>([]);
@@ -216,7 +218,7 @@ export default function ContractorMilestonesScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <LinearGradient colors={['#0F172A', '#1E293B']} style={styles.header}>
+      <LinearGradient colors={gradients.header} style={styles.header}>
         <View style={styles.headerContent}>
           <TouchableOpacity onPress={() => navigation.goBack()}><Ionicons name="arrow-back" size={24} color="#FFF" /></TouchableOpacity>
           <Text style={styles.headerTitle}>Milestones</Text>
