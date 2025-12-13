@@ -45,14 +45,26 @@ export const colors = {
 };
 
 // Gradient presets (mutable arrays for LinearGradient compatibility)
+// UNIFIED PLATFORM GRADIENT: Navy Command Center style
 export const gradients = {
-  primary: ['#1473FF', '#BE01FF'] as [string, string],
+  // Primary platform gradient - used for headers, buttons, key UI elements
+  primary: ['#0F172A', '#1E293B'] as [string, string],
+  // Accent gradient for special highlights
+  accent: ['#3B82F6', '#8B5CF6'] as [string, string],
+  // Button gradient - subtle navy with blue tint
+  button: ['#1E3A5F', '#0F172A'] as [string, string],
+  // Header gradient - matches Platform Command Center
+  header: ['#0F172A', '#1E293B'] as [string, string],
+  // Card gradient
+  card: ['#1E293B', '#0F172A'] as [string, string],
+  // Status gradients
   success: ['#10b981', '#059669'] as [string, string],
   warning: ['#f59e0b', '#d97706'] as [string, string],
   danger: ['#ef4444', '#dc2626'] as [string, string],
+  // Legacy gradients (for backward compatibility)
   purple: ['#8b5cf6', '#7c3aed'] as [string, string],
   blue: ['#3b82f6', '#2563eb'] as [string, string],
-  dark: ['#1a1a2e', '#0f0f23'] as [string, string],
+  dark: ['#0F172A', '#1E293B'] as [string, string],
   rewards: ['#f59e0b', '#f97316'] as [string, string],
 };
 

@@ -42,7 +42,7 @@ const SettingsScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
   const { darkMode } = useSelector((state: RootState) => state.settings);
-  const { colors } = useTheme();
+  const { colors, gradients, isDark } = useTheme();
   const [notifications, setNotifications] = useState(true);
   const [emailAlerts, setEmailAlerts] = useState(true);
   const [biometrics, setBiometrics] = useState(false);
@@ -212,7 +212,7 @@ const SettingsScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      <LinearGradient colors={['#0F172A', '#1E293B']} style={styles.header}>
+      <LinearGradient colors={gradients.header} style={styles.header}>
         <View style={styles.headerRow}>
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" size={24} color="#fff" />
