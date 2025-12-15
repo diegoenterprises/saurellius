@@ -52,7 +52,7 @@ export const login = async (credentials: LoginCredentials): Promise<AuthResponse
 
 // Sign up
 export const signUp = async (data: SignUpData): Promise<AuthResponse> => {
-  const response = await api.post('/api/auth/register', data);
+  const response = await api.post('/api/auth/signup', data);
   return response.data;
 };
 

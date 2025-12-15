@@ -23,6 +23,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import api from '../../services/api';
 
+// Gradient colors
+const gradients = {
+  header: ['#1473FF', '#0D5BCC'] as const,
+};
+
 type StepType = 'account' | 'personal' | 'employment' | 'verify' | 'complete';
 
 interface AccountData {
@@ -88,6 +93,8 @@ export default function EmployeeRegisterScreen() {
   });
 
   const [verificationCode, setVerificationCode] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [electronicConsent, setElectronicConsent] = useState(false);
@@ -240,7 +247,7 @@ export default function EmployeeRegisterScreen() {
     if (currentStep === 'account') {
       setLoading(true);
       try {
-        const response = await api.post('/api/auth/register/employee', {
+        const response = await api.post('/api/employee-onboarding/start', {
           ...accountData,
           terms_accepted: termsAccepted,
           privacy_accepted: privacyAccepted,
@@ -332,14 +339,19 @@ export default function EmployeeRegisterScreen() {
 
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Password *</Text>
-        <TextInput
-          style={styles.input}
-          value={accountData.password}
-          onChangeText={(text) => setAccountData(prev => ({ ...prev, password: text }))}
-          placeholder="Create a strong password"
-          placeholderTextColor="#666"
-          secureTextEntry
-        />
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.passwordInput}
+            value={accountData.password}
+            onChangeText={(text) => setAccountData(prev => ({ ...prev, password: text }))}
+            placeholder="Create a strong password"
+            placeholderTextColor="#666"
+            secureTextEntry={!showPassword}
+          />
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeButton}>
+            <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={22} color="#666" />
+          </TouchableOpacity>
+        </View>
         {accountData.password.length > 0 && (
           <View style={styles.passwordStrength}>
             <View style={styles.strengthBar}>
@@ -360,14 +372,19 @@ export default function EmployeeRegisterScreen() {
 
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Confirm Password *</Text>
-        <TextInput
-          style={styles.input}
-          value={accountData.password_confirm}
-          onChangeText={(text) => setAccountData(prev => ({ ...prev, password_confirm: text }))}
-          placeholder="Confirm your password"
-          placeholderTextColor="#666"
-          secureTextEntry
-        />
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.passwordInput}
+            value={accountData.password_confirm}
+            onChangeText={(text) => setAccountData(prev => ({ ...prev, password_confirm: text }))}
+            placeholder="Confirm your password"
+            placeholderTextColor="#666"
+            secureTextEntry={!showConfirmPassword}
+          />
+          <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)} style={styles.eyeButton}>
+            <Ionicons name={showConfirmPassword ? 'eye-off' : 'eye'} size={22} color="#666" />
+          </TouchableOpacity>
+        </View>
         {accountData.password_confirm.length > 0 && (
           <View style={styles.matchIndicator}>
             <Ionicons 
@@ -408,7 +425,7 @@ export default function EmployeeRegisterScreen() {
             {termsAccepted && <Ionicons name="checkmark" size={14} color="#FFF" />}
           </View>
           <Text style={styles.checkboxLabel}>
-            I agree to the <Text style={styles.link}>Terms of Service</Text> *
+            I agree to the <Text style={styles.link} onPress={() => navigation.navigate('TermsConditions')}>Terms of Service</Text> *
           </Text>
         </TouchableOpacity>
 
@@ -420,7 +437,7 @@ export default function EmployeeRegisterScreen() {
             {privacyAccepted && <Ionicons name="checkmark" size={14} color="#FFF" />}
           </View>
           <Text style={styles.checkboxLabel}>
-            I agree to the <Text style={styles.link}>Privacy Policy</Text> *
+            I agree to the <Text style={styles.link} onPress={() => navigation.navigate('PrivacyPolicy')}>Privacy Policy</Text> *
           </Text>
         </TouchableOpacity>
 
@@ -935,6 +952,23 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#666',
     marginTop: 4,
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1a1a2e',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#2a2a4e',
+  },
+  passwordInput: {
+    flex: 1,
+    padding: 14,
+    fontSize: 16,
+    color: '#FFF',
+  },
+  eyeButton: {
+    padding: 14,
   },
   row: {
     flexDirection: 'row',

@@ -280,7 +280,7 @@ class BillingManager:
             return {'monthly_cost': 0, 'employee_count': 0}
         
         plan = self.get_plan_info(self.user.subscription_tier)
-        employee_count = self.user.employee_count or 0
+        employee_count = getattr(self.user, 'employee_count', 0) or 0
         monthly_cost = self.calculate_monthly_cost(self.user.subscription_tier, employee_count)
         discount = self.get_volume_discount(employee_count)
         
@@ -302,7 +302,7 @@ class BillingManager:
             return {}
         
         plan = self.get_plan_info(self.user.subscription_tier)
-        employee_count = self.user.employee_count or 0
+        employee_count = getattr(self.user, 'employee_count', 0) or 0
         monthly_cost = self.calculate_monthly_cost(self.user.subscription_tier, employee_count)
         discount = self.get_volume_discount(employee_count)
         
@@ -315,9 +315,9 @@ class BillingManager:
             'price_per_employee': plan['price_per_employee'],
             'volume_discount': discount,
             'monthly_cost': monthly_cost,
-            'paystubs_generated': self.user.total_paystubs_generated or 0,
+            'paystubs_generated': getattr(self.user, 'total_paystubs_generated', 0) or 0,
             'paystubs_limit': 'Unlimited',
-            'billing_cycle_start': self.user.billing_cycle_start.isoformat() if self.user.billing_cycle_start else None
+            'billing_cycle_start': getattr(self.user, 'billing_cycle_start', None).isoformat() if getattr(self.user, 'billing_cycle_start', None) else None
         }
     
     def reset_monthly_usage(self):
@@ -330,14 +330,14 @@ class BillingManager:
         """Increment paystub usage counter."""
         if self.user:
             self.user.paystubs_this_month = (self.user.paystubs_this_month or 0) + 1
-            self.user.total_paystubs_generated = (self.user.total_paystubs_generated or 0) + 1
+            self.user.total_paystubs_generated = (getattr(self.user, 'total_paystubs_generated', 0) or 0) + 1
     
     def recommend_plan_for_user(self) -> Dict:
         """Recommend a plan based on employee count."""
         if not self.user:
             return {'recommended': 'starter', 'reason': 'Start with our Starter plan'}
         
-        employee_count = self.user.employee_count or 0
+        employee_count = getattr(self.user, 'employee_count', 0) or 0
         recommended = self.recommend_plan(employee_count)
         
         reasons = {

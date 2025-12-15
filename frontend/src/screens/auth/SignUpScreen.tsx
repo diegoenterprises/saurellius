@@ -23,6 +23,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../../store/slices/authSlice';
 import { AppDispatch, RootState } from '../../store';
 
+// Gradient colors for header
+const gradients = {
+  header: ['#1473FF', '#0D5BCC'] as const,
+};
+
 type UserRole = 'employer' | 'employee' | 'contractor';
 
 const SignUpScreen: React.FC = () => {
@@ -156,6 +161,17 @@ const SignUpScreen: React.FC = () => {
           <TouchableOpacity style={styles.loginLink} onPress={() => navigation.navigate('Login')}>
             <Text style={styles.loginText}>Already have an account? <Text style={styles.loginLinkText}>Log In</Text></Text>
           </TouchableOpacity>
+
+          {/* Legal Links */}
+          <View style={styles.legalLinks}>
+            <TouchableOpacity onPress={() => navigation.navigate('TermsConditions' as never)}>
+              <Text style={styles.legalLink}>Terms of Service</Text>
+            </TouchableOpacity>
+            <Text style={styles.legalDivider}>•</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('PrivacyPolicy' as never)}>
+              <Text style={styles.legalLink}>Privacy Policy</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -201,6 +217,9 @@ const styles = StyleSheet.create({
   loginLink: { alignItems: 'center', paddingBottom: 40 },
   loginText: { fontSize: 15, color: '#a0a0a0' },
   loginLinkText: { color: '#1473FF', fontWeight: '600' },
+  legalLinks: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 16, paddingBottom: 20 },
+  legalLink: { color: '#666', fontSize: 13 },
+  legalDivider: { color: '#666', marginHorizontal: 8 },
 });
 
 export default SignUpScreen;

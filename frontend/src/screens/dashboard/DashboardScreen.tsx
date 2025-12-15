@@ -84,9 +84,9 @@ export default function DashboardScreen() {
     scrollContent: {
       padding: horizontalPadding,
       paddingBottom: spacing.xxl,
-      maxWidth: isDesktop ? 1400 : '100%',
-      marginHorizontal: isDesktop ? 'auto' : 0,
-      width: '100%',
+      maxWidth: isDesktop ? 1400 : ('100%' as const),
+      marginHorizontal: isDesktop ? ('auto' as const) : 0,
+      width: '100%' as const,
     },
     mainGrid: {
       flexDirection: (isMobile ? 'column' : 'row') as 'column' | 'row',
@@ -557,6 +557,9 @@ const styles = StyleSheet.create({
   scrollContent: {
     padding: spacing.lg,
     paddingBottom: spacing.xxl,
+    maxWidth: 1400,
+    width: '100%',
+    alignSelf: 'center',
   },
   hero: {
     borderRadius: borderRadius.lg,

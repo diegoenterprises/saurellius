@@ -22,6 +22,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import BackButton from '../../components/common/BackButton';
 import api from '../../services/api';
 import { useTheme } from '../../context/ThemeContext';
 
@@ -178,7 +179,7 @@ export default function ContractorPortfolioScreen() {
     <SafeAreaView style={styles.container}>
       <LinearGradient colors={gradients.header} style={styles.header}>
         <View style={styles.headerContent}>
-          <TouchableOpacity onPress={() => navigation.goBack()}><Ionicons name="arrow-back" size={24} color="#FFF" /></TouchableOpacity>
+          <BackButton variant="gradient" />
           <Text style={styles.headerTitle}>Portfolio</Text>
           <TouchableOpacity onPress={() => setShowAddModal(true)}><Ionicons name="add-circle-outline" size={24} color="#FFF" /></TouchableOpacity>
         </View>
@@ -243,7 +244,10 @@ const styles = StyleSheet.create({
   statValue: { fontSize: 20, fontWeight: 'bold', color: '#FFF' },
   statLabel: { fontSize: 11, color: 'rgba(255,255,255,0.6)', marginTop: 2 },
   content: { flex: 1 },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   portfolioCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
   featuredCard: { borderColor: '#F59E0B' },
   featuredBanner: { flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 8 },

@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import walletService, {
   WalletBalance,
   Transaction,
@@ -41,6 +42,7 @@ const COLORS = {
 type WalletType = 'employer' | 'employee';
 
 export default function WalletScreen() {
+  const navigation = useNavigation();
   const [walletType, setWalletType] = useState<WalletType>('employee');
   const [wallet, setWallet] = useState<WalletBalance | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -163,6 +165,15 @@ export default function WalletScreen() {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         showsVerticalScrollIndicator={false}
       >
+        {/* Header with Back Button */}
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={24} color={COLORS.text} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Digital Wallet</Text>
+          <View style={{ width: 40 }} />
+        </View>
+
         {/* Wallet Type Selector */}
         <View style={styles.tabContainer}>
           <TouchableOpacity
@@ -422,6 +433,9 @@ export default function WalletScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16 },
+  backButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: COLORS.card, alignItems: 'center', justifyContent: 'center' },
+  headerTitle: { fontSize: 20, fontWeight: '700', color: COLORS.text },
   
   tabContainer: { flexDirection: 'row', padding: 16, gap: 8 },
   tab: { flex: 1, padding: 12, borderRadius: 12, backgroundColor: COLORS.card, alignItems: 'center' },

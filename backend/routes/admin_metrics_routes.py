@@ -81,7 +81,7 @@ def get_platform_metrics():
         arr = mrr * 12
         
         paid_users = starter_users + professional_users + business_users
-        arpu = mrr / paid_users if paid_users > 0 else 0
+        arpu = round(mrr / paid_users, 2) if paid_users > 0 else 0
         
         # Companies (users with employer role)
         total_companies = User.query.filter(
@@ -130,25 +130,25 @@ def get_platform_metrics():
         cac = 50  # Would come from marketing spend data
         
         # LTV:CAC Ratio
-        ltv_cac_ratio = ltv / cac if cac > 0 else 0
+        ltv_cac_ratio = round(ltv / cac, 1) if cac > 0 and ltv > 0 else 0
         
         # Net Revenue Retention (NRR) - simplified
-        nrr = 100 + (user_growth * 0.5) if user_growth > 0 else 95
+        nrr = round(100 + (user_growth * 0.5), 1) if paid_users > 0 else 0
         
         # Average Revenue Per Account (ARPA)
-        arpa = mrr / total_companies if total_companies > 0 else 0
+        arpa = round(mrr / total_companies, 2) if total_companies > 0 and mrr > 0 else 0
         
         # Expansion MRR (upgrades)
-        expansion_mrr = mrr * 0.05  # Estimate 5% expansion
+        expansion_mrr = round(mrr * 0.05, 2) if mrr > 0 else 0
         
         # New MRR (new customers)
-        new_mrr = new_users_this_month * arpu * 0.3  # Estimate 30% of new users are paid
+        new_mrr = round(new_users_this_month * arpu * 0.3, 2) if arpu > 0 else 0
         
         # Churned MRR
-        churned_mrr = mrr * (churn_rate / 100) if churn_rate > 0 else 0
+        churned_mrr = round(mrr * (churn_rate / 100), 2) if churn_rate > 0 and mrr > 0 else 0
         
         # Net New MRR
-        net_new_mrr = new_mrr + expansion_mrr - churned_mrr
+        net_new_mrr = round(new_mrr + expansion_mrr - churned_mrr, 2)
         
         # Users by status
         active_subscribers = paid_users

@@ -51,8 +51,8 @@ def get_dashboard():
             'stats': {
                 'employees': employee_count,
                 'companies': company_count,
-                'paystubs_this_month': usage['paystubs_used'],
-                'total_paystubs': usage['total_generated'],
+                'paystubs_this_month': usage.get('paystubs_generated', 0),
+                'total_paystubs': usage.get('paystubs_generated', 0),
                 'monthly_payroll': round(monthly_total, 2)
             },
             'subscription': {
@@ -201,3 +201,125 @@ def get_reward_level(points: int) -> dict:
             }
     
     return {'name': 'Bronze', 'progress': 0, 'next_level': 'Silver'}
+
+
+@dashboard_bp.route('/api/employees', methods=['GET'])
+@jwt_required()
+def get_employees():
+    """Get all employees for the current user."""
+    user_id = get_jwt_identity()
+    
+    employees = Employee.query.filter_by(user_id=user_id, is_active=True).all()
+    
+    return jsonify({
+        'success': True,
+        'employees': [
+            {
+                'id': emp.id,
+                'first_name': emp.first_name,
+                'last_name': emp.last_name,
+                'email': emp.email,
+                'department': emp.department,
+                'position': emp.position,
+                'hire_date': emp.hire_date.isoformat() if emp.hire_date else None,
+                'pay_rate': float(emp.pay_rate) if emp.pay_rate else 0,
+                'pay_type': emp.pay_type,
+                'is_active': emp.is_active
+            }
+            for emp in employees
+        ],
+        'total': len(employees)
+    }), 200
+
+
+@dashboard_bp.route('/api/employees', methods=['POST'])
+@jwt_required()
+def create_employee():
+    """Create a new employee."""
+    user_id = get_jwt_identity()
+    data = request.get_json()
+    
+    employee = Employee(
+        user_id=user_id,
+        first_name=data.get('first_name'),
+        last_name=data.get('last_name'),
+        email=data.get('email'),
+        department=data.get('department'),
+        position=data.get('position'),
+        pay_rate=data.get('pay_rate'),
+        pay_type=data.get('pay_type', 'salary'),
+        is_active=True
+    )
+    
+    db.session.add(employee)
+    db.session.commit()
+    
+    return jsonify({
+        'success': True,
+        'message': 'Employee created successfully',
+        'employee': {
+            'id': employee.id,
+            'first_name': employee.first_name,
+            'last_name': employee.last_name,
+            'email': employee.email
+        }
+    }), 201
+
+
+@dashboard_bp.route('/api/companies', methods=['GET'])
+@jwt_required()
+def get_companies():
+    """Get all companies for the current user."""
+    user_id = get_jwt_identity()
+    
+    companies = Company.query.filter_by(user_id=user_id).all()
+    
+    return jsonify({
+        'success': True,
+        'companies': [
+            {
+                'id': comp.id,
+                'name': comp.name,
+                'address': comp.address,
+                'city': comp.city,
+                'state': comp.state,
+                'zip_code': comp.zip_code,
+                'phone': comp.phone,
+                'ein': comp.ein,
+                'created_at': comp.created_at.isoformat() if comp.created_at else None
+            }
+            for comp in companies
+        ],
+        'total': len(companies)
+    }), 200
+
+
+@dashboard_bp.route('/api/companies', methods=['POST'])
+@jwt_required()
+def create_company():
+    """Create a new company."""
+    user_id = get_jwt_identity()
+    data = request.get_json()
+    
+    company = Company(
+        user_id=user_id,
+        name=data.get('name'),
+        address=data.get('address'),
+        city=data.get('city'),
+        state=data.get('state'),
+        zip_code=data.get('zip_code'),
+        phone=data.get('phone'),
+        ein=data.get('ein')
+    )
+    
+    db.session.add(company)
+    db.session.commit()
+    
+    return jsonify({
+        'success': True,
+        'message': 'Company created successfully',
+        'company': {
+            'id': company.id,
+            'name': company.name
+        }
+    }), 201

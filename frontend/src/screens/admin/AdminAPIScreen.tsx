@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../../context/ThemeContext';
 import adminDashboardService from '../../services/adminDashboard';
+import BackButton from '../../components/common/BackButton';
 
 const { width } = Dimensions.get('window');
 
@@ -56,9 +57,7 @@ export default function AdminAPIScreen() {
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <LinearGradient colors={gradients.header} style={styles.header}>
         <View style={styles.headerRow}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
-          </TouchableOpacity>
+          <BackButton variant="gradient" />
           <Text style={styles.headerTitle}>API Management</Text>
           <TouchableOpacity>
             <Ionicons name="settings-outline" size={24} color="#FFF" />
@@ -69,39 +68,33 @@ export default function AdminAPIScreen() {
       <ScrollView style={styles.content} refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchData} />}>
         <View style={styles.metricsRow}>
           <View style={[styles.metricCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-            <Text style={[styles.metricValue, { color: colors.text }]}>{formatNumber(apiData?.monthly_requests || 2400000)}</Text>
+            <Text style={[styles.metricValue, { color: colors.text }]}>{formatNumber(apiData?.monthly_requests || 0)}</Text>
             <Text style={[styles.metricLabel, { color: colors.textSecondary }]}>Monthly Requests</Text>
-            <Text style={styles.metricChange}>+22.1% ↑</Text>
+            <Text style={styles.metricChange}>{apiData?.requests_change || '0%'}</Text>
           </View>
           <View style={[styles.metricCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-            <Text style={[styles.metricValue, { color: colors.text }]}>{apiData?.total_partners || 347}</Text>
+            <Text style={[styles.metricValue, { color: colors.text }]}>{apiData?.total_partners || 0}</Text>
             <Text style={[styles.metricLabel, { color: colors.textSecondary }]}>API Partners</Text>
-            <Text style={styles.metricChange}>+18 new</Text>
+            <Text style={styles.metricChange}>{apiData?.partners_change || '0 new'}</Text>
           </View>
         </View>
 
         <View style={styles.metricsRow}>
           <View style={[styles.metricCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-            <Text style={[styles.metricValue, { color: colors.text }]}>{apiData?.avg_response_time || 187}ms</Text>
+            <Text style={[styles.metricValue, { color: colors.text }]}>{apiData?.avg_response_time || 0}ms</Text>
             <Text style={[styles.metricLabel, { color: colors.textSecondary }]}>Avg Response</Text>
-            <Text style={[styles.metricChange, { color: '#22C55E' }]}>↓ 15ms</Text>
+            <Text style={[styles.metricChange, { color: '#22C55E' }]}>{apiData?.response_change || '0ms'}</Text>
           </View>
           <View style={[styles.metricCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-            <Text style={[styles.metricValue, { color: colors.text }]}>{apiData?.error_rate || 0.02}%</Text>
+            <Text style={[styles.metricValue, { color: colors.text }]}>{apiData?.error_rate || 0}%</Text>
             <Text style={[styles.metricLabel, { color: colors.textSecondary }]}>Error Rate</Text>
-            <Text style={[styles.metricChange, { color: '#22C55E' }]}>↓ 0.01%</Text>
+            <Text style={[styles.metricChange, { color: '#22C55E' }]}>{apiData?.error_change || '0%'}</Text>
           </View>
         </View>
 
         <View style={[styles.section, { backgroundColor: colors.card, borderColor: colors.border }]}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Top Endpoints</Text>
-          {[
-            { endpoint: '/tax/calculate/gross-to-net', requests: 1234567, pct: 51.4 },
-            { endpoint: '/geocoding/address-to-codes', requests: 487234, pct: 20.3 },
-            { endpoint: '/tax/rates/lookup', requests: 342123, pct: 14.2 },
-            { endpoint: '/tax/calculate/gross-up', requests: 187654, pct: 7.8 },
-            { endpoint: '/tax/benefits/taxability', requests: 145892, pct: 6.1 },
-          ].map((item, idx) => (
+          {(apiData?.top_endpoints || []).map((item: any, idx: number) => (
             <View key={idx} style={styles.endpointRow}>
               <Text style={[styles.endpointName, { color: colors.text }]} numberOfLines={1}>{item.endpoint}</Text>
               <Text style={[styles.endpointCount, { color: colors.textSecondary }]}>{formatNumber(item.requests)}</Text>
@@ -117,11 +110,11 @@ export default function AdminAPIScreen() {
           <Text style={[styles.sectionTitle, { color: colors.text }]}>API Revenue</Text>
           <View style={styles.revenueRow}>
             <View style={styles.revenueItem}>
-              <Text style={[styles.revenueValue, { color: '#22C55E' }]}>$78,450</Text>
+              <Text style={[styles.revenueValue, { color: '#22C55E' }]}>${(apiData?.monthly_revenue || 0).toLocaleString()}</Text>
               <Text style={[styles.revenueLabel, { color: colors.textSecondary }]}>Monthly</Text>
             </View>
             <View style={styles.revenueItem}>
-              <Text style={[styles.revenueValue, { color: colors.text }]}>$941,400</Text>
+              <Text style={[styles.revenueValue, { color: colors.text }]}>${(apiData?.annual_revenue || 0).toLocaleString()}</Text>
               <Text style={[styles.revenueLabel, { color: colors.textSecondary }]}>Annual</Text>
             </View>
           </View>
@@ -145,7 +138,10 @@ const styles = StyleSheet.create({
   metricValue: { fontSize: 24, fontWeight: '700' },
   metricLabel: { fontSize: 14, marginTop: 4 },
   metricChange: { fontSize: 12, color: '#22C55E', marginTop: 4 },
-  section: { padding: 16, borderRadius: 12, borderWidth: 1, marginBottom: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16, borderRadius: 12, borderWidth: 1, marginBottom: 16 },
   sectionTitle: { fontSize: 18, fontWeight: '700', marginBottom: 16 },
   endpointRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
   endpointName: { width: 140, fontSize: 12 },

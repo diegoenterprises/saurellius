@@ -9,6 +9,35 @@ from datetime import date
 
 payroll_run_bp = Blueprint('payroll_runs', __name__, url_prefix='/api/payroll-runs')
 
+# Also register singular route for compatibility
+payroll_run_singular_bp = Blueprint('payroll_run', __name__, url_prefix='/api/payroll-run')
+
+
+@payroll_run_singular_bp.route('/status', methods=['GET'])
+@jwt_required()
+def get_payroll_status():
+    """Get current payroll run status summary."""
+    from services.payroll_run_service import payroll_run_service
+    user_id = get_jwt_identity()
+    
+    # Get active/pending payroll runs
+    active_runs = payroll_run_service.get_payroll_runs(status='in_progress')
+    pending_runs = payroll_run_service.get_payroll_runs(status='pending')
+    completed_runs = payroll_run_service.get_payroll_runs(status='completed')
+    
+    return jsonify({
+        'success': True,
+        'status': {
+            'active_runs': len(active_runs) if active_runs else 0,
+            'pending_runs': len(pending_runs) if pending_runs else 0,
+            'completed_this_month': len(completed_runs) if completed_runs else 0,
+            'next_payroll_date': None,  # Calculate based on pay schedule
+            'last_payroll_date': completed_runs[0]['pay_date'] if completed_runs else None
+        },
+        'active_payroll_runs': active_runs[:5] if active_runs else [],
+        'recent_completed': completed_runs[:5] if completed_runs else []
+    })
+
 
 @payroll_run_bp.route('', methods=['GET'])
 @jwt_required()

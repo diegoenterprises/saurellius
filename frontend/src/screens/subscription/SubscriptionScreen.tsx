@@ -239,6 +239,9 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xxl,
   },
   section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center',
     marginBottom: spacing.xl,
   },
   sectionTitle: {

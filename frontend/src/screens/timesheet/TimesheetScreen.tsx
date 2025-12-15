@@ -317,7 +317,10 @@ const styles = StyleSheet.create({
   clockButtonText: { color: '#fff', fontSize: 16, fontWeight: '600', marginLeft: 8 },
   breakButtonText: { color: '#F59E0B', fontSize: 14, fontWeight: '600', marginLeft: 6 },
   breakButtonTextActive: { color: '#fff' },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
   sectionTitle: { fontSize: 18, fontWeight: '600', color: '#FFFFFF' },
   weeklyTotal: { flexDirection: 'row', alignItems: 'center' },

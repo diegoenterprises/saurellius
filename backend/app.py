@@ -64,7 +64,7 @@ def create_app(config_name='default'):
     # Register blueprints - Enterprise Features
     from routes.accounting_routes import accounting_bp
     from routes.contractor_routes import contractor_bp
-    from routes.payroll_run_routes import payroll_run_bp
+    from routes.payroll_run_routes import payroll_run_bp, payroll_run_singular_bp
     from routes.pto_routes import pto_bp
     from routes.tax_filing_routes import tax_filing_bp
     from routes.garnishment_routes import garnishment_bp
@@ -106,6 +106,7 @@ def create_app(config_name='default'):
     app.register_blueprint(accounting_bp)
     app.register_blueprint(contractor_bp)
     app.register_blueprint(payroll_run_bp)
+    app.register_blueprint(payroll_run_singular_bp)
     app.register_blueprint(pto_bp)
     app.register_blueprint(tax_filing_bp)
     app.register_blueprint(garnishment_bp)
@@ -160,9 +161,17 @@ def create_app(config_name='default'):
     from routes.regulatory_filing_routes import regulatory_bp
     app.register_blueprint(regulatory_bp)
     
+    # Regulatory Forms Download Routes (IRS/Government Forms)
+    from routes.regulatory_forms_routes import regulatory_forms_bp
+    app.register_blueprint(regulatory_forms_bp)
+    
     # Wallet Routes
     from routes.wallet_routes import wallet_bp
     app.register_blueprint(wallet_bp)
+    
+    # Stripe Financial Connections Routes (Bank Linking)
+    from routes.financial_connections_routes import financial_connections_bp
+    app.register_blueprint(financial_connections_bp)
     
     # Tax Updater Routes
     from routes.tax_updater_routes import tax_updater_bp

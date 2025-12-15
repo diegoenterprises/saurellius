@@ -196,7 +196,10 @@ const styles = StyleSheet.create({
   statLabel: { fontSize: 10, color: 'rgba(255,255,255,0.6)', marginTop: 2 },
   content: { flex: 1 },
   chartContainer: { minWidth: '100%' },
-  section: { padding: 16, minWidth: 400 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16, minWidth: 400 },
   nodeContainer: { marginBottom: 4 },
   nodeCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#1a1a2e', borderRadius: 12, padding: 12, borderWidth: 1, borderColor: '#2a2a4e' },
   selectedNode: { borderColor: '#1473FF', backgroundColor: '#1473FF10' },

@@ -11,6 +11,30 @@ import random
 
 contractor_portal_bp = Blueprint('contractor_portal', __name__, url_prefix='/api/contractor')
 
+
+# ============================================================================
+# DASHBOARD
+# ============================================================================
+@contractor_portal_bp.route('/dashboard', methods=['GET'])
+@jwt_required()
+def get_contractor_dashboard():
+    """Get contractor dashboard overview"""
+    return jsonify({
+        'success': True,
+        'dashboard': {
+            'active_contracts': 0,
+            'pending_invoices': 0,
+            'ytd_earnings': 0,
+            'recent_payments': [],
+            'upcoming_deadlines': [],
+            'tax_info': {
+                'w9_status': 'pending',
+                '1099_ready': False
+            }
+        }
+    }), 200
+
+
 # ============================================================================
 # NDAs & AGREEMENTS (Phase 32)
 # ============================================================================

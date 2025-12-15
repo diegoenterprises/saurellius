@@ -102,7 +102,9 @@ const ProfileScreen: React.FC = () => {
         {/* Avatar Section */}
         <View style={styles.avatarSection}>
           <View style={styles.avatar}>
-            <Text style={styles.avatarText}>JS</Text>
+            <Text style={styles.avatarText}>
+              {(firstName?.[0] || '').toUpperCase()}{(lastName?.[0] || '').toUpperCase()}
+            </Text>
           </View>
           {isEditing && (
             <TouchableOpacity 
@@ -174,7 +176,10 @@ const styles = StyleSheet.create({
   avatarText: { fontSize: 36, fontWeight: '700', color: '#1473FF' },
   changePhotoButton: { flexDirection: 'row', alignItems: 'center', marginTop: 12 },
   changePhotoText: { fontSize: 14, color: '#1473FF', marginLeft: 6 },
-  section: { backgroundColor: '#1a1a2e', marginHorizontal: 16, marginBottom: 16, borderRadius: 12, padding: 16, borderWidth: 1, borderColor: '#2a2a4e' },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', backgroundColor: '#1a1a2e', marginHorizontal: 16, marginBottom: 16, borderRadius: 12, padding: 16, borderWidth: 1, borderColor: '#2a2a4e' },
   sectionTitle: { fontSize: 14, fontWeight: '600', color: '#a0a0a0', marginBottom: 16 },
   field: { marginBottom: 16 },
   fieldLabel: { fontSize: 12, color: '#a0a0a0', marginBottom: 4 },

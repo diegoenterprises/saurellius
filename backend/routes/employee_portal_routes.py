@@ -11,6 +11,28 @@ import random
 
 employee_portal_bp = Blueprint('employee_portal', __name__, url_prefix='/api/employee')
 
+
+# ============================================================================
+# DASHBOARD
+# ============================================================================
+@employee_portal_bp.route('/dashboard', methods=['GET'])
+@jwt_required()
+def get_employee_dashboard():
+    """Get employee dashboard overview"""
+    return jsonify({
+        'success': True,
+        'dashboard': {
+            'next_payday': None,
+            'current_pay_period': None,
+            'pto_balance': {'vacation': 0, 'sick': 0, 'personal': 0},
+            'recent_paystubs': [],
+            'pending_requests': [],
+            'announcements': [],
+            'quick_links': []
+        }
+    }), 200
+
+
 # ============================================================================
 # OFFICE MAP (Phase 31)
 # ============================================================================

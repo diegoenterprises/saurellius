@@ -500,6 +500,9 @@ const styles = StyleSheet.create({
   },
   tabContent: {
     padding: 16,
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center',
   },
   // Score Card
   scoreCard: {
@@ -557,6 +560,9 @@ const styles = StyleSheet.create({
   },
   // Section
   section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center',
     marginBottom: 24,
   },
   sectionHeader: {
@@ -581,6 +587,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 12,
+    justifyContent: 'center',
   },
   actionCard: {
     width: '47%',

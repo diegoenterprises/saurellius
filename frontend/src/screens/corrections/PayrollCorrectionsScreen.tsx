@@ -17,6 +17,7 @@ import {
   useColorScheme,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 interface Correction {
@@ -31,6 +32,7 @@ interface Correction {
 }
 
 const PayrollCorrectionsScreen: React.FC = () => {
+  const navigation = useNavigation();
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === 'dark';
   
@@ -253,7 +255,13 @@ const PayrollCorrectionsScreen: React.FC = () => {
     <View style={styles.container}>
       {/* Header */}
       <LinearGradient colors={['#6366F1', '#8B5CF6']} style={styles.header}>
-        <Text style={styles.headerTitle}>Payroll Corrections</Text>
+        <View style={styles.headerRow}>
+          <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={24} color="#FFF" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Payroll Corrections</Text>
+          <View style={{ width: 40 }} />
+        </View>
         <TouchableOpacity style={styles.newButton} onPress={() => setShowNewModal(true)}>
           <Ionicons name="add" size={24} color="#6366F1" />
         </TouchableOpacity>
@@ -464,6 +472,8 @@ const PayrollCorrectionsScreen: React.FC = () => {
 const createStyles = (isDarkMode: boolean) => StyleSheet.create({
   container: { flex: 1, backgroundColor: isDarkMode ? '#111827' : '#F3F4F6' },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20, paddingTop: 60 },
+  headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flex: 1 },
+  backBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center' },
   headerTitle: { fontSize: 24, fontWeight: 'bold', color: '#FFFFFF' },
   newButton: { backgroundColor: '#FFFFFF', width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center' },
   statsRow: { flexDirection: 'row', padding: 16, gap: 12 },

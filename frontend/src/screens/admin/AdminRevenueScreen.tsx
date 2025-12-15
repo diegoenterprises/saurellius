@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../../context/ThemeContext';
 import adminDashboardService from '../../services/adminDashboard';
+import BackButton from '../../components/common/BackButton';
 
 const { width } = Dimensions.get('window');
 
@@ -72,9 +73,7 @@ export default function AdminRevenueScreen() {
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <LinearGradient colors={gradients.header} style={styles.header}>
         <View style={styles.headerRow}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
-          </TouchableOpacity>
+          <BackButton variant="gradient" />
           <Text style={styles.headerTitle}>Revenue Analytics</Text>
           <TouchableOpacity>
             <Ionicons name="download-outline" size={24} color="#FFF" />
@@ -84,21 +83,16 @@ export default function AdminRevenueScreen() {
 
       <ScrollView style={styles.content} refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchData} />}>
         <View style={styles.metricsGrid}>
-          <MetricCard title="MRR" value={formatCurrency(revenueData?.mrr || 287500)} change={15.3} color="#8B5CF6" icon="cash-outline" />
-          <MetricCard title="ARR" value={formatCurrency(revenueData?.arr || 3450000)} change={18.7} color="#3B82F6" icon="trending-up-outline" />
-          <MetricCard title="YTD Revenue" value={formatCurrency(revenueData?.ytd_revenue || 3187450)} change={22.1} color="#22C55E" icon="wallet-outline" />
-          <MetricCard title="Profit Margin" value={`${revenueData?.profit_margin || 72.4}%`} change={2.1} color="#F59E0B" icon="pie-chart-outline" />
+          <MetricCard title="MRR" value={formatCurrency(revenueData?.mrr || 0)} change={revenueData?.mrr_change || 0} color="#8B5CF6" icon="cash-outline" />
+          <MetricCard title="ARR" value={formatCurrency(revenueData?.arr || 0)} change={revenueData?.arr_change || 0} color="#3B82F6" icon="trending-up-outline" />
+          <MetricCard title="YTD Revenue" value={formatCurrency(revenueData?.ytd_revenue || 0)} change={revenueData?.ytd_change || 0} color="#22C55E" icon="wallet-outline" />
+          <MetricCard title="Profit Margin" value={`${revenueData?.profit_margin || 0}%`} change={revenueData?.margin_change || 0} color="#F59E0B" icon="pie-chart-outline" />
         </View>
 
         <View style={[styles.section, { backgroundColor: colors.card, borderColor: colors.border }]}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Revenue by Plan</Text>
           <View style={styles.planRows}>
-            {[
-              { plan: 'Enterprise', revenue: 145200, pct: 50.5, color: '#8B5CF6' },
-              { plan: 'Pro', revenue: 98350, pct: 34.2, color: '#3B82F6' },
-              { plan: 'Standard', revenue: 32450, pct: 11.3, color: '#22C55E' },
-              { plan: 'Trial', revenue: 11500, pct: 4.0, color: '#F59E0B' },
-            ].map((item, idx) => (
+            {(revenueData?.plan_breakdown || []).map((item: any, idx: number) => (
               <View key={idx} style={styles.planRow}>
                 <View style={styles.planInfo}>
                   <View style={[styles.planDot, { backgroundColor: item.color }]} />
@@ -118,19 +112,19 @@ export default function AdminRevenueScreen() {
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Subscription Metrics</Text>
           <View style={styles.subMetrics}>
             <View style={styles.subMetricItem}>
-              <Text style={[styles.subMetricValue, { color: '#22C55E' }]}>1.1%</Text>
+              <Text style={[styles.subMetricValue, { color: '#22C55E' }]}>{revenueData?.churn_rate || 0}%</Text>
               <Text style={[styles.subMetricLabel, { color: colors.textSecondary }]}>Churn Rate</Text>
             </View>
             <View style={styles.subMetricItem}>
-              <Text style={[styles.subMetricValue, { color: colors.text }]}>$8,245</Text>
+              <Text style={[styles.subMetricValue, { color: colors.text }]}>${revenueData?.avg_ltv || 0}</Text>
               <Text style={[styles.subMetricLabel, { color: colors.textSecondary }]}>Avg LTV</Text>
             </View>
             <View style={styles.subMetricItem}>
-              <Text style={[styles.subMetricValue, { color: colors.text }]}>24.1:1</Text>
+              <Text style={[styles.subMetricValue, { color: colors.text }]}>{revenueData?.ltv_cac || '0:1'}</Text>
               <Text style={[styles.subMetricLabel, { color: colors.textSecondary }]}>LTV:CAC</Text>
             </View>
             <View style={styles.subMetricItem}>
-              <Text style={[styles.subMetricValue, { color: colors.text }]}>118%</Text>
+              <Text style={[styles.subMetricValue, { color: colors.text }]}>{revenueData?.nrr || 0}%</Text>
               <Text style={[styles.subMetricLabel, { color: colors.textSecondary }]}>NRR</Text>
             </View>
           </View>
@@ -155,7 +149,10 @@ const styles = StyleSheet.create({
   metricValue: { fontSize: 24, fontWeight: '700' },
   metricTitle: { fontSize: 14, marginTop: 4 },
   changeBadge: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12, marginTop: 8, alignSelf: 'flex-start' },
-  section: { padding: 16, borderRadius: 12, borderWidth: 1, marginBottom: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16, borderRadius: 12, borderWidth: 1, marginBottom: 16 },
   sectionTitle: { fontSize: 18, fontWeight: '700', marginBottom: 16 },
   planRows: { gap: 12 },
   planRow: { flexDirection: 'row', alignItems: 'center' },

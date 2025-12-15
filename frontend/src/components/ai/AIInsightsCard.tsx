@@ -14,6 +14,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, spacing, borderRadius, fontSize } from '../../styles/theme';
+import { useTheme } from '../../context/ThemeContext';
 import { aiService, DashboardInsights } from '../../services/ai';
 
 interface AIInsightsCardProps {
@@ -98,6 +99,7 @@ const generateLocalInsights = (metrics: AIInsightsCardProps['metrics']): Dashboa
 };
 
 export default function AIInsightsCard({ metrics }: AIInsightsCardProps) {
+  const { colors: themeColors, isDark } = useTheme();
   const [insights, setInsights] = useState<DashboardInsights | null>(null);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(true); // Start expanded to show insights
@@ -147,7 +149,7 @@ export default function AIInsightsCard({ metrics }: AIInsightsCardProps) {
     return (
       <View style={styles.container}>
         <LinearGradient
-          colors={['#1a1a2e', '#16213e']}
+          colors={isDark ? ['#1a1a2e', '#16213e'] : ['#F8FAFC', '#E2E8F0']}
           style={styles.loadingContainer}
         >
           <ActivityIndicator size="small" color={colors.primary} />
@@ -167,7 +169,7 @@ export default function AIInsightsCard({ metrics }: AIInsightsCardProps) {
       onPress={() => setExpanded(!expanded)}
     >
       <LinearGradient
-        colors={['#1a1a2e', '#16213e']}
+        colors={isDark ? ['#1a1a2e', '#16213e'] : ['#F8FAFC', '#E2E8F0']}
         style={styles.container}
       >
         {/* Header */}

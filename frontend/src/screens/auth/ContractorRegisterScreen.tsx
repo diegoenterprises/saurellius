@@ -23,6 +23,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import api from '../../services/api';
 
+// Gradient colors
+const gradients = {
+  header: ['#1473FF', '#0D5BCC'] as const,
+};
+
 type StepType = 'account' | 'business' | 'w9' | 'payment' | 'verify' | 'complete';
 
 interface AccountData {
@@ -131,6 +136,8 @@ export default function ContractorRegisterScreen() {
   });
 
   const [verificationCode, setVerificationCode] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [independentContractorAck, setIndependentContractorAck] = useState(false);
   const [taxResponsibilityAck, setTaxResponsibilityAck] = useState(false);
@@ -173,8 +180,25 @@ export default function ContractorRegisterScreen() {
           Alert.alert('Invalid Email', 'Please enter a valid email address');
           return false;
         }
+        // Password strength validation
         if (accountData.password.length < 8) {
           Alert.alert('Weak Password', 'Password must be at least 8 characters');
+          return false;
+        }
+        if (!/[A-Z]/.test(accountData.password)) {
+          Alert.alert('Weak Password', 'Password must contain an uppercase letter');
+          return false;
+        }
+        if (!/[a-z]/.test(accountData.password)) {
+          Alert.alert('Weak Password', 'Password must contain a lowercase letter');
+          return false;
+        }
+        if (!/[0-9]/.test(accountData.password)) {
+          Alert.alert('Weak Password', 'Password must contain a number');
+          return false;
+        }
+        if (!/[!@#$%^&*]/.test(accountData.password)) {
+          Alert.alert('Weak Password', 'Password must contain a special character (!@#$%^&*)');
           return false;
         }
         if (accountData.password !== accountData.password_confirm) {
@@ -327,26 +351,37 @@ export default function ContractorRegisterScreen() {
 
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Password *</Text>
-        <TextInput
-          style={styles.input}
-          value={accountData.password}
-          onChangeText={(text) => setAccountData(prev => ({ ...prev, password: text }))}
-          placeholder="Create a strong password"
-          placeholderTextColor="#666"
-          secureTextEntry
-        />
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.passwordInput}
+            value={accountData.password}
+            onChangeText={(text) => setAccountData(prev => ({ ...prev, password: text }))}
+            placeholder="Create a strong password"
+            placeholderTextColor="#666"
+            secureTextEntry={!showPassword}
+          />
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeButton}>
+            <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={22} color="#666" />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.passwordHint}>Min 8 chars, uppercase, lowercase, number, special char (!@#$%^&*)</Text>
       </View>
 
       <View style={styles.inputGroup}>
         <Text style={styles.label}>Confirm Password *</Text>
-        <TextInput
-          style={styles.input}
-          value={accountData.password_confirm}
-          onChangeText={(text) => setAccountData(prev => ({ ...prev, password_confirm: text }))}
-          placeholder="Confirm your password"
-          placeholderTextColor="#666"
-          secureTextEntry
-        />
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.passwordInput}
+            value={accountData.password_confirm}
+            onChangeText={(text) => setAccountData(prev => ({ ...prev, password_confirm: text }))}
+            placeholder="Confirm your password"
+            placeholderTextColor="#666"
+            secureTextEntry={!showConfirmPassword}
+          />
+          <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)} style={styles.eyeButton}>
+            <Ionicons name={showConfirmPassword ? 'eye-off' : 'eye'} size={22} color="#666" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={styles.inputGroup}>
@@ -372,7 +407,7 @@ export default function ContractorRegisterScreen() {
             {termsAccepted && <Ionicons name="checkmark" size={14} color="#FFF" />}
           </View>
           <Text style={styles.checkboxLabel}>
-            I agree to the <Text style={styles.link}>Terms of Service</Text> and <Text style={styles.link}>Privacy Policy</Text> *
+            I agree to the <Text style={styles.link} onPress={() => navigation.navigate('TermsConditions')}>Terms of Service</Text> and <Text style={styles.link} onPress={() => navigation.navigate('PrivacyPolicy')}>Privacy Policy</Text> *
           </Text>
         </TouchableOpacity>
 
@@ -986,6 +1021,28 @@ const styles = StyleSheet.create({
   },
   helperText: {
     fontSize: 12,
+    color: '#666',
+    marginTop: 4,
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1a1a2e',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#2a2a4e',
+  },
+  passwordInput: {
+    flex: 1,
+    padding: 14,
+    fontSize: 16,
+    color: '#FFF',
+  },
+  eyeButton: {
+    padding: 14,
+  },
+  passwordHint: {
+    fontSize: 11,
     color: '#666',
     marginTop: 4,
   },

@@ -20,7 +20,8 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
-import { colors, spacing, borderRadius, fontSize } from '../../styles/theme';
+import { spacing, borderRadius, fontSize } from '../../styles/theme';
+import { useTheme } from '../../context/ThemeContext';
 import { aiService, ChatContext } from '../../services/ai';
 
 interface Message {
@@ -36,6 +37,7 @@ interface AIChatProps {
 }
 
 export default function AIChat({ context, onClose }: AIChatProps) {
+  const { colors, isDark } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -160,10 +162,10 @@ export default function AIChat({ context, onClose }: AIChatProps) {
         <View
           style={[
             styles.messageBubble,
-            isUser ? styles.userBubble : styles.assistantBubble,
+            isUser ? [styles.userBubble, { backgroundColor: colors.primary }] : [styles.assistantBubble, { backgroundColor: colors.card }],
           ]}
         >
-          <Text style={[styles.messageText, isUser && styles.userMessageText]}>
+          <Text style={[styles.messageText, { color: colors.text }, isUser && styles.userMessageText]}>
             {message.content}
           </Text>
         </View>
@@ -203,7 +205,7 @@ export default function AIChat({ context, onClose }: AIChatProps) {
       >
         <View style={styles.modalContainer}>
           <BlurView intensity={20} style={styles.blurView}>
-            <View style={styles.chatContainer}>
+            <View style={[styles.chatContainer, { backgroundColor: colors.background }]}>
               {/* Header */}
               <LinearGradient
                 colors={['#1473FF', '#BE01FF']}
@@ -240,9 +242,9 @@ export default function AIChat({ context, onClose }: AIChatProps) {
                   
                   {isLoading && (
                     <View style={styles.loadingContainer}>
-                      <View style={styles.loadingBubble}>
+                      <View style={[styles.loadingBubble, { backgroundColor: colors.card }]}>
                         <ActivityIndicator size="small" color={colors.primary} />
-                        <Text style={styles.loadingText}>Thinking...</Text>
+                        <Text style={[styles.loadingText, { color: colors.textSecondary }]}>Thinking...</Text>
                       </View>
                     </View>
                   )}
@@ -251,7 +253,7 @@ export default function AIChat({ context, onClose }: AIChatProps) {
                 {/* Quick Actions */}
                 {messages.length <= 2 && (
                   <View style={styles.quickActions}>
-                    <Text style={styles.quickActionsTitle}>Quick questions:</Text>
+                    <Text style={[styles.quickActionsTitle, { color: colors.textSecondary }]}>Quick questions:</Text>
                     <ScrollView
                       horizontal
                       showsHorizontalScrollIndicator={false}
@@ -260,11 +262,11 @@ export default function AIChat({ context, onClose }: AIChatProps) {
                       {quickActions.map((action, index) => (
                         <TouchableOpacity
                           key={index}
-                          style={styles.quickActionButton}
+                          style={[styles.quickActionButton, { backgroundColor: colors.card, borderColor: colors.border }]}
                           onPress={() => handleQuickAction(action.topic)}
                           disabled={isLoading}
                         >
-                          <Text style={styles.quickActionText}>{action.label}</Text>
+                          <Text style={[styles.quickActionText, { color: colors.text }]}>{action.label}</Text>
                         </TouchableOpacity>
                       ))}
                     </ScrollView>
@@ -272,9 +274,9 @@ export default function AIChat({ context, onClose }: AIChatProps) {
                 )}
 
                 {/* Input */}
-                <View style={styles.inputContainer}>
+                <View style={[styles.inputContainer, { borderTopColor: colors.border, backgroundColor: colors.backgroundSecondary }]}>
                   <TextInput
-                    style={styles.input}
+                    style={[styles.input, { backgroundColor: colors.card, color: colors.text }]}
                     placeholder="Ask me anything about payroll..."
                     placeholderTextColor={colors.textMuted}
                     value={inputText}
@@ -342,7 +344,6 @@ const styles = StyleSheet.create({
   },
   chatContainer: {
     height: '85%',
-    backgroundColor: colors.background,
     borderTopLeftRadius: borderRadius.xxl,
     borderTopRightRadius: borderRadius.xxl,
     overflow: 'hidden',
@@ -363,7 +364,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   headerTitle: {
-    color: colors.white,
+    color: '#FFFFFF',
     fontSize: fontSize.lg,
     fontWeight: '600',
     marginLeft: spacing.sm,
@@ -408,20 +409,17 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.lg,
   },
   userBubble: {
-    backgroundColor: colors.primary,
     borderBottomRightRadius: 4,
   },
   assistantBubble: {
-    backgroundColor: colors.card,
     borderBottomLeftRadius: 4,
   },
   messageText: {
-    color: colors.text,
     fontSize: fontSize.md,
     lineHeight: 22,
   },
   userMessageText: {
-    color: colors.white,
+    color: '#FFFFFF',
   },
   loadingContainer: {
     flexDirection: 'row',
@@ -431,13 +429,11 @@ const styles = StyleSheet.create({
   loadingBubble: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.card,
     padding: spacing.md,
     borderRadius: borderRadius.lg,
     gap: spacing.sm,
   },
   loadingText: {
-    color: colors.textSecondary,
     fontSize: fontSize.sm,
     marginLeft: spacing.sm,
   },
@@ -446,7 +442,6 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.sm,
   },
   quickActionsTitle: {
-    color: colors.textSecondary,
     fontSize: fontSize.sm,
     marginBottom: spacing.sm,
   },
@@ -454,16 +449,13 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   quickActionButton: {
-    backgroundColor: colors.card,
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.md,
     borderRadius: borderRadius.full,
     borderWidth: 1,
-    borderColor: colors.border,
     marginRight: spacing.sm,
   },
   quickActionText: {
-    color: colors.text,
     fontSize: fontSize.sm,
   },
   inputContainer: {
@@ -471,16 +463,12 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     padding: spacing.md,
     borderTopWidth: 1,
-    borderTopColor: colors.border,
-    backgroundColor: colors.backgroundSecondary,
   },
   input: {
     flex: 1,
-    backgroundColor: colors.card,
     borderRadius: borderRadius.lg,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
-    color: colors.text,
     fontSize: fontSize.md,
     maxHeight: 100,
     marginRight: spacing.sm,

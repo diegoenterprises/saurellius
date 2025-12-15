@@ -294,7 +294,10 @@ const styles = StyleSheet.create({
   inviteRow: { flexDirection: 'row', gap: 10 },
   inviteInput: { flex: 1, backgroundColor: '#1a1a2e', borderRadius: 12, padding: 14, fontSize: 15, color: '#FFF', borderWidth: 1, borderColor: '#2a2a4e' },
   inviteButton: { width: 50, backgroundColor: '#1473FF', borderRadius: 12, justifyContent: 'center', alignItems: 'center' },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   referralCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
   referralHeader: { flexDirection: 'row', alignItems: 'center' },
   statusIcon: { width: 44, height: 44, borderRadius: 22, justifyContent: 'center', alignItems: 'center', marginRight: 12 },

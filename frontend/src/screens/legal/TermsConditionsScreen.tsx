@@ -503,6 +503,9 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center',
     backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 16,

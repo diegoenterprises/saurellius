@@ -19,6 +19,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import BackButton from '../../components/common/BackButton';
 import api from '../../services/api';
 import { useTheme } from '../../context/ThemeContext';
 
@@ -100,7 +101,7 @@ export default function ContractorEarningsScreen() {
     <SafeAreaView style={styles.container}>
       <LinearGradient colors={gradients.header} style={styles.header}>
         <View style={styles.headerContent}>
-          <TouchableOpacity onPress={() => navigation.goBack()}><Ionicons name="arrow-back" size={24} color="#FFF" /></TouchableOpacity>
+          <BackButton variant="gradient" />
           <Text style={styles.headerTitle}>Earnings</Text>
           <TouchableOpacity><Ionicons name="download-outline" size={24} color="#FFF" /></TouchableOpacity>
         </View>

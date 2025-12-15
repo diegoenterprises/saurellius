@@ -243,7 +243,10 @@ const styles = StyleSheet.create({
   filterText: { fontSize: 13, color: '#F59E0B' },
   clearFilter: { fontSize: 13, color: '#F59E0B', fontWeight: '600' },
   content: { flex: 1 },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   starsRow: { flexDirection: 'row', gap: 2 },
   reviewCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
   reviewHeader: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 12 },

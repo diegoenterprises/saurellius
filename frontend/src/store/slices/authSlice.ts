@@ -116,7 +116,7 @@ export const register = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await api.post('/api/auth/register', data);
+      const response = await api.post('/api/auth/signup', data);
       // For registration, we may not auto-login - just return success
       return response.data;
     } catch (error: any) {

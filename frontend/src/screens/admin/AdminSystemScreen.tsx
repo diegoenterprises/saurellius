@@ -158,7 +158,10 @@ const styles = StyleSheet.create({
   metricCard: { flex: 1, padding: 16, borderRadius: 12, borderWidth: 1, alignItems: 'center' },
   metricValue: { fontSize: 28, fontWeight: '700' },
   metricLabel: { fontSize: 14, marginTop: 4 },
-  section: { padding: 16, borderRadius: 12, borderWidth: 1, marginBottom: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16, borderRadius: 12, borderWidth: 1, marginBottom: 16 },
   sectionTitle: { fontSize: 18, fontWeight: '700', marginBottom: 16 },
   statusRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
   statusDot: { width: 10, height: 10, borderRadius: 5, marginRight: 12 },

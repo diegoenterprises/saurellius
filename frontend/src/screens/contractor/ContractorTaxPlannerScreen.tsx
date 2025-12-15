@@ -19,6 +19,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import BackButton from '../../components/common/BackButton';
 import api from '../../services/api';
 import { useTheme } from '../../context/ThemeContext';
 
@@ -252,7 +253,7 @@ export default function ContractorTaxPlannerScreen() {
     <SafeAreaView style={styles.container}>
       <LinearGradient colors={gradients.header} style={styles.header}>
         <View style={styles.headerContent}>
-          <TouchableOpacity onPress={() => navigation.goBack()}><Ionicons name="arrow-back" size={24} color="#FFF" /></TouchableOpacity>
+          <BackButton variant="gradient" />
           <Text style={styles.headerTitle}>Tax Planner</Text>
           <TouchableOpacity><Ionicons name="calculator-outline" size={24} color="#FFF" /></TouchableOpacity>
         </View>
@@ -308,7 +309,10 @@ const styles = StyleSheet.create({
   tabText: { fontSize: 14, fontWeight: '500', color: '#a0a0a0' },
   tabTextActive: { color: '#FFF' },
   content: { flex: 1 },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   estimateCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, borderWidth: 1, borderColor: '#2a2a4e' },
   estimateTitle: { fontSize: 18, fontWeight: '600', color: '#FFF', marginBottom: 16 },
   incomeSection: { borderBottomWidth: 1, borderBottomColor: '#2a2a4e', paddingBottom: 14, marginBottom: 14 },

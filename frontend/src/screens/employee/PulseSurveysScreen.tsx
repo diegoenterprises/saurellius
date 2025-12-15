@@ -267,7 +267,10 @@ const styles = StyleSheet.create({
   tabBadge: { backgroundColor: '#EF4444', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 10 },
   tabBadgeText: { fontSize: 10, fontWeight: 'bold', color: '#FFF' },
   content: { flex: 1 },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   surveyCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
   urgentCard: { borderColor: '#EF4444' },
   surveyHeader: { flexDirection: 'row', alignItems: 'flex-start' },

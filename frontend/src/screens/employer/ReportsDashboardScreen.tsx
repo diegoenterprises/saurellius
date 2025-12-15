@@ -430,6 +430,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center',
     padding: 16,
   },
   sectionTitle: {

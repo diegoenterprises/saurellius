@@ -294,7 +294,10 @@ const styles = StyleSheet.create({
   tabText: { fontSize: 14, fontWeight: '500', color: '#a0a0a0' },
   tabTextActive: { color: '#FFF' },
   content: { flex: 1 },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   ticketCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
   ticketHeader: { flexDirection: 'row', alignItems: 'center' },
   categoryIcon: { width: 36, height: 36, borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginRight: 10 },

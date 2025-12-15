@@ -258,7 +258,10 @@ const styles = StyleSheet.create({
   categoryChipText: { fontSize: 12, color: '#a0a0a0', fontWeight: '500' },
   categoryChipTextActive: { color: '#FFF' },
   content: { flex: 1 },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   newsCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
   pinnedCard: { borderColor: '#F59E0B' },
   pinnedBanner: { flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 8 },

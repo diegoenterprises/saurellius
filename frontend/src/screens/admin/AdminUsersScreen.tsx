@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../../context/ThemeContext';
 import adminDashboardService from '../../services/adminDashboard';
+import BackButton from '../../components/common/BackButton';
 
 type TabType = 'overview' | 'employers' | 'employees' | 'contractors' | 'activity';
 
@@ -97,9 +98,7 @@ export default function AdminUsersScreen() {
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <LinearGradient colors={gradients.header} style={styles.header}>
         <View style={styles.headerRow}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={24} color="#FFF" />
-          </TouchableOpacity>
+          <BackButton variant="gradient" />
           <Text style={styles.headerTitle}>Users Management</Text>
           <TouchableOpacity>
             <Ionicons name="search" size={24} color="#FFF" />

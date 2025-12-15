@@ -21,6 +21,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import BackButton from '../../components/common/BackButton';
 import api from '../../services/api';
 import { useTheme } from '../../context/ThemeContext';
 
@@ -200,7 +201,7 @@ export default function ContractorEquipmentScreen() {
     <SafeAreaView style={styles.container}>
       <LinearGradient colors={gradients.header} style={styles.header}>
         <View style={styles.headerContent}>
-          <TouchableOpacity onPress={() => navigation.goBack()}><Ionicons name="arrow-back" size={24} color="#FFF" /></TouchableOpacity>
+          <BackButton variant="gradient" />
           <Text style={styles.headerTitle}>Equipment</Text>
           <TouchableOpacity onPress={() => setShowAddModal(true)}><Ionicons name="add-circle-outline" size={24} color="#FFF" /></TouchableOpacity>
         </View>
@@ -278,7 +279,10 @@ const styles = StyleSheet.create({
   filterChipText: { fontSize: 13, color: '#a0a0a0', fontWeight: '500' },
   filterChipTextActive: { color: '#FFF' },
   content: { flex: 1 },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   equipCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
   maintenanceCard: { borderColor: '#F59E0B' },
   equipHeader: { flexDirection: 'row', alignItems: 'flex-start' },

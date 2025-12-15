@@ -296,7 +296,10 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 24, fontWeight: '700', color: '#fff' },
   content: { flex: 1 },
   sectionTitle: { fontSize: 14, fontWeight: '600', color: '#a0a0a0', marginTop: 24, marginBottom: 8, marginHorizontal: 16 },
-  section: { backgroundColor: '#1a1a2e', borderRadius: 12, marginHorizontal: 16, overflow: 'hidden', borderWidth: 1, borderColor: '#2a2a4e' },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', backgroundColor: '#1a1a2e', borderRadius: 12, marginHorizontal: 16, overflow: 'hidden', borderWidth: 1, borderColor: '#2a2a4e' },
   profileSection: { backgroundColor: '#1a1a2e', borderRadius: 12, marginHorizontal: 16, padding: 20, borderWidth: 1, borderColor: '#2a2a4e', flexDirection: 'row', alignItems: 'center' },
   profilePictureContainer: { position: 'relative' },
   profilePicture: { width: 80, height: 80, borderRadius: 40, borderWidth: 3, borderColor: '#1473FF' },

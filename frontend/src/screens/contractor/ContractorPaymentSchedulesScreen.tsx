@@ -215,7 +215,10 @@ const styles = StyleSheet.create({
   filterChipText: { fontSize: 13, color: '#a0a0a0', fontWeight: '500', textTransform: 'capitalize' },
   filterChipTextActive: { color: '#FFF' },
   content: { flex: 1 },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   scheduleCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
   overdueCard: { borderColor: '#EF4444' },
   dueTodayCard: { borderColor: '#F59E0B' },

@@ -248,7 +248,10 @@ const styles = StyleSheet.create({
   markAllButton: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   markAllText: { fontSize: 13, color: '#1473FF', fontWeight: '500' },
   content: { flex: 1 },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   notifCard: { flexDirection: 'row', alignItems: 'flex-start', backgroundColor: '#1a1a2e', borderRadius: 12, padding: 14, marginBottom: 10, borderWidth: 1, borderColor: '#2a2a4e' },
   notifCardUnread: { backgroundColor: '#1473FF10', borderColor: '#1473FF30' },
   notifIcon: { width: 40, height: 40, borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginRight: 12 },

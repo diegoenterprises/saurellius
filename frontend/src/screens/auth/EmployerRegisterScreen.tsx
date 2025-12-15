@@ -23,7 +23,19 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
 
-type StepType = 'company' | 'federal_tax' | 'state_tax' | 'banking' | 'compliance' | 'subscription' | 'review';
+// Gradient colors
+const gradients = {
+  header: ['#1473FF', '#0D5BCC'] as const,
+};
+
+type StepType = 'account' | 'company' | 'federal_tax' | 'state_tax' | 'banking' | 'compliance' | 'subscription' | 'review';
+
+interface AccountData {
+  email: string;
+  password: string;
+  password_confirm: string;
+  phone_number: string;
+}
 
 interface CompanyData {
   legal_business_name: string;
@@ -95,9 +107,21 @@ const US_STATES = [
 
 export default function EmployerRegisterScreen() {
   const navigation = useNavigation<any>();
-  const [currentStep, setCurrentStep] = useState<StepType>('company');
+  const [currentStep, setCurrentStep] = useState<StepType>('account');
   const [loading, setLoading] = useState(false);
   const [registrationId, setRegistrationId] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  
+  // Account Data
+  const [accountData, setAccountData] = useState<AccountData>({
+    email: '',
+    password: '',
+    password_confirm: '',
+    phone_number: '',
+  });
   
   // Form Data
   const [companyData, setCompanyData] = useState<CompanyData>({
@@ -142,8 +166,10 @@ export default function EmployerRegisterScreen() {
   });
   
   const [selectedPlan, setSelectedPlan] = useState('professional');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const steps: { key: StepType; label: string; icon: string }[] = [
+    { key: 'account', label: 'Account', icon: 'person' },
     { key: 'company', label: 'Company', icon: 'business' },
     { key: 'federal_tax', label: 'Federal Tax', icon: 'document-text' },
     { key: 'state_tax', label: 'State Tax', icon: 'map' },
@@ -170,6 +196,41 @@ export default function EmployerRegisterScreen() {
 
   const validateStep = (step: StepType): boolean => {
     switch (step) {
+      case 'account':
+        if (!accountData.email.includes('@')) {
+          Alert.alert('Invalid Email', 'Please enter a valid email address');
+          return false;
+        }
+        if (accountData.password.length < 8) {
+          Alert.alert('Weak Password', 'Password must be at least 8 characters');
+          return false;
+        }
+        if (!/[A-Z]/.test(accountData.password)) {
+          Alert.alert('Weak Password', 'Password must contain an uppercase letter');
+          return false;
+        }
+        if (!/[a-z]/.test(accountData.password)) {
+          Alert.alert('Weak Password', 'Password must contain a lowercase letter');
+          return false;
+        }
+        if (!/[0-9]/.test(accountData.password)) {
+          Alert.alert('Weak Password', 'Password must contain a number');
+          return false;
+        }
+        if (!/[!@#$%^&*]/.test(accountData.password)) {
+          Alert.alert('Weak Password', 'Password must contain a special character (!@#$%^&*)');
+          return false;
+        }
+        if (accountData.password !== accountData.password_confirm) {
+          Alert.alert('Password Mismatch', 'Passwords do not match');
+          return false;
+        }
+        if (!termsAccepted || !privacyAccepted) {
+          Alert.alert('Required', 'Please accept Terms of Service and Privacy Policy');
+          return false;
+        }
+        return true;
+      
       case 'company':
         if (!companyData.legal_business_name.trim()) {
           Alert.alert('Required', 'Legal business name is required');
@@ -224,6 +285,34 @@ export default function EmployerRegisterScreen() {
   const handleNext = async () => {
     if (!validateStep(currentStep)) return;
     
+    // If on account step, create the employer account first
+    if (currentStep === 'account' && !isAuthenticated) {
+      setLoading(true);
+      try {
+        const response = await api.post('/api/employer/register', {
+          email: accountData.email,
+          password: accountData.password,
+          phone_number: accountData.phone_number,
+        });
+        
+        if (response.data.success) {
+          // Store auth token
+          const token = response.data.access_token;
+          api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          setIsAuthenticated(true);
+        } else {
+          Alert.alert('Error', response.data.message || 'Registration failed');
+          setLoading(false);
+          return;
+        }
+      } catch (error: any) {
+        Alert.alert('Error', error.response?.data?.message || 'Failed to create account');
+        setLoading(false);
+        return;
+      }
+      setLoading(false);
+    }
+    
     const currentIndex = getCurrentStepIndex();
     if (currentIndex < steps.length - 1) {
       setCurrentStep(steps[currentIndex + 1].key);
@@ -240,13 +329,26 @@ export default function EmployerRegisterScreen() {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const response = await api.post('/api/employer-registration/complete', {
+      // Step 1: Start registration to get registration_id
+      const startResponse = await api.post('/api/employer-registration/start', {
         company: companyData,
-        tax: taxData,
-        banking: bankingData,
-        compliance: complianceData,
-        subscription_plan: selectedPlan,
       });
+      
+      if (!startResponse.data.success) {
+        throw new Error(startResponse.data.message || 'Failed to start registration');
+      }
+      
+      const regId = startResponse.data.registration?.id;
+      
+      // Step 2: Submit all step data
+      await api.post(`/api/employer-registration/${regId}/step/1`, companyData);
+      await api.post(`/api/employer-registration/${regId}/step/2`, taxData);
+      await api.post(`/api/employer-registration/${regId}/step/4`, bankingData);
+      await api.post(`/api/employer-registration/${regId}/step/6`, complianceData);
+      await api.post(`/api/employer-registration/${regId}/step/7`, { plan: selectedPlan });
+      
+      // Step 3: Complete registration
+      const response = await api.post(`/api/employer-registration/${regId}/complete`, {});
       
       if (response.data.success) {
         Alert.alert(
@@ -287,6 +389,99 @@ export default function EmployerRegisterScreen() {
       state_registrations: prev.state_registrations.filter((_, i) => i !== index)
     }));
   };
+
+  const renderAccountStep = () => (
+    <View style={styles.stepContent}>
+      <Text style={styles.stepTitle}>Create Your Account</Text>
+      <Text style={styles.stepSubtitle}>Set up your employer account credentials</Text>
+
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Email Address *</Text>
+        <TextInput
+          style={styles.input}
+          value={accountData.email}
+          onChangeText={(text) => setAccountData(prev => ({ ...prev, email: text.toLowerCase().trim() }))}
+          placeholder="your@company.com"
+          placeholderTextColor="#666"
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+      </View>
+
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Password *</Text>
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.passwordInput}
+            value={accountData.password}
+            onChangeText={(text) => setAccountData(prev => ({ ...prev, password: text }))}
+            placeholder="Create a strong password"
+            placeholderTextColor="#666"
+            secureTextEntry={!showPassword}
+          />
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={styles.eyeButton}>
+            <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={22} color="#666" />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.passwordHint}>Min 8 chars, uppercase, lowercase, number, special char (!@#$%^&*)</Text>
+      </View>
+
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Confirm Password *</Text>
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={styles.passwordInput}
+            value={accountData.password_confirm}
+            onChangeText={(text) => setAccountData(prev => ({ ...prev, password_confirm: text }))}
+            placeholder="Confirm your password"
+            placeholderTextColor="#666"
+            secureTextEntry={!showConfirmPassword}
+          />
+          <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)} style={styles.eyeButton}>
+            <Ionicons name={showConfirmPassword ? 'eye-off' : 'eye'} size={22} color="#666" />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Phone Number</Text>
+        <TextInput
+          style={styles.input}
+          value={accountData.phone_number}
+          onChangeText={(text) => setAccountData(prev => ({ ...prev, phone_number: formatPhone(text) }))}
+          placeholder="(000) 000-0000"
+          placeholderTextColor="#666"
+          keyboardType="phone-pad"
+        />
+      </View>
+
+      <View style={styles.agreementSection}>
+        <TouchableOpacity 
+          style={styles.checkboxRow}
+          onPress={() => setTermsAccepted(!termsAccepted)}
+        >
+          <View style={[styles.checkbox, termsAccepted && styles.checkboxChecked]}>
+            {termsAccepted && <Ionicons name="checkmark" size={14} color="#FFF" />}
+          </View>
+          <Text style={styles.checkboxLabel}>
+            I agree to the <Text style={styles.link} onPress={() => navigation.navigate('TermsConditions')}>Terms of Service</Text> *
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={styles.checkboxRow}
+          onPress={() => setPrivacyAccepted(!privacyAccepted)}
+        >
+          <View style={[styles.checkbox, privacyAccepted && styles.checkboxChecked]}>
+            {privacyAccepted && <Ionicons name="checkmark" size={14} color="#FFF" />}
+          </View>
+          <Text style={styles.checkboxLabel}>
+            I agree to the <Text style={styles.link} onPress={() => navigation.navigate('PrivacyPolicy')}>Privacy Policy</Text> *
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 
   const renderCompanyStep = () => (
     <View style={styles.stepContent}>
@@ -934,6 +1129,7 @@ export default function EmployerRegisterScreen() {
 
   const renderStepContent = () => {
     switch (currentStep) {
+      case 'account': return renderAccountStep();
       case 'company': return renderCompanyStep();
       case 'federal_tax': return renderFederalTaxStep();
       case 'state_tax': return renderStateTaxStep();
@@ -1120,6 +1316,36 @@ const styles = StyleSheet.create({
     color: '#FFF',
     borderWidth: 1,
     borderColor: '#2a2a4e',
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1a1a2e',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#2a2a4e',
+  },
+  passwordInput: {
+    flex: 1,
+    padding: 14,
+    fontSize: 16,
+    color: '#FFF',
+  },
+  eyeButton: {
+    padding: 14,
+  },
+  passwordHint: {
+    fontSize: 11,
+    color: '#666',
+    marginTop: 4,
+  },
+  agreementSection: {
+    marginTop: 20,
+    gap: 12,
+  },
+  link: {
+    color: '#1473FF',
+    textDecorationLine: 'underline',
   },
   row: {
     flexDirection: 'row',

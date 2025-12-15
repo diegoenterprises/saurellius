@@ -255,7 +255,10 @@ const styles = StyleSheet.create({
   tabText: { fontSize: 14, fontWeight: '500', color: '#a0a0a0' },
   tabTextActive: { color: '#FFF' },
   content: { flex: 1 },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   activityCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#1a1a2e', borderRadius: 12, padding: 14, marginBottom: 10, borderWidth: 1, borderColor: '#2a2a4e' },
   activityLogged: { backgroundColor: '#10B98110', borderColor: '#10B98130' },
   categoryIcon: { width: 48, height: 48, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginRight: 12 },

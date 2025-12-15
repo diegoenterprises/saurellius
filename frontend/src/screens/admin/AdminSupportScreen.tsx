@@ -223,9 +223,15 @@ export default function AdminSupportScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
       >
-        {/* Page Title */}
+        {/* Page Title with Back Button */}
         <View style={styles.pageHeader}>
-          <View>
+          <TouchableOpacity 
+            style={styles.backButton} 
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back" size={24} color={COLORS.text} />
+          </TouchableOpacity>
+          <View style={{ flex: 1 }}>
             <Text style={styles.pageTitle}>Support Center</Text>
             <Text style={styles.pageSubtitle}>Manage customers and support tickets</Text>
           </View>
@@ -522,7 +528,18 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   pageHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
     marginBottom: 24,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: COLORS.surfaceLight,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   pageTitle: {
     fontSize: 28,

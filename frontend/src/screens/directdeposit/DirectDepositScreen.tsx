@@ -12,6 +12,7 @@ import {
   useColorScheme,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 interface BankAccount {
   id: string;
@@ -26,6 +27,7 @@ interface BankAccount {
 }
 
 const DirectDepositScreen: React.FC = () => {
+  const navigation = useNavigation();
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === 'dark';
   const [accounts, setAccounts] = useState<BankAccount[]>([]);
@@ -192,7 +194,12 @@ const DirectDepositScreen: React.FC = () => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.title}>Direct Deposit</Text>
+        <View style={styles.headerRow}>
+          <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={24} color="#FFF" />
+          </TouchableOpacity>
+          <Text style={styles.title}>Direct Deposit</Text>
+        </View>
         <TouchableOpacity style={styles.addButton} onPress={() => setShowAddModal(true)}>
           <Ionicons name="add" size={24} color="#FFFFFF" />
           <Text style={styles.addButtonText}>Add Account</Text>
@@ -485,10 +492,19 @@ const createStyles = (isDarkMode: boolean) => StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
-    backgroundColor: isDarkMode ? '#1F2937' : '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: isDarkMode ? '#374151' : '#E5E7EB',
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  backBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(99,102,241,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
     fontSize: 24,

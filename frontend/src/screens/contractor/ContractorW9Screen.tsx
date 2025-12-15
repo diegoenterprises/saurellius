@@ -520,6 +520,9 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center',
     marginBottom: 20,
   },
   sectionHeader: {

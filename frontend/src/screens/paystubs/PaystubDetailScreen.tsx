@@ -381,6 +381,9 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center',
     backgroundColor: '#1a1a2e',
     margin: 16,
     marginBottom: 0,

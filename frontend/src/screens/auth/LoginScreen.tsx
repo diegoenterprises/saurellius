@@ -204,6 +204,17 @@ export default function LoginScreen() {
             <Text style={styles.signUpLink}>Sign Up</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Legal Links */}
+        <View style={styles.legalLinks}>
+          <TouchableOpacity onPress={() => navigation.navigate('TermsConditions' as never)}>
+            <Text style={styles.legalLink}>Terms of Service</Text>
+          </TouchableOpacity>
+          <Text style={styles.legalDivider}>•</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('PrivacyPolicy' as never)}>
+            <Text style={styles.legalLink}>Privacy Policy</Text>
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
     </LinearGradient>
   );
@@ -318,5 +329,20 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: fontSize.md,
     fontWeight: '600',
+  },
+  legalLinks: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: spacing.lg,
+    paddingBottom: spacing.lg,
+  },
+  legalLink: {
+    color: colors.textMuted,
+    fontSize: fontSize.sm,
+  },
+  legalDivider: {
+    color: colors.textMuted,
+    marginHorizontal: spacing.sm,
   },
 });

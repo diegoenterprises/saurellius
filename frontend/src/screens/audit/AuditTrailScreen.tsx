@@ -18,6 +18,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 interface AuditLog {
@@ -135,6 +136,7 @@ const MOCK_LOGS: AuditLog[] = [
 ];
 
 const AuditTrailScreen: React.FC = () => {
+  const navigation = useNavigation();
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === 'dark';
   
@@ -260,7 +262,13 @@ const AuditTrailScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#1F2937', '#374151']} style={styles.header}>
-        <Text style={styles.headerTitle}>Audit Trail</Text>
+        <View style={styles.headerRow}>
+          <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={24} color="#FFF" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Audit Trail</Text>
+          <View style={{ width: 40 }} />
+        </View>
         <Text style={styles.headerSubtitle}>Complete change history</Text>
       </LinearGradient>
       
@@ -429,6 +437,8 @@ const AuditTrailScreen: React.FC = () => {
 const createStyles = (isDarkMode: boolean) => StyleSheet.create({
   container: { flex: 1, backgroundColor: isDarkMode ? '#111827' : '#F3F4F6' },
   header: { padding: 20, paddingTop: 60 },
+  headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  backBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center' },
   headerTitle: { fontSize: 28, fontWeight: 'bold', color: '#FFFFFF' },
   headerSubtitle: { fontSize: 14, color: 'rgba(255,255,255,0.7)', marginTop: 4 },
   searchContainer: { flexDirection: 'row', alignItems: 'center', backgroundColor: isDarkMode ? '#1F2937' : '#FFFFFF', margin: 16, marginBottom: 8, padding: 12, borderRadius: 12, gap: 12, borderWidth: 1, borderColor: isDarkMode ? '#374151' : '#E5E7EB' },

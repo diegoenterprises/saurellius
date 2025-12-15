@@ -275,7 +275,10 @@ const styles = StyleSheet.create({
   headerTitle: { fontSize: 24, fontWeight: '700', color: '#fff' },
   content: { flex: 1 },
   sectionTitle: { fontSize: 14, fontWeight: '600', marginTop: 24, marginBottom: 8, marginHorizontal: 16 },
-  section: { borderRadius: 12, marginHorizontal: 16, overflow: 'hidden', borderWidth: 1 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', borderRadius: 12, marginHorizontal: 16, overflow: 'hidden', borderWidth: 1 },
   settingItem: { flexDirection: 'row', alignItems: 'center', padding: 16, borderBottomWidth: 1 },
   icon: { marginRight: 12 },
   settingContent: { flex: 1 },

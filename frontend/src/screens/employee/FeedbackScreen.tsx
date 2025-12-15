@@ -230,7 +230,10 @@ const styles = StyleSheet.create({
   statValue: { fontSize: 20, fontWeight: 'bold', color: '#FFF' },
   statLabel: { fontSize: 11, color: 'rgba(255,255,255,0.6)', marginTop: 2 },
   content: { flex: 1 },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   feedbackCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
   feedbackHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
   typeIcon: { width: 40, height: 40, borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginRight: 12 },

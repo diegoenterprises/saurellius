@@ -17,6 +17,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import api from '../../services/api';
 
 interface Badge {
@@ -46,6 +47,7 @@ interface RewardsData {
 }
 
 const RewardsScreen: React.FC = () => {
+  const navigation = useNavigation();
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'overview' | 'badges' | 'leaderboard'>('overview');
@@ -219,7 +221,13 @@ const RewardsScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient colors={['#1473FF', '#BE01FF']} style={styles.header}>
-        <Text style={styles.headerTitle}>Rewards</Text>
+        <View style={styles.headerRow}>
+          <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={24} color="#FFF" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Rewards</Text>
+          <View style={{ width: 40 }} />
+        </View>
         <Text style={styles.headerSubtitle}>Earn points and unlock achievements</Text>
       </LinearGradient>
 
@@ -253,6 +261,8 @@ const RewardsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0f0f23' },
   header: { paddingHorizontal: 20, paddingVertical: 20 },
+  headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  backBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center' },
   headerTitle: { fontSize: 28, fontWeight: '700', color: '#fff' },
   headerSubtitle: { fontSize: 14, color: 'rgba(255,255,255,0.8)', marginTop: 4 },
   tabBar: { flexDirection: 'row', backgroundColor: '#1a1a2e', borderBottomWidth: 1, borderBottomColor: '#2a2a4e' },
@@ -278,7 +288,10 @@ const styles = StyleSheet.create({
   streakBonus: { alignItems: 'center' },
   bonusText: { fontSize: 18, fontWeight: '700', color: '#10B981' },
   bonusLabel: { fontSize: 12, color: '#a0a0a0' },
-  section: { marginTop: 8 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', marginTop: 8 },
   sectionTitle: { fontSize: 18, fontWeight: '600', color: '#fff', marginBottom: 12 },
   activityRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#1a1a2e', borderRadius: 12, padding: 16, marginBottom: 8, borderWidth: 1, borderColor: '#2a2a4e' },
   activityInfo: { flex: 1 },

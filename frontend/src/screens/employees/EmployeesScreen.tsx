@@ -154,6 +154,9 @@ const EmployeesScreen: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <LinearGradient colors={['#1473FF', '#BE01FF']} style={styles.header}>
         <View style={styles.headerTop}>
+          <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={24} color="#FFF" />
+          </TouchableOpacity>
           <Text style={styles.headerTitle}>Employees</Text>
           <TouchableOpacity
             style={styles.addButton}
@@ -243,6 +246,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  backBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   headerTitle: {
     fontSize: 28,

@@ -491,6 +491,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center',
     backgroundColor: '#1a1a2e',
     marginTop: 12,
     paddingVertical: 16,

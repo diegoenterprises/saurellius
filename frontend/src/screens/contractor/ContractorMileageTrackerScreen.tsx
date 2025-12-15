@@ -279,7 +279,10 @@ const styles = StyleSheet.create({
   secondaryValue: { fontSize: 14, fontWeight: '600', color: '#FFF' },
   secondaryLabel: { fontSize: 10, color: '#a0a0a0' },
   content: { flex: 1 },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   dateHeader: { fontSize: 14, fontWeight: '600', color: '#a0a0a0', marginBottom: 10, marginTop: 10 },
   tripCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, marginBottom: 10, borderWidth: 1, borderColor: '#2a2a4e' },
   tripHeader: { flexDirection: 'row', alignItems: 'flex-start' },

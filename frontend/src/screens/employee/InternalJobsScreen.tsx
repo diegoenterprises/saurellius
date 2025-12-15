@@ -227,7 +227,10 @@ const styles = StyleSheet.create({
   tabText: { fontSize: 13, fontWeight: '500', color: '#a0a0a0' },
   tabTextActive: { color: '#FFF' },
   content: { flex: 1 },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   jobCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
   jobHeader: { flexDirection: 'row', alignItems: 'flex-start' },
   recommendedBadge: { position: 'absolute', top: -8, left: -8, flexDirection: 'row', alignItems: 'center', backgroundColor: '#F59E0B20', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8, gap: 4, zIndex: 1 },

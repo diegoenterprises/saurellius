@@ -216,7 +216,10 @@ const styles = StyleSheet.create({
   filterChipText: { fontSize: 12, color: '#a0a0a0', fontWeight: '500' },
   filterChipTextActive: { color: '#FFF' },
   content: { flex: 1 },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   courseCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
   courseHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
   categoryBadge: { backgroundColor: '#3B82F620', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 10 },

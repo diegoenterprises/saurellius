@@ -285,20 +285,28 @@ export default function AdminDashboard() {
   };
 
   const formatCurrency = (amount: number) => {
+    // Guard against NaN, undefined, null, or Infinity
+    const safeAmount = (amount == null || isNaN(amount) || !isFinite(amount)) ? 0 : amount;
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(amount);
+    }).format(safeAmount);
   };
 
   const formatNumber = (num: number) => {
-    return new Intl.NumberFormat('en-US').format(num);
+    // Guard against NaN, undefined, null, or Infinity
+    const safeNum = (num == null || isNaN(num) || !isFinite(num)) ? 0 : num;
+    return new Intl.NumberFormat('en-US').format(safeNum);
+  };
+
+  const safeNumber = (num: number, fallback: number = 0) => {
+    return (num == null || isNaN(num) || !isFinite(num)) ? fallback : num;
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Header />
       
       <ScrollView
@@ -318,7 +326,7 @@ export default function AdminDashboard() {
         >
           <View style={styles.heroContent}>
             <View style={styles.heroHeader}>
-              <View>
+              <View style={styles.heroTextContainer}>
                 <Text style={styles.heroTitle}>Platform Command Center</Text>
                 <Text style={styles.heroSubtitle}>
                   Welcome back, {user?.first_name}. Here's your platform overview.
@@ -334,7 +342,7 @@ export default function AdminDashboard() {
 
         {/* Key Metrics Row */}
         <View style={styles.metricsRow}>
-          <View style={[styles.metricCard, styles.metricCardLarge]}>
+          <View style={[styles.metricCard, styles.metricCardLarge, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <LinearGradient
               colors={['#8B5CF6', '#6D28D9']}
               style={styles.metricIconBg}
@@ -342,8 +350,8 @@ export default function AdminDashboard() {
               <Ionicons name="people" size={24} color="#FFF" />
             </LinearGradient>
             <View style={styles.metricContent}>
-              <Text style={styles.metricValue}>{formatNumber(metrics.total_users)}</Text>
-              <Text style={styles.metricLabel}>Total Users</Text>
+              <Text style={[styles.metricValue, { color: colors.text }]}>{formatNumber(metrics.total_users)}</Text>
+              <Text style={[styles.metricLabel, { color: colors.textSecondary }]}>Total Users</Text>
               <View style={styles.metricTrend}>
                 <Ionicons name="trending-up" size={14} color={COLORS.green} />
                 <Text style={[styles.trendText, { color: COLORS.green }]}>
@@ -353,7 +361,7 @@ export default function AdminDashboard() {
             </View>
           </View>
 
-          <View style={[styles.metricCard, styles.metricCardLarge]}>
+          <View style={[styles.metricCard, styles.metricCardLarge, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <LinearGradient
               colors={['#22C55E', '#16A34A']}
               style={styles.metricIconBg}
@@ -361,8 +369,8 @@ export default function AdminDashboard() {
               <Ionicons name="cash" size={24} color="#FFF" />
             </LinearGradient>
             <View style={styles.metricContent}>
-              <Text style={styles.metricValue}>{formatCurrency(metrics.mrr)}</Text>
-              <Text style={styles.metricLabel}>Monthly Revenue (MRR)</Text>
+              <Text style={[styles.metricValue, { color: colors.text }]}>{formatCurrency(metrics.mrr)}</Text>
+              <Text style={[styles.metricLabel, { color: colors.textSecondary }]}>Monthly Revenue (MRR)</Text>
               <View style={styles.metricTrend}>
                 <Ionicons name="trending-up" size={14} color={COLORS.green} />
                 <Text style={[styles.trendText, { color: COLORS.green }]}>
@@ -372,7 +380,7 @@ export default function AdminDashboard() {
             </View>
           </View>
 
-          <View style={[styles.metricCard, styles.metricCardLarge]}>
+          <View style={[styles.metricCard, styles.metricCardLarge, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <LinearGradient
               colors={['#3B82F6', '#1D4ED8']}
               style={styles.metricIconBg}
@@ -380,8 +388,8 @@ export default function AdminDashboard() {
               <Ionicons name="business" size={24} color="#FFF" />
             </LinearGradient>
             <View style={styles.metricContent}>
-              <Text style={styles.metricValue}>{formatNumber(metrics.active_companies)}</Text>
-              <Text style={styles.metricLabel}>Active Companies</Text>
+              <Text style={[styles.metricValue, { color: colors.text }]}>{formatNumber(metrics.active_companies)}</Text>
+              <Text style={[styles.metricLabel, { color: colors.textSecondary }]}>Active Companies</Text>
               <View style={styles.metricTrend}>
                 <Text style={styles.trendTextMuted}>
                   of {metrics.total_companies} total
@@ -390,7 +398,7 @@ export default function AdminDashboard() {
             </View>
           </View>
 
-          <View style={[styles.metricCard, styles.metricCardLarge]}>
+          <View style={[styles.metricCard, styles.metricCardLarge, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <LinearGradient
               colors={['#06B6D4', '#0891B2']}
               style={styles.metricIconBg}
@@ -398,8 +406,8 @@ export default function AdminDashboard() {
               <Ionicons name="code-slash" size={24} color="#FFF" />
             </LinearGradient>
             <View style={styles.metricContent}>
-              <Text style={styles.metricValue}>{formatNumber(metrics.api_calls_today)}</Text>
-              <Text style={styles.metricLabel}>API Calls Today</Text>
+              <Text style={[styles.metricValue, { color: colors.text }]}>{formatNumber(metrics.api_calls_today)}</Text>
+              <Text style={[styles.metricLabel, { color: colors.textSecondary }]}>API Calls Today</Text>
               <View style={styles.metricTrend}>
                 <Text style={styles.trendTextMuted}>
                   {metrics.avg_response_time}ms avg response
@@ -411,73 +419,73 @@ export default function AdminDashboard() {
 
         {/* Secondary Metrics */}
         <View style={styles.secondaryMetrics}>
-          <View style={styles.smallMetricCard}>
-            <Text style={styles.smallMetricValue}>{formatCurrency(metrics.arr)}</Text>
-            <Text style={styles.smallMetricLabel}>Annual Revenue (ARR)</Text>
+          <View style={[styles.smallMetricCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <Text style={[styles.smallMetricValue, { color: colors.text }]}>{formatCurrency(metrics.arr)}</Text>
+            <Text style={[styles.smallMetricLabel, { color: colors.textSecondary }]}>Annual Revenue (ARR)</Text>
           </View>
-          <View style={styles.smallMetricCard}>
-            <Text style={styles.smallMetricValue}>{formatCurrency(metrics.arpu)}</Text>
-            <Text style={styles.smallMetricLabel}>ARPU</Text>
+          <View style={[styles.smallMetricCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <Text style={[styles.smallMetricValue, { color: colors.text }]}>{formatCurrency(metrics.arpu)}</Text>
+            <Text style={[styles.smallMetricLabel, { color: colors.textSecondary }]}>ARPU</Text>
           </View>
-          <View style={styles.smallMetricCard}>
-            <Text style={styles.smallMetricValue}>{formatCurrency(metrics.ltv)}</Text>
-            <Text style={styles.smallMetricLabel}>Customer LTV</Text>
+          <View style={[styles.smallMetricCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <Text style={[styles.smallMetricValue, { color: colors.text }]}>{formatCurrency(metrics.ltv)}</Text>
+            <Text style={[styles.smallMetricLabel, { color: colors.textSecondary }]}>Customer LTV</Text>
           </View>
-          <View style={styles.smallMetricCard}>
-            <Text style={[styles.smallMetricValue, { color: COLORS.green }]}>{metrics.ltv_cac_ratio}x</Text>
-            <Text style={styles.smallMetricLabel}>LTV:CAC Ratio</Text>
+          <View style={[styles.smallMetricCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <Text style={[styles.smallMetricValue, { color: COLORS.green }]}>{safeNumber(metrics.ltv_cac_ratio)}x</Text>
+            <Text style={[styles.smallMetricLabel, { color: colors.textSecondary }]}>LTV:CAC Ratio</Text>
           </View>
-          <View style={styles.smallMetricCard}>
-            <Text style={[styles.smallMetricValue, { color: COLORS.green }]}>{metrics.nrr}%</Text>
-            <Text style={styles.smallMetricLabel}>Net Revenue Retention</Text>
+          <View style={[styles.smallMetricCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <Text style={[styles.smallMetricValue, { color: COLORS.green }]}>{safeNumber(metrics.nrr)}%</Text>
+            <Text style={[styles.smallMetricLabel, { color: colors.textSecondary }]}>Net Revenue Retention</Text>
           </View>
-          <View style={styles.smallMetricCard}>
-            <Text style={[styles.smallMetricValue, { color: COLORS.yellow }]}>{metrics.churn_rate}%</Text>
-            <Text style={styles.smallMetricLabel}>Churn Rate</Text>
+          <View style={[styles.smallMetricCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <Text style={[styles.smallMetricValue, { color: COLORS.yellow }]}>{safeNumber(metrics.churn_rate)}%</Text>
+            <Text style={[styles.smallMetricLabel, { color: colors.textSecondary }]}>Churn Rate</Text>
           </View>
         </View>
 
         {/* Engagement & Growth Metrics */}
         <View style={styles.engagementRow}>
-          <View style={styles.engagementCard}>
-            <Text style={styles.engagementTitle}>User Engagement</Text>
+          <View style={[styles.engagementCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <Text style={[styles.engagementTitle, { color: colors.text }]}>User Engagement</Text>
             <View style={styles.engagementStats}>
               <View style={styles.engagementStat}>
-                <Text style={styles.engagementValue}>{metrics.dau}</Text>
-                <Text style={styles.engagementLabel}>DAU</Text>
+                <Text style={[styles.engagementValue, { color: colors.text }]}>{metrics.dau}</Text>
+                <Text style={[styles.engagementLabel, { color: colors.textSecondary }]}>DAU</Text>
               </View>
               <View style={styles.engagementStat}>
-                <Text style={styles.engagementValue}>{metrics.wau}</Text>
-                <Text style={styles.engagementLabel}>WAU</Text>
+                <Text style={[styles.engagementValue, { color: colors.text }]}>{metrics.wau}</Text>
+                <Text style={[styles.engagementLabel, { color: colors.textSecondary }]}>WAU</Text>
               </View>
               <View style={styles.engagementStat}>
-                <Text style={styles.engagementValue}>{metrics.mau}</Text>
-                <Text style={styles.engagementLabel}>MAU</Text>
+                <Text style={[styles.engagementValue, { color: colors.text }]}>{metrics.mau}</Text>
+                <Text style={[styles.engagementLabel, { color: colors.textSecondary }]}>MAU</Text>
               </View>
               <View style={styles.engagementStat}>
-                <Text style={[styles.engagementValue, { color: COLORS.cyan }]}>{metrics.dau_mau_ratio}%</Text>
-                <Text style={styles.engagementLabel}>DAU/MAU</Text>
+                <Text style={[styles.engagementValue, { color: COLORS.cyan }]}>{safeNumber(metrics.dau_mau_ratio)}%</Text>
+                <Text style={[styles.engagementLabel, { color: colors.textSecondary }]}>DAU/MAU</Text>
               </View>
             </View>
           </View>
-          <View style={styles.engagementCard}>
-            <Text style={styles.engagementTitle}>MRR Breakdown</Text>
+          <View style={[styles.engagementCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <Text style={[styles.engagementTitle, { color: colors.text }]}>MRR Breakdown</Text>
             <View style={styles.engagementStats}>
               <View style={styles.engagementStat}>
                 <Text style={[styles.engagementValue, { color: COLORS.green }]}>{formatCurrency(metrics.new_mrr)}</Text>
-                <Text style={styles.engagementLabel}>New MRR</Text>
+                <Text style={[styles.engagementLabel, { color: colors.textSecondary }]}>New MRR</Text>
               </View>
               <View style={styles.engagementStat}>
                 <Text style={[styles.engagementValue, { color: COLORS.blue }]}>{formatCurrency(metrics.expansion_mrr)}</Text>
-                <Text style={styles.engagementLabel}>Expansion</Text>
+                <Text style={[styles.engagementLabel, { color: colors.textSecondary }]}>Expansion</Text>
               </View>
               <View style={styles.engagementStat}>
                 <Text style={[styles.engagementValue, { color: COLORS.red }]}>-{formatCurrency(metrics.churned_mrr)}</Text>
-                <Text style={styles.engagementLabel}>Churned</Text>
+                <Text style={[styles.engagementLabel, { color: colors.textSecondary }]}>Churned</Text>
               </View>
               <View style={styles.engagementStat}>
                 <Text style={[styles.engagementValue, { color: COLORS.primary }]}>{formatCurrency(metrics.net_new_mrr)}</Text>
-                <Text style={styles.engagementLabel}>Net New</Text>
+                <Text style={[styles.engagementLabel, { color: colors.textSecondary }]}>Net New</Text>
               </View>
             </View>
           </View>
@@ -485,35 +493,35 @@ export default function AdminDashboard() {
 
         {/* Growth Stats */}
         <View style={styles.growthRow}>
-          <View style={styles.growthCard}>
+          <View style={[styles.growthCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <Ionicons name="person-add" size={24} color={COLORS.green} />
-            <Text style={styles.growthValue}>{metrics.new_users_today}</Text>
-            <Text style={styles.growthLabel}>New Today</Text>
+            <Text style={[styles.growthValue, { color: colors.text }]}>{metrics.new_users_today}</Text>
+            <Text style={[styles.growthLabel, { color: colors.textSecondary }]}>New Today</Text>
           </View>
-          <View style={styles.growthCard}>
+          <View style={[styles.growthCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <Ionicons name="trending-up" size={24} color={COLORS.blue} />
-            <Text style={styles.growthValue}>{metrics.new_users_this_week}</Text>
-            <Text style={styles.growthLabel}>This Week</Text>
+            <Text style={[styles.growthValue, { color: colors.text }]}>{metrics.new_users_this_week}</Text>
+            <Text style={[styles.growthLabel, { color: colors.textSecondary }]}>This Week</Text>
           </View>
-          <View style={styles.growthCard}>
+          <View style={[styles.growthCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <Ionicons name="calendar" size={24} color={COLORS.primary} />
-            <Text style={styles.growthValue}>{metrics.new_users_this_month}</Text>
-            <Text style={styles.growthLabel}>This Month</Text>
+            <Text style={[styles.growthValue, { color: colors.text }]}>{metrics.new_users_this_month}</Text>
+            <Text style={[styles.growthLabel, { color: colors.textSecondary }]}>This Month</Text>
           </View>
-          <View style={styles.growthCard}>
+          <View style={[styles.growthCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <Ionicons name="cash" size={24} color={COLORS.green} />
-            <Text style={styles.growthValue}>{metrics.paid_users}</Text>
-            <Text style={styles.growthLabel}>Paid Users</Text>
+            <Text style={[styles.growthValue, { color: colors.text }]}>{metrics.paid_users}</Text>
+            <Text style={[styles.growthLabel, { color: colors.textSecondary }]}>Paid Users</Text>
           </View>
-          <View style={styles.growthCard}>
+          <View style={[styles.growthCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <Ionicons name="checkmark-circle" size={24} color={COLORS.cyan} />
-            <Text style={styles.growthValue}>{metrics.conversion_rate}%</Text>
-            <Text style={styles.growthLabel}>Conversion</Text>
+            <Text style={[styles.growthValue, { color: colors.text }]}>{safeNumber(metrics.conversion_rate)}%</Text>
+            <Text style={[styles.growthLabel, { color: colors.textSecondary }]}>Conversion</Text>
           </View>
-          <View style={styles.growthCard}>
+          <View style={[styles.growthCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <Ionicons name="server" size={24} color={COLORS.yellow} />
-            <Text style={styles.growthValue}>{metrics.api_uptime}%</Text>
-            <Text style={styles.growthLabel}>API Uptime</Text>
+            <Text style={[styles.growthValue, { color: colors.text }]}>{safeNumber(metrics.api_uptime)}%</Text>
+            <Text style={[styles.growthLabel, { color: colors.textSecondary }]}>API Uptime</Text>
           </View>
         </View>
 
@@ -522,19 +530,19 @@ export default function AdminDashboard() {
           {/* Left Column */}
           <View style={styles.leftColumn}>
             {/* Subscription Breakdown */}
-            <View style={styles.card}>
-              <View style={styles.cardHeader}>
+            <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
+              <View style={[styles.cardHeader, { borderBottomColor: colors.border }]}>
                 <View style={styles.cardTitleRow}>
                   <Ionicons name="pie-chart" size={20} color={COLORS.primary} />
-                  <Text style={styles.cardTitle}>Subscription Breakdown</Text>
+                  <Text style={[styles.cardTitle, { color: colors.text }]}>Subscription Breakdown</Text>
                 </View>
               </View>
 
               <View style={styles.subscriptionBars}>
                 <View style={styles.subBar}>
                   <View style={styles.subBarHeader}>
-                    <Text style={styles.subBarLabel}>Free</Text>
-                    <Text style={styles.subBarCount}>{metrics.free_users}</Text>
+                    <Text style={[styles.subBarLabel, { color: colors.textSecondary }]}>Free</Text>
+                    <Text style={[styles.subBarCount, { color: colors.text }]}>{metrics.free_users}</Text>
                   </View>
                   <View style={styles.subBarTrack}>
                     <View style={[styles.subBarFill, { width: `${metrics.total_users > 0 ? (metrics.free_users / metrics.total_users) * 100 : 0}%`, backgroundColor: '#6B7280' }]} />
@@ -543,8 +551,8 @@ export default function AdminDashboard() {
 
                 <View style={styles.subBar}>
                   <View style={styles.subBarHeader}>
-                    <Text style={styles.subBarLabel}>Starter ($29/mo)</Text>
-                    <Text style={styles.subBarCount}>{metrics.starter_users}</Text>
+                    <Text style={[styles.subBarLabel, { color: colors.textSecondary }]}>Starter ($29/mo)</Text>
+                    <Text style={[styles.subBarCount, { color: colors.text }]}>{metrics.starter_users}</Text>
                   </View>
                   <View style={styles.subBarTrack}>
                     <View style={[styles.subBarFill, { width: `${metrics.total_users > 0 ? (metrics.starter_users / metrics.total_users) * 100 : 0}%`, backgroundColor: COLORS.blue }]} />
@@ -553,8 +561,8 @@ export default function AdminDashboard() {
 
                 <View style={styles.subBar}>
                   <View style={styles.subBarHeader}>
-                    <Text style={styles.subBarLabel}>Professional ($79/mo)</Text>
-                    <Text style={styles.subBarCount}>{metrics.professional_users}</Text>
+                    <Text style={[styles.subBarLabel, { color: colors.textSecondary }]}>Professional ($79/mo)</Text>
+                    <Text style={[styles.subBarCount, { color: colors.text }]}>{metrics.professional_users}</Text>
                   </View>
                   <View style={styles.subBarTrack}>
                     <View style={[styles.subBarFill, { width: `${metrics.total_users > 0 ? (metrics.professional_users / metrics.total_users) * 100 : 0}%`, backgroundColor: COLORS.primary }]} />
@@ -563,8 +571,8 @@ export default function AdminDashboard() {
 
                 <View style={styles.subBar}>
                   <View style={styles.subBarHeader}>
-                    <Text style={styles.subBarLabel}>Business ($199/mo)</Text>
-                    <Text style={styles.subBarCount}>{metrics.business_users}</Text>
+                    <Text style={[styles.subBarLabel, { color: colors.textSecondary }]}>Business ($199/mo)</Text>
+                    <Text style={[styles.subBarCount, { color: colors.text }]}>{metrics.business_users}</Text>
                   </View>
                   <View style={styles.subBarTrack}>
                     <View style={[styles.subBarFill, { width: `${metrics.total_users > 0 ? (metrics.business_users / metrics.total_users) * 100 : 0}%`, backgroundColor: COLORS.green }]} />
@@ -572,19 +580,19 @@ export default function AdminDashboard() {
                 </View>
               </View>
 
-              <View style={styles.subscriptionSummary}>
-                <Text style={styles.summaryText}>
-                  Paid Conversion Rate: <Text style={styles.summaryHighlight}>{metrics.conversion_rate.toFixed(1)}%</Text>
+              <View style={[styles.subscriptionSummary, { borderTopColor: colors.border }]}>
+                <Text style={[styles.summaryText, { color: colors.textSecondary }]}>
+                  Paid Conversion Rate: <Text style={styles.summaryHighlight}>{safeNumber(metrics.conversion_rate).toFixed(1)}%</Text>
                 </Text>
               </View>
             </View>
 
             {/* Recent Signups */}
-            <View style={[styles.card, { marginTop: 16 }]}>
-              <View style={styles.cardHeader}>
+            <View style={[styles.card, { marginTop: 16, backgroundColor: colors.card, borderColor: colors.border }]}>
+              <View style={[styles.cardHeader, { borderBottomColor: colors.border }]}>
                 <View style={styles.cardTitleRow}>
                   <Ionicons name="person-add" size={20} color={COLORS.green} />
-                  <Text style={styles.cardTitle}>Recent Signups</Text>
+                  <Text style={[styles.cardTitle, { color: colors.text }]}>Recent Signups</Text>
                 </View>
                 <TouchableOpacity>
                   <Text style={styles.viewAllLink}>View All</Text>
@@ -600,8 +608,8 @@ export default function AdminDashboard() {
                       </Text>
                     </View>
                     <View style={styles.signupInfo}>
-                      <Text style={styles.signupCompany}>{signup.company}</Text>
-                      <Text style={styles.signupEmail}>{signup.email}</Text>
+                      <Text style={[styles.signupCompany, { color: colors.text }]}>{signup.company}</Text>
+                      <Text style={[styles.signupEmail, { color: colors.textSecondary }]}>{signup.email}</Text>
                     </View>
                     <View style={styles.signupMeta}>
                       <View style={[styles.planBadge, { backgroundColor: getPlanColor(signup.plan) }]}>
@@ -622,11 +630,11 @@ export default function AdminDashboard() {
           {/* Right Column */}
           <View style={styles.rightColumn}>
             {/* Platform Activity */}
-            <View style={styles.card}>
-              <View style={styles.cardHeader}>
+            <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
+              <View style={[styles.cardHeader, { borderBottomColor: colors.border }]}>
                 <View style={styles.cardTitleRow}>
                   <Ionicons name="pulse" size={20} color={COLORS.cyan} />
-                  <Text style={styles.cardTitle}>Platform Activity</Text>
+                  <Text style={[styles.cardTitle, { color: colors.text }]}>Platform Activity</Text>
                 </View>
               </View>
 
@@ -635,9 +643,9 @@ export default function AdminDashboard() {
                   <View key={activity.id} style={styles.activityItem}>
                     <View style={[styles.activityDot, { backgroundColor: getActivityColor(activity.type) }]} />
                     <View style={styles.activityContent}>
-                      <Text style={styles.activityAction}>{activity.action}</Text>
-                      <Text style={styles.activityDetail}>{activity.detail}</Text>
-                      <Text style={styles.activityTime}>{activity.time}</Text>
+                      <Text style={[styles.activityAction, { color: colors.text }]}>{activity.action}</Text>
+                      <Text style={[styles.activityDetail, { color: colors.textSecondary }]}>{activity.detail}</Text>
+                      <Text style={[styles.activityTime, { color: colors.textMuted }]}>{activity.time}</Text>
                     </View>
                   </View>
                 ))
@@ -649,43 +657,43 @@ export default function AdminDashboard() {
             </View>
 
             {/* Quick Actions */}
-            <View style={[styles.card, { marginTop: 16 }]}>
-              <View style={styles.cardHeader}>
+            <View style={[styles.card, { marginTop: 16, backgroundColor: colors.card, borderColor: colors.border }]}>
+              <View style={[styles.cardHeader, { borderBottomColor: colors.border }]}>
                 <View style={styles.cardTitleRow}>
                   <Ionicons name="flash" size={20} color={COLORS.yellow} />
-                  <Text style={styles.cardTitle}>Quick Actions</Text>
+                  <Text style={[styles.cardTitle, { color: colors.text }]}>Quick Actions</Text>
                 </View>
               </View>
 
-              <TouchableOpacity style={styles.quickAction} onPress={() => navigateTo('AdminSupport')}>
+              <TouchableOpacity style={styles.quickAction} onPress={() => navigateTo('AdminUsers')}>
                 <View style={[styles.quickActionIcon, { backgroundColor: COLORS.primary + '20' }]}>
                   <Ionicons name="people" size={20} color={COLORS.primary} />
                 </View>
-                <Text style={styles.quickActionText}>Manage Customers</Text>
+                <Text style={[styles.quickActionText, { color: colors.text }]}>Manage Customers</Text>
                 <Ionicons name="chevron-forward" size={16} color={COLORS.textMuted} />
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.quickAction} onPress={() => navigateTo('AdminPortal')}>
+              <TouchableOpacity style={styles.quickAction} onPress={() => navigateTo('AdminSubscriptions')}>
                 <View style={[styles.quickActionIcon, { backgroundColor: COLORS.green + '20' }]}>
                   <Ionicons name="card" size={20} color={COLORS.green} />
                 </View>
-                <Text style={styles.quickActionText}>Billing & Subscriptions</Text>
+                <Text style={[styles.quickActionText, { color: colors.text }]}>Billing & Subscriptions</Text>
                 <Ionicons name="chevron-forward" size={16} color={COLORS.textMuted} />
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.quickAction} onPress={() => navigateTo('AdminPortal')}>
+              <TouchableOpacity style={styles.quickAction} onPress={() => navigateTo('AdminAPI')}>
                 <View style={[styles.quickActionIcon, { backgroundColor: COLORS.blue + '20' }]}>
                   <Ionicons name="key" size={20} color={COLORS.blue} />
                 </View>
-                <Text style={styles.quickActionText}>API Keys & Subscribers</Text>
+                <Text style={[styles.quickActionText, { color: colors.text }]}>API Keys & Subscribers</Text>
                 <Ionicons name="chevron-forward" size={16} color={COLORS.textMuted} />
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.quickAction} onPress={() => navigateTo('Reports')}>
+              <TouchableOpacity style={styles.quickAction} onPress={() => navigateTo('AdminRevenue')}>
                 <View style={[styles.quickActionIcon, { backgroundColor: COLORS.cyan + '20' }]}>
                   <Ionicons name="analytics" size={20} color={COLORS.cyan} />
                 </View>
-                <Text style={styles.quickActionText}>Full Analytics</Text>
+                <Text style={[styles.quickActionText, { color: colors.text }]}>Full Analytics</Text>
                 <Ionicons name="chevron-forward" size={16} color={COLORS.textMuted} />
               </TouchableOpacity>
 
@@ -693,7 +701,7 @@ export default function AdminDashboard() {
                 <View style={[styles.quickActionIcon, { backgroundColor: COLORS.yellow + '20' }]}>
                   <Ionicons name="help-buoy" size={20} color={COLORS.yellow} />
                 </View>
-                <Text style={styles.quickActionText}>Support Tickets</Text>
+                <Text style={[styles.quickActionText, { color: colors.text }]}>Support Tickets</Text>
                 <Ionicons name="chevron-forward" size={16} color={COLORS.textMuted} />
               </TouchableOpacity>
 
@@ -701,7 +709,7 @@ export default function AdminDashboard() {
                 <View style={[styles.quickActionIcon, { backgroundColor: COLORS.red + '20' }]}>
                   <Ionicons name="settings" size={20} color={COLORS.red} />
                 </View>
-                <Text style={styles.quickActionText}>Platform Settings</Text>
+                <Text style={[styles.quickActionText, { color: colors.text }]}>Platform Settings</Text>
                 <Ionicons name="chevron-forward" size={16} color={COLORS.textMuted} />
               </TouchableOpacity>
             </View>
@@ -745,11 +753,11 @@ export default function AdminDashboard() {
             </View>
 
             {/* System Health */}
-            <View style={[styles.card, { marginTop: 16 }]}>
-              <View style={styles.cardHeader}>
+            <View style={[styles.card, { marginTop: 16, backgroundColor: colors.card, borderColor: colors.border }]}>
+              <View style={[styles.cardHeader, { borderBottomColor: colors.border }]}>
                 <View style={styles.cardTitleRow}>
                   <Ionicons name="server" size={20} color={COLORS.green} />
-                  <Text style={styles.cardTitle}>System Health</Text>
+                  <Text style={[styles.cardTitle, { color: colors.text }]}>System Health</Text>
                 </View>
                 <View style={styles.healthBadge}>
                   <View style={styles.healthDot} />
@@ -888,34 +896,45 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   hero: {
-    borderRadius: 16,
-    padding: 24,
+    borderRadius: 20,
+    padding: 20,
+    paddingTop: 16,
     marginBottom: 20,
+    marginHorizontal: 0,
   },
-  heroContent: {},
+  heroContent: {
+    width: '100%',
+  },
   heroHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+    width: '100%',
+  },
+  heroTextContainer: {
+    flex: 1,
+    marginRight: 12,
   },
   heroTitle: {
-    fontSize: 28,
+    fontSize: width < 400 ? 20 : 24,
     fontWeight: '700',
     color: '#FFF',
-    marginBottom: 8,
+    marginBottom: 6,
   },
   heroSubtitle: {
-    fontSize: 16,
+    fontSize: width < 400 ? 13 : 14,
     color: 'rgba(255,255,255,0.8)',
+    lineHeight: 20,
   },
   liveIndicator: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'rgba(34, 197, 94, 0.2)',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
     borderRadius: 20,
-    gap: 6,
+    gap: 5,
+    flexShrink: 0,
   },
   liveDot: {
     width: 8,

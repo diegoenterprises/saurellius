@@ -14,6 +14,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 // Theme colors
 const theme = {
@@ -53,6 +54,7 @@ interface Application {
 }
 
 const TalentScreen: React.FC = () => {
+  const navigation = useNavigation();
   const [activeTab, setActiveTab] = useState<'jobs' | 'applications' | 'reviews' | 'goals' | 'training'>('jobs');
   const [jobs, setJobs] = useState<JobPosting[]>([]);
   const [applications, setApplications] = useState<Application[]>([]);
@@ -228,7 +230,12 @@ const TalentScreen: React.FC = () => {
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <View style={styles.header}>
-        <Text style={[styles.title, { color: theme.colors.text }]}>Talent Management</Text>
+        <View style={styles.headerRow}>
+          <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
+          </TouchableOpacity>
+          <Text style={[styles.title, { color: theme.colors.text }]}>Talent Management</Text>
+        </View>
         <TouchableOpacity
           style={[styles.addButton, { backgroundColor: theme.colors.primary }]}
           onPress={() => setShowNewJobModal(true)}
@@ -290,6 +297,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
   },
+  headerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  backBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(99,102,241,0.1)', alignItems: 'center', justifyContent: 'center' },
   title: { fontSize: 24, fontWeight: 'bold' },
   addButton: {
     width: 44,

@@ -267,7 +267,10 @@ const styles = StyleSheet.create({
   statValue: { fontSize: 16, fontWeight: 'bold', color: '#FFF' },
   statLabel: { fontSize: 10, color: '#a0a0a0', marginTop: 2 },
   content: { flex: 1 },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   policyCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
   expiredCard: { opacity: 0.7 },
   policyHeader: { flexDirection: 'row', alignItems: 'flex-start' },

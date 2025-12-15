@@ -197,7 +197,10 @@ const styles = StyleSheet.create({
   backButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.2)', justifyContent: 'center', alignItems: 'center' },
   headerTitle: { fontSize: 24, fontWeight: '700', color: '#fff' },
   content: { flex: 1, padding: 16 },
-  section: { borderRadius: 12, overflow: 'hidden', borderWidth: 1 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', borderRadius: 12, overflow: 'hidden', borderWidth: 1 },
   emptyState: { padding: 40, alignItems: 'center' },
   emptyText: { marginTop: 12, fontSize: 16 },
   paymentItem: { flexDirection: 'row', alignItems: 'center', padding: 16, borderBottomWidth: 1 },

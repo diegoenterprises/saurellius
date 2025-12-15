@@ -3,7 +3,7 @@
  */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { themesAPI } from '../../services/api';
+import api from '../../services/api';
 
 interface SettingsState {
   selectedTheme: string;
@@ -58,7 +58,16 @@ export const loadSettings = createAsyncThunk(
 export const toggleDarkMode = createAsyncThunk(
   'settings/toggleDarkMode',
   async (darkMode: boolean) => {
+    // Save to AsyncStorage for local persistence
     await AsyncStorage.setItem('dark_mode', JSON.stringify(darkMode));
+    
+    // Sync to backend for cross-device persistence
+    try {
+      await api.put('/api/settings/preferences', { dark_mode: darkMode });
+    } catch (error) {
+      console.log('Failed to sync dark mode to backend:', error);
+    }
+    
     return darkMode;
   }
 );
@@ -67,11 +76,13 @@ export const setTheme = createAsyncThunk(
   'settings/setTheme',
   async (themeKey: string, { rejectWithValue }) => {
     try {
-      await themesAPI.setPreferred(themeKey);
+      await api.put('/api/settings/preferences', { theme: themeKey });
       await AsyncStorage.setItem('selected_theme', themeKey);
       return themeKey;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to set theme');
+      // Still save locally even if backend fails
+      await AsyncStorage.setItem('selected_theme', themeKey);
+      return themeKey;
     }
   }
 );

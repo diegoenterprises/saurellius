@@ -170,7 +170,10 @@ const styles = StyleSheet.create({
   searchContainer: { flexDirection: 'row', alignItems: 'center', margin: 16, paddingHorizontal: 16, paddingVertical: 12, borderRadius: 12, borderWidth: 1 },
   searchInput: { flex: 1, marginLeft: 10, fontSize: 16 },
   content: { flex: 1 },
-  section: { borderRadius: 12, marginHorizontal: 16, overflow: 'hidden', borderWidth: 1 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', borderRadius: 12, marginHorizontal: 16, overflow: 'hidden', borderWidth: 1 },
   timezoneItem: { flexDirection: 'row', alignItems: 'center', padding: 16, borderBottomWidth: 1 },
   abbrBadge: { width: 50, paddingVertical: 6, borderRadius: 6, alignItems: 'center', marginRight: 12 },
   abbrText: { fontSize: 12, fontWeight: '700' },

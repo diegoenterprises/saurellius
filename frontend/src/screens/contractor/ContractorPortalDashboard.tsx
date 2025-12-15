@@ -462,6 +462,9 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center',
     padding: 16,
   },
   sectionHeader: {

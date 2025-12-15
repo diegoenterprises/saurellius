@@ -11,6 +11,31 @@ import random
 
 employer_portal_bp = Blueprint('employer_portal', __name__, url_prefix='/api/employer')
 
+
+# ============================================================================
+# DASHBOARD
+# ============================================================================
+@employer_portal_bp.route('/dashboard', methods=['GET'])
+@jwt_required()
+def get_employer_dashboard():
+    """Get employer dashboard overview"""
+    return jsonify({
+        'success': True,
+        'dashboard': {
+            'employee_count': 0,
+            'active_payroll_runs': 0,
+            'pending_approvals': 0,
+            'upcoming_deadlines': [],
+            'recent_activity': [],
+            'quick_stats': {
+                'total_payroll_ytd': 0,
+                'taxes_paid_ytd': 0,
+                'benefits_cost_ytd': 0
+            }
+        }
+    }), 200
+
+
 # ============================================================================
 # EMERGENCY CONTACTS (Phase 30)
 # ============================================================================

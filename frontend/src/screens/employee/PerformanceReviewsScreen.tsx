@@ -234,7 +234,10 @@ const styles = StyleSheet.create({
   statValue: { fontSize: 18, fontWeight: 'bold', color: '#FFF' },
   statLabel: { fontSize: 10, color: 'rgba(255,255,255,0.6)', marginTop: 2 },
   content: { flex: 1 },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   reviewCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
   reviewHeader: { flexDirection: 'row', alignItems: 'center' },
   reviewIcon: { marginRight: 12 },

@@ -6,7 +6,15 @@ Complete payroll platform services - Core and Enterprise features
 # Core Services
 from .weather_service import WeatherService, weather_service
 from .email_service import EmailService, email_service
-from .gemini_service import SaurelliusAI, saurellius_ai, gemini_ai
+
+# AI Service (requires google-generativeai, optional on Python 3.7)
+try:
+    from .gemini_service import SaurelliusAI, saurellius_ai, gemini_ai
+except ImportError:
+    SaurelliusAI = None
+    saurellius_ai = None
+    gemini_ai = None
+
 from .state_payroll_rules import StatePayrollRules, state_payroll_rules
 from .paystub_generator import PaystubGenerator, paystub_generator, COLOR_THEMES, number_to_words
 from .messaging_service import SaurelliusCommunicationsHub, communications_hub, RECOGNITION_BADGES

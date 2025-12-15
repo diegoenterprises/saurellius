@@ -54,15 +54,15 @@ const ADMIN_MENU_SECTIONS: MenuSection[] = [
     items: [
       { id: 'dashboard', label: 'Dashboard', icon: 'grid-outline', screen: 'Dashboard' },
       { id: 'analytics', label: 'Analytics & KPIs', icon: 'stats-chart-outline', screen: 'AdminPortal' },
-      { id: 'revenue', label: 'Revenue', icon: 'cash-outline', screen: 'AdminPortal', color: COLORS.success },
+      { id: 'revenue', label: 'Revenue', icon: 'cash-outline', screen: 'AdminRevenue', color: COLORS.success },
     ],
   },
   {
     title: 'CUSTOMER MANAGEMENT',
     items: [
-      { id: 'customers', label: 'Customers', icon: 'people-outline', screen: 'AdminSupport' },
-      { id: 'subscriptions', label: 'Subscriptions', icon: 'card-outline', screen: 'AdminPortal' },
-      { id: 'apisubscribers', label: 'API Subscribers', icon: 'code-slash-outline', screen: 'AdminPortal' },
+      { id: 'customers', label: 'Customers', icon: 'people-outline', screen: 'AdminUsers' },
+      { id: 'subscriptions', label: 'Subscriptions', icon: 'card-outline', screen: 'AdminSubscriptions' },
+      { id: 'apisubscribers', label: 'API Subscribers', icon: 'code-slash-outline', screen: 'AdminAPI' },
     ],
   },
   {
@@ -75,9 +75,9 @@ const ADMIN_MENU_SECTIONS: MenuSection[] = [
   {
     title: 'SYSTEM',
     items: [
-      { id: 'apikeys', label: 'API Keys', icon: 'key-outline', screen: 'AdminPortal' },
-      { id: 'compliance', label: 'Compliance', icon: 'shield-checkmark-outline', screen: 'Compliance' },
-      { id: 'reports', label: 'Reports', icon: 'bar-chart-outline', screen: 'Reports' },
+      { id: 'apikeys', label: 'API Management', icon: 'key-outline', screen: 'AdminAPI' },
+      { id: 'system', label: 'System Health', icon: 'server-outline', screen: 'AdminSystem' },
+      { id: 'settings', label: 'Platform Settings', icon: 'settings-outline', screen: 'Settings' },
     ],
   },
 ];

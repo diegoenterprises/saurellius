@@ -3,10 +3,84 @@ Settings Routes
 API endpoints for user and company settings
 """
 
+import os
+import base64
+import uuid
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from models import User, db
 
 settings_bp = Blueprint('settings', __name__)
+
+UPLOAD_FOLDER = '/var/www/saurellius-api/uploads/avatars'
+
+
+# ============================================================================
+# PROFILE PICTURE UPLOAD
+# ============================================================================
+
+@settings_bp.route('/api/profile/avatar', methods=['POST'])
+@jwt_required()
+def upload_avatar():
+    """Upload user profile picture."""
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    
+    if not user:
+        return jsonify({'success': False, 'message': 'User not found'}), 404
+    
+    data = request.get_json()
+    image_data = data.get('image')  # Base64 encoded image
+    
+    if not image_data:
+        return jsonify({'success': False, 'message': 'No image provided'}), 400
+    
+    try:
+        # Create uploads directory if it doesn't exist
+        os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+        
+        # Decode base64 image
+        if ',' in image_data:
+            image_data = image_data.split(',')[1]
+        
+        image_bytes = base64.b64decode(image_data)
+        
+        # Generate unique filename
+        filename = f"{user_id}_{uuid.uuid4().hex[:8]}.png"
+        filepath = os.path.join(UPLOAD_FOLDER, filename)
+        
+        # Save image
+        with open(filepath, 'wb') as f:
+            f.write(image_bytes)
+        
+        # Update user's avatar URL in database
+        avatar_url = f"/uploads/avatars/{filename}"
+        user.avatar_url = avatar_url
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Profile picture updated',
+            'avatar_url': avatar_url
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+
+@settings_bp.route('/api/profile/avatar', methods=['GET'])
+@jwt_required()
+def get_avatar():
+    """Get user's current avatar URL."""
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    
+    if not user:
+        return jsonify({'success': False, 'message': 'User not found'}), 404
+    
+    return jsonify({
+        'success': True,
+        'avatar_url': getattr(user, 'avatar_url', None)
+    })
 
 
 # ============================================================================
@@ -240,14 +314,18 @@ def delete_payment_method(method_id):
 def get_user_preferences():
     """Get user's app preferences."""
     user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    
+    if not user:
+        return jsonify({'success': False, 'message': 'User not found'}), 404
     
     preferences = {
-        'language': 'en',
-        'timezone': 'America/Chicago',
-        'dark_mode': False,
-        'auto_clock_out': False,
-        'date_format': 'MM/DD/YYYY',
-        'currency': 'USD',
+        'language': getattr(user, 'language', 'en') or 'en',
+        'timezone': getattr(user, 'timezone', 'America/Chicago') or 'America/Chicago',
+        'dark_mode': getattr(user, 'dark_mode', True),
+        'auto_clock_out': getattr(user, 'auto_clock_out', False),
+        'date_format': getattr(user, 'date_format', 'MM/DD/YYYY') or 'MM/DD/YYYY',
+        'currency': getattr(user, 'currency', 'USD') or 'USD',
     }
     
     return jsonify({
@@ -261,12 +339,24 @@ def get_user_preferences():
 def update_user_preferences():
     """Update user's app preferences."""
     user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    
+    if not user:
+        return jsonify({'success': False, 'message': 'User not found'}), 404
+    
     data = request.get_json()
     
     updated = {}
     for key in ['language', 'timezone', 'dark_mode', 'auto_clock_out', 'date_format', 'currency']:
         if key in data:
+            setattr(user, key, data[key])
             updated[key] = data[key]
+    
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'message': str(e)}), 500
     
     return jsonify({
         'success': True,

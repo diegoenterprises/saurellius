@@ -83,6 +83,190 @@ def signup():
     }), 201
 
 
+@auth_bp.route('/api/employee-onboarding/start', methods=['POST'])
+def employee_register():
+    """Register a new employee user (public endpoint)."""
+    data = request.get_json()
+    
+    email = data.get('email', '').lower().strip()
+    password = data.get('password')
+    phone_number = data.get('phone_number', '')
+    
+    # Validation
+    if not email or not password:
+        return jsonify({
+            'success': False,
+            'message': 'Email and password are required'
+        }), 400
+    
+    # Password strength validation
+    if len(password) < 8:
+        return jsonify({'success': False, 'message': 'Password must be at least 8 characters'}), 400
+    if not any(c.isupper() for c in password):
+        return jsonify({'success': False, 'message': 'Password must contain an uppercase letter'}), 400
+    if not any(c.islower() for c in password):
+        return jsonify({'success': False, 'message': 'Password must contain a lowercase letter'}), 400
+    if not any(c.isdigit() for c in password):
+        return jsonify({'success': False, 'message': 'Password must contain a number'}), 400
+    if not any(c in '!@#$%^&*' for c in password):
+        return jsonify({'success': False, 'message': 'Password must contain a special character (!@#$%^&*)'}), 400
+    
+    # Check if user exists
+    if User.query.filter_by(email=email).first():
+        return jsonify({
+            'success': False,
+            'message': 'An account with this email already exists'
+        }), 409
+    
+    # Create user
+    user = User(
+        email=email,
+        phone=phone_number,
+        user_type='employee',
+        subscription_tier='free',
+        subscription_status='active'
+    )
+    user.set_password(password)
+    
+    db.session.add(user)
+    db.session.commit()
+    
+    # Generate tokens
+    access_token = create_access_token(identity=user.id)
+    refresh_token = create_refresh_token(identity=user.id)
+    
+    return jsonify({
+        'success': True,
+        'message': 'Employee account created successfully',
+        'user': user.to_dict(),
+        'access_token': access_token,
+        'refresh_token': refresh_token
+    }), 201
+
+
+@auth_bp.route('/api/contractor/register', methods=['POST'])
+def contractor_register():
+    """Register a new contractor user (public endpoint)."""
+    data = request.get_json()
+    
+    email = data.get('email', '').lower().strip()
+    password = data.get('password')
+    phone_number = data.get('phone_number', '')
+    
+    # Validation
+    if not email or not password:
+        return jsonify({
+            'success': False,
+            'message': 'Email and password are required'
+        }), 400
+    
+    # Password strength validation
+    if len(password) < 8:
+        return jsonify({'success': False, 'message': 'Password must be at least 8 characters'}), 400
+    if not any(c.isupper() for c in password):
+        return jsonify({'success': False, 'message': 'Password must contain an uppercase letter'}), 400
+    if not any(c.islower() for c in password):
+        return jsonify({'success': False, 'message': 'Password must contain a lowercase letter'}), 400
+    if not any(c.isdigit() for c in password):
+        return jsonify({'success': False, 'message': 'Password must contain a number'}), 400
+    if not any(c in '!@#$%^&*' for c in password):
+        return jsonify({'success': False, 'message': 'Password must contain a special character (!@#$%^&*)'}), 400
+    
+    # Check if user exists
+    if User.query.filter_by(email=email).first():
+        return jsonify({
+            'success': False,
+            'message': 'An account with this email already exists'
+        }), 409
+    
+    # Create user
+    user = User(
+        email=email,
+        phone=phone_number,
+        user_type='contractor',
+        subscription_tier='free',
+        subscription_status='active'
+    )
+    user.set_password(password)
+    
+    db.session.add(user)
+    db.session.commit()
+    
+    # Generate tokens
+    access_token = create_access_token(identity=user.id)
+    refresh_token = create_refresh_token(identity=user.id)
+    
+    return jsonify({
+        'success': True,
+        'message': 'Contractor account created successfully',
+        'user': user.to_dict(),
+        'access_token': access_token,
+        'refresh_token': refresh_token
+    }), 201
+
+
+@auth_bp.route('/api/employer/register', methods=['POST'])
+def employer_register():
+    """Register a new employer user (public endpoint)."""
+    data = request.get_json()
+    
+    email = data.get('email', '').lower().strip()
+    password = data.get('password')
+    company_name = data.get('company_name', '')
+    phone_number = data.get('phone_number', '')
+    
+    # Validation
+    if not email or not password:
+        return jsonify({
+            'success': False,
+            'message': 'Email and password are required'
+        }), 400
+    
+    # Password strength validation
+    if len(password) < 8:
+        return jsonify({'success': False, 'message': 'Password must be at least 8 characters'}), 400
+    if not any(c.isupper() for c in password):
+        return jsonify({'success': False, 'message': 'Password must contain an uppercase letter'}), 400
+    if not any(c.islower() for c in password):
+        return jsonify({'success': False, 'message': 'Password must contain a lowercase letter'}), 400
+    if not any(c.isdigit() for c in password):
+        return jsonify({'success': False, 'message': 'Password must contain a number'}), 400
+    if not any(c in '!@#$%^&*' for c in password):
+        return jsonify({'success': False, 'message': 'Password must contain a special character (!@#$%^&*)'}), 400
+    
+    # Check if user exists
+    if User.query.filter_by(email=email).first():
+        return jsonify({
+            'success': False,
+            'message': 'An account with this email already exists'
+        }), 409
+    
+    # Create employer user
+    user = User(
+        email=email,
+        phone=phone_number,
+        user_type='employer',
+        subscription_tier='free',
+        subscription_status='trial'
+    )
+    user.set_password(password)
+    
+    db.session.add(user)
+    db.session.commit()
+    
+    # Generate tokens
+    access_token = create_access_token(identity=user.id)
+    refresh_token = create_refresh_token(identity=user.id)
+    
+    return jsonify({
+        'success': True,
+        'message': 'Employer account created successfully',
+        'user': user.to_dict(),
+        'access_token': access_token,
+        'refresh_token': refresh_token
+    }), 201
+
+
 @auth_bp.route('/api/auth/login', methods=['POST'])
 def login():
     """Authenticate user and return tokens."""
@@ -132,6 +316,18 @@ def refresh():
     return jsonify({
         'success': True,
         'access_token': access_token
+    }), 200
+
+
+@auth_bp.route('/api/auth/logout', methods=['POST'])
+@jwt_required()
+def logout():
+    """Logout user (client-side token removal)."""
+    # JWT tokens are stateless, so logout is handled client-side
+    # This endpoint just confirms the logout action
+    return jsonify({
+        'success': True,
+        'message': 'Logged out successfully'
     }), 200
 
 
@@ -336,4 +532,101 @@ def delete_profile_picture():
         'success': True,
         'message': 'Profile picture removed',
         'user': user.to_dict()
+    }), 200
+
+
+@auth_bp.route('/api/auth/verify/email', methods=['POST'])
+def verify_email():
+    """Verify email with verification code."""
+    data = request.get_json()
+    email = data.get('email', '').lower().strip()
+    code = data.get('code', '').strip()
+    
+    if not email or not code:
+        return jsonify({
+            'success': False,
+            'message': 'Email and verification code are required'
+        }), 400
+    
+    user = User.query.filter_by(email=email).first()
+    
+    if not user:
+        return jsonify({
+            'success': False,
+            'message': 'User not found'
+        }), 404
+    
+    # Check verification code (stored in user model or cache)
+    stored_code = getattr(user, 'verification_code', None)
+    
+    # For demo/testing, accept '123456' as valid code or match stored code
+    if code == '123456' or code == stored_code:
+        user.email_verified = True
+        user.verification_code = None
+        db.session.commit()
+        
+        # Generate tokens for auto-login after verification
+        access_token = create_access_token(identity=user.id)
+        refresh_token = create_refresh_token(identity=user.id)
+        
+        return jsonify({
+            'success': True,
+            'message': 'Email verified successfully',
+            'user': user.to_dict(),
+            'access_token': access_token,
+            'refresh_token': refresh_token
+        }), 200
+    
+    return jsonify({
+        'success': False,
+        'message': 'Invalid verification code'
+    }), 400
+
+
+@auth_bp.route('/api/auth/resend-verification', methods=['POST'])
+def resend_verification():
+    """Resend email verification code."""
+    data = request.get_json()
+    email = data.get('email', '').lower().strip()
+    
+    if not email:
+        return jsonify({
+            'success': False,
+            'message': 'Email is required'
+        }), 400
+    
+    user = User.query.filter_by(email=email).first()
+    
+    if not user:
+        # Don't reveal if user exists
+        return jsonify({
+            'success': True,
+            'message': 'If an account exists with this email, a verification code has been sent'
+        }), 200
+    
+    if getattr(user, 'email_verified', False):
+        return jsonify({
+            'success': False,
+            'message': 'Email is already verified'
+        }), 400
+    
+    # Generate new verification code
+    import random
+    verification_code = str(random.randint(100000, 999999))
+    user.verification_code = verification_code
+    db.session.commit()
+    
+    # Send verification email
+    try:
+        email_service.send_verification_email(
+            recipient=email,
+            user_name=user.first_name or email.split('@')[0],
+            verification_code=verification_code
+        )
+    except Exception as e:
+        current_app.logger.warning(f"Failed to send verification email: {e}")
+    
+    return jsonify({
+        'success': True,
+        'message': 'Verification code sent to your email'
     }), 200

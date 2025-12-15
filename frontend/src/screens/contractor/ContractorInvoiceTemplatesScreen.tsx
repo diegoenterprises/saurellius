@@ -234,7 +234,10 @@ const styles = StyleSheet.create({
   statCardValue: { fontSize: 20, fontWeight: 'bold', color: '#FFF' },
   statCardLabel: { fontSize: 10, color: 'rgba(255,255,255,0.6)', marginTop: 2 },
   content: { flex: 1 },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   templateCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, marginBottom: 14, borderWidth: 1, borderColor: '#2a2a4e' },
   defaultCard: { borderColor: '#F59E0B' },
   defaultBadge: { flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', backgroundColor: '#F59E0B20', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 10, marginBottom: 10, gap: 4 },

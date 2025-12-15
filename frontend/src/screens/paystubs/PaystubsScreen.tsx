@@ -129,6 +129,9 @@ const PaystubsScreen: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <LinearGradient colors={['#1473FF', '#BE01FF']} style={styles.header}>
         <View style={styles.headerTop}>
+          <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={24} color="#FFF" />
+          </TouchableOpacity>
           <Text style={styles.headerTitle}>Paystubs</Text>
           <TouchableOpacity
             style={styles.generateButton}
@@ -199,6 +202,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#0f0f23' },
   header: { paddingHorizontal: 20, paddingTop: 10, paddingBottom: 20 },
   headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
+  backBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center' },
   headerTitle: { fontSize: 28, fontWeight: '700', color: '#fff' },
   generateButton: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#1a1a2e', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 8, borderWidth: 1, borderColor: '#1473FF' },
   generateButtonText: { fontSize: 14, fontWeight: '600', color: '#1473FF', marginLeft: 4 },

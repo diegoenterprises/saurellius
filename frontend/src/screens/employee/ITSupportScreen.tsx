@@ -265,7 +265,10 @@ const styles = StyleSheet.create({
   quickAction: { flex: 1, alignItems: 'center', backgroundColor: '#1a1a2e', paddingVertical: 12, borderRadius: 10, gap: 4, borderWidth: 1, borderColor: '#2a2a4e' },
   quickText: { fontSize: 11, color: '#a0a0a0' },
   content: { flex: 1 },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   sectionTitle: { fontSize: 16, fontWeight: '600', color: '#FFF', marginBottom: 14 },
   ticketCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
   ticketHeader: { flexDirection: 'row', alignItems: 'center' },

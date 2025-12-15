@@ -60,6 +60,7 @@ import AdminUsersScreen from '../screens/admin/AdminUsersScreen';
 import AdminRevenueScreen from '../screens/admin/AdminRevenueScreen';
 import AdminAPIScreen from '../screens/admin/AdminAPIScreen';
 import AdminSystemScreen from '../screens/admin/AdminSystemScreen';
+import AdminSubscriptionsScreen from '../screens/admin/AdminSubscriptionsScreen';
 
 // Additional Enterprise Screens
 import { SwipeScreen } from '../screens/swipe';
@@ -226,6 +227,7 @@ export type RootStackParamList = {
   AdminRevenue: undefined;
   AdminAPI: undefined;
   AdminSystem: undefined;
+  AdminSubscriptions: undefined;
   PrivacyPolicy: undefined;
   TermsConditions: undefined;
   // Self-Service Portals
@@ -429,6 +431,7 @@ function MainStack() {
       <Stack.Screen name="AdminRevenue" component={AdminRevenueScreen} />
       <Stack.Screen name="AdminAPI" component={AdminAPIScreen} />
       <Stack.Screen name="AdminSystem" component={AdminSystemScreen} />
+      <Stack.Screen name="AdminSubscriptions" component={AdminSubscriptionsScreen} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
       <Stack.Screen name="TermsConditions" component={TermsConditionsScreen} />
       <Stack.Screen name="EmployeePortal" component={EmployeePortalDashboard} />

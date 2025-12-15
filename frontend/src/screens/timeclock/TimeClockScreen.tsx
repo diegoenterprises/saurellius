@@ -16,6 +16,7 @@ import {
   Animated,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 interface TimeEntry {
@@ -43,6 +44,7 @@ interface WeekSummary {
 }
 
 const TimeClockScreen: React.FC = () => {
+  const navigation = useNavigation();
   const colorScheme = useColorScheme();
   const isDarkMode = colorScheme === 'dark';
   
@@ -214,7 +216,13 @@ const TimeClockScreen: React.FC = () => {
         colors={isClockedIn ? ['#10B981', '#059669'] : ['#6366F1', '#8B5CF6']} 
         style={styles.header}
       >
-        <Text style={styles.headerTitle}>Time Clock</Text>
+        <View style={styles.headerRow}>
+          <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={24} color="#FFF" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Time Clock</Text>
+          <View style={{ width: 40 }} />
+        </View>
         <Text style={styles.headerSubtitle}>{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</Text>
       </LinearGradient>
       
@@ -381,6 +389,8 @@ const TimeClockScreen: React.FC = () => {
 const createStyles = (isDarkMode: boolean) => StyleSheet.create({
   container: { flex: 1, backgroundColor: isDarkMode ? '#111827' : '#F3F4F6' },
   header: { padding: 20, paddingTop: 60 },
+  headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  backBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center' },
   headerTitle: { fontSize: 28, fontWeight: 'bold', color: '#FFFFFF' },
   headerSubtitle: { fontSize: 14, color: 'rgba(255,255,255,0.8)', marginTop: 4 },
   content: { flex: 1, padding: 20 },

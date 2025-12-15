@@ -264,7 +264,10 @@ const styles = StyleSheet.create({
   filterChipText: { fontSize: 12, color: '#a0a0a0', fontWeight: '500' },
   filterChipTextActive: { color: '#FFF' },
   content: { flex: 1 },
-  section: { padding: 16 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', padding: 16 },
   expenseCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
   expenseHeader: { flexDirection: 'row', alignItems: 'flex-start' },
   categoryIcon: { width: 44, height: 44, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginRight: 12 },

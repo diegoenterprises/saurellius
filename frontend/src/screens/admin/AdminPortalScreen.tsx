@@ -47,6 +47,13 @@ interface Metrics {
   arr: number;
   churn_rate: number;
   conversion_rate: number;
+  subscription_breakdown?: {
+    free: number;
+    starter: number;
+    professional: number;
+    business: number;
+    enterprise: number;
+  };
 }
 
 interface APIClient {
@@ -160,7 +167,7 @@ export default function AdminPortalScreen({ navigation }: any) {
     <View style={styles.tabContent}>
       {/* Hero Stats */}
       <LinearGradient
-        colors={['#1473FF', '#BE01FF']}
+        colors={['#0F172A', '#1E3A5F']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.heroCard}
@@ -239,10 +246,11 @@ export default function AdminPortalScreen({ navigation }: any) {
           <View style={styles.pieStats}>
             {/* Dynamic subscription counts from real users */}
             {[
-              { tier: 'Free', count: 0, color: '#6B7280' },
-              { tier: 'Starter', count: 0, color: '#3B82F6' },
-              { tier: 'Professional', count: 0, color: '#1473FF' },
-              { tier: 'Business', count: 0, color: '#8B5CF6' },
+              { tier: 'Free', count: metrics.subscription_breakdown?.free || 0, color: '#6B7280' },
+              { tier: 'Starter', count: metrics.subscription_breakdown?.starter || 0, color: '#3B82F6' },
+              { tier: 'Professional', count: metrics.subscription_breakdown?.professional || 0, color: '#1473FF' },
+              { tier: 'Business', count: metrics.subscription_breakdown?.business || 0, color: '#8B5CF6' },
+              { tier: 'Enterprise', count: metrics.subscription_breakdown?.enterprise || 0, color: '#BE01FF' },
             ].map((tier) => {
               const total = metrics.total_users || 1;
               const percent = total > 0 ? Math.round((tier.count / total) * 100) : 0;

@@ -190,7 +190,10 @@ const styles = StyleSheet.create({
   editButton: { paddingHorizontal: 16, paddingVertical: 8, backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 8 },
   editButtonText: { color: '#fff', fontWeight: '600' },
   content: { flex: 1, padding: 16 },
-  section: { borderRadius: 12, overflow: 'hidden', borderWidth: 1 },
+  section: {
+    maxWidth: 1200,
+    width: '100%',
+    alignSelf: 'center', borderRadius: 12, overflow: 'hidden', borderWidth: 1 },
   fieldContainer: { flexDirection: 'row', alignItems: 'center', padding: 16, borderBottomWidth: 1 },
   fieldIcon: { width: 36, height: 36, borderRadius: 8, backgroundColor: 'rgba(20, 115, 255, 0.15)', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
   fieldContent: { flex: 1 },

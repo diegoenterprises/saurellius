@@ -24,14 +24,22 @@ class SaurelliusAI:
     
     def __init__(self):
         self.api_key = os.getenv('GEMINI_API_KEY')
+        self.initialized = False
+        self.model = None
+        self.vision_model = None
+        
         if self.api_key:
-            genai.configure(api_key=self.api_key)
-            self.model = genai.GenerativeModel('gemini-1.5-flash')
-            self.vision_model = genai.GenerativeModel('gemini-1.5-flash')
-            self.initialized = True
+            try:
+                genai.configure(api_key=self.api_key)
+                self.model = genai.GenerativeModel('gemini-1.5-flash')
+                self.vision_model = genai.GenerativeModel('gemini-1.5-flash')
+                self.initialized = True
+                logger.info("Saurellius AI initialized successfully with Gemini")
+            except Exception as e:
+                logger.error(f"Failed to initialize Gemini AI: {e}")
+                self.initialized = False
         else:
             logger.warning("GEMINI_API_KEY not found. AI features will be limited.")
-            self.initialized = False
     
     def _safe_generate(self, prompt: str, max_tokens: int = 1000) -> Optional[str]:
         """Safely generate AI response with error handling."""
