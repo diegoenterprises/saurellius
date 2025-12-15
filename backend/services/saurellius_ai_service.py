@@ -64,6 +64,8 @@ Be clear and step-by-step in explanations."""
     def __init__(self):
         self.initialized = False
         self.model = None
+        self.model_name = None
+        self.use_legacy_api = False
         self._initialize_gemini()
     
     def _initialize_gemini(self):
@@ -79,29 +81,71 @@ Be clear and step-by-step in explanations."""
         
         try:
             genai.configure(api_key=api_key)
-            # Try different model initialization approaches for compatibility
-            try:
-                self.model = genai.GenerativeModel('gemini-pro')
-            except AttributeError:
-                # Fallback for older API versions
-                self.model = genai.GenerativeModel(model_name='gemini-pro')
-            self.initialized = True
-            logger.info("Saurellius AI initialized successfully")
+            
+            # Check available functions to determine API version
+            available_funcs = dir(genai)
+            logger.info(f"Available genai functions: {[f for f in available_funcs if not f.startswith('_')]}")
+            
+            # Check for legacy generate_text first (v0.1.x)
+            if 'generate_text' in available_funcs:
+                self.use_legacy_api = True
+                # Try to get a text generation model
+                try:
+                    models = list(genai.list_models())
+                    for m in models:
+                        methods = getattr(m, 'supported_generation_methods', [])
+                        if 'generateText' in methods:
+                            self.model_name = m.name
+                            self.initialized = True
+                            logger.info(f"Saurellius AI initialized with legacy API, model: {m.name}")
+                            return
+                except Exception as list_err:
+                    logger.warning(f"Could not list models: {list_err}")
+                
+                # Use default model
+                self.model_name = 'models/text-bison-001'
+                self.initialized = True
+                logger.info("Saurellius AI initialized with legacy API, default model")
+                return
+            
+            # Try newer GenerativeModel API
+            if 'GenerativeModel' in available_funcs:
+                try:
+                    self.model = genai.GenerativeModel('gemini-pro')
+                    self.initialized = True
+                    logger.info("Saurellius AI initialized with GenerativeModel")
+                    return
+                except Exception as model_err:
+                    logger.warning(f"GenerativeModel failed: {model_err}")
+            
+            logger.error("No compatible Gemini API found")
         except Exception as e:
             logger.error(f"Failed to initialize Gemini AI: {e}")
-            # Try alternative initialization
-            try:
-                import google.generativeai as genai2
-                genai2.configure(api_key=api_key)
-                models = genai2.list_models()
-                for m in models:
-                    if 'generateContent' in m.supported_generation_methods:
-                        self.model = genai2.GenerativeModel(m.name)
-                        self.initialized = True
-                        logger.info(f"Saurellius AI initialized with model: {m.name}")
-                        break
-            except Exception as e2:
-                logger.error(f"Alternative Gemini init also failed: {e2}")
+    
+    def _generate_content(self, prompt: str) -> str:
+        """Generate content using either new or legacy API"""
+        if not self.initialized:
+            return None
+        
+        try:
+            if self.use_legacy_api:
+                # Use legacy generate_text API
+                response = genai.generate_text(
+                    model=self.model_name,
+                    prompt=prompt,
+                    temperature=0.7,
+                    max_output_tokens=2048
+                )
+                if response and response.result:
+                    return response.result
+                return None
+            else:
+                # Use newer GenerativeModel API
+                response = self.model.generate_content(prompt)
+                return response.text
+        except Exception as e:
+            logger.error(f"Error generating content: {e}")
+            return None
     
     def _build_system_prompt(self, user_context: dict, feature: str) -> str:
         """Build comprehensive system prompt with user context"""
@@ -212,8 +256,9 @@ USER MESSAGE: {message}
 Respond naturally and helpfully. If you learn something new about the user or their preferences, note it mentally for future reference."""
 
             # Generate response
-            response = self.model.generate_content(full_prompt)
-            ai_response = response.text
+            ai_response = self._generate_content(full_prompt)
+            if not ai_response:
+                raise Exception("No response from AI")
             
             # Log AI response
             conv_id = memory.log_conversation(
@@ -335,8 +380,10 @@ Generate insights in this JSON format:
 Focus on actionable, relevant insights. Return ONLY valid JSON."""
 
         try:
-            response = self.model.generate_content(prompt)
-            insights_data = json.loads(response.text)
+            response_text = self._generate_content(prompt)
+            if not response_text:
+                return []
+            insights_data = json.loads(response_text)
             
             created_insights = []
             for insight in insights_data:
@@ -383,10 +430,12 @@ Provide:
 Be specific and actionable."""
 
         try:
-            response = self.model.generate_content(prompt)
+            response_text = self._generate_content(prompt)
+            if not response_text:
+                return {'success': False, 'analysis': 'No response from AI'}
             return {
                 'success': True,
-                'analysis': response.text
+                'analysis': response_text
             }
         except Exception as e:
             return {'success': False, 'error': str(e)}
@@ -433,8 +482,10 @@ Provide a prediction in JSON format:
 Return ONLY valid JSON."""
 
         try:
-            response = self.model.generate_content(prompt)
-            prediction = json.loads(response.text)
+            response_text = self._generate_content(prompt)
+            if not response_text:
+                return {'success': False, 'error': 'No response from AI'}
+            prediction = json.loads(response_text)
             
             # Store prediction
             memory.store_prediction(
@@ -471,8 +522,8 @@ ADDITIONAL CONTEXT:
 Provide a helpful, accurate, and concise answer."""
 
         try:
-            response = self.model.generate_content(prompt)
-            return response.text
+            response_text = self._generate_content(prompt)
+            return response_text or "I couldn't generate a response."
         except Exception as e:
             return f"I couldn't process that question. Error: {str(e)}"
     
@@ -488,8 +539,8 @@ Provide a helpful, accurate, and concise answer."""
 Be concise and highlight the most important points."""
 
         try:
-            response = self.model.generate_content(prompt)
-            return response.text
+            response_text = self._generate_content(prompt)
+            return response_text or "Unable to generate summary."
         except Exception as e:
             return f"Unable to summarize: {str(e)}"
 
