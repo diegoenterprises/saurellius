@@ -8,8 +8,8 @@ import React, { useRef, useImperativeHandle, forwardRef, useState } from 'react'
 import { View, Modal, StyleSheet, ActivityIndicator, Platform } from 'react-native';
 import { WebView } from 'react-native-webview';
 
-// Your reCAPTCHA site key - should be in environment variable
-const RECAPTCHA_SITE_KEY = process.env.EXPO_PUBLIC_RECAPTCHA_SITE_KEY || '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'; // Test key for development
+// Your reCAPTCHA site key - production key
+const RECAPTCHA_SITE_KEY = process.env.EXPO_PUBLIC_RECAPTCHA_SITE_KEY || '6LdQqywsAAAAACX1D-mD1Ri91H4leJ5Vl6dRalRq';
 
 export interface RecaptchaVerifierRef {
   getToken: () => Promise<string>;
