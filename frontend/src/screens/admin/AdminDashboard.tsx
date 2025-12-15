@@ -174,6 +174,7 @@ const DEFAULT_METRICS: PlatformMetrics = {
   api_uptime: 99.9,
 };
 
+// Static COLORS for StyleSheet (dark theme defaults)
 const COLORS = {
   background: '#0F0F23',
   surface: '#1A1A2E',
@@ -194,6 +195,23 @@ export default function AdminDashboard() {
   const { user } = useSelector((state: RootState) => state.auth);
   const navigation = useNavigation<any>();
   const { colors, gradients, isDark } = useTheme();
+  
+  // Dynamic theme colors (used in JSX to override static StyleSheet)
+  const themeColors = {
+    background: colors.background,
+    surface: colors.card,
+    surfaceLight: colors.inputBackground,
+    primary: COLORS.primary,
+    blue: COLORS.blue,
+    green: COLORS.green,
+    yellow: COLORS.yellow,
+    red: COLORS.red,
+    cyan: COLORS.cyan,
+    pink: COLORS.pink,
+    text: colors.text,
+    textMuted: colors.textSecondary,
+    border: colors.border,
+  };
   const [isLoading, setIsLoading] = useState(true);
   const [metrics, setMetrics] = useState<PlatformMetrics>(DEFAULT_METRICS);
   const [signups, setSignups] = useState<Signup[]>([]);
@@ -794,35 +812,35 @@ export default function AdminDashboard() {
         onRequestClose={() => setShowBetaModal(false)}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
+          <View style={[styles.modalContent, { backgroundColor: colors.card, borderColor: colors.border }]}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>🚀 Send Beta Invite</Text>
+              <Text style={[styles.modalTitle, { color: colors.text }]}>🚀 Send Beta Invite</Text>
               <TouchableOpacity onPress={() => setShowBetaModal(false)}>
-                <Ionicons name="close" size={24} color={COLORS.textMuted} />
+                <Ionicons name="close" size={24} color={colors.textSecondary} />
               </TouchableOpacity>
             </View>
             
-            <Text style={styles.modalDescription}>
+            <Text style={[styles.modalDescription, { color: colors.textSecondary }]}>
               Send an exclusive beta invitation with signup link and perks info.
             </Text>
             
             <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Recipient Name</Text>
+              <Text style={[styles.inputLabel, { color: colors.text }]}>Recipient Name</Text>
               <TextInput
-                style={styles.textInput}
+                style={[styles.textInput, { backgroundColor: colors.inputBackground, color: colors.text, borderColor: colors.border }]}
                 placeholder="John Doe"
-                placeholderTextColor={COLORS.textMuted}
+                placeholderTextColor={colors.textSecondary}
                 value={inviteName}
                 onChangeText={setInviteName}
               />
             </View>
             
             <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Email Address *</Text>
+              <Text style={[styles.inputLabel, { color: colors.text }]}>Email Address *</Text>
               <TextInput
-                style={styles.textInput}
+                style={[styles.textInput, { backgroundColor: colors.inputBackground, color: colors.text, borderColor: colors.border }]}
                 placeholder="user@company.com"
-                placeholderTextColor={COLORS.textMuted}
+                placeholderTextColor={colors.textSecondary}
                 value={inviteEmail}
                 onChangeText={setInviteEmail}
                 keyboardType="email-address"
@@ -832,10 +850,10 @@ export default function AdminDashboard() {
             
             <View style={styles.modalButtons}>
               <TouchableOpacity 
-                style={styles.cancelButton}
+                style={[styles.cancelButton, { backgroundColor: colors.inputBackground }]}
                 onPress={() => setShowBetaModal(false)}
               >
-                <Text style={styles.cancelButtonText}>Cancel</Text>
+                <Text style={[styles.cancelButtonText, { color: colors.textSecondary }]}>Cancel</Text>
               </TouchableOpacity>
               
               <TouchableOpacity 
