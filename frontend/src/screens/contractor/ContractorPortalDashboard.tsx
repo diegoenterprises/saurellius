@@ -19,6 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import contractorSelfServiceAPI, { ContractorDashboard } from '../../services/contractorSelfService';
 import { colors, gradients } from '../../theme';
+import { useTheme } from '../../context/ThemeContext';
 
 interface QuickActionProps {
   icon: string;
@@ -68,6 +69,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, subtitle, icon, color
 
 export default function ContractorPortalDashboard() {
   const navigation = useNavigation();
+  const { colors: themeColors, gradients: themeGradients } = useTheme();
   const [dashboard, setDashboard] = useState<ContractorDashboard | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -106,9 +108,9 @@ export default function ContractorPortalDashboard() {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
+      <View style={[styles.loadingContainer, { backgroundColor: themeColors.background }]}>
         <ActivityIndicator size="large" color={colors.primary.purple} />
-        <Text style={styles.loadingText}>Loading dashboard...</Text>
+        <Text style={[styles.loadingText, { color: themeColors.textSecondary }]}>Loading dashboard...</Text>
       </View>
     );
   }
@@ -117,7 +119,7 @@ export default function ContractorPortalDashboard() {
 
   return (
     <ScrollView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: themeColors.background }]}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
@@ -200,7 +202,7 @@ export default function ContractorPortalDashboard() {
 
       {/* Quick Actions */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Quick Actions</Text>
+        <Text style={[styles.sectionTitle, { color: themeColors.text }]}>Quick Actions</Text>
         <View style={styles.quickActionsGrid}>
           <QuickAction
             icon="add-circle"
@@ -242,14 +244,14 @@ export default function ContractorPortalDashboard() {
       {/* Recent Invoices */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Recent Invoices</Text>
+          <Text style={[styles.sectionTitle, { color: themeColors.text }]}>Recent Invoices</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Paystubs' as never)}>
             <Text style={styles.seeAllText}>See All</Text>
           </TouchableOpacity>
         </View>
         {dashboard?.recent_invoices && dashboard.recent_invoices.length > 0 ? (
           dashboard.recent_invoices.slice(0, 3).map((invoice: any, index: number) => (
-            <View key={index} style={styles.invoiceItem}>
+            <View key={index} style={[styles.invoiceItem, { backgroundColor: themeColors.card }]}>
               <View style={styles.invoiceInfo}>
                 <Text style={styles.invoiceNumber}>{invoice.invoice_number}</Text>
                 <Text style={styles.invoiceClient}>Client ID: {invoice.client_id}</Text>
@@ -287,14 +289,14 @@ export default function ContractorPortalDashboard() {
       {/* Recent Payments */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Recent Payments</Text>
+          <Text style={[styles.sectionTitle, { color: themeColors.text }]}>Recent Payments</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Wallet' as never)}>
             <Text style={styles.seeAllText}>See All</Text>
           </TouchableOpacity>
         </View>
         {dashboard?.recent_payments && dashboard.recent_payments.length > 0 ? (
           dashboard.recent_payments.slice(0, 3).map((payment: any, index: number) => (
-            <View key={index} style={styles.paymentItem}>
+            <View key={index} style={[styles.paymentItem, { backgroundColor: themeColors.card }]}>
               <View style={styles.paymentIcon}>
                 <Ionicons name="checkmark-circle" size={24} color={colors.status.success} />
               </View>

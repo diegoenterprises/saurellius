@@ -19,6 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import employeeSelfServiceAPI, { DashboardData } from '../../services/employeeSelfService';
 import { colors, gradients } from '../../theme';
+import { useTheme } from '../../context/ThemeContext';
 
 interface QuickActionProps {
   icon: string;
@@ -62,6 +63,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, subtitle, icon, color
 
 export default function EmployeePortalDashboard() {
   const navigation = useNavigation();
+  const { colors: themeColors, gradients: themeGradients } = useTheme();
   const [dashboard, setDashboard] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -107,9 +109,9 @@ export default function EmployeePortalDashboard() {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
+      <View style={[styles.loadingContainer, { backgroundColor: themeColors.background }]}>
         <ActivityIndicator size="large" color={colors.primary.purple} />
-        <Text style={styles.loadingText}>Loading dashboard...</Text>
+        <Text style={[styles.loadingText, { color: themeColors.textSecondary }]}>Loading dashboard...</Text>
       </View>
     );
   }
@@ -118,7 +120,7 @@ export default function EmployeePortalDashboard() {
 
   return (
     <ScrollView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: themeColors.background }]}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
@@ -169,7 +171,7 @@ export default function EmployeePortalDashboard() {
 
       {/* Quick Actions */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Quick Actions</Text>
+        <Text style={[styles.sectionTitle, { color: themeColors.text }]}>Quick Actions</Text>
         <View style={styles.quickActionsGrid}>
           <QuickAction
             icon="document-text"
@@ -207,9 +209,9 @@ export default function EmployeePortalDashboard() {
       {/* Upcoming Events */}
       {dashboard?.upcoming_events && dashboard.upcoming_events.length > 0 && (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Upcoming</Text>
+          <Text style={[styles.sectionTitle, { color: themeColors.text }]}>Upcoming</Text>
           {dashboard.upcoming_events.map((event, index) => (
-            <View key={index} style={styles.eventItem}>
+            <View key={index} style={[styles.eventItem, { backgroundColor: themeColors.card }]}>
               <View style={styles.eventDate}>
                 <Text style={styles.eventDateText}>{formatDate(event.date)}</Text>
               </View>
@@ -225,9 +227,9 @@ export default function EmployeePortalDashboard() {
       {/* Recent Activity */}
       {dashboard?.recent_activity && dashboard.recent_activity.length > 0 && (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Recent Activity</Text>
+          <Text style={[styles.sectionTitle, { color: themeColors.text }]}>Recent Activity</Text>
           {dashboard.recent_activity.slice(0, 5).map((activity, index) => (
-            <View key={index} style={styles.activityItem}>
+            <View key={index} style={[styles.activityItem, { backgroundColor: themeColors.card }]}>
               <Ionicons
                 name="checkmark-circle"
                 size={20}
@@ -259,12 +261,12 @@ export default function EmployeePortalDashboard() {
       {/* Profile Completion */}
       {dashboard?.profile_completion && dashboard.profile_completion < 100 && (
         <TouchableOpacity
-          style={styles.completionCard}
+          style={[styles.completionCard, { backgroundColor: themeColors.card }]}
           onPress={() => navigation.navigate('Profile' as never)}
         >
           <View style={styles.completionHeader}>
             <Ionicons name="person-circle" size={24} color={colors.primary.purple} />
-            <Text style={styles.completionTitle}>Complete Your Profile</Text>
+            <Text style={[styles.completionTitle, { color: themeColors.text }]}>Complete Your Profile</Text>
           </View>
           <View style={styles.progressBarContainer}>
             <View
@@ -274,7 +276,7 @@ export default function EmployeePortalDashboard() {
               ]}
             />
           </View>
-          <Text style={styles.completionText}>
+          <Text style={[styles.completionText, { color: themeColors.textSecondary }]}>
             {dashboard.profile_completion}% complete
           </Text>
         </TouchableOpacity>
