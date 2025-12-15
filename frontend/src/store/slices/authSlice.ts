@@ -64,7 +64,7 @@ const initialState: AuthState = {
 // Async thunks
 export const login = createAsyncThunk(
   'auth/login',
-  async (credentials: { email: string; password: string }, { rejectWithValue }) => {
+  async (credentials: { email: string; password: string; recaptcha_token?: string }, { rejectWithValue }) => {
     try {
       const response = await api.post('/api/auth/login', credentials);
       const { access_token, refresh_token, user } = response.data;

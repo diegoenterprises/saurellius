@@ -3,7 +3,7 @@
  * User authentication login form
  */
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -22,6 +22,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
 
 import { login, clearError } from '../../store/slices/authSlice';
+import RecaptchaVerifier, { RecaptchaVerifierRef } from '../../components/auth/RecaptchaVerifier';
 import { AppDispatch, RootState } from '../../store';
 import { colors, gradients, spacing, borderRadius, fontSize } from '../../styles/theme';
 
@@ -29,6 +30,7 @@ export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const recaptchaRef = useRef<RecaptchaVerifierRef>(null);
   
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation<any>();
@@ -45,7 +47,22 @@ export default function LoginScreen() {
     }
 
     try {
-      await dispatch(login({ email, password })).unwrap();
+      // Get reCAPTCHA token
+      let recaptcha_token = '';
+      if (recaptchaRef.current) {
+        try {
+          recaptcha_token = await recaptchaRef.current.getToken();
+        } catch (recaptchaError: any) {
+          Toast.show({
+            type: 'error',
+            text1: 'Verification Failed',
+            text2: 'Please try again',
+          });
+          return;
+        }
+      }
+
+      await dispatch(login({ email, password, recaptcha_token })).unwrap();
       Toast.show({
         type: 'success',
         text1: 'Welcome Back!',
@@ -65,6 +82,9 @@ export default function LoginScreen() {
       colors={[colors.background, colors.backgroundSecondary]}
       style={styles.container}
     >
+      {/* reCAPTCHA Verifier */}
+      <RecaptchaVerifier ref={recaptchaRef} />
+      
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.content}

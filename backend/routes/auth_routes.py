@@ -14,6 +14,7 @@ from flask_jwt_extended import (
 )
 from models import User, db
 from services.email_service import email_service
+from services.recaptcha_service import recaptcha_service
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -274,6 +275,16 @@ def login():
     
     email = data.get('email', '').lower().strip()
     password = data.get('password')
+    recaptcha_token = data.get('recaptcha_token')
+    
+    # Verify reCAPTCHA
+    client_ip = request.remote_addr
+    recaptcha_result = recaptcha_service.verify(recaptcha_token, client_ip)
+    if not recaptcha_result.get('success'):
+        return jsonify({
+            'success': False,
+            'message': recaptcha_result.get('error', 'reCAPTCHA verification failed')
+        }), 400
     
     if not email or not password:
         return jsonify({
