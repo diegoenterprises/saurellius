@@ -12,9 +12,11 @@ class RecaptchaService:
     """Service for verifying Google reCAPTCHA tokens."""
     
     VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify'
+    # Production secret key (fallback if env var not set)
+    DEFAULT_SECRET_KEY = '6LdQqywsAAAAIv867rf3X9gyLZGAW8op4aCztHu'
     
     def __init__(self):
-        self.secret_key = os.environ.get('RECAPTCHA_SECRET_KEY', '')
+        self.secret_key = os.environ.get('RECAPTCHA_SECRET_KEY', self.DEFAULT_SECRET_KEY)
     
     def verify(self, token: str, remote_ip: str = None) -> dict:
         """
