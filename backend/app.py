@@ -206,6 +206,10 @@ def create_app(config_name='default'):
     from routes.beta_invite_routes import beta_invite_bp
     app.register_blueprint(beta_invite_bp)
     
+    # Saurellius AI Assistant Routes (Comprehensive AI System)
+    from routes.ai_assistant_routes import ai_assistant_bp
+    app.register_blueprint(ai_assistant_bp)
+    
     # Initialize Tax Update Scheduler
     from services.scheduler_service import init_scheduler
     init_scheduler(app)
@@ -224,8 +228,10 @@ def create_app(config_name='default'):
     def internal_error(error):
         return {'success': False, 'message': 'Internal server error'}, 500
     
-    # Create database tables
+    # Create database tables (including AI models)
     with app.app_context():
+        # Import AI models to ensure they're registered
+        import models_ai
         db.create_all()
     
     return app
