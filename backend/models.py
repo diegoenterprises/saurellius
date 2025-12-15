@@ -43,6 +43,11 @@ class User(db.Model):
     profile_picture = db.Column(db.Text)  # Base64 encoded image or URL
     is_active = db.Column(db.Boolean, default=True)
     
+    # User Preferences
+    dark_mode = db.Column(db.Boolean, default=True)
+    language = db.Column(db.String(10), default='en')
+    timezone = db.Column(db.String(50), default='America/Chicago')
+    
     # Timestamps
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
