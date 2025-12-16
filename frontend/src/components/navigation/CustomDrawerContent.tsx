@@ -18,8 +18,9 @@ import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import { useTheme } from '../../context/ThemeContext';
 
-const COLORS = {
+const STATIC_COLORS = {
   background: '#0F172A',
   backgroundLight: '#1E293B',
   primary: '#3B82F6',
@@ -54,7 +55,7 @@ const ADMIN_MENU_SECTIONS: MenuSection[] = [
     items: [
       { id: 'dashboard', label: 'Dashboard', icon: 'grid-outline', screen: 'Dashboard' },
       { id: 'analytics', label: 'Analytics & KPIs', icon: 'stats-chart-outline', screen: 'AdminPortal' },
-      { id: 'revenue', label: 'Revenue', icon: 'cash-outline', screen: 'AdminRevenue', color: COLORS.success },
+      { id: 'revenue', label: 'Revenue', icon: 'cash-outline', screen: 'AdminRevenue', color: STATIC_COLORS.success },
     ],
   },
   {
@@ -96,8 +97,8 @@ const EMPLOYER_MENU_SECTIONS: MenuSection[] = [
   {
     title: 'PAYROLL',
     items: [
-      { id: 'payrollrun', label: 'Run Payroll', icon: 'play-circle-outline', screen: 'PayrollRun', color: COLORS.success },
-      { id: 'wallet', label: 'Wallet', icon: 'wallet-outline', screen: 'Wallet', color: COLORS.success },
+      { id: 'payrollrun', label: 'Run Payroll', icon: 'play-circle-outline', screen: 'PayrollRun', color: STATIC_COLORS.success },
+      { id: 'wallet', label: 'Wallet', icon: 'wallet-outline', screen: 'Wallet', color: STATIC_COLORS.success },
       { id: 'timesheet', label: 'Time Clock', icon: 'time-outline', screen: 'Timesheet' },
       { id: 'workforce', label: 'Scheduling', icon: 'calendar-outline', screen: 'Workforce' },
       { id: 'paygrades', label: 'Pay Grades', icon: 'trending-up-outline', screen: 'PayGrades' },
@@ -151,7 +152,7 @@ const EMPLOYER_MENU_SECTIONS: MenuSection[] = [
     items: [
       { id: 'messages', label: 'Messages', icon: 'chatbubbles-outline', screen: 'Messages', badge: 3 },
       { id: 'swipe', label: 'Shift Swap', icon: 'swap-horizontal-outline', screen: 'Swipe' },
-      { id: 'rewards', label: 'Rewards', icon: 'trophy-outline', screen: 'Rewards', color: COLORS.warning },
+      { id: 'rewards', label: 'Rewards', icon: 'trophy-outline', screen: 'Rewards', color: STATIC_COLORS.warning },
     ],
   },
   {
@@ -170,7 +171,7 @@ const EMPLOYEE_MENU_SECTIONS: MenuSection[] = [
     items: [
       { id: 'dashboard', label: 'Dashboard', icon: 'grid-outline', screen: 'EmployeePortal' },
       { id: 'paystubs', label: 'My Paystubs', icon: 'document-text-outline', screen: 'Paystubs' },
-      { id: 'wallet', label: 'Wallet', icon: 'wallet-outline', screen: 'Wallet', color: COLORS.success },
+      { id: 'wallet', label: 'Wallet', icon: 'wallet-outline', screen: 'Wallet', color: STATIC_COLORS.success },
       { id: 'profile', label: 'My Profile', icon: 'person-outline', screen: 'Profile' },
     ],
   },
@@ -188,7 +189,7 @@ const EMPLOYEE_MENU_SECTIONS: MenuSection[] = [
     items: [
       { id: 'benefits', label: 'My Benefits', icon: 'heart-outline', screen: 'Benefits' },
       { id: 'wellness', label: 'Wellness', icon: 'fitness-outline', screen: 'Wellness' },
-      { id: 'rewards', label: 'Rewards', icon: 'trophy-outline', screen: 'Rewards', color: COLORS.warning },
+      { id: 'rewards', label: 'Rewards', icon: 'trophy-outline', screen: 'Rewards', color: STATIC_COLORS.warning },
     ],
   },
   {
@@ -247,7 +248,7 @@ const CONTRACTOR_MENU_SECTIONS: MenuSection[] = [
     items: [
       { id: 'dashboard', label: 'Dashboard', icon: 'grid-outline', screen: 'ContractorPortal' },
       { id: 'invoices', label: 'Invoices', icon: 'document-text-outline', screen: 'ContractorInvoices' },
-      { id: 'wallet', label: 'Wallet', icon: 'wallet-outline', screen: 'Wallet', color: COLORS.success },
+      { id: 'wallet', label: 'Wallet', icon: 'wallet-outline', screen: 'Wallet', color: STATIC_COLORS.success },
       { id: 'payments', label: 'Payment History', icon: 'card-outline', screen: 'ContractorPaymentHistory' },
     ],
   },
@@ -307,7 +308,7 @@ const CONTRACTOR_MENU_SECTIONS: MenuSection[] = [
   {
     title: 'REFERRALS',
     items: [
-      { id: 'referrals', label: 'Referral Program', icon: 'gift-outline', screen: 'ContractorReferralProgram', color: COLORS.warning },
+      { id: 'referrals', label: 'Referral Program', icon: 'gift-outline', screen: 'ContractorReferralProgram', color: STATIC_COLORS.warning },
     ],
   },
   {
@@ -399,7 +400,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
                     <Ionicons
                       name={isActive ? item.icon.replace('-outline', '') as any : item.icon}
                       size={20}
-                      color={isActive ? COLORS.primary : item.color || COLORS.textMuted}
+                      color={isActive ? STATIC_COLORS.primary : item.color || STATIC_COLORS.textMuted}
                     />
                   </View>
                   <Text style={[styles.menuLabel, isActive && styles.menuLabelActive]}>
@@ -426,7 +427,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
           onPress={() => handleNavigation('Settings')}
         >
           <View style={styles.iconWrapper}>
-            <Ionicons name="settings-outline" size={20} color={COLORS.textMuted} />
+            <Ionicons name="settings-outline" size={20} color={STATIC_COLORS.textMuted} />
           </View>
           <Text style={styles.menuLabel}>Settings</Text>
         </TouchableOpacity>
@@ -450,7 +451,7 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
             <Text style={styles.userName}>{userName}</Text>
             <Text style={styles.userEmail}>{userEmail}</Text>
           </View>
-          <Ionicons name="chevron-forward" size={16} color={COLORS.textMuted} />
+          <Ionicons name="chevron-forward" size={16} color={STATIC_COLORS.textMuted} />
         </TouchableOpacity>
       </View>
     </View>
@@ -460,12 +461,12 @@ export default function CustomDrawerContent(props: DrawerContentComponentProps) 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: STATIC_COLORS.background,
   },
   header: {
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
+    borderBottomColor: STATIC_COLORS.border,
   },
   logoContainer: {
     flexDirection: 'row',
@@ -480,10 +481,10 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: COLORS.primary,
+    backgroundColor: STATIC_COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: COLORS.primary,
+    shadowColor: STATIC_COLORS.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -498,13 +499,13 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   brandName: {
-    color: COLORS.text,
+    color: STATIC_COLORS.text,
     fontSize: 18,
     fontWeight: '700',
     letterSpacing: 1,
   },
   brandTagline: {
-    color: COLORS.textMuted,
+    color: STATIC_COLORS.textMuted,
     fontSize: 12,
     marginTop: 2,
   },
@@ -518,7 +519,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   sectionTitle: {
-    color: COLORS.textMuted,
+    color: STATIC_COLORS.textMuted,
     fontSize: 11,
     fontWeight: '600',
     letterSpacing: 1.5,
@@ -535,7 +536,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   menuItemActive: {
-    backgroundColor: COLORS.backgroundLight,
+    backgroundColor: STATIC_COLORS.backgroundLight,
   },
   iconWrapper: {
     width: 36,
@@ -546,21 +547,21 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   iconWrapperActive: {
-    backgroundColor: `${COLORS.primary}15`,
+    backgroundColor: `${STATIC_COLORS.primary}15`,
   },
   menuLabel: {
     flex: 1,
-    color: COLORS.textMuted,
+    color: STATIC_COLORS.textMuted,
     fontSize: 14,
     fontWeight: '500',
     marginLeft: 12,
   },
   menuLabelActive: {
-    color: COLORS.text,
+    color: STATIC_COLORS.text,
     fontWeight: '600',
   },
   badge: {
-    backgroundColor: COLORS.danger,
+    backgroundColor: STATIC_COLORS.danger,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 10,
@@ -579,13 +580,13 @@ const styles = StyleSheet.create({
     marginTop: -10,
     width: 3,
     height: 20,
-    backgroundColor: COLORS.primary,
+    backgroundColor: STATIC_COLORS.primary,
     borderTopRightRadius: 3,
     borderBottomRightRadius: 3,
   },
   bottomSection: {
     borderTopWidth: 1,
-    borderTopColor: COLORS.border,
+    borderTopColor: STATIC_COLORS.border,
     paddingTop: 12,
   },
   userCard: {
@@ -594,14 +595,14 @@ const styles = StyleSheet.create({
     padding: 16,
     marginHorizontal: 12,
     marginTop: 8,
-    backgroundColor: COLORS.backgroundLight,
+    backgroundColor: STATIC_COLORS.backgroundLight,
     borderRadius: 16,
   },
   userAvatar: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: COLORS.accent,
+    backgroundColor: STATIC_COLORS.accent,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -620,12 +621,12 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   userName: {
-    color: COLORS.text,
+    color: STATIC_COLORS.text,
     fontSize: 14,
     fontWeight: '600',
   },
   userEmail: {
-    color: COLORS.textMuted,
+    color: STATIC_COLORS.textMuted,
     fontSize: 12,
     marginTop: 2,
   },
