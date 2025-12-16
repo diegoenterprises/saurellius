@@ -188,6 +188,10 @@ def create_app(config_name='default'):
     # Admin Rules Routes (Ruleset Management)
     from routes.admin_rules_routes import admin_rules_bp
     app.register_blueprint(admin_rules_bp)
+
+    # Rulesets Routes (Authenticated)
+    from routes.rulesets_routes import rulesets_bp
+    app.register_blueprint(rulesets_bp)
     
     # Settings Routes
     from routes.settings_routes import settings_bp
