@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "jurisdiction": "US",
+  "rule_type": "federal_income_tax_withholding",
+  "tax_year": 2026,
+  "effective_start": "2026-01-01",
+  "effective_end": "2026-12-31",
+  "source": {
+    "name": "IRS Publication 15-T (2026) and Revenue Procedure 2025-32",
+    "local_source_file": "/Users/diegousoro/Desktop/2026_IRS_Tax_Withholding_Tables.md"
+  },
+  "standard_deduction": {
+    "single": 16100,
+    "married_filing_jointly": 32200,
+    "married_filing_separately": 16100,
+    "head_of_household": 24150
+  },
+  "brackets": {
+    "single": [
+      {"rate": 0.10, "min": 0, "max": 12400},
+      {"rate": 0.12, "min": 12401, "max": 50400},
+      {"rate": 0.22, "min": 50401, "max": 105700},
+      {"rate": 0.24, "min": 105701, "max": 206650},
+      {"rate": 0.32, "min": 206651, "max": 263100},
+      {"rate": 0.35, "min": 263101, "max": 640600},
+      {"rate": 0.37, "min": 640601, "max": null}
+    ],
+    "married_filing_jointly": [
+      {"rate": 0.10, "min": 0, "max": 19300},
+      {"rate": 0.12, "min": 19301, "max": 44100},
+      {"rate": 0.22, "min": 44101, "max": 120100},
+      {"rate": 0.24, "min": 120101, "max": 230700},
+      {"rate": 0.32, "min": 230701, "max": 422850},
+      {"rate": 0.35, "min": 422851, "max": 788000},
+      {"rate": 0.37, "min": 788001, "max": null}
+    ],
+    "married_filing_separately": [
+      {"rate": 0.10, "min": 0, "max": 9650},
+      {"rate": 0.12, "min": 9651, "max": 22050},
+      {"rate": 0.22, "min": 22051, "max": 60050},
+      {"rate": 0.24, "min": 60051, "max": 115350},
+      {"rate": 0.32, "min": 115351, "max": 211425},
+      {"rate": 0.35, "min": 211426, "max": 265875},
+      {"rate": 0.37, "min": 265876, "max": null}
+    ],
+    "head_of_household": [
+      {"rate": 0.10, "min": 0, "max": 17700},
+      {"rate": 0.12, "min": 17701, "max": 50400},
+      {"rate": 0.22, "min": 50401, "max": 105700},
+      {"rate": 0.24, "min": 105701, "max": 206650},
+      {"rate": 0.32, "min": 206651, "max": 263100},
+      {"rate": 0.35, "min": 263101, "max": 640600},
+      {"rate": 0.37, "min": 640601, "max": null}
+    ]
+  },
+  "withholding_percentage_method_tables": {
+    "annual": {
+      "married_filing_jointly": [
+        {"min": 0, "max": 19300, "base": 0.0, "rate": 0.0, "excess_over": 0},
+        {"min": 19300, "max": 44100, "base": 0.0, "rate": 0.10, "excess_over": 19300},
+        {"min": 44100, "max": 120100, "base": 2480.0, "rate": 0.12, "excess_over": 44100},
+        {"min": 120100, "max": 230700, "base": 11600.0, "rate": 0.22, "excess_over": 120100},
+        {"min": 230700, "max": 422850, "base": 35932.0, "rate": 0.24, "excess_over": 230700},
+        {"min": 422850, "max": 531750, "base": 82048.0, "rate": 0.32, "excess_over": 422850},
+        {"min": 531750, "max": 788000, "base": 116896.0, "rate": 0.35, "excess_over": 531750},
+        {"min": 788000, "max": null, "base": 206583.50, "rate": 0.37, "excess_over": 788000}
+      ],
+      "single_or_mfs": [
+        {"min": 0, "max": 9650, "base": 0.0, "rate": 0.0, "excess_over": 0},
+        {"min": 9650, "max": 22050, "base": 0.0, "rate": 0.10, "excess_over": 9650},
+        {"min": 22050, "max": 60050, "base": 1240.0, "rate": 0.12, "excess_over": 22050},
+        {"min": 60050, "max": 115350, "base": 5800.0, "rate": 0.22, "excess_over": 60050},
+        {"min": 115350, "max": 211425, "base": 17966.0, "rate": 0.24, "excess_over": 115350},
+        {"min": 211425, "max": 265875, "base": 41024.0, "rate": 0.32, "excess_over": 211425},
+        {"min": 265875, "max": 400450, "base": 58448.0, "rate": 0.35, "excess_over": 265875},
+        {"min": 400450, "max": null, "base": 103291.75, "rate": 0.37, "excess_over": 400450}
+      ],
+      "head_of_household": [
+        {"min": 0, "max": 14400, "base": 0.0, "rate": 0.0, "excess_over": 0},
+        {"min": 14400, "max": 36650, "base": 0.0, "rate": 0.10, "excess_over": 14400},
+        {"min": 36650, "max": 84100, "base": 2225.0, "rate": 0.12, "excess_over": 36650},
+        {"min": 84100, "max": 153800, "base": 7919.0, "rate": 0.22, "excess_over": 84100},
+        {"min": 153800, "max": 257750, "base": 23253.0, "rate": 0.24, "excess_over": 153800},
+        {"min": 257750, "max": 322400, "base": 48201.0, "rate": 0.32, "excess_over": 257750},
+        {"min": 322400, "max": 520300, "base": 68889.0, "rate": 0.35, "excess_over": 322400},
+        {"min": 520300, "max": null, "base": 138154.0, "rate": 0.37, "excess_over": 520300}
+      ]
+    },
+    "pay_period_divisors": {
+      "weekly": 52,
+      "biweekly": 26,
+      "semimonthly": 24,
+      "monthly": 12,
+      "quarterly": 4,
+      "semiannually": 2,
+      "daily": 260
+    },
+    "nonresident_alien_additions": {
+      "weekly": {"post_2020": 309.60, "pre_2020": 226.90},
+      "biweekly": {"post_2020": 619.20, "pre_2020": 453.80},
+      "semimonthly": {"post_2020": 670.80, "pre_2020": 491.70},
+      "monthly": {"post_2020": 1341.70, "pre_2020": 983.30},
+      "annually": {"post_2020": 16100.00, "pre_2020": 11800.00}
+    }
+  }
+}

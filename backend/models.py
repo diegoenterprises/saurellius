@@ -3,6 +3,7 @@
 SQLAlchemy ORM models for the application
 """
 
+import json
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -790,4 +791,58 @@ class Notification(db.Model):
             'action_url': self.action_url,
             'is_read': self.is_read,
             'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+
+
+class Ruleset(db.Model):
+    """Versioned, effective-dated rulesets (tax, compliance, payroll) stored as JSON payloads."""
+    __tablename__ = 'rulesets'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    # Identification
+    key = db.Column(db.String(120), nullable=False, index=True)  # e.g. irs_federal_withholding
+    jurisdiction = db.Column(db.String(20), nullable=False, default='US')
+    rule_type = db.Column(db.String(120), nullable=False)  # e.g. federal_income_tax_withholding
+    version = db.Column(db.String(50), nullable=False, default='1')
+
+    # Effective dating
+    effective_start = db.Column(db.Date, nullable=False, index=True)
+    effective_end = db.Column(db.Date, nullable=True, index=True)
+
+    # Provenance
+    source_name = db.Column(db.String(255))
+    source_ref = db.Column(db.String(500))
+    created_by = db.Column(db.Integer)
+
+    # Payload
+    payload_json = db.Column(db.Text, nullable=False)
+
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    __table_args__ = (
+        db.UniqueConstraint('key', 'version', 'effective_start', name='uq_rulesets_key_version_start'),
+    )
+
+    def payload(self):
+        try:
+            return json.loads(self.payload_json) if self.payload_json else None
+        except Exception:
+            return None
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'key': self.key,
+            'jurisdiction': self.jurisdiction,
+            'rule_type': self.rule_type,
+            'version': self.version,
+            'effective_start': self.effective_start.isoformat() if self.effective_start else None,
+            'effective_end': self.effective_end.isoformat() if self.effective_end else None,
+            'source_name': self.source_name,
+            'source_ref': self.source_ref,
+            'created_by': self.created_by,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
         }

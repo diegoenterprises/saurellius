@@ -184,6 +184,10 @@ def create_app(config_name='default'):
     # Admin Support Routes
     from routes.admin_support_routes import admin_support_bp
     app.register_blueprint(admin_support_bp)
+
+    # Admin Rules Routes (Ruleset Management)
+    from routes.admin_rules_routes import admin_rules_bp
+    app.register_blueprint(admin_rules_bp)
     
     # Settings Routes
     from routes.settings_routes import settings_bp
