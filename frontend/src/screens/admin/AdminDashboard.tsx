@@ -707,11 +707,19 @@ export default function AdminDashboard() {
                 <Ionicons name="chevron-forward" size={16} color={COLORS.textMuted} />
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.quickAction} onPress={() => navigateTo('AdminRevenue')}>
+              <TouchableOpacity style={styles.quickAction} onPress={() => navigateTo('UsersAnalytics')}>
                 <View style={[styles.quickActionIcon, { backgroundColor: COLORS.cyan + '20' }]}>
-                  <Ionicons name="analytics" size={20} color={COLORS.cyan} />
+                  <Ionicons name="bar-chart" size={20} color={COLORS.cyan} />
                 </View>
-                <Text style={[styles.quickActionText, { color: colors.text }]}>Full Analytics</Text>
+                <Text style={[styles.quickActionText, { color: colors.text }]}>Users Analytics</Text>
+                <Ionicons name="chevron-forward" size={16} color={COLORS.textMuted} />
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.quickAction} onPress={() => navigateTo('AdminRevenue')}>
+                <View style={[styles.quickActionIcon, { backgroundColor: COLORS.pink + '20' }]}>
+                  <Ionicons name="analytics" size={20} color={COLORS.pink} />
+                </View>
+                <Text style={[styles.quickActionText, { color: colors.text }]}>Revenue Analytics</Text>
                 <Ionicons name="chevron-forward" size={16} color={COLORS.textMuted} />
               </TouchableOpacity>
 
