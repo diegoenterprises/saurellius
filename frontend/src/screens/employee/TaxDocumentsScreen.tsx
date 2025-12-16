@@ -377,7 +377,7 @@ export default function TaxDocumentsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   loadingContainer: {
     flex: 1,
@@ -398,7 +398,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   yearSelector: {
     paddingHorizontal: 16,
@@ -419,7 +419,7 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.6)',
   },
   yearChipTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   content: {
     flex: 1,
@@ -433,11 +433,11 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 16,
   },
   summaryCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     margin: 16,
     borderRadius: 14,
     padding: 18,
@@ -447,7 +447,7 @@ const styles = StyleSheet.create({
   summaryTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 16,
   },
   summaryGrid: {
@@ -465,7 +465,7 @@ const styles = StyleSheet.create({
   summaryValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 2,
   },
   summaryDivider: {
@@ -474,7 +474,7 @@ const styles = StyleSheet.create({
     marginVertical: 12,
   },
   documentCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     marginBottom: 12,
     borderWidth: 1,
@@ -505,7 +505,7 @@ const styles = StyleSheet.create({
   documentTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   correctedBadge: {
     backgroundColor: '#F59E0B20',
@@ -550,7 +550,7 @@ const styles = StyleSheet.create({
   metaValue: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 2,
   },
   documentActions: {
@@ -582,7 +582,7 @@ const styles = StyleSheet.create({
   emptyStateTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 12,
   },
   emptyStateText: {
@@ -606,7 +606,7 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 4,
   },
   infoText: {
@@ -630,6 +630,6 @@ const styles = StyleSheet.create({
   updateW4Text: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
 });

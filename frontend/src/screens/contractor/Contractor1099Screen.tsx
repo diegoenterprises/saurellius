@@ -451,7 +451,7 @@ export default function Contractor1099Screen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   loadingContainer: {
     flex: 1,
@@ -475,7 +475,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   yearSelector: {
     flexDirection: 'row',
@@ -502,7 +502,7 @@ const styles = StyleSheet.create({
   total1099Value: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   total1099Count: {
     fontSize: 13,
@@ -531,7 +531,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   tabTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   content: {
     flex: 1,
@@ -546,7 +546,7 @@ const styles = StyleSheet.create({
   emptyStateTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 16,
   },
   emptyStateText: {
@@ -573,7 +573,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   form1099Card: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 18,
     marginBottom: 14,
@@ -612,7 +612,7 @@ const styles = StyleSheet.create({
   payerName: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 4,
   },
   payerAddress: {
@@ -621,7 +621,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   formAmounts: {
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
     borderRadius: 10,
     padding: 14,
     marginBottom: 14,
@@ -638,7 +638,7 @@ const styles = StyleSheet.create({
   formAmountValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   formActions: {
     flexDirection: 'row',
@@ -673,7 +673,7 @@ const styles = StyleSheet.create({
     color: '#8B5CF6',
   },
   summaryCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 18,
     borderWidth: 1,
@@ -682,7 +682,7 @@ const styles = StyleSheet.create({
   summaryTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 16,
   },
   summarySection: {
@@ -705,7 +705,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   summaryRowHighlight: {
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
     marginHorizontal: -18,
     paddingHorizontal: 18,
     marginTop: 12,
@@ -727,17 +727,17 @@ const styles = StyleSheet.create({
   summaryLabelBold: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   summaryValue: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
   },
   summaryValueBold: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   disclaimerCard: {
     flexDirection: 'row',
@@ -760,7 +760,7 @@ const styles = StyleSheet.create({
   quarterlyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 6,
   },
   quarterlySubtitle: {
@@ -769,7 +769,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   quarterCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -797,7 +797,7 @@ const styles = StyleSheet.create({
   quarterBadgeText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.text,
   },
   quarterBadgeTextPast: {
     color: '#10B981',
@@ -808,7 +808,7 @@ const styles = StyleSheet.create({
   quarterPeriod: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
   },
   quarterDue: {
     fontSize: 13,
@@ -832,10 +832,10 @@ const styles = StyleSheet.create({
   payButtonText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   quarterAmount: {
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
     borderRadius: 10,
     padding: 14,
     marginTop: 14,
@@ -850,7 +850,7 @@ const styles = StyleSheet.create({
   quarterAmountValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   irsInfo: {
     flexDirection: 'row',
@@ -867,7 +867,7 @@ const styles = StyleSheet.create({
   irsInfoTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   irsInfoText: {
     fontSize: 13,

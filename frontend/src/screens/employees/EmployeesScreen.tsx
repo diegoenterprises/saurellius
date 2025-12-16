@@ -235,7 +235,7 @@ const EmployeesScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   header: {
     paddingHorizontal: 20,
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.text,
   },
   headerSubtitle: {
     fontSize: 14,
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -288,10 +288,10 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     marginLeft: 10,
-    color: '#fff',
+    color: colors.text,
   },
   filtersContainer: {
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     marginRight: 8,
   },
   filterChipActive: {
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
     color: '#a0a0a0',
   },
   filterChipTextActive: {
-    color: '#fff',
+    color: colors.text,
     fontWeight: '600',
   },
   listContent: {
@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
   employeeCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
   employeeName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.text,
   },
   employeePosition: {
     fontSize: 14,

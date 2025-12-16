@@ -474,7 +474,7 @@ const createStyles = (isDarkMode: boolean) => StyleSheet.create({
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20, paddingTop: 60 },
   headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', flex: 1 },
   backBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center' },
-  headerTitle: { fontSize: 24, fontWeight: 'bold', color: '#FFFFFF' },
+  headerTitle: { fontSize: 24, fontWeight: 'bold', color: colors.text },
   newButton: { backgroundColor: '#FFFFFF', width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center' },
   statsRow: { flexDirection: 'row', padding: 16, gap: 12 },
   statCard: { flex: 1, backgroundColor: isDarkMode ? '#1F2937' : '#FFFFFF', padding: 16, borderRadius: 12, alignItems: 'center' },
@@ -484,7 +484,7 @@ const createStyles = (isDarkMode: boolean) => StyleSheet.create({
   tab: { flex: 1, paddingVertical: 10, borderRadius: 8, alignItems: 'center', backgroundColor: isDarkMode ? '#1F2937' : '#FFFFFF' },
   tabActive: { backgroundColor: '#6366F1' },
   tabText: { color: '#6B7280', fontWeight: '600' },
-  tabTextActive: { color: '#FFFFFF' },
+  tabTextActive: { color: colors.text },
   listContent: { padding: 16 },
   correctionCard: { backgroundColor: isDarkMode ? '#1F2937' : '#FFFFFF', borderRadius: 12, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: isDarkMode ? '#374151' : '#E5E7EB' },
   correctionHeader: { flexDirection: 'row', alignItems: 'center' },
@@ -503,9 +503,9 @@ const createStyles = (isDarkMode: boolean) => StyleSheet.create({
   actionButtonOutline: { flex: 1, paddingVertical: 10, borderRadius: 8, alignItems: 'center', borderWidth: 1, borderColor: isDarkMode ? '#4B5563' : '#D1D5DB' },
   actionButtonOutlineText: { color: isDarkMode ? '#D1D5DB' : '#6B7280', fontWeight: '600' },
   actionButtonPrimary: { flex: 1, backgroundColor: '#6366F1', paddingVertical: 10, borderRadius: 8, alignItems: 'center' },
-  actionButtonPrimaryText: { color: '#FFFFFF', fontWeight: '600' },
+  actionButtonPrimaryText: { color: colors.text, fontWeight: '600' },
   actionButtonSuccess: { flex: 1, flexDirection: 'row', justifyContent: 'center', gap: 8, backgroundColor: '#10B981', paddingVertical: 10, borderRadius: 8, alignItems: 'center' },
-  actionButtonSuccessText: { color: '#FFFFFF', fontWeight: '600' },
+  actionButtonSuccessText: { color: colors.text, fontWeight: '600' },
   actionButtonDanger: { flex: 1, backgroundColor: '#FEE2E2', paddingVertical: 10, borderRadius: 8, alignItems: 'center' },
   actionButtonDangerText: { color: '#EF4444', fontWeight: '600' },
   emptyState: { alignItems: 'center', paddingVertical: 60 },
@@ -533,7 +533,7 @@ const createStyles = (isDarkMode: boolean) => StyleSheet.create({
   cancelButton: { flex: 1, paddingVertical: 14, borderRadius: 8, alignItems: 'center', borderWidth: 1, borderColor: isDarkMode ? '#4B5563' : '#D1D5DB' },
   cancelButtonText: { color: isDarkMode ? '#D1D5DB' : '#6B7280', fontWeight: '600' },
   createButton: { flex: 1, backgroundColor: '#6366F1', paddingVertical: 14, borderRadius: 8, alignItems: 'center' },
-  createButtonText: { color: '#FFFFFF', fontWeight: '600' },
+  createButtonText: { color: colors.text, fontWeight: '600' },
 });
 
 export default PayrollCorrectionsScreen;

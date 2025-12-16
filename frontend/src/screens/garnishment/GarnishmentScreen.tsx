@@ -428,7 +428,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.text,
   },
   headerAction: {
     width: 40,
@@ -459,7 +459,7 @@ const styles = StyleSheet.create({
   summaryTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.text,
   },
   summaryStats: {
     flexDirection: 'row',
@@ -471,7 +471,7 @@ const styles = StyleSheet.create({
   summaryStatValue: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.text,
   },
   summaryStatLabel: {
     fontSize: 12,
@@ -483,7 +483,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
   },
   priorityCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     marginBottom: 16,
@@ -499,7 +499,7 @@ const styles = StyleSheet.create({
   priorityTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.text,
   },
   priorityList: {
     gap: 4,
@@ -511,7 +511,7 @@ const styles = StyleSheet.create({
   tabBar: {
     flexDirection: 'row',
     marginBottom: 16,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     padding: 4,
   },
@@ -530,7 +530,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   tabLabelActive: {
-    color: '#fff',
+    color: colors.text,
     fontWeight: '600',
   },
   list: {
@@ -538,7 +538,7 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   garnishmentCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 16,
     borderWidth: 1,
@@ -581,7 +581,7 @@ const styles = StyleSheet.create({
   employeeName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.text,
     marginBottom: 4,
   },
   caseNumber: {
@@ -643,7 +643,7 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.text,
     marginTop: 12,
   },
   emptyDesc: {
@@ -670,7 +670,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '80%',
@@ -686,7 +686,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.text,
   },
   modalBody: {
     padding: 20,
@@ -704,7 +704,7 @@ const styles = StyleSheet.create({
   },
   detailValue: {
     fontSize: 14,
-    color: '#fff',
+    color: colors.text,
     fontWeight: '500',
   },
   modalActions: {
@@ -725,6 +725,6 @@ const styles = StyleSheet.create({
   modalButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.text,
   },
 });

@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   header: { paddingHorizontal: 16, paddingVertical: 16 },
   headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   backButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.2)', justifyContent: 'center', alignItems: 'center' },
-  headerTitle: { fontSize: 24, fontWeight: '700', color: '#fff' },
+  headerTitle: { fontSize: 24, fontWeight: '700', color: colors.text },
   content: { flex: 1 },
   sectionTitle: { fontSize: 14, fontWeight: '600', marginTop: 24, marginBottom: 8, marginHorizontal: 16 },
   section: {

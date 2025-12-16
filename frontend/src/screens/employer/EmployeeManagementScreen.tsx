@@ -544,7 +544,7 @@ export default function EmployeeManagementScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   loadingContainer: {
     flex: 1,
@@ -565,7 +565,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   statsRow: {
     flexDirection: 'row',
@@ -586,7 +586,7 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   statLabel: {
     fontSize: 11,
@@ -603,7 +603,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     paddingHorizontal: 12,
     borderWidth: 1,
@@ -614,12 +614,12 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 10,
     fontSize: 15,
-    color: '#FFF',
+    color: colors.text,
   },
   filterButton: {
     width: 46,
     height: 46,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
@@ -663,7 +663,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   employeeCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 16,
     marginBottom: 12,
@@ -699,7 +699,7 @@ const styles = StyleSheet.create({
   avatarText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   employeeInfo: {
     flex: 1,
@@ -707,7 +707,7 @@ const styles = StyleSheet.create({
   employeeName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   employeeTitle: {
     fontSize: 14,
@@ -769,7 +769,7 @@ const styles = StyleSheet.create({
   },
   footerValue: {
     fontSize: 13,
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
     marginTop: 2,
   },
@@ -780,7 +780,7 @@ const styles = StyleSheet.create({
   emptyStateTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 16,
   },
   emptyStateText: {
@@ -804,11 +804,11 @@ const styles = StyleSheet.create({
   addText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   modalHeader: {
     flexDirection: 'row',
@@ -821,7 +821,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   modalCancel: {
     fontSize: 16,
@@ -838,7 +838,7 @@ const styles = StyleSheet.create({
   filterSectionTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 12,
     marginTop: 16,
   },
@@ -848,7 +848,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   filterOption: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     paddingHorizontal: 14,
     paddingVertical: 10,
     borderRadius: 10,
@@ -879,7 +879,7 @@ const styles = StyleSheet.create({
   applyText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   actionsOverlay: {
     flex: 1,
@@ -887,7 +887,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   actionsSheet: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 20,
@@ -904,7 +904,7 @@ const styles = StyleSheet.create({
   actionsTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 20,
     textAlign: 'center',
   },
@@ -921,6 +921,6 @@ const styles = StyleSheet.create({
   },
   actionItemText: {
     fontSize: 16,
-    color: '#FFF',
+    color: colors.text,
   },
 });

@@ -631,7 +631,7 @@ export default function AdminPortalScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
   },
   header: {
     paddingTop: 50,
@@ -650,7 +650,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   adminBadge: {
     flexDirection: 'row',
@@ -689,7 +689,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   tabTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   content: {
     flex: 1,
@@ -718,7 +718,7 @@ const styles = StyleSheet.create({
   heroValue: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   heroLabel: {
     fontSize: 13,
@@ -733,7 +733,7 @@ const styles = StyleSheet.create({
   },
   metricCard: {
     width: (width - 44) / 2,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     borderLeftWidth: 4,
@@ -766,7 +766,7 @@ const styles = StyleSheet.create({
   metricValue: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   metricTitle: {
     fontSize: 13,
@@ -778,14 +778,14 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   chartCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
   },
   chartTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 16,
   },
   chartContainer: {
@@ -828,7 +828,7 @@ const styles = StyleSheet.create({
   pieTier: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   pieCount: {
     fontSize: 12,
@@ -836,7 +836,7 @@ const styles = StyleSheet.create({
   },
   quickStatsRow: {
     flexDirection: 'row',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
   },
@@ -851,7 +851,7 @@ const styles = StyleSheet.create({
   quickStatValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
     marginTop: 8,
   },
   quickStatLabel: {
@@ -869,7 +869,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   sectionSubtitle: {
     fontSize: 13,
@@ -886,7 +886,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 8,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     gap: 4,
   },
   filterText: {
@@ -899,7 +899,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 8,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     gap: 4,
   },
   exportText: {
@@ -912,7 +912,7 @@ const styles = StyleSheet.create({
   },
   userCard: {
     flexDirection: 'row',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -921,7 +921,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -937,7 +937,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   userEmail: {
     fontSize: 13,
@@ -984,11 +984,11 @@ const styles = StyleSheet.create({
   addClientText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   apiRevenueCard: {
     flexDirection: 'row',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -1008,14 +1008,14 @@ const styles = StyleSheet.create({
   apiRevenueValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
     marginTop: 4,
   },
   apiClientsList: {
     gap: 12,
   },
   apiClientCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
   },
@@ -1033,7 +1033,7 @@ const styles = StyleSheet.create({
   apiClientName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   apiClientRevenue: {
     fontSize: 14,
@@ -1055,7 +1055,7 @@ const styles = StyleSheet.create({
   apiUsageValue: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   usageBar: {
     height: 8,
@@ -1108,7 +1108,7 @@ const styles = StyleSheet.create({
   },
   healthCard: {
     width: (width - 44) / 2,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -1119,7 +1119,7 @@ const styles = StyleSheet.create({
   healthName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 8,
   },
   healthStatus: {
@@ -1149,11 +1149,11 @@ const styles = StyleSheet.create({
   subsectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 12,
   },
   noErrors: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 32,
     alignItems: 'center',

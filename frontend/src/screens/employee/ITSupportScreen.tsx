@@ -237,7 +237,7 @@ export default function ITSupportScreen() {
               <View style={styles.priorityRow}>
                 {['low', 'medium', 'high', 'critical'].map(p => (
                   <TouchableOpacity key={p} style={[styles.priorityOption, newTicket.priority === p && { backgroundColor: getPriorityColor(p) }]} onPress={() => setNewTicket(prev => ({...prev, priority: p as any}))}>
-                    <Text style={[styles.priorityOptionText, newTicket.priority === p && { color: '#FFF' }]}>{p}</Text>
+                    <Text style={[styles.priorityOptionText, newTicket.priority === p && { color: colors.text }]}>{p}</Text>
                   </TouchableOpacity>
                 ))}
               </View>
@@ -251,31 +251,31 @@ export default function ITSupportScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0f0f23' },
+  container: { flex: 1, backgroundColor: colors.background },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   header: { paddingBottom: 16 },
   headerContent: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 10, marginBottom: 16 },
-  headerTitle: { fontSize: 18, fontWeight: '600', color: '#FFF' },
+  headerTitle: { fontSize: 18, fontWeight: '600', color: colors.text },
   statsContainer: { flexDirection: 'row', backgroundColor: 'rgba(255,255,255,0.1)', marginHorizontal: 20, borderRadius: 12, padding: 12 },
   statCard: { flex: 1, alignItems: 'center' },
   statDivider: { width: 1, backgroundColor: 'rgba(255,255,255,0.2)', marginHorizontal: 8 },
-  statValue: { fontSize: 18, fontWeight: 'bold', color: '#FFF' },
+  statValue: { fontSize: 18, fontWeight: 'bold', color: colors.text },
   statLabel: { fontSize: 10, color: 'rgba(255,255,255,0.6)', marginTop: 2 },
   quickActions: { flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#2a2a4e', gap: 8 },
-  quickAction: { flex: 1, alignItems: 'center', backgroundColor: '#1a1a2e', paddingVertical: 12, borderRadius: 10, gap: 4, borderWidth: 1, borderColor: '#2a2a4e' },
+  quickAction: { flex: 1, alignItems: 'center', backgroundColor: colors.card, paddingVertical: 12, borderRadius: 10, gap: 4, borderWidth: 1, borderColor: '#2a2a4e' },
   quickText: { fontSize: 11, color: '#a0a0a0' },
   content: { flex: 1 },
   section: {
     maxWidth: 1200,
     width: '100%',
     alignSelf: 'center', padding: 16 },
-  sectionTitle: { fontSize: 16, fontWeight: '600', color: '#FFF', marginBottom: 14 },
-  ticketCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
+  sectionTitle: { fontSize: 16, fontWeight: '600', color: colors.text, marginBottom: 14 },
+  ticketCard: { backgroundColor: colors.card, borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
   ticketHeader: { flexDirection: 'row', alignItems: 'center' },
   categoryIcon: { width: 40, height: 40, borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginRight: 10 },
   ticketInfo: { flex: 1 },
   ticketNumber: { fontSize: 11, color: '#666' },
-  ticketSubject: { fontSize: 15, fontWeight: '600', color: '#FFF', marginTop: 2 },
+  ticketSubject: { fontSize: 15, fontWeight: '600', color: colors.text, marginTop: 2 },
   statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 10 },
   statusText: { fontSize: 11, fontWeight: '600', textTransform: 'capitalize' },
   ticketDesc: { fontSize: 13, color: '#a0a0a0', marginTop: 10, lineHeight: 18 },
@@ -290,21 +290,21 @@ const styles = StyleSheet.create({
   newTicketFab: { position: 'absolute', bottom: 24, right: 24, width: 56, height: 56, borderRadius: 28, backgroundColor: '#1473FF', justifyContent: 'center', alignItems: 'center', shadowColor: '#1473FF', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 5 },
   emptyState: { alignItems: 'center', paddingVertical: 40 },
   emptyText: { fontSize: 14, color: '#666', marginTop: 12 },
-  modalContainer: { flex: 1, backgroundColor: '#0f0f23' },
+  modalContainer: { flex: 1, backgroundColor: colors.background },
   modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20, borderBottomWidth: 1, borderBottomColor: '#2a2a4e' },
-  modalTitle: { fontSize: 17, fontWeight: '600', color: '#FFF' },
+  modalTitle: { fontSize: 17, fontWeight: '600', color: colors.text },
   modalCancel: { fontSize: 16, color: '#a0a0a0' },
   modalSave: { fontSize: 16, fontWeight: '600', color: '#1473FF' },
   modalContent: { padding: 20 },
   inputGroup: { marginBottom: 20 },
   inputLabel: { fontSize: 13, color: '#a0a0a0', marginBottom: 8 },
-  input: { backgroundColor: '#1a1a2e', borderRadius: 12, padding: 14, fontSize: 16, color: '#FFF', borderWidth: 1, borderColor: '#2a2a4e' },
+  input: { backgroundColor: colors.card, borderRadius: 12, padding: 14, fontSize: 16, color: colors.text, borderWidth: 1, borderColor: '#2a2a4e' },
   textArea: { height: 120, textAlignVertical: 'top' },
   categoryGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   categoryOption: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, paddingVertical: 10, backgroundColor: '#2a2a4e', borderRadius: 10, gap: 6 },
   categoryActive: { backgroundColor: '#1473FF' },
   categoryOptionText: { fontSize: 12, color: '#a0a0a0' },
-  categoryOptionTextActive: { color: '#FFF' },
+  categoryOptionTextActive: { color: colors.text },
   priorityRow: { flexDirection: 'row', gap: 8 },
   priorityOption: { flex: 1, alignItems: 'center', paddingVertical: 10, backgroundColor: '#2a2a4e', borderRadius: 10 },
   priorityOptionText: { fontSize: 12, color: '#a0a0a0', textTransform: 'capitalize' },

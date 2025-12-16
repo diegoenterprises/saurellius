@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   header: { paddingHorizontal: 16, paddingVertical: 16 },
   headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  headerTitle: { fontSize: 20, fontWeight: '700', color: '#FFF' },
+  headerTitle: { fontSize: 20, fontWeight: '700', color: colors.text },
   content: { flex: 1, padding: 16 },
   metricsRow: { flexDirection: 'row', gap: 12, marginBottom: 12 },
   metricCard: { flex: 1, padding: 16, borderRadius: 12, borderWidth: 1 },

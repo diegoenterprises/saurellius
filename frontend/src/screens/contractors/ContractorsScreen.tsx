@@ -573,7 +573,7 @@ export default function ContractorsScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   header: {
     paddingTop: 50,
@@ -589,7 +589,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   tabBar: {
     flexDirection: 'row',
@@ -615,7 +615,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   tabTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   content: {
     flex: 1,
@@ -630,7 +630,7 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 12,
     alignItems: 'center',
@@ -640,7 +640,7 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   statLabel: {
     fontSize: 12,
@@ -650,7 +650,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     paddingHorizontal: 14,
     marginBottom: 12,
@@ -662,7 +662,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingLeft: 10,
     fontSize: 16,
-    color: '#FFFFFF',
+    color: colors.text,
   },
   addButton: {
     marginBottom: 16,
@@ -678,13 +678,13 @@ const styles = StyleSheet.create({
   addButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   contractorsList: {
     gap: 12,
   },
   contractorCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
@@ -715,7 +715,7 @@ const styles = StyleSheet.create({
   contractorName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   contractorEmail: {
     fontSize: 13,
@@ -748,7 +748,7 @@ const styles = StyleSheet.create({
   detailValue: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.text,
     textTransform: 'capitalize',
   },
   w9Status: {
@@ -786,7 +786,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   paymentCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
@@ -805,7 +805,7 @@ const styles = StyleSheet.create({
   paymentContractor: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 4,
   },
   paymentDescription: {
@@ -833,7 +833,7 @@ const styles = StyleSheet.create({
   form1099Title: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   form1099Subtitle: {
     fontSize: 14,
@@ -848,7 +848,7 @@ const styles = StyleSheet.create({
   generateButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   thresholdCard: {
     flexDirection: 'row',
@@ -866,7 +866,7 @@ const styles = StyleSheet.create({
   thresholdTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 4,
   },
   thresholdText: {
@@ -876,7 +876,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 12,
   },
   form1099List: {
@@ -884,7 +884,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   form1099Card: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
@@ -899,7 +899,7 @@ const styles = StyleSheet.create({
   form1099Name: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   form1099Type: {
     fontSize: 13,
@@ -945,7 +945,7 @@ const styles = StyleSheet.create({
     color: '#1473FF',
   },
   belowThresholdList: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
@@ -960,7 +960,7 @@ const styles = StyleSheet.create({
   },
   belowThresholdName: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.text,
   },
   belowThresholdAmount: {
     fontSize: 14,
@@ -977,7 +977,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 24,
@@ -992,7 +992,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   formGroup: {
     marginBottom: 16,
@@ -1000,7 +1000,7 @@ const styles = StyleSheet.create({
   formLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 8,
   },
   formInput: {
@@ -1008,7 +1008,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 14,
     fontSize: 16,
-    color: '#FFFFFF',
+    color: colors.text,
   },
   selectInput: {
     backgroundColor: '#2a2a4e',
@@ -1048,6 +1048,6 @@ const styles = StyleSheet.create({
   modalButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
 });

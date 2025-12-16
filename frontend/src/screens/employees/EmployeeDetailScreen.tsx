@@ -436,7 +436,7 @@ const styles = StyleSheet.create({
   avatarText: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   statusDot: {
     position: 'absolute',
@@ -451,7 +451,7 @@ const styles = StyleSheet.create({
   employeeName: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 12,
   },
   employeePosition: {
@@ -466,7 +466,7 @@ const styles = StyleSheet.create({
   },
   tabContainer: {
     flexDirection: 'row',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderBottomWidth: 1,
     borderBottomColor: '#2a2a4e',
   },
@@ -494,7 +494,7 @@ const styles = StyleSheet.create({
     maxWidth: 1200,
     width: '100%',
     alignSelf: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     marginTop: 12,
     paddingVertical: 16,
   },
@@ -527,10 +527,10 @@ const styles = StyleSheet.create({
   },
   infoValue: {
     fontSize: 15,
-    color: '#FFFFFF',
+    color: colors.text,
   },
   documentsContainer: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     marginTop: 12,
     paddingVertical: 8,
   },
@@ -557,7 +557,7 @@ const styles = StyleSheet.create({
   documentName: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   documentDate: {
     fontSize: 12,
@@ -565,7 +565,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   actionsContainer: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     marginTop: 12,
     paddingVertical: 8,
   },

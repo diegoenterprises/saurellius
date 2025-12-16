@@ -594,7 +594,7 @@ export default function TimesheetEntryScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   loadingContainer: {
     flex: 1,
@@ -615,7 +615,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   clockWidget: {
     backgroundColor: 'rgba(255,255,255,0.1)',
@@ -637,7 +637,7 @@ const styles = StyleSheet.create({
   clockStatusText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   clockTimeText: {
     fontSize: 13,
@@ -663,7 +663,7 @@ const styles = StyleSheet.create({
   clockButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   breakButton: {
     flex: 1,
@@ -716,11 +716,11 @@ const styles = StyleSheet.create({
   weekDate: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 2,
   },
   weekSummaryCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     margin: 16,
     borderRadius: 14,
     padding: 16,
@@ -736,7 +736,7 @@ const styles = StyleSheet.create({
   summaryTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   statusBadge: {
     paddingHorizontal: 10,
@@ -762,7 +762,7 @@ const styles = StyleSheet.create({
   summaryStatValue: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   summaryStatLabel: {
     fontSize: 12,
@@ -775,7 +775,7 @@ const styles = StyleSheet.create({
   dayRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     marginBottom: 8,
@@ -792,7 +792,7 @@ const styles = StyleSheet.create({
   dayName: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   dayNameToday: {
     color: '#1473FF',
@@ -816,7 +816,7 @@ const styles = StyleSheet.create({
   },
   entryTime: {
     fontSize: 14,
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
   },
   entryHours: {
@@ -825,7 +825,7 @@ const styles = StyleSheet.create({
   hoursText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   overtimeText: {
     fontSize: 11,
@@ -861,7 +861,7 @@ const styles = StyleSheet.create({
   submitText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   pendingCard: {
     flexDirection: 'row',
@@ -897,7 +897,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   modalHeader: {
     flexDirection: 'row',
@@ -910,7 +910,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   modalCancel: {
     fontSize: 16,
@@ -928,7 +928,7 @@ const styles = StyleSheet.create({
   entryDate: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     textAlign: 'center',
     marginBottom: 24,
   },
@@ -941,11 +941,11 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   input: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     padding: 14,
     fontSize: 16,
-    color: '#FFF',
+    color: colors.text,
     borderWidth: 1,
     borderColor: '#2a2a4e',
   },

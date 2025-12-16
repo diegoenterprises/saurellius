@@ -1231,7 +1231,7 @@ export default function EmployerRegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   header: {
     paddingBottom: 20,
@@ -1247,7 +1247,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   progressBar: {
     flexDirection: 'row',
@@ -1291,7 +1291,7 @@ const styles = StyleSheet.create({
   stepTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 8,
   },
   stepSubtitle: {
@@ -1309,18 +1309,18 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   input: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     fontSize: 16,
-    color: '#FFF',
+    color: colors.text,
     borderWidth: 1,
     borderColor: '#2a2a4e',
   },
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#2a2a4e',
@@ -1329,7 +1329,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 14,
     fontSize: 16,
-    color: '#FFF',
+    color: colors.text,
   },
   eyeButton: {
     padding: 14,
@@ -1359,7 +1359,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 20,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderWidth: 1,
     borderColor: '#2a2a4e',
   },
@@ -1372,7 +1372,7 @@ const styles = StyleSheet.create({
     color: '#a0a0a0',
   },
   chipTextSelected: {
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
   },
   infoCard: {
@@ -1389,7 +1389,7 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 4,
   },
   infoText: {
@@ -1400,7 +1400,7 @@ const styles = StyleSheet.create({
   radioOption: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -1436,7 +1436,7 @@ const styles = StyleSheet.create({
   radioLabel: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 4,
   },
   radioDescription: {
@@ -1445,7 +1445,7 @@ const styles = StyleSheet.create({
   },
   toggleRow: {
     flexDirection: 'row',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 4,
     borderWidth: 1,
@@ -1465,7 +1465,7 @@ const styles = StyleSheet.create({
     color: '#a0a0a0',
   },
   toggleTextActive: {
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '600',
   },
   checkboxRow: {
@@ -1492,7 +1492,7 @@ const styles = StyleSheet.create({
   checkboxLabel: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 4,
   },
   checkboxDescription: {
@@ -1500,7 +1500,7 @@ const styles = StyleSheet.create({
     color: '#a0a0a0',
   },
   stateCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -1516,7 +1516,7 @@ const styles = StyleSheet.create({
   stateCardTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   addButton: {
     flexDirection: 'row',
@@ -1550,7 +1550,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   planCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 16,
     padding: 20,
     marginBottom: 16,
@@ -1573,7 +1573,7 @@ const styles = StyleSheet.create({
   recommendedText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.text,
   },
   planHeader: {
     flexDirection: 'row',
@@ -1584,7 +1584,7 @@ const styles = StyleSheet.create({
   planName: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   planEmployees: {
     fontSize: 14,
@@ -1636,7 +1636,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   reviewSection: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -1660,13 +1660,13 @@ const styles = StyleSheet.create({
   },
   reviewValue: {
     fontSize: 14,
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
     flex: 1,
     textAlign: 'right',
   },
   agreementContainer: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
   },
@@ -1679,7 +1679,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 20,
     paddingBottom: 34,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderTopWidth: 1,
     borderTopColor: '#2a2a4e',
     gap: 12,
@@ -1711,7 +1711,7 @@ const styles = StyleSheet.create({
   nextButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   buttonDisabled: {
     opacity: 0.6,

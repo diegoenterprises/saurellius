@@ -464,7 +464,7 @@ export default function ContractorAvailabilityScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   loadingContainer: {
     flex: 1,
@@ -485,7 +485,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   headerInfo: {
     flexDirection: 'row',
@@ -515,7 +515,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 4,
   },
   sectionSubtitle: {
@@ -524,7 +524,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   scheduleCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 4,
     borderWidth: 1,
@@ -559,7 +559,7 @@ const styles = StyleSheet.create({
   dayLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
   },
   dayLabelDisabled: {
     color: '#666',
@@ -609,12 +609,12 @@ const styles = StyleSheet.create({
   calendarMonth: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   calendarGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 8,
     borderWidth: 1,
@@ -649,7 +649,7 @@ const styles = StyleSheet.create({
   },
   calendarDayText: {
     fontSize: 14,
-    color: '#FFF',
+    color: colors.text,
   },
   calendarDayTextToday: {
     fontWeight: 'bold',
@@ -700,7 +700,7 @@ const styles = StyleSheet.create({
   blockedCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     marginBottom: 10,
@@ -722,7 +722,7 @@ const styles = StyleSheet.create({
   blockedDates: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
   },
   blockedReason: {
     fontSize: 13,

@@ -8,7 +8,7 @@ import base64
 import uuid
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models import User, db
+from models import User, db, SecuritySettings, ActiveSession, Notification
 
 settings_bp = Blueprint('settings', __name__)
 
@@ -197,18 +197,38 @@ def update_company_info():
 @settings_bp.route('/api/security/settings', methods=['GET'])
 @jwt_required()
 def get_security_settings():
-    """Get user's security settings."""
+    """Get user's security settings from database."""
     user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    
+    if not user:
+        return jsonify({'success': False, 'message': 'User not found'}), 404
+    
+    # Get or create security settings
+    sec_settings = SecuritySettings.query.filter_by(user_id=user_id, user_type='employer').first()
+    if not sec_settings:
+        sec_settings = SecuritySettings(
+            user_id=user_id,
+            user_type='employer',
+            enable_2fa=False,
+            login_notifications=True,
+            suspicious_activity_alerts=True
+        )
+        db.session.add(sec_settings)
+        db.session.commit()
+    
+    # Count active sessions
+    active_sessions = ActiveSession.query.filter_by(user_id=user_id, user_type='employer').count()
     
     settings = {
-        'two_factor_enabled': True,
-        'sms_auth': False,
-        'email_auth': True,
-        'app_auth': False,
-        'login_notifications': True,
-        'active_sessions': 1,
-        'last_password_change': '2024-11-15',
-        'password_expires_in_days': 90,
+        'two_factor_enabled': sec_settings.enable_2fa,
+        'sms_auth': sec_settings.two_fa_method == 'sms',
+        'email_auth': sec_settings.two_fa_method == 'email',
+        'app_auth': sec_settings.two_fa_method == 'authenticator',
+        'login_notifications': sec_settings.login_notifications,
+        'suspicious_activity_alerts': sec_settings.suspicious_activity_alerts,
+        'active_sessions': active_sessions,
+        'last_password_change': user.updated_at.strftime('%Y-%m-%d') if user.updated_at else None,
     }
     
     return jsonify({
@@ -220,22 +240,46 @@ def get_security_settings():
 @settings_bp.route('/api/security/settings', methods=['PUT'])
 @jwt_required()
 def update_security_settings():
-    """Update user's security settings."""
+    """Update user's security settings in database."""
     user_id = get_jwt_identity()
     data = request.get_json()
+    
+    # Get or create security settings
+    sec_settings = SecuritySettings.query.filter_by(user_id=user_id, user_type='employer').first()
+    if not sec_settings:
+        sec_settings = SecuritySettings(user_id=user_id, user_type='employer')
+        db.session.add(sec_settings)
     
     updated_settings = {}
     
     if 'two_factor_enabled' in data:
+        sec_settings.enable_2fa = data['two_factor_enabled']
         updated_settings['two_factor_enabled'] = data['two_factor_enabled']
-    if 'sms_auth' in data:
-        updated_settings['sms_auth'] = data['sms_auth']
-    if 'email_auth' in data:
-        updated_settings['email_auth'] = data['email_auth']
-    if 'app_auth' in data:
-        updated_settings['app_auth'] = data['app_auth']
+    
+    # Determine 2FA method
+    if data.get('sms_auth'):
+        sec_settings.two_fa_method = 'sms'
+        updated_settings['sms_auth'] = True
+    elif data.get('email_auth'):
+        sec_settings.two_fa_method = 'email'
+        updated_settings['email_auth'] = True
+    elif data.get('app_auth'):
+        sec_settings.two_fa_method = 'authenticator'
+        updated_settings['app_auth'] = True
+    
     if 'login_notifications' in data:
+        sec_settings.login_notifications = data['login_notifications']
         updated_settings['login_notifications'] = data['login_notifications']
+    
+    if 'suspicious_activity_alerts' in data:
+        sec_settings.suspicious_activity_alerts = data['suspicious_activity_alerts']
+        updated_settings['suspicious_activity_alerts'] = data['suspicious_activity_alerts']
+    
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'message': str(e)}), 500
     
     return jsonify({
         'success': True,
@@ -372,12 +416,115 @@ def update_user_preferences():
 @settings_bp.route('/api/auth/logout-all', methods=['POST'])
 @jwt_required()
 def logout_all_sessions():
-    """Log out from all devices."""
+    """Log out from all devices by clearing active sessions."""
     user_id = get_jwt_identity()
     
-    # In production, invalidate all tokens for this user
+    try:
+        # Delete all active sessions for this user
+        ActiveSession.query.filter_by(user_id=user_id).delete()
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Logged out from all devices'
+        })
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+
+@settings_bp.route('/api/settings/theme', methods=['GET'])
+@jwt_required()
+def get_theme_preference():
+    """Get user's theme preference."""
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    
+    if not user:
+        return jsonify({'success': False, 'message': 'User not found'}), 404
     
     return jsonify({
         'success': True,
-        'message': 'Logged out from all devices'
+        'data': {
+            'dark_mode': getattr(user, 'dark_mode', True)
+        }
     })
+
+
+@settings_bp.route('/api/settings/theme', methods=['PUT'])
+@jwt_required()
+def update_theme_preference():
+    """Update user's theme preference."""
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+    
+    if not user:
+        return jsonify({'success': False, 'message': 'User not found'}), 404
+    
+    data = request.get_json()
+    dark_mode = data.get('dark_mode', True)
+    
+    user.dark_mode = dark_mode
+    
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'message': str(e)}), 500
+    
+    return jsonify({
+        'success': True,
+        'message': 'Theme preference updated',
+        'data': {'dark_mode': dark_mode}
+    })
+
+
+@settings_bp.route('/api/notifications', methods=['GET'])
+@jwt_required()
+def get_notifications():
+    """Get user's notifications."""
+    user_id = get_jwt_identity()
+    
+    notifications = Notification.query.filter_by(
+        user_id=user_id
+    ).order_by(Notification.created_at.desc()).limit(50).all()
+    
+    return jsonify({
+        'success': True,
+        'data': [n.to_dict() for n in notifications],
+        'unread_count': Notification.query.filter_by(user_id=user_id, is_read=False).count()
+    })
+
+
+@settings_bp.route('/api/notifications/<int:notification_id>/read', methods=['PUT'])
+@jwt_required()
+def mark_notification_read(notification_id):
+    """Mark a notification as read."""
+    user_id = get_jwt_identity()
+    from datetime import datetime
+    
+    notification = Notification.query.filter_by(id=notification_id, user_id=user_id).first()
+    if not notification:
+        return jsonify({'success': False, 'message': 'Notification not found'}), 404
+    
+    notification.is_read = True
+    notification.read_at = datetime.utcnow()
+    db.session.commit()
+    
+    return jsonify({'success': True, 'message': 'Notification marked as read'})
+
+
+@settings_bp.route('/api/notifications/read-all', methods=['PUT'])
+@jwt_required()
+def mark_all_notifications_read():
+    """Mark all notifications as read."""
+    user_id = get_jwt_identity()
+    from datetime import datetime
+    
+    Notification.query.filter_by(user_id=user_id, is_read=False).update({
+        'is_read': True,
+        'read_at': datetime.utcnow()
+    })
+    db.session.commit()
+    
+    return jsonify({'success': True, 'message': 'All notifications marked as read'})

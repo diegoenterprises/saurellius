@@ -400,7 +400,7 @@ const WorkforceScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   header: {
     padding: 16,
@@ -427,7 +427,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#fff',
+    color: colors.text,
   },
   headerSubtitle: {
     fontSize: 14,
@@ -449,7 +449,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   publishText: {
-    color: '#fff',
+    color: colors.text,
     fontWeight: '600',
     fontSize: 14,
   },
@@ -469,7 +469,7 @@ const styles = StyleSheet.create({
   weekText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.text,
     minWidth: 120,
     textAlign: 'center',
   },
@@ -486,7 +486,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   toggleActive: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
   },
   toggleText: {
     color: '#94A3B8',
@@ -494,14 +494,14 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   toggleTextActive: {
-    color: '#fff',
+    color: colors.text,
     fontSize: 13,
     fontWeight: '600',
   },
   filtersContainer: {
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
     borderBottomWidth: 1,
     borderBottomColor: '#1a1a2e',
   },
@@ -514,7 +514,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#2a2a4e',
     marginRight: 8,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
   },
   filterDot: {
     width: 8,
@@ -529,7 +529,7 @@ const styles = StyleSheet.create({
   },
   statsBar: {
     flexDirection: 'row',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
@@ -542,7 +542,7 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#fff',
+    color: colors.text,
   },
   overtimeValue: {
     color: '#EF4444',
@@ -594,7 +594,7 @@ const styles = StyleSheet.create({
   dayNumber: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#fff',
+    color: colors.text,
     marginTop: 2,
   },
   todayText: {
@@ -604,7 +604,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderBottomColor: '#E2E8F0',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
   },
   employeeCell: {
     width: 160,
@@ -632,7 +632,7 @@ const styles = StyleSheet.create({
   employeeName: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.text,
   },
   hoursContainer: {
     flexDirection: 'row',

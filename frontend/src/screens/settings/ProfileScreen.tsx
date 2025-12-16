@@ -165,11 +165,11 @@ const ProfileScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0f0f23' },
+  container: { flex: 1, backgroundColor: colors.background },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, paddingVertical: 16 },
   backButton: { padding: 4 },
-  headerTitle: { fontSize: 20, fontWeight: '700', color: '#fff' },
-  editButton: { fontSize: 16, fontWeight: '600', color: '#fff' },
+  headerTitle: { fontSize: 20, fontWeight: '700', color: colors.text },
+  editButton: { fontSize: 16, fontWeight: '600', color: colors.text },
   content: { flex: 1 },
   avatarSection: { alignItems: 'center', paddingVertical: 24 },
   avatar: { width: 100, height: 100, borderRadius: 50, backgroundColor: '#2a2a4e', justifyContent: 'center', alignItems: 'center' },
@@ -179,12 +179,12 @@ const styles = StyleSheet.create({
   section: {
     maxWidth: 1200,
     width: '100%',
-    alignSelf: 'center', backgroundColor: '#1a1a2e', marginHorizontal: 16, marginBottom: 16, borderRadius: 12, padding: 16, borderWidth: 1, borderColor: '#2a2a4e' },
+    alignSelf: 'center', backgroundColor: colors.card, marginHorizontal: 16, marginBottom: 16, borderRadius: 12, padding: 16, borderWidth: 1, borderColor: '#2a2a4e' },
   sectionTitle: { fontSize: 14, fontWeight: '600', color: '#a0a0a0', marginBottom: 16 },
   field: { marginBottom: 16 },
   fieldLabel: { fontSize: 12, color: '#a0a0a0', marginBottom: 4 },
-  fieldValue: { fontSize: 16, color: '#fff' },
-  fieldInput: { fontSize: 16, color: '#fff', borderBottomWidth: 1, borderBottomColor: '#1473FF', paddingVertical: 4 },
+  fieldValue: { fontSize: 16, color: colors.text },
+  fieldInput: { fontSize: 16, color: colors.text, borderBottomWidth: 1, borderBottomColor: '#1473FF', paddingVertical: 4 },
   cancelButton: { marginHorizontal: 16, marginBottom: 24, padding: 16, borderRadius: 12, borderWidth: 1, borderColor: '#2a2a4e', alignItems: 'center' },
   cancelButtonText: { fontSize: 16, color: '#a0a0a0' },
 });

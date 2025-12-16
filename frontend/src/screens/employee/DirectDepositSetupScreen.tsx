@@ -622,7 +622,7 @@ export default function DirectDepositSetupScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   loadingContainer: {
     flex: 1,
@@ -643,7 +643,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   headerInfo: {
     flexDirection: 'row',
@@ -660,7 +660,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   accountCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 18,
     marginBottom: 14,
@@ -695,7 +695,7 @@ const styles = StyleSheet.create({
   bankName: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   accountType: {
     fontSize: 14,
@@ -750,7 +750,7 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   depositInfo: {
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
     borderRadius: 10,
     padding: 14,
     marginBottom: 14,
@@ -763,7 +763,7 @@ const styles = StyleSheet.create({
   depositValue: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
   },
   accountActions: {
     flexDirection: 'row',
@@ -811,7 +811,7 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   infoText: {
     fontSize: 13,
@@ -829,7 +829,7 @@ const styles = StyleSheet.create({
   emptyStateTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   emptyStateText: {
     fontSize: 14,
@@ -854,11 +854,11 @@ const styles = StyleSheet.create({
   addFirstButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   modalHeader: {
     flexDirection: 'row',
@@ -871,7 +871,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   modalContent: {
     flex: 1,
@@ -902,11 +902,11 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   input: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     padding: 14,
     fontSize: 16,
-    color: '#FFF',
+    color: colors.text,
     borderWidth: 1,
     borderColor: '#2a2a4e',
   },
@@ -917,7 +917,7 @@ const styles = StyleSheet.create({
   },
   toggleRow: {
     flexDirection: 'row',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     padding: 4,
     borderWidth: 1,
@@ -937,13 +937,13 @@ const styles = StyleSheet.create({
     color: '#a0a0a0',
   },
   toggleTextActive: {
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '600',
   },
   sectionLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 16,
   },
   depositOptions: {
@@ -953,7 +953,7 @@ const styles = StyleSheet.create({
   depositOption: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     borderWidth: 2,
@@ -985,7 +985,7 @@ const styles = StyleSheet.create({
   depositOptionTitle: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
   },
   depositOptionDesc: {
     fontSize: 13,
@@ -995,7 +995,7 @@ const styles = StyleSheet.create({
   amountInput: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#2a2a4e',
@@ -1011,13 +1011,13 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
     paddingVertical: 12,
   },
   percentInput: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#2a2a4e',
@@ -1027,7 +1027,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
     paddingVertical: 12,
   },
   percentSymbol: {
@@ -1048,6 +1048,6 @@ const styles = StyleSheet.create({
   saveButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
 });

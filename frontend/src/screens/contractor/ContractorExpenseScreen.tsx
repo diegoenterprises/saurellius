@@ -629,7 +629,7 @@ export default function ContractorExpenseScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   header: {
     paddingBottom: 20,
@@ -645,7 +645,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   summaryCards: {
     flexDirection: 'row',
@@ -669,7 +669,7 @@ const styles = StyleSheet.create({
   summaryValue: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   mileageSubtext: {
     fontSize: 11,
@@ -698,7 +698,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   tabTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   quickActions: {
     flexDirection: 'row',
@@ -730,7 +730,7 @@ const styles = StyleSheet.create({
   expenseCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     marginBottom: 10,
@@ -751,7 +751,7 @@ const styles = StyleSheet.create({
   expenseDescription: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 4,
   },
   expenseDetails: {
@@ -777,7 +777,7 @@ const styles = StyleSheet.create({
   expenseAmount: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   receiptBadge: {
     marginTop: 4,
@@ -789,7 +789,7 @@ const styles = StyleSheet.create({
   emptyStateText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 16,
   },
   emptyStateSubtext: {
@@ -799,7 +799,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   modalHeader: {
     flexDirection: 'row',
@@ -812,7 +812,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   modalContent: {
     flex: 1,
@@ -821,7 +821,7 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 16,
   },
   categoryGrid: {
@@ -832,7 +832,7 @@ const styles = StyleSheet.create({
   },
   categoryOption: {
     width: '31%',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     padding: 12,
     alignItems: 'center',
@@ -864,11 +864,11 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   input: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     padding: 14,
     fontSize: 16,
-    color: '#FFF',
+    color: colors.text,
     borderWidth: 1,
     borderColor: '#2a2a4e',
   },
@@ -879,7 +879,7 @@ const styles = StyleSheet.create({
   amountInput: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#2a2a4e',
@@ -895,7 +895,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
     paddingVertical: 12,
   },
   receiptButtons: {
@@ -946,7 +946,7 @@ const styles = StyleSheet.create({
   saveButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   mileageRateInfo: {
     flexDirection: 'row',
@@ -962,7 +962,7 @@ const styles = StyleSheet.create({
   mileageRateTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   mileageRateValue: {
     fontSize: 13,
@@ -972,7 +972,7 @@ const styles = StyleSheet.create({
   milesInput: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#2a2a4e',
@@ -982,7 +982,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
     paddingVertical: 12,
   },
   milesLabel: {

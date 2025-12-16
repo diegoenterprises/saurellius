@@ -331,7 +331,7 @@ export default function ContractorContractsScreen() {
                   onPress={() => handleRenewalAction(item)}
                 >
                   <Ionicons name="refresh" size={18} color="#FFF" />
-                  <Text style={[styles.actionButtonText, { color: '#FFF' }]}>Request Renewal</Text>
+                  <Text style={[styles.actionButtonText, { color: colors.text }]}>Request Renewal</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -427,7 +427,7 @@ export default function ContractorContractsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   loadingContainer: {
     flex: 1,
@@ -448,7 +448,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   statsContainer: {
     flexDirection: 'row',
@@ -469,7 +469,7 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   statLabel: {
     fontSize: 11,
@@ -486,7 +486,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 16,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     marginRight: 8,
     borderWidth: 1,
     borderColor: '#2a2a4e',
@@ -501,13 +501,13 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   filterChipTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   listContent: {
     padding: 16,
   },
   contractCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     marginBottom: 12,
     borderWidth: 1,
@@ -537,7 +537,7 @@ const styles = StyleSheet.create({
   clientInitial: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   contractInfo: {
     flex: 1,
@@ -545,7 +545,7 @@ const styles = StyleSheet.create({
   clientName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   contractTitle: {
     fontSize: 13,
@@ -584,7 +584,7 @@ const styles = StyleSheet.create({
   metaValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 2,
   },
   progressContainer: {},
@@ -599,7 +599,7 @@ const styles = StyleSheet.create({
   },
   progressValue: {
     fontSize: 12,
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
   },
   progressBar: {
@@ -630,13 +630,13 @@ const styles = StyleSheet.create({
   },
   expandedText: {
     fontSize: 14,
-    color: '#FFF',
+    color: colors.text,
   },
   milestoneItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
     borderRadius: 10,
     padding: 12,
     marginBottom: 8,
@@ -647,7 +647,7 @@ const styles = StyleSheet.create({
   milestoneName: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
   },
   milestoneDue: {
     fontSize: 12,
@@ -660,7 +660,7 @@ const styles = StyleSheet.create({
   milestoneAmount: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   milestoneStatus: {
     paddingHorizontal: 8,
@@ -671,12 +671,12 @@ const styles = StyleSheet.create({
   milestoneStatusText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   documentItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
     borderRadius: 10,
     padding: 12,
     marginBottom: 8,
@@ -685,7 +685,7 @@ const styles = StyleSheet.create({
   documentName: {
     flex: 1,
     fontSize: 14,
-    color: '#FFF',
+    color: colors.text,
   },
   contractActions: {
     flexDirection: 'row',
@@ -717,7 +717,7 @@ const styles = StyleSheet.create({
   emptyStateTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 16,
   },
   emptyStateText: {

@@ -597,3 +597,197 @@ class Garnishment(db.Model):
     # Timestamps
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+class Kudos(db.Model):
+    """Kudos/recognition messages between users."""
+    __tablename__ = 'kudos'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, nullable=False)
+    sender_type = db.Column(db.String(20), nullable=False)
+    recipient_id = db.Column(db.Integer, nullable=False)
+    recipient_type = db.Column(db.String(20), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    badge_type = db.Column(db.String(50), default='star')
+    is_public = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'sender_id': self.sender_id,
+            'sender_type': self.sender_type,
+            'recipient_id': self.recipient_id,
+            'recipient_type': self.recipient_type,
+            'message': self.message,
+            'badge_type': self.badge_type,
+            'is_public': self.is_public,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+
+
+class Message(db.Model):
+    """Internal messaging between users."""
+    __tablename__ = 'messages'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, nullable=False)
+    sender_type = db.Column(db.String(20), nullable=False)
+    recipient_id = db.Column(db.Integer, nullable=False)
+    recipient_type = db.Column(db.String(20), nullable=False)
+    subject = db.Column(db.String(255), nullable=False)
+    body = db.Column(db.Text, nullable=False)
+    priority = db.Column(db.String(20), default='normal')
+    status = db.Column(db.String(20), default='sent')
+    read_at = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'sender_id': self.sender_id,
+            'sender_type': self.sender_type,
+            'recipient_id': self.recipient_id,
+            'recipient_type': self.recipient_type,
+            'subject': self.subject,
+            'body': self.body,
+            'priority': self.priority,
+            'status': self.status,
+            'read_at': self.read_at.isoformat() if self.read_at else None,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+
+
+class APIClient(db.Model):
+    """Tax Engine API clients."""
+    __tablename__ = 'api_clients'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    company_name = db.Column(db.String(255), nullable=False)
+    contact_name = db.Column(db.String(255))
+    contact_email = db.Column(db.String(255), nullable=False, unique=True)
+    api_type = db.Column(db.String(50), default='tax_engine')
+    api_key = db.Column(db.String(64), nullable=False, unique=True, index=True)
+    api_secret_hash = db.Column(db.String(255), nullable=False)
+    api_tier = db.Column(db.String(20), default='basic')
+    rate_limit = db.Column(db.Integer, default=1000)
+    requests_this_month = db.Column(db.Integer, default=0)
+    status = db.Column(db.String(20), default='active')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_by = db.Column(db.Integer)
+    suspended_at = db.Column(db.DateTime)
+    suspended_by = db.Column(db.Integer)
+    key_regenerated_at = db.Column(db.DateTime)
+    last_request_at = db.Column(db.DateTime)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'company_name': self.company_name,
+            'contact_name': self.contact_name,
+            'contact_email': self.contact_email,
+            'api_type': self.api_type,
+            'api_key': self.api_key[:8] + '...' if self.api_key else None,
+            'api_tier': self.api_tier,
+            'rate_limit': self.rate_limit,
+            'requests_this_month': self.requests_this_month,
+            'status': self.status,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'last_request_at': self.last_request_at.isoformat() if self.last_request_at else None
+        }
+
+
+class APILog(db.Model):
+    """API request logs for usage tracking."""
+    __tablename__ = 'api_logs'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    client_id = db.Column(db.Integer, db.ForeignKey('api_clients.id'), index=True)
+    endpoint = db.Column(db.String(255), nullable=False)
+    method = db.Column(db.String(10), nullable=False)
+    status_code = db.Column(db.Integer, nullable=False)
+    response_time_ms = db.Column(db.Integer)
+    request_ip = db.Column(db.String(50))
+    error_message = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+
+
+class SecuritySettings(db.Model):
+    """User security settings."""
+    __tablename__ = 'security_settings'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False, index=True)
+    user_type = db.Column(db.String(20), nullable=False)
+    enable_2fa = db.Column(db.Boolean, default=False)
+    two_fa_method = db.Column(db.String(20))
+    two_fa_secret = db.Column(db.String(255))
+    login_notifications = db.Column(db.Boolean, default=True)
+    suspicious_activity_alerts = db.Column(db.Boolean, default=True)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'user_type': self.user_type,
+            'enable_2fa': self.enable_2fa,
+            'two_fa_method': self.two_fa_method,
+            'login_notifications': self.login_notifications,
+            'suspicious_activity_alerts': self.suspicious_activity_alerts
+        }
+
+
+class ActiveSession(db.Model):
+    """Active user sessions for session management."""
+    __tablename__ = 'active_sessions'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False, index=True)
+    user_type = db.Column(db.String(20), nullable=False)
+    token_hash = db.Column(db.String(255), nullable=False)
+    device_info = db.Column(db.String(255))
+    ip_address = db.Column(db.String(50))
+    user_agent = db.Column(db.String(500))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    last_activity = db.Column(db.DateTime, default=datetime.utcnow)
+    expires_at = db.Column(db.DateTime)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'device_info': self.device_info,
+            'ip_address': self.ip_address,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'last_activity': self.last_activity.isoformat() if self.last_activity else None
+        }
+
+
+class Notification(db.Model):
+    """User notifications."""
+    __tablename__ = 'notifications'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False, index=True)
+    user_type = db.Column(db.String(20), nullable=False)
+    title = db.Column(db.String(255), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    type = db.Column(db.String(50), default='info')
+    category = db.Column(db.String(50))
+    action_url = db.Column(db.String(500))
+    is_read = db.Column(db.Boolean, default=False)
+    read_at = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'message': self.message,
+            'type': self.type,
+            'category': self.category,
+            'action_url': self.action_url,
+            'is_read': self.is_read,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }

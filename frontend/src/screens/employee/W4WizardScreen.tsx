@@ -672,7 +672,7 @@ export default function W4WizardScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   header: {
     paddingBottom: 20,
@@ -688,7 +688,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   progressContainer: {
     paddingHorizontal: 20,
@@ -719,7 +719,7 @@ const styles = StyleSheet.create({
   stepTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 8,
   },
   stepSubtitle: {
@@ -742,7 +742,7 @@ const styles = StyleSheet.create({
   introTitle: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
     textAlign: 'center',
   },
   introSubtitle: {
@@ -752,7 +752,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   introCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 18,
     marginBottom: 16,
@@ -762,7 +762,7 @@ const styles = StyleSheet.create({
   introCardTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 8,
   },
   introCardText: {
@@ -796,7 +796,7 @@ const styles = StyleSheet.create({
   existingW4Title: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   existingW4Text: {
     fontSize: 13,
@@ -807,7 +807,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   filingOption: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     borderWidth: 2,
@@ -844,7 +844,7 @@ const styles = StyleSheet.create({
   filingOptionLabel: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
     flex: 1,
   },
   filingOptionDesc: {
@@ -855,7 +855,7 @@ const styles = StyleSheet.create({
   },
   yesNoOption: {
     flexDirection: 'row',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     borderWidth: 2,
@@ -886,7 +886,7 @@ const styles = StyleSheet.create({
   yesNoLabel: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 4,
   },
   yesNoDesc: {
@@ -900,12 +900,12 @@ const styles = StyleSheet.create({
   optionSectionTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 12,
   },
   methodOption: {
     flexDirection: 'row',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     padding: 14,
     borderWidth: 1,
@@ -941,7 +941,7 @@ const styles = StyleSheet.create({
   methodTitle: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
   },
   methodDesc: {
     fontSize: 12,
@@ -963,7 +963,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   dependentSection: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 18,
     marginBottom: 16,
@@ -979,7 +979,7 @@ const styles = StyleSheet.create({
   dependentTitle: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   dependentDesc: {
     fontSize: 13,
@@ -1008,7 +1008,7 @@ const styles = StyleSheet.create({
   counterNumber: {
     fontSize: 36,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   counterLabel: {
     fontSize: 12,
@@ -1026,7 +1026,7 @@ const styles = StyleSheet.create({
   creditTotalLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   creditTotalValue: {
     fontSize: 24,
@@ -1039,7 +1039,7 @@ const styles = StyleSheet.create({
   adjustmentLabel: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 4,
   },
   adjustmentDesc: {
@@ -1051,7 +1051,7 @@ const styles = StyleSheet.create({
   amountInput: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#2a2a4e',
@@ -1067,12 +1067,12 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
     paddingVertical: 14,
   },
   exemptOption: {
     flexDirection: 'row',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     borderWidth: 2,
@@ -1089,7 +1089,7 @@ const styles = StyleSheet.create({
   exemptLabel: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 4,
   },
   exemptDesc: {
@@ -1098,7 +1098,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   summaryCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 18,
     marginBottom: 24,
@@ -1108,7 +1108,7 @@ const styles = StyleSheet.create({
   summaryTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 16,
   },
   summaryRow: {
@@ -1125,10 +1125,10 @@ const styles = StyleSheet.create({
   summaryValue: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
   },
   signatureSection: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 18,
     borderWidth: 1,
@@ -1137,7 +1137,7 @@ const styles = StyleSheet.create({
   signatureTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 12,
   },
   signatureText: {
@@ -1155,21 +1155,21 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   signatureInput: {
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
     borderRadius: 10,
     padding: 16,
     fontSize: 18,
     fontStyle: 'italic',
-    color: '#FFF',
+    color: colors.text,
     borderWidth: 1,
     borderColor: '#2a2a4e',
   },
   input: {
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
     borderRadius: 10,
     padding: 14,
     fontSize: 16,
-    color: '#FFF',
+    color: colors.text,
     borderWidth: 1,
     borderColor: '#2a2a4e',
   },
@@ -1187,7 +1187,7 @@ const styles = StyleSheet.create({
   completeTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
     textAlign: 'center',
     marginBottom: 8,
   },
@@ -1199,7 +1199,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   nextStepsCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 18,
     marginBottom: 24,
@@ -1209,7 +1209,7 @@ const styles = StyleSheet.create({
   nextStepsTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 16,
   },
   nextStepItem: {
@@ -1236,13 +1236,13 @@ const styles = StyleSheet.create({
   doneButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   footer: {
     flexDirection: 'row',
     padding: 20,
     paddingBottom: 34,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderTopWidth: 1,
     borderTopColor: '#2a2a4e',
     gap: 12,
@@ -1274,7 +1274,7 @@ const styles = StyleSheet.create({
   nextButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   buttonDisabled: {
     opacity: 0.6,

@@ -478,7 +478,7 @@ export default function TimeOffRequestScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   header: {
     paddingBottom: 20,
@@ -494,7 +494,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   totalBalance: {
     alignItems: 'center',
@@ -508,7 +508,7 @@ const styles = StyleSheet.create({
   totalBalanceValue: {
     fontSize: 36,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   tabs: {
     flexDirection: 'row',
@@ -532,7 +532,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   tabTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   content: {
     flex: 1,
@@ -542,7 +542,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   balanceCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 18,
     marginBottom: 14,
@@ -568,7 +568,7 @@ const styles = StyleSheet.create({
   balanceType: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   balanceAccrual: {
     fontSize: 12,
@@ -607,7 +607,7 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
   requestCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -633,7 +633,7 @@ const styles = StyleSheet.create({
   requestType: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   requestDates: {
     fontSize: 13,
@@ -723,7 +723,7 @@ const styles = StyleSheet.create({
   emptyStateText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 16,
   },
   emptyStateSubtext: {
@@ -733,7 +733,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   modalHeader: {
     flexDirection: 'row',
@@ -746,7 +746,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   modalContent: {
     flex: 1,
@@ -755,7 +755,7 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 16,
   },
   typeGrid: {
@@ -766,7 +766,7 @@ const styles = StyleSheet.create({
   },
   typeOption: {
     width: '31%',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     alignItems: 'center',
@@ -786,7 +786,7 @@ const styles = StyleSheet.create({
   },
   typeOptionLabel: {
     fontSize: 11,
-    color: '#FFF',
+    color: colors.text,
     textAlign: 'center',
     marginBottom: 4,
   },
@@ -803,11 +803,11 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   input: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     padding: 14,
     fontSize: 16,
-    color: '#FFF',
+    color: colors.text,
     borderWidth: 1,
     borderColor: '#2a2a4e',
   },
@@ -835,6 +835,6 @@ const styles = StyleSheet.create({
   submitButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
 });

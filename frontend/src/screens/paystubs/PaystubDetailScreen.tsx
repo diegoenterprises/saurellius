@@ -285,7 +285,7 @@ export default function PaystubDetailScreen({ route, navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
   },
   loadingContainer: {
     flex: 1,
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   shareButton: {
     width: 40,
@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   card: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     margin: 16,
     marginBottom: 0,
     padding: 20,
@@ -335,7 +335,7 @@ const styles = StyleSheet.create({
   employeeName: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   employeeId: {
     fontSize: 14,
@@ -357,11 +357,11 @@ const styles = StyleSheet.create({
   periodValue: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.text,
     marginTop: 2,
   },
   netPayCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     margin: 16,
     marginBottom: 0,
     padding: 20,
@@ -384,7 +384,7 @@ const styles = StyleSheet.create({
     maxWidth: 1200,
     width: '100%',
     alignSelf: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     margin: 16,
     marginBottom: 0,
     borderRadius: 16,
@@ -413,11 +413,11 @@ const styles = StyleSheet.create({
   },
   rowLabelBold: {
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   rowValue: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.text,
   },
   rowValueBold: {
     fontWeight: '600',
@@ -430,7 +430,7 @@ const styles = StyleSheet.create({
   actionsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     margin: 16,
     padding: 16,
     borderRadius: 16,

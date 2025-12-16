@@ -375,7 +375,7 @@ export default function ReportsDashboardScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   loadingContainer: {
     flex: 1,
@@ -396,7 +396,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   quickStats: {
     flexDirection: 'row',
@@ -420,7 +420,7 @@ const styles = StyleSheet.create({
   quickStatValue: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   quickStatLabel: {
     fontSize: 12,
@@ -438,11 +438,11 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 12,
   },
   recentCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     width: 140,
@@ -462,7 +462,7 @@ const styles = StyleSheet.create({
   recentName: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 6,
   },
   recentMeta: {
@@ -472,7 +472,7 @@ const styles = StyleSheet.create({
   categoryCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     marginBottom: 8,
@@ -499,7 +499,7 @@ const styles = StyleSheet.create({
   categoryName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   categoryCount: {
     fontSize: 13,
@@ -507,7 +507,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   reportsList: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderWidth: 1,
     borderTopWidth: 0,
     borderColor: '#1473FF',
@@ -529,7 +529,7 @@ const styles = StyleSheet.create({
   reportName: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
   },
   reportDesc: {
     fontSize: 12,
@@ -555,7 +555,7 @@ const styles = StyleSheet.create({
   customReportCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     marginBottom: 10,
@@ -577,7 +577,7 @@ const styles = StyleSheet.create({
   customReportTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   customReportDesc: {
     fontSize: 13,

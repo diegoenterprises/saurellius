@@ -186,9 +186,9 @@ const styles = StyleSheet.create({
   header: { paddingHorizontal: 16, paddingVertical: 16 },
   headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   backButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.2)', justifyContent: 'center', alignItems: 'center' },
-  headerTitle: { fontSize: 24, fontWeight: '700', color: '#fff' },
+  headerTitle: { fontSize: 24, fontWeight: '700', color: colors.text },
   editButton: { paddingHorizontal: 16, paddingVertical: 8, backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 8 },
-  editButtonText: { color: '#fff', fontWeight: '600' },
+  editButtonText: { color: colors.text, fontWeight: '600' },
   content: { flex: 1, padding: 16 },
   section: {
     maxWidth: 1200,

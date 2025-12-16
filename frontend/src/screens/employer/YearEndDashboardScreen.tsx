@@ -552,7 +552,7 @@ export default function YearEndDashboardScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   loadingContainer: {
     flex: 1,
@@ -576,7 +576,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   yearSelector: {
     flexDirection: 'row',
@@ -603,7 +603,7 @@ const styles = StyleSheet.create({
   progressTitle: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
   },
   progressPercent: {
     fontSize: 16,
@@ -642,7 +642,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   tabTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   content: {
     flex: 1,
@@ -657,7 +657,7 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -675,7 +675,7 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   statLabel: {
     fontSize: 12,
@@ -683,7 +683,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   summaryCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -693,7 +693,7 @@ const styles = StyleSheet.create({
   summaryTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 16,
   },
   summaryRow: {
@@ -720,7 +720,7 @@ const styles = StyleSheet.create({
   summaryValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   actionCards: {
     flexDirection: 'row',
@@ -738,7 +738,7 @@ const styles = StyleSheet.create({
   actionCardTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 12,
   },
   actionCardSubtitle: {
@@ -756,7 +756,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     paddingVertical: 12,
     gap: 6,
@@ -775,7 +775,7 @@ const styles = StyleSheet.create({
   emptyStateText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 16,
   },
   emptyStateSubtext: {
@@ -784,7 +784,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   formCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 10,
@@ -800,7 +800,7 @@ const styles = StyleSheet.create({
   formCardName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   formCardSubtext: {
     fontSize: 13,
@@ -837,7 +837,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   checklistProgress: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -863,7 +863,7 @@ const styles = StyleSheet.create({
   checklistItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     marginBottom: 10,
@@ -884,7 +884,7 @@ const styles = StyleSheet.create({
   checklistTitle: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
   },
   checklistTitleComplete: {
     textDecorationLine: 'line-through',

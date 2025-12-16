@@ -541,7 +541,7 @@ const BenefitsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   header: {
     paddingHorizontal: 20,
@@ -566,7 +566,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.text,
   },
   headerSubtitle: {
     fontSize: 14,
@@ -574,7 +574,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   tabBar: {
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
     borderBottomWidth: 1,
     borderBottomColor: '#1a1a2e',
   },
@@ -613,12 +613,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.text,
     marginBottom: 12,
     marginTop: 8,
   },
   summaryCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 20,
     marginBottom: 16,
@@ -631,7 +631,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 16,
   },
   costRow: {
@@ -675,7 +675,7 @@ const styles = StyleSheet.create({
   enrollmentCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -697,7 +697,7 @@ const styles = StyleSheet.create({
   enrollmentName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   enrollmentType: {
     fontSize: 12,
@@ -716,7 +716,7 @@ const styles = StyleSheet.create({
   enrollmentCostValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   enrollmentCostLabel: {
     fontSize: 12,
@@ -729,7 +729,7 @@ const styles = StyleSheet.create({
   },
   quickAction: {
     width: '48%',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -742,7 +742,7 @@ const styles = StyleSheet.create({
   },
   quickActionText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.text,
     marginTop: 8,
     textAlign: 'center',
   },
@@ -768,7 +768,7 @@ const styles = StyleSheet.create({
   currentPlanName: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   currentPlanDetails: {
     fontSize: 14,
@@ -776,7 +776,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   planCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -796,7 +796,7 @@ const styles = StyleSheet.create({
   planName: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   planCarrier: {
     fontSize: 14,
@@ -828,7 +828,7 @@ const styles = StyleSheet.create({
   planDetailValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   planPremiums: {
     marginTop: 12,
@@ -839,7 +839,7 @@ const styles = StyleSheet.create({
   premiumLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 8,
   },
   premiumRow: {
@@ -855,7 +855,7 @@ const styles = StyleSheet.create({
   premiumAmount: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   enrolledBadge: {
     backgroundColor: '#10B981',
@@ -865,7 +865,7 @@ const styles = StyleSheet.create({
   },
   enrolledBadgeText: {
     fontSize: 12,
-    color: '#fff',
+    color: colors.text,
     fontWeight: '600',
   },
   viewDetailsButton: {
@@ -898,7 +898,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   addButtonText: {
-    color: '#fff',
+    color: colors.text,
     fontWeight: '600',
     marginLeft: 4,
   },
@@ -920,7 +920,7 @@ const styles = StyleSheet.create({
   dependentCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -945,7 +945,7 @@ const styles = StyleSheet.create({
   dependentName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   dependentRelation: {
     fontSize: 14,
@@ -979,7 +979,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   modalHeader: {
     flexDirection: 'row',
@@ -992,7 +992,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   modalContent: {
     padding: 20,
@@ -1000,7 +1000,7 @@ const styles = StyleSheet.create({
   modalPlanName: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 4,
   },
   modalCarrier: {
@@ -1019,7 +1019,7 @@ const styles = StyleSheet.create({
   },
   modalSectionText: {
     fontSize: 16,
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 4,
   },
   copayRow: {
@@ -1035,7 +1035,7 @@ const styles = StyleSheet.create({
   copayAmount: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   enrollButton: {
     backgroundColor: '#1473FF',
@@ -1047,7 +1047,7 @@ const styles = StyleSheet.create({
   enrollButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.text,
   },
 });
 

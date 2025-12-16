@@ -261,7 +261,7 @@ Attn: Privacy Team
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   header: {
     paddingHorizontal: 20,
@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.text,
   },
   headerSubtitle: {
     fontSize: 13,
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   dateContainer: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
   companyCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
   companyName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   companySubtext: {
     fontSize: 13,
@@ -335,7 +335,7 @@ const styles = StyleSheet.create({
     maxWidth: 1200,
     width: '100%',
     alignSelf: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,

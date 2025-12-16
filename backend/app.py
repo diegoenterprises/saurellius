@@ -202,6 +202,10 @@ def create_app(config_name='default'):
     from routes.admin_dashboard_routes import admin_dashboard_bp
     app.register_blueprint(admin_dashboard_bp)
     
+    # API Client Management Routes (Tax Engine)
+    from routes.api_clients_routes import api_clients_bp
+    app.register_blueprint(api_clients_bp)
+    
     # Beta Invitation Routes
     from routes.beta_invite_routes import beta_invite_bp
     app.register_blueprint(beta_invite_bp)

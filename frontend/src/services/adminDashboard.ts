@@ -96,6 +96,55 @@ export const adminDashboardService = {
     const response = await api.get('/admin-dashboard/ai/usage');
     return response.data;
   },
+
+  // Tax Engine API Clients
+  async getAPIClients(page = 1, perPage = 20) {
+    const response = await api.get('/admin/tax-engine/clients', {
+      params: { page, per_page: perPage }
+    });
+    return response.data;
+  },
+
+  async createAPIClient(data: {
+    company_name: string;
+    contact_name?: string;
+    contact_email: string;
+    api_tier?: string;
+    rate_limit?: number;
+  }) {
+    const response = await api.post('/admin/tax-engine/clients', data);
+    return response.data;
+  },
+
+  async updateAPIClient(clientId: number, data: any) {
+    const response = await api.put(`/admin/tax-engine/clients/${clientId}`, data);
+    return response.data;
+  },
+
+  async suspendAPIClient(clientId: number) {
+    const response = await api.post(`/admin/tax-engine/clients/${clientId}/suspend`);
+    return response.data;
+  },
+
+  async reactivateAPIClient(clientId: number) {
+    const response = await api.post(`/admin/tax-engine/clients/${clientId}/reactivate`);
+    return response.data;
+  },
+
+  async regenerateAPIKey(clientId: number) {
+    const response = await api.post(`/admin/tax-engine/clients/${clientId}/regenerate-key`);
+    return response.data;
+  },
+
+  async getAPIClientUsage(clientId: number) {
+    const response = await api.get(`/admin/tax-engine/clients/${clientId}/usage`);
+    return response.data;
+  },
+
+  async getAPIUsageStats() {
+    const response = await api.get('/admin/tax-engine/usage');
+    return response.data;
+  },
 };
 
 export default adminDashboardService;

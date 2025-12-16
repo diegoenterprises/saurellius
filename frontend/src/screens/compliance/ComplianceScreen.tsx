@@ -459,7 +459,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.text,
   },
   headerAction: {
     width: 40,
@@ -522,7 +522,7 @@ const styles = StyleSheet.create({
   scoreTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.text,
   },
   scoreCircle: {
     alignItems: 'center',
@@ -531,7 +531,7 @@ const styles = StyleSheet.create({
   scoreValue: {
     fontSize: 48,
     fontWeight: '800',
-    color: '#fff',
+    color: colors.text,
   },
   scoreLabel: {
     fontSize: 14,
@@ -547,7 +547,7 @@ const styles = StyleSheet.create({
   scoreStatValue: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.text,
   },
   scoreStatLabel: {
     fontSize: 12,
@@ -574,7 +574,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.text,
     marginBottom: 12,
   },
   seeAll: {
@@ -591,7 +591,7 @@ const styles = StyleSheet.create({
   },
   actionCard: {
     width: '47%',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -608,14 +608,14 @@ const styles = StyleSheet.create({
   },
   actionLabel: {
     fontSize: 13,
-    color: '#fff',
+    color: colors.text,
     fontWeight: '500',
   },
   // Deadlines
   deadlineItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     marginBottom: 10,
@@ -634,7 +634,7 @@ const styles = StyleSheet.create({
   deadlineForm: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.text,
   },
   deadlineDesc: {
     fontSize: 12,
@@ -661,7 +661,7 @@ const styles = StyleSheet.create({
   },
   documentCard: {
     width: '47%',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 16,
     borderWidth: 1,
@@ -679,7 +679,7 @@ const styles = StyleSheet.create({
   documentName: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.text,
     marginBottom: 4,
   },
   documentDesc: {
@@ -707,12 +707,12 @@ const styles = StyleSheet.create({
   calendarYear: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.text,
   },
   formItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     marginBottom: 10,
@@ -734,7 +734,7 @@ const styles = StyleSheet.create({
   formName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.text,
   },
   formPurpose: {
     fontSize: 12,
@@ -769,7 +769,7 @@ const styles = StyleSheet.create({
   onboardingTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#fff',
+    color: colors.text,
     marginTop: 12,
   },
   onboardingSubtitle: {
@@ -781,7 +781,7 @@ const styles = StyleSheet.create({
   onboardingButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 12,
@@ -796,7 +796,7 @@ const styles = StyleSheet.create({
   checklistItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     marginBottom: 10,
@@ -818,7 +818,7 @@ const styles = StyleSheet.create({
   checklistName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.text,
   },
   checklistDesc: {
     fontSize: 12,

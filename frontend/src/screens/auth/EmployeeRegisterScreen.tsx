@@ -872,7 +872,7 @@ export default function EmployeeRegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   header: {
     paddingBottom: 20,
@@ -888,7 +888,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   progressContainer: {
     paddingHorizontal: 20,
@@ -919,7 +919,7 @@ const styles = StyleSheet.create({
   stepTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 8,
     textAlign: 'center',
   },
@@ -940,11 +940,11 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   input: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     fontSize: 16,
-    color: '#FFF',
+    color: colors.text,
     borderWidth: 1,
     borderColor: '#2a2a4e',
   },
@@ -956,7 +956,7 @@ const styles = StyleSheet.create({
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#2a2a4e',
@@ -965,7 +965,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 14,
     fontSize: 16,
-    color: '#FFF',
+    color: colors.text,
   },
   eyeButton: {
     padding: 14,
@@ -1029,7 +1029,7 @@ const styles = StyleSheet.create({
   statusOption: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -1065,7 +1065,7 @@ const styles = StyleSheet.create({
   statusLabel: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 4,
   },
   statusDescription: {
@@ -1086,7 +1086,7 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 4,
   },
   infoText: {
@@ -1110,7 +1110,7 @@ const styles = StyleSheet.create({
     color: '#1473FF',
   },
   employerCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 16,
     padding: 20,
     borderWidth: 1,
@@ -1133,7 +1133,7 @@ const styles = StyleSheet.create({
   employerName: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   employerDetail: {
     fontSize: 14,
@@ -1151,7 +1151,7 @@ const styles = StyleSheet.create({
   },
   jobTitle: {
     fontSize: 16,
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
   },
   verifyIcon: {
@@ -1169,12 +1169,12 @@ const styles = StyleSheet.create({
     marginVertical: 24,
   },
   codeInput: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 16,
     padding: 20,
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
     borderWidth: 2,
     borderColor: '#2a2a4e',
     letterSpacing: 8,
@@ -1202,7 +1202,7 @@ const styles = StyleSheet.create({
   verifyButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   successIcon: {
     alignItems: 'center',
@@ -1216,7 +1216,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   nextStepsCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 16,
     padding: 20,
     marginVertical: 24,
@@ -1224,7 +1224,7 @@ const styles = StyleSheet.create({
   nextStepsTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 16,
   },
   nextStepItem: {
@@ -1246,7 +1246,7 @@ const styles = StyleSheet.create({
   nextStepLabel: {
     flex: 1,
     fontSize: 15,
-    color: '#FFF',
+    color: colors.text,
   },
   completeButton: {
     borderRadius: 12,
@@ -1262,13 +1262,13 @@ const styles = StyleSheet.create({
   completeButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   footer: {
     flexDirection: 'row',
     padding: 20,
     paddingBottom: 34,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderTopWidth: 1,
     borderTopColor: '#2a2a4e',
     gap: 12,
@@ -1300,7 +1300,7 @@ const styles = StyleSheet.create({
   nextButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   buttonDisabled: {
     opacity: 0.6,

@@ -585,7 +585,7 @@ export default function TaxCenterScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   header: {
     paddingTop: 50,
@@ -601,7 +601,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   tabBar: {
     flexDirection: 'row',
@@ -627,7 +627,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   tabTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   content: {
     flex: 1,
@@ -650,7 +650,7 @@ const styles = StyleSheet.create({
   liabilityAmount: {
     fontSize: 36,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
     marginVertical: 4,
   },
   liabilityPeriod: {
@@ -673,10 +673,10 @@ const styles = StyleSheet.create({
   liabilityItemValue: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   scheduleCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
@@ -690,7 +690,7 @@ const styles = StyleSheet.create({
   scheduleTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   scheduleBadge: {
     backgroundColor: '#EBF5FF',
@@ -724,7 +724,7 @@ const styles = StyleSheet.create({
   nextDepositDate: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   depositButton: {
     backgroundColor: '#1473FF',
@@ -735,12 +735,12 @@ const styles = StyleSheet.create({
   depositButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 12,
   },
   deadlinesList: {
@@ -748,7 +748,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   deadlineCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     flexDirection: 'row',
@@ -772,7 +772,7 @@ const styles = StyleSheet.create({
   deadlineForm: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   deadlineDesc: {
     fontSize: 12,
@@ -794,7 +794,7 @@ const styles = StyleSheet.create({
   },
   quickAction: {
     width: '47%',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -810,7 +810,7 @@ const styles = StyleSheet.create({
   quickActionLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   filterRow: {
     flexDirection: 'row',
@@ -821,7 +821,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
   },
   filterButtonActive: {
     backgroundColor: '#1473FF',
@@ -832,14 +832,14 @@ const styles = StyleSheet.create({
   },
   filterButtonTextActive: {
     fontSize: 14,
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
   },
   filingsList: {
     gap: 12,
   },
   filingCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
   },
@@ -858,7 +858,7 @@ const styles = StyleSheet.create({
   filingBadgeText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   statusBadge: {
     paddingHorizontal: 10,
@@ -873,7 +873,7 @@ const styles = StyleSheet.create({
   filingPeriod: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 12,
   },
   filingFooter: {
@@ -887,7 +887,7 @@ const styles = StyleSheet.create({
   filingDueDate: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   filingAmountContainer: {
     alignItems: 'flex-end',
@@ -927,13 +927,13 @@ const styles = StyleSheet.create({
   addButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   depositsList: {
     gap: 12,
   },
   depositCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
   },
@@ -946,7 +946,7 @@ const styles = StyleSheet.create({
   depositType: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   depositPeriod: {
     fontSize: 14,
@@ -976,7 +976,7 @@ const styles = StyleSheet.create({
   w2Title: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   w2Subtitle: {
     fontSize: 14,
@@ -989,7 +989,7 @@ const styles = StyleSheet.create({
   },
   w2StatCard: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -997,7 +997,7 @@ const styles = StyleSheet.create({
   w2StatValue: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   w2StatLabel: {
     fontSize: 12,
@@ -1021,7 +1021,7 @@ const styles = StyleSheet.create({
   w2ActionText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   w2SecondaryActions: {
     flexDirection: 'row',
@@ -1034,7 +1034,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 12,
     borderRadius: 8,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     gap: 6,
   },
   w2SecondaryText: {
@@ -1043,14 +1043,14 @@ const styles = StyleSheet.create({
     color: '#1473FF',
   },
   w2Checklist: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
   },
   checklistTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 16,
   },
   checklistItem: {
@@ -1074,7 +1074,7 @@ const styles = StyleSheet.create({
   },
   checklistLabel: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.text,
   },
   checklistLabelChecked: {
     color: '#a0a0a0',
@@ -1086,7 +1086,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 24,
@@ -1101,7 +1101,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   depositTypeSelector: {
     flexDirection: 'row',
@@ -1150,6 +1150,6 @@ const styles = StyleSheet.create({
   modalButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
 });

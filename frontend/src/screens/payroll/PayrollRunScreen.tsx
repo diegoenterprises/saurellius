@@ -626,7 +626,7 @@ export default function PayrollRunScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   header: {
     paddingTop: 50,
@@ -642,7 +642,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   progressBar: {
     flexDirection: 'row',
@@ -670,7 +670,7 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.5)',
   },
   stepLabelActive: {
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
   },
   stepLine: {
@@ -692,7 +692,7 @@ const styles = StyleSheet.create({
   stepTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   stepSubtitle: {
     fontSize: 14,
@@ -714,7 +714,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   setupCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -722,7 +722,7 @@ const styles = StyleSheet.create({
   setupLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 10,
   },
   setupOptions: {},
@@ -763,7 +763,7 @@ const styles = StyleSheet.create({
     color: '#a0a0a0',
   },
   typeOptionTextActive: {
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '600',
   },
   infoCard: {
@@ -780,7 +780,7 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 4,
   },
   infoText: {
@@ -802,14 +802,14 @@ const styles = StyleSheet.create({
   nextButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   employeesList: {
     gap: 12,
     marginBottom: 20,
   },
   employeeCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
   },
@@ -838,7 +838,7 @@ const styles = StyleSheet.create({
   employeeName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   employeeDept: {
     fontSize: 13,
@@ -862,7 +862,7 @@ const styles = StyleSheet.create({
   hoursValue: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   overtimeValue: {
     color: '#F59E0B',
@@ -896,7 +896,7 @@ const styles = StyleSheet.create({
   netPayLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   netPayValue: {
     fontSize: 16,
@@ -913,7 +913,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 20,
     borderRadius: 12,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     gap: 6,
   },
   backButtonText: {
@@ -944,7 +944,7 @@ const styles = StyleSheet.create({
   summaryAmount: {
     fontSize: 36,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   summaryEmployees: {
     fontSize: 14,
@@ -1124,7 +1124,7 @@ const styles = StyleSheet.create({
   processButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   modalOverlay: {
     flex: 1,
@@ -1188,6 +1188,6 @@ const styles = StyleSheet.create({
   confirmButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
 });

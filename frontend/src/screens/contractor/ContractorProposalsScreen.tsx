@@ -220,14 +220,14 @@ export default function ContractorProposalsScreen() {
                   </TouchableOpacity>
                   <TouchableOpacity style={[styles.actionButton, styles.actionButtonPrimary]} onPress={() => handleSendProposal(proposal)}>
                     <Ionicons name="send" size={18} color="#FFF" />
-                    <Text style={[styles.actionButtonText, { color: '#FFF' }]}>Send</Text>
+                    <Text style={[styles.actionButtonText, { color: colors.text }]}>Send</Text>
                   </TouchableOpacity>
                 </>
               )}
               {proposal.status === 'accepted' && (
                 <TouchableOpacity style={[styles.actionButton, styles.actionButtonSuccess]} onPress={() => handleConvertToContract(proposal)}>
                   <Ionicons name="document-text" size={18} color="#FFF" />
-                  <Text style={[styles.actionButtonText, { color: '#FFF' }]}>Convert to Contract</Text>
+                  <Text style={[styles.actionButtonText, { color: colors.text }]}>Convert to Contract</Text>
                 </TouchableOpacity>
               )}
               <TouchableOpacity style={styles.actionButton} onPress={() => handleDuplicateProposal(proposal)}>
@@ -301,31 +301,31 @@ export default function ContractorProposalsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0f0f23' },
+  container: { flex: 1, backgroundColor: colors.background },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   header: { paddingBottom: 16 },
   headerContent: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 10, marginBottom: 16 },
-  headerTitle: { fontSize: 18, fontWeight: '600', color: '#FFF' },
+  headerTitle: { fontSize: 18, fontWeight: '600', color: colors.text },
   statsContainer: { flexDirection: 'row', backgroundColor: 'rgba(255,255,255,0.1)', marginHorizontal: 20, borderRadius: 12, padding: 12 },
   statCard: { flex: 1, alignItems: 'center' },
   statDivider: { width: 1, backgroundColor: 'rgba(255,255,255,0.2)', marginHorizontal: 6 },
-  statValue: { fontSize: 14, fontWeight: 'bold', color: '#FFF' },
+  statValue: { fontSize: 14, fontWeight: 'bold', color: colors.text },
   statLabel: { fontSize: 10, color: 'rgba(255,255,255,0.6)', marginTop: 2 },
   filterBar: { paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#2a2a4e' },
-  filterChip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 16, backgroundColor: '#1a1a2e', marginRight: 8, borderWidth: 1, borderColor: '#2a2a4e' },
+  filterChip: { paddingHorizontal: 14, paddingVertical: 8, borderRadius: 16, backgroundColor: colors.card, marginRight: 8, borderWidth: 1, borderColor: '#2a2a4e' },
   filterChipActive: { backgroundColor: '#1473FF', borderColor: '#1473FF' },
   filterChipText: { fontSize: 13, color: '#a0a0a0', fontWeight: '500' },
-  filterChipTextActive: { color: '#FFF' },
+  filterChipTextActive: { color: colors.text },
   content: { flex: 1 },
   section: {
     maxWidth: 1200,
     width: '100%',
     alignSelf: 'center', padding: 16 },
-  proposalCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
+  proposalCard: { backgroundColor: colors.card, borderRadius: 14, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#2a2a4e' },
   proposalHeader: { flexDirection: 'row', alignItems: 'center' },
   statusIcon: { width: 40, height: 40, borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginRight: 12 },
   proposalInfo: { flex: 1 },
-  proposalTitle: { fontSize: 15, fontWeight: '600', color: '#FFF' },
+  proposalTitle: { fontSize: 15, fontWeight: '600', color: colors.text },
   proposalClient: { fontSize: 13, color: '#a0a0a0', marginTop: 2 },
   proposalRight: { alignItems: 'flex-end' },
   proposalAmount: { fontSize: 16, fontWeight: 'bold', color: '#10B981' },
@@ -337,12 +337,12 @@ const styles = StyleSheet.create({
   viewedText: { fontSize: 12, color: '#3B82F6' },
   proposalExpanded: { marginTop: 14, paddingTop: 14, borderTopWidth: 1, borderTopColor: '#2a2a4e' },
   itemsSection: { marginBottom: 14 },
-  sectionTitle: { fontSize: 13, fontWeight: '600', color: '#FFF', marginBottom: 8 },
+  sectionTitle: { fontSize: 13, fontWeight: '600', color: colors.text, marginBottom: 8 },
   itemRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6 },
   itemDesc: { flex: 1, fontSize: 13, color: '#a0a0a0' },
-  itemTotal: { fontSize: 13, color: '#FFF', fontWeight: '500', marginLeft: 10 },
+  itemTotal: { fontSize: 13, color: colors.text, fontWeight: '500', marginLeft: 10 },
   totalRow: { flexDirection: 'row', justifyContent: 'space-between', paddingTop: 8, marginTop: 8, borderTopWidth: 1, borderTopColor: '#2a2a4e' },
-  totalLabel: { fontSize: 14, fontWeight: '600', color: '#FFF' },
+  totalLabel: { fontSize: 14, fontWeight: '600', color: colors.text },
   totalValue: { fontSize: 16, fontWeight: 'bold', color: '#10B981' },
   proposalActions: { flexDirection: 'row', gap: 8 },
   actionButton: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#1473FF20', borderRadius: 10, paddingVertical: 10, gap: 4 },
@@ -351,14 +351,14 @@ const styles = StyleSheet.create({
   actionButtonText: { fontSize: 12, fontWeight: '500', color: '#1473FF' },
   emptyState: { alignItems: 'center', paddingVertical: 40 },
   emptyText: { fontSize: 14, color: '#666', marginTop: 12 },
-  modalContainer: { flex: 1, backgroundColor: '#0f0f23' },
+  modalContainer: { flex: 1, backgroundColor: colors.background },
   modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20, borderBottomWidth: 1, borderBottomColor: '#2a2a4e' },
-  modalTitle: { fontSize: 17, fontWeight: '600', color: '#FFF' },
+  modalTitle: { fontSize: 17, fontWeight: '600', color: colors.text },
   modalCancel: { fontSize: 16, color: '#a0a0a0' },
   modalSave: { fontSize: 16, fontWeight: '600', color: '#1473FF' },
   modalContent: { padding: 20 },
   inputGroup: { marginBottom: 16 },
   inputLabel: { fontSize: 13, color: '#a0a0a0', marginBottom: 6 },
-  input: { backgroundColor: '#1a1a2e', borderRadius: 10, padding: 14, fontSize: 16, color: '#FFF', borderWidth: 1, borderColor: '#2a2a4e' },
+  input: { backgroundColor: colors.card, borderRadius: 10, padding: 14, fontSize: 16, color: colors.text, borderWidth: 1, borderColor: '#2a2a4e' },
   textArea: { height: 80, textAlignVertical: 'top' },
 });

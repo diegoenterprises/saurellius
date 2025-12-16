@@ -117,7 +117,7 @@ export default function ReportsScreen({ navigation }: any) {
     <View style={styles.tabContent}>
       {/* KPI Cards - Dynamic from API */}
       <View style={styles.kpiRow}>
-        <View style={[styles.kpiCard, { backgroundColor: '#1a1a2e' }]}>
+        <View style={[styles.kpiCard, { backgroundColor: colors.card }]}>
           <Ionicons name="cash" size={24} color="#1473FF" />
           <Text style={styles.kpiValue}>{formatCurrency(metrics.ytdPayroll)}</Text>
           <Text style={styles.kpiLabel}>YTD Payroll</Text>
@@ -410,7 +410,7 @@ export default function ReportsScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   header: {
     paddingTop: 50,
@@ -426,7 +426,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   tabBar: {
     flexDirection: 'row',
@@ -452,7 +452,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   tabTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   content: {
     flex: 1,
@@ -473,7 +473,7 @@ const styles = StyleSheet.create({
   kpiValue: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
     marginTop: 8,
   },
   kpiLabel: {
@@ -497,7 +497,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   chartCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -505,7 +505,7 @@ const styles = StyleSheet.create({
   chartTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 16,
   },
   chartContainer: {
@@ -532,7 +532,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   breakdownCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -540,7 +540,7 @@ const styles = StyleSheet.create({
   breakdownTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 16,
   },
   breakdownItem: {
@@ -560,12 +560,12 @@ const styles = StyleSheet.create({
   breakdownName: {
     flex: 1,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.text,
   },
   breakdownAmount: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   breakdownBarBg: {
     height: 6,
@@ -579,7 +579,7 @@ const styles = StyleSheet.create({
   },
   quickStatsRow: {
     flexDirection: 'row',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
   },
@@ -590,7 +590,7 @@ const styles = StyleSheet.create({
   quickStatValue: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   quickStatLabel: {
     fontSize: 12,
@@ -608,7 +608,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     marginRight: 8,
   },
   categoryChipActive: {
@@ -619,7 +619,7 @@ const styles = StyleSheet.create({
     color: '#a0a0a0',
   },
   categoryChipTextActive: {
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
   },
   reportsList: {
@@ -627,7 +627,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   reportCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     flexDirection: 'row',
@@ -637,7 +637,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -648,7 +648,7 @@ const styles = StyleSheet.create({
   reportName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   reportDesc: {
     fontSize: 13,
@@ -660,11 +660,11 @@ const styles = StyleSheet.create({
   scheduledTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 12,
   },
   scheduledCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     flexDirection: 'row',
@@ -686,7 +686,7 @@ const styles = StyleSheet.create({
   scheduledName: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   scheduledFreq: {
     fontSize: 12,
@@ -698,7 +698,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 12,
     borderRadius: 12,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderWidth: 1,
     borderColor: '#1473FF',
     borderStyle: 'dashed',
@@ -718,7 +718,7 @@ const styles = StyleSheet.create({
   exportTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
     marginTop: 12,
   },
   exportDesc: {
@@ -731,7 +731,7 @@ const styles = StyleSheet.create({
   exportSectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 12,
   },
   exportOptions: {
@@ -742,7 +742,7 @@ const styles = StyleSheet.create({
   },
   exportOption: {
     width: '47%',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -751,7 +751,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 12,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 8,
@@ -759,7 +759,7 @@ const styles = StyleSheet.create({
   exportFormat: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   exportFormatDesc: {
     fontSize: 12,
@@ -771,7 +771,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   integrationCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     flexDirection: 'row',
@@ -781,7 +781,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -792,7 +792,7 @@ const styles = StyleSheet.create({
   integrationName: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   integrationStatus: {
     fontSize: 12,
@@ -801,7 +801,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   recentExportItem: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     flexDirection: 'row',
@@ -811,7 +811,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -822,7 +822,7 @@ const styles = StyleSheet.create({
   recentExportName: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   recentExportDate: {
     fontSize: 12,

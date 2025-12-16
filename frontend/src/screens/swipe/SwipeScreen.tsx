@@ -581,7 +581,7 @@ const SwipeScreen: React.FC<{ navigation?: any }> = ({ navigation: navProp }) =>
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   header: {
     padding: 20,
@@ -606,7 +606,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#fff',
+    color: colors.text,
   },
   headerSubtitle: {
     fontSize: 14,
@@ -616,7 +616,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     marginHorizontal: 16,
     marginTop: -20,
     marginBottom: 12,
@@ -630,7 +630,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 12,
     fontSize: 16,
-    color: '#FFFFFF',
+    color: colors.text,
   },
   tabContainer: {
     flexDirection: 'row',
@@ -644,7 +644,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     marginRight: 8,
     borderRadius: 20,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderWidth: 1,
     borderColor: '#2a2a4e',
   },
@@ -658,7 +658,7 @@ const styles = StyleSheet.create({
     color: '#a0a0a0',
   },
   tabTextActive: {
-    color: '#fff',
+    color: colors.text,
   },
   tabBadge: {
     backgroundColor: '#EF4444',
@@ -670,7 +670,7 @@ const styles = StyleSheet.create({
     marginLeft: 6,
   },
   tabBadgeText: {
-    color: '#fff',
+    color: colors.text,
     fontSize: 11,
     fontWeight: 'bold',
   },
@@ -688,7 +688,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   requestCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 16,
     padding: 16,
     marginBottom: 12,
@@ -749,7 +749,7 @@ const styles = StyleSheet.create({
   employeeName: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 8,
     textAlign: 'center',
   },
@@ -789,7 +789,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#10B981',
   },
   approveBtnText: {
-    color: '#fff',
+    color: colors.text,
     fontWeight: '600',
     fontSize: 14,
   },
@@ -817,7 +817,7 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginTop: 16,
   },
   emptyText: {
@@ -831,7 +831,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '80%',
@@ -847,7 +847,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   modalBody: {
     padding: 16,
@@ -866,12 +866,12 @@ const styles = StyleSheet.create({
   },
   reasonText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.text,
   },
   notesLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginTop: 20,
     marginBottom: 8,
   },
@@ -880,7 +880,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 12,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.text,
     minHeight: 80,
     textAlignVertical: 'top',
   },
@@ -900,7 +900,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#10B981',
   },
   approveModalBtnText: {
-    color: '#fff',
+    color: colors.text,
     fontWeight: '600',
     fontSize: 15,
   },

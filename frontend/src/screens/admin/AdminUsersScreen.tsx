@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   header: { paddingHorizontal: 16, paddingVertical: 16 },
   headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  headerTitle: { fontSize: 20, fontWeight: '700', color: '#FFF' },
+  headerTitle: { fontSize: 20, fontWeight: '700', color: colors.text },
   tabsContainer: { borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.1)' },
   tab: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12, gap: 6 },
   tabActive: { borderBottomWidth: 2, borderBottomColor: '#3B82F6' },
@@ -181,6 +181,6 @@ const styles = StyleSheet.create({
   employerMeta: { alignItems: 'flex-end', marginRight: 12 },
   employerEmployees: { fontSize: 14 },
   planBadge: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 4, marginTop: 4 },
-  planText: { color: '#FFF', fontSize: 10, fontWeight: '600' },
+  planText: { color: colors.text, fontSize: 10, fontWeight: '600' },
   employerMRR: { fontSize: 14, fontWeight: '600', marginRight: 8 },
 });

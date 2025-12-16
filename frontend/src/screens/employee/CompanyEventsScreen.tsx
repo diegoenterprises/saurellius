@@ -159,7 +159,7 @@ export default function CompanyEventsScreen() {
             {['attending', 'maybe', 'not_attending'].map(status => (
               <TouchableOpacity key={status} style={[styles.rsvpButton, event.rsvp_status === status && { backgroundColor: getRsvpColor(status) }]} onPress={() => handleRsvp(event, status)}>
                 <Ionicons name={status === 'attending' ? 'checkmark' : status === 'maybe' ? 'help' : 'close'} size={16} color={event.rsvp_status === status ? '#FFF' : '#666'} />
-                <Text style={[styles.rsvpButtonText, event.rsvp_status === status && { color: '#FFF' }]}>{status === 'not_attending' ? 'No' : status.charAt(0).toUpperCase() + status.slice(1)}</Text>
+                <Text style={[styles.rsvpButtonText, event.rsvp_status === status && { color: colors.text }]}>{status === 'not_attending' ? 'No' : status.charAt(0).toUpperCase() + status.slice(1)}</Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -218,36 +218,36 @@ export default function CompanyEventsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0f0f23' },
+  container: { flex: 1, backgroundColor: colors.background },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   header: { paddingBottom: 16 },
   headerContent: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 10, marginBottom: 16 },
-  headerTitle: { fontSize: 18, fontWeight: '600', color: '#FFF' },
+  headerTitle: { fontSize: 18, fontWeight: '600', color: colors.text },
   statsContainer: { flexDirection: 'row', backgroundColor: 'rgba(255,255,255,0.1)', marginHorizontal: 20, borderRadius: 12, padding: 12 },
   statCard: { flex: 1, alignItems: 'center' },
   statDivider: { width: 1, backgroundColor: 'rgba(255,255,255,0.2)', marginHorizontal: 8 },
-  statValue: { fontSize: 20, fontWeight: 'bold', color: '#FFF' },
+  statValue: { fontSize: 20, fontWeight: 'bold', color: colors.text },
   statLabel: { fontSize: 10, color: 'rgba(255,255,255,0.6)', marginTop: 2 },
   tabs: { flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: '#2a2a4e' },
   tab: { flex: 1, alignItems: 'center', paddingVertical: 10, borderRadius: 10 },
   tabActive: { backgroundColor: '#1473FF' },
   tabText: { fontSize: 14, fontWeight: '500', color: '#a0a0a0' },
-  tabTextActive: { color: '#FFF' },
+  tabTextActive: { color: colors.text },
   content: { flex: 1 },
   section: {
     maxWidth: 1200,
     width: '100%',
     alignSelf: 'center', padding: 16 },
-  eventCard: { backgroundColor: '#1a1a2e', borderRadius: 14, padding: 16, marginBottom: 14, borderWidth: 1, borderColor: '#2a2a4e' },
+  eventCard: { backgroundColor: colors.card, borderRadius: 14, padding: 16, marginBottom: 14, borderWidth: 1, borderColor: '#2a2a4e' },
   todayCard: { borderColor: '#1473FF' },
   todayBadge: { position: 'absolute', top: -8, right: 16, backgroundColor: '#1473FF', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 10 },
-  todayText: { fontSize: 10, fontWeight: '600', color: '#FFF' },
+  todayText: { fontSize: 10, fontWeight: '600', color: colors.text },
   mandatoryBadge: { flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', backgroundColor: '#EF444420', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8, marginBottom: 10, gap: 4 },
   mandatoryText: { fontSize: 10, fontWeight: '600', color: '#EF4444' },
   eventHeader: { flexDirection: 'row', alignItems: 'flex-start' },
   typeIcon: { width: 44, height: 44, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginRight: 12 },
   eventInfo: { flex: 1 },
-  eventTitle: { fontSize: 17, fontWeight: '600', color: '#FFF' },
+  eventTitle: { fontSize: 17, fontWeight: '600', color: colors.text },
   eventDesc: { fontSize: 13, color: '#666', marginTop: 4, lineHeight: 18 },
   eventDetails: { flexDirection: 'row', flexWrap: 'wrap', marginTop: 14, gap: 12 },
   detailRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
   rsvpButton: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 10, backgroundColor: '#2a2a4e', borderRadius: 10, gap: 4 },
   rsvpButtonText: { fontSize: 13, fontWeight: '500', color: '#666' },
   joinButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#3B82F6', paddingVertical: 12, borderRadius: 10, marginTop: 12, gap: 6 },
-  joinText: { fontSize: 14, fontWeight: '600', color: '#FFF' },
+  joinText: { fontSize: 14, fontWeight: '600', color: colors.text },
   emptyState: { alignItems: 'center', paddingVertical: 40 },
   emptyText: { fontSize: 14, color: '#666', marginTop: 12 },
 });

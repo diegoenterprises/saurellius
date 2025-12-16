@@ -343,7 +343,7 @@ export default function PayHistoryScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   loadingContainer: {
     flex: 1,
@@ -364,7 +364,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   yearButton: {
     flexDirection: 'row',
@@ -377,7 +377,7 @@ const styles = StyleSheet.create({
   },
   yearButtonText: {
     fontSize: 14,
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
   },
   headerStats: {
@@ -403,14 +403,14 @@ const styles = StyleSheet.create({
   headerStatValue: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   yearPicker: {
     flexDirection: 'row',
     paddingHorizontal: 16,
     paddingVertical: 8,
     gap: 8,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderBottomWidth: 1,
     borderBottomColor: '#2a2a4e',
   },
@@ -429,13 +429,13 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   yearOptionTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   listContent: {
     padding: 16,
   },
   ytdCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 18,
     marginBottom: 20,
@@ -445,12 +445,12 @@ const styles = StyleSheet.create({
   ytdTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 16,
   },
   ytdHighlights: {
     flexDirection: 'row',
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
     borderRadius: 10,
     padding: 16,
     marginBottom: 16,
@@ -471,7 +471,7 @@ const styles = StyleSheet.create({
   ytdHighlightValue: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   ytdDetails: {
     borderTopWidth: 1,
@@ -498,10 +498,10 @@ const styles = StyleSheet.create({
   ytdRowValue: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
   },
   paystubCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 16,
     marginBottom: 12,
@@ -517,7 +517,7 @@ const styles = StyleSheet.create({
   payDate: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   payPeriod: {
     fontSize: 13,
@@ -551,7 +551,7 @@ const styles = StyleSheet.create({
   amountValue: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
   },
   netPayRow: {
     marginTop: 8,
@@ -562,7 +562,7 @@ const styles = StyleSheet.create({
   netPayLabel: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   netPayValue: {
     fontSize: 18,
@@ -593,7 +593,7 @@ const styles = StyleSheet.create({
   emptyStateText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 16,
   },
   emptyStateSubtext: {

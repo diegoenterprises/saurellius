@@ -446,7 +446,7 @@ export default function PayrollSummaryDashboard() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   loadingContainer: {
     flex: 1,
@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   nextPayrollCard: {
     flexDirection: 'row',
@@ -488,7 +488,7 @@ const styles = StyleSheet.create({
   nextPayrollDate: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 4,
   },
   nextPayrollDays: {
@@ -501,7 +501,7 @@ const styles = StyleSheet.create({
   nextPayrollDaysNumber: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   nextPayrollDaysLabel: {
     fontSize: 11,
@@ -529,7 +529,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   tabTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   content: {
     flex: 1,
@@ -545,7 +545,7 @@ const styles = StyleSheet.create({
   },
   metricCard: {
     width: (width - 42) / 2,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -563,7 +563,7 @@ const styles = StyleSheet.create({
   metricValue: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   metricLabel: {
     fontSize: 12,
@@ -571,7 +571,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   summaryCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 18,
     marginBottom: 16,
@@ -587,7 +587,7 @@ const styles = StyleSheet.create({
   summaryTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   statusBadge: {
     paddingHorizontal: 10,
@@ -627,7 +627,7 @@ const styles = StyleSheet.create({
   breakdownValue: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
   },
   breakdownRowTotal: {
     borderTopWidth: 1,
@@ -638,7 +638,7 @@ const styles = StyleSheet.create({
   breakdownLabelTotal: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   breakdownValueTotal: {
     fontSize: 20,
@@ -646,7 +646,7 @@ const styles = StyleSheet.create({
     color: '#10B981',
   },
   employerCostSection: {
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
     borderRadius: 10,
     padding: 14,
     marginTop: 14,
@@ -669,7 +669,7 @@ const styles = StyleSheet.create({
   employerCostItemValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 2,
   },
   runPayrollButton: {
@@ -687,10 +687,10 @@ const styles = StyleSheet.create({
   runPayrollText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   ytdCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 18,
     borderWidth: 1,
@@ -699,7 +699,7 @@ const styles = StyleSheet.create({
   ytdTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 16,
   },
   ytdStats: {
@@ -722,18 +722,18 @@ const styles = StyleSheet.create({
   ytdStatValue: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 16,
   },
   payrollHistoryItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 10,
@@ -754,7 +754,7 @@ const styles = StyleSheet.create({
   payrollHistoryDate: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
   },
   payrollHistoryEmployees: {
     fontSize: 12,
@@ -768,7 +768,7 @@ const styles = StyleSheet.create({
   payrollHistoryAmount: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   payrollHistoryStatus: {
     fontSize: 11,
@@ -798,7 +798,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   deadlineCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -831,7 +831,7 @@ const styles = StyleSheet.create({
   deadlineType: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   deadlineDesc: {
     fontSize: 12,
@@ -855,7 +855,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
     borderRadius: 8,
     padding: 12,
     marginTop: 12,
@@ -867,7 +867,7 @@ const styles = StyleSheet.create({
   deadlineAmountValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   noDeadlines: {
     alignItems: 'center',
@@ -876,7 +876,7 @@ const styles = StyleSheet.create({
   noDeadlinesText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 12,
   },
   noDeadlinesSubtext: {

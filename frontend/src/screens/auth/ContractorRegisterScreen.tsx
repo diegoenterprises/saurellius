@@ -939,7 +939,7 @@ export default function ContractorRegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   header: {
     paddingBottom: 20,
@@ -955,7 +955,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   progressContainer: {
     paddingHorizontal: 20,
@@ -986,7 +986,7 @@ const styles = StyleSheet.create({
   stepTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 8,
     textAlign: 'center',
   },
@@ -1007,11 +1007,11 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   input: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     fontSize: 16,
-    color: '#FFF',
+    color: colors.text,
     borderWidth: 1,
     borderColor: '#2a2a4e',
   },
@@ -1027,7 +1027,7 @@ const styles = StyleSheet.create({
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#2a2a4e',
@@ -1036,7 +1036,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 14,
     fontSize: 16,
-    color: '#FFF',
+    color: colors.text,
   },
   eyeButton: {
     padding: 14,
@@ -1056,7 +1056,7 @@ const styles = StyleSheet.create({
   acknowledgmentTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 8,
   },
   checkboxRow: {
@@ -1090,7 +1090,7 @@ const styles = StyleSheet.create({
   classificationOption: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     padding: 14,
     marginBottom: 8,
@@ -1122,7 +1122,7 @@ const styles = StyleSheet.create({
   },
   classificationLabel: {
     fontSize: 15,
-    color: '#FFF',
+    color: colors.text,
   },
   w9Header: {
     marginBottom: 20,
@@ -1149,7 +1149,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 20,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderWidth: 1,
     borderColor: '#2a2a4e',
     marginRight: 8,
@@ -1163,7 +1163,7 @@ const styles = StyleSheet.create({
     color: '#a0a0a0',
   },
   taxClassChipTextSelected: {
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
   },
   tinTypeRow: {
@@ -1174,7 +1174,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 10,
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderWidth: 1,
     borderColor: '#2a2a4e',
   },
@@ -1188,10 +1188,10 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   tinTypeTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   certificationSection: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -1199,7 +1199,7 @@ const styles = StyleSheet.create({
   certificationTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 12,
   },
   certificationText: {
@@ -1211,7 +1211,7 @@ const styles = StyleSheet.create({
   paymentOption: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -1237,7 +1237,7 @@ const styles = StyleSheet.create({
   paymentOptionLabel: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 4,
   },
   paymentOptionDescription: {
@@ -1246,7 +1246,7 @@ const styles = StyleSheet.create({
   },
   toggleRow: {
     flexDirection: 'row',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 4,
     borderWidth: 1,
@@ -1266,7 +1266,7 @@ const styles = StyleSheet.create({
     color: '#a0a0a0',
   },
   toggleTextActive: {
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '600',
   },
   walletInfo: {
@@ -1280,7 +1280,7 @@ const styles = StyleSheet.create({
   walletInfoTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 12,
     marginBottom: 8,
   },
@@ -1305,12 +1305,12 @@ const styles = StyleSheet.create({
     marginVertical: 24,
   },
   codeInput: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 16,
     padding: 20,
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
     borderWidth: 2,
     borderColor: '#2a2a4e',
     letterSpacing: 8,
@@ -1326,7 +1326,7 @@ const styles = StyleSheet.create({
   verifyButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   successIcon: {
     alignItems: 'center',
@@ -1340,7 +1340,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   nextStepsCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 16,
     padding: 20,
     marginVertical: 24,
@@ -1348,7 +1348,7 @@ const styles = StyleSheet.create({
   nextStepsTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 16,
   },
   nextStepItem: {
@@ -1370,7 +1370,7 @@ const styles = StyleSheet.create({
   nextStepLabel: {
     flex: 1,
     fontSize: 15,
-    color: '#FFF',
+    color: colors.text,
   },
   completeButton: {
     borderRadius: 12,
@@ -1386,13 +1386,13 @@ const styles = StyleSheet.create({
   completeButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   footer: {
     flexDirection: 'row',
     padding: 20,
     paddingBottom: 34,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderTopWidth: 1,
     borderTopColor: '#2a2a4e',
     gap: 12,
@@ -1424,7 +1424,7 @@ const styles = StyleSheet.create({
   nextButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   buttonDisabled: {
     opacity: 0.6,

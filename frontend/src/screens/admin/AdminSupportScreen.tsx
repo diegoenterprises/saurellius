@@ -626,7 +626,7 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
   filterChipTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   listContainer: {
     gap: 12,
@@ -651,7 +651,7 @@ const styles = StyleSheet.create({
   customerAvatarText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.text,
   },
   customerInfo: {
     flex: 1,
@@ -680,7 +680,7 @@ const styles = StyleSheet.create({
   tierBadgeText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     textTransform: 'capitalize',
   },
   customerRole: {
@@ -736,7 +736,7 @@ const styles = StyleSheet.create({
   statusBadgeText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     textTransform: 'capitalize',
   },
   ticketSubject: {
@@ -816,7 +816,7 @@ const styles = StyleSheet.create({
   customerDetailAvatarText: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.text,
   },
   customerDetailName: {
     fontSize: 20,
@@ -867,7 +867,7 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
   tierOptionTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   actionButtons: {
     gap: 12,
@@ -890,7 +890,7 @@ const styles = StyleSheet.create({
   actionButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   confirmModal: {
     alignItems: 'center',
@@ -934,7 +934,7 @@ const styles = StyleSheet.create({
   confirmButtonDeleteText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
 });
 

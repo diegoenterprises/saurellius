@@ -442,15 +442,15 @@ const styles = StyleSheet.create({
   tabActive: { backgroundColor: COLORS.primary },
   tabContent: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   tabText: { fontSize: 14, color: COLORS.text, fontWeight: '600' },
-  tabTextActive: { color: '#FFF' },
+  tabTextActive: { color: colors.text },
   
   balanceCard: { backgroundColor: COLORS.primary, margin: 16, borderRadius: 20, padding: 24 },
   balanceLabel: { color: 'rgba(255,255,255,0.8)', fontSize: 14 },
-  balanceAmount: { color: '#FFF', fontSize: 42, fontWeight: '700', marginVertical: 8 },
+  balanceAmount: { color: colors.text, fontSize: 42, fontWeight: '700', marginVertical: 8 },
   balanceDetails: { flexDirection: 'row', marginTop: 16 },
   balanceItem: { flex: 1 },
   balanceItemLabel: { color: 'rgba(255,255,255,0.7)', fontSize: 12 },
-  balanceItemValue: { color: '#FFF', fontSize: 18, fontWeight: '600' },
+  balanceItemValue: { color: colors.text, fontSize: 18, fontWeight: '600' },
   
   actionsContainer: { flexDirection: 'row', paddingHorizontal: 16, gap: 12 },
   actionButton: { flex: 1, backgroundColor: COLORS.card, padding: 16, borderRadius: 16, alignItems: 'center' },
@@ -492,5 +492,5 @@ const styles = StyleSheet.create({
   cancelButton: { flex: 1, padding: 16, borderRadius: 12, backgroundColor: COLORS.background, alignItems: 'center' },
   cancelButtonText: { color: COLORS.text, fontWeight: '600' },
   confirmButton: { flex: 1, padding: 16, borderRadius: 12, backgroundColor: COLORS.primary, alignItems: 'center' },
-  confirmButtonText: { color: '#FFF', fontWeight: '600' },
+  confirmButtonText: { color: colors.text, fontWeight: '600' },
 });

@@ -348,7 +348,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  pipelineCount: { color: '#FFFFFF', fontSize: 16, fontWeight: 'bold' },
+  pipelineCount: { color: colors.text, fontSize: 16, fontWeight: 'bold' },
   pipelineLabel: { marginTop: 8, fontSize: 12 },
   statCard: {
     borderRadius: 12,
@@ -398,7 +398,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 8,
   },
-  startButtonText: { color: '#FFFFFF', fontSize: 14, fontWeight: '600' },
+  startButtonText: { color: colors.text, fontSize: 14, fontWeight: '600' },
 });
 
 export default TalentScreen;

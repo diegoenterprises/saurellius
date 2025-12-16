@@ -936,7 +936,7 @@ const styles = StyleSheet.create({
   heroTitle: {
     fontSize: width < 400 ? 20 : 24,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 6,
   },
   heroSubtitle: {
@@ -1146,7 +1146,7 @@ const styles = StyleSheet.create({
   signupAvatarText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#FFF',
+    color: colors.text,
   },
   signupInfo: {
     flex: 1,
@@ -1174,7 +1174,7 @@ const styles = StyleSheet.create({
   planBadgeText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     textTransform: 'capitalize',
   },
   signupDate: {
@@ -1366,7 +1366,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   betaInviteBadgeText: {
-    color: '#FFFFFF',
+    color: colors.text,
     fontSize: 10,
     fontWeight: '700',
     letterSpacing: 1,
@@ -1374,7 +1374,7 @@ const styles = StyleSheet.create({
   betaInviteTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 4,
   },
   betaInviteSubtitle: {
@@ -1487,7 +1487,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   sendButtonText: {
-    color: '#FFFFFF',
+    color: colors.text,
     fontSize: 15,
     fontWeight: '600',
   },

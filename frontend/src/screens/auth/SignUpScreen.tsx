@@ -179,18 +179,18 @@ const SignUpScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0f0f23' },
+  container: { flex: 1, backgroundColor: colors.background },
   scrollContent: { flexGrow: 1 },
   header: { paddingHorizontal: 20, paddingTop: 10, paddingBottom: 40 },
   backButton: { marginBottom: 20 },
-  headerTitle: { fontSize: 32, fontWeight: '700', color: '#fff' },
+  headerTitle: { fontSize: 32, fontWeight: '700', color: colors.text },
   headerSubtitle: { fontSize: 16, color: 'rgba(255,255,255,0.7)', marginTop: 8 },
   form: { flex: 1, padding: 20 },
-  sectionTitle: { fontSize: 20, fontWeight: '600', color: '#fff', marginBottom: 20 },
+  sectionTitle: { fontSize: 20, fontWeight: '600', color: colors.text, marginBottom: 20 },
   roleCard: { 
     flexDirection: 'row', 
     alignItems: 'center', 
-    backgroundColor: '#1a1a2e', 
+    backgroundColor: colors.card, 
     borderRadius: 16, 
     padding: 16, 
     marginBottom: 16, 
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     marginRight: 16 
   },
   roleContent: { flex: 1 },
-  roleTitle: { fontSize: 18, fontWeight: '700', color: '#fff', marginBottom: 4 },
+  roleTitle: { fontSize: 18, fontWeight: '700', color: colors.text, marginBottom: 4 },
   roleDescription: { fontSize: 13, color: '#a0a0a0', lineHeight: 18, marginBottom: 8 },
   roleFeatures: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   featureTag: { flexDirection: 'row', alignItems: 'center', gap: 4 },

@@ -654,7 +654,7 @@ export default function EmergencyInfoScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   loadingContainer: {
     flex: 1,
@@ -674,7 +674,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   content: {
     flex: 1,
@@ -709,10 +709,10 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   contactCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 16,
     marginBottom: 12,
@@ -744,7 +744,7 @@ const styles = StyleSheet.create({
   contactName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   primaryBadge: {
     backgroundColor: '#F59E0B20',
@@ -776,7 +776,7 @@ const styles = StyleSheet.create({
   contactDetailText: {
     flex: 1,
     fontSize: 14,
-    color: '#FFF',
+    color: colors.text,
   },
   contactDetailLabel: {
     fontSize: 11,
@@ -797,7 +797,7 @@ const styles = StyleSheet.create({
     color: '#EF4444',
   },
   formSection: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 16,
     borderWidth: 1,
@@ -812,7 +812,7 @@ const styles = StyleSheet.create({
   formTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   inputGroup: {
     marginBottom: 16,
@@ -823,11 +823,11 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   input: {
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
     borderRadius: 10,
     padding: 14,
     fontSize: 16,
-    color: '#FFF',
+    color: colors.text,
     borderWidth: 1,
     borderColor: '#2a2a4e',
   },
@@ -849,7 +849,7 @@ const styles = StyleSheet.create({
     color: '#a0a0a0',
   },
   chipTextActive: {
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
   },
   checkboxRow: {
@@ -860,7 +860,7 @@ const styles = StyleSheet.create({
   },
   checkboxLabel: {
     fontSize: 14,
-    color: '#FFF',
+    color: colors.text,
   },
   saveButton: {
     borderRadius: 12,
@@ -873,7 +873,7 @@ const styles = StyleSheet.create({
   saveText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   buttonDisabled: {
     opacity: 0.6,
@@ -897,10 +897,10 @@ const styles = StyleSheet.create({
   emptyButtonText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
   },
   medicalCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 16,
     borderWidth: 1,
@@ -919,13 +919,13 @@ const styles = StyleSheet.create({
   },
   medicalValue: {
     fontSize: 14,
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
     flex: 1,
     textAlign: 'right',
   },
   medicalForm: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 16,
     borderWidth: 1,
@@ -960,7 +960,7 @@ const styles = StyleSheet.create({
   },
   tagText: {
     fontSize: 13,
-    color: '#FFF',
+    color: colors.text,
   },
   lastUpdated: {
     fontSize: 12,

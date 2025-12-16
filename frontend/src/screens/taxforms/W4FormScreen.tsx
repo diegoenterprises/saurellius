@@ -431,7 +431,7 @@ const W4FormScreen: React.FC = () => {
 const createStyles = (isDarkMode: boolean) => StyleSheet.create({
   container: { flex: 1, backgroundColor: isDarkMode ? '#111827' : '#F3F4F6' },
   header: { padding: 20, paddingTop: 60 },
-  headerTitle: { fontSize: 28, fontWeight: 'bold', color: '#FFFFFF' },
+  headerTitle: { fontSize: 28, fontWeight: 'bold', color: colors.text },
   headerSubtitle: { fontSize: 14, color: 'rgba(255,255,255,0.8)', marginTop: 4 },
   progressContainer: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: isDarkMode ? '#1F2937' : '#FFFFFF' },
   progressStep: { flexDirection: 'row', alignItems: 'center' },
@@ -439,7 +439,7 @@ const createStyles = (isDarkMode: boolean) => StyleSheet.create({
   progressCircleActive: { backgroundColor: '#6366F1' },
   progressCircleComplete: { backgroundColor: '#10B981' },
   progressNumber: { fontSize: 12, fontWeight: '600', color: '#6B7280' },
-  progressNumberActive: { color: '#FFFFFF' },
+  progressNumberActive: { color: colors.text },
   progressLine: { width: 40, height: 2, backgroundColor: isDarkMode ? '#374151' : '#E5E7EB', marginHorizontal: 4 },
   progressLineActive: { backgroundColor: '#10B981' },
   content: { flex: 1 },
@@ -484,9 +484,9 @@ const createStyles = (isDarkMode: boolean) => StyleSheet.create({
   backButton: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, paddingVertical: 14, borderRadius: 8, borderWidth: 1, borderColor: isDarkMode ? '#4B5563' : '#D1D5DB' },
   backButtonText: { color: isDarkMode ? '#FFFFFF' : '#374151', fontWeight: '600' },
   nextButton: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: '#6366F1', paddingVertical: 14, borderRadius: 8 },
-  nextButtonText: { color: '#FFFFFF', fontWeight: '600' },
+  nextButtonText: { color: colors.text, fontWeight: '600' },
   submitButton: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: '#10B981', paddingVertical: 14, borderRadius: 8 },
-  submitButtonText: { color: '#FFFFFF', fontWeight: '600' },
+  submitButtonText: { color: colors.text, fontWeight: '600' },
 });
 
 export default W4FormScreen;

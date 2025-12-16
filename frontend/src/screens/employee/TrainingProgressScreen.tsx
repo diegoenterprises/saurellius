@@ -435,7 +435,7 @@ export default function TrainingProgressScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   loadingContainer: {
     flex: 1,
@@ -456,7 +456,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   statsRow: {
     flexDirection: 'row',
@@ -477,7 +477,7 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   statLabel: {
     fontSize: 11,
@@ -506,7 +506,7 @@ const styles = StyleSheet.create({
     color: '#a0a0a0',
   },
   tabTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   categoryFilter: {
     borderBottomWidth: 1,
@@ -522,7 +522,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 16,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     marginRight: 8,
     gap: 6,
     borderWidth: 1,
@@ -538,7 +538,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   categoryChipTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   content: {
     flex: 1,
@@ -550,7 +550,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   courseCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     marginBottom: 12,
     borderWidth: 1,
@@ -584,7 +584,7 @@ const styles = StyleSheet.create({
   courseTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     flex: 1,
   },
   requiredBadge: {
@@ -668,7 +668,7 @@ const styles = StyleSheet.create({
   modulesTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 10,
   },
   moduleRow: {
@@ -679,7 +679,7 @@ const styles = StyleSheet.create({
   },
   moduleName: {
     fontSize: 14,
-    color: '#FFF',
+    color: colors.text,
     flex: 1,
   },
   moduleCompleted: {
@@ -705,7 +705,7 @@ const styles = StyleSheet.create({
   startButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   certificateButton: {
     flex: 1,
@@ -725,7 +725,7 @@ const styles = StyleSheet.create({
   certCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 16,
     marginBottom: 12,
@@ -746,7 +746,7 @@ const styles = StyleSheet.create({
   certName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   certIssuer: {
     fontSize: 13,

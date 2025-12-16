@@ -521,7 +521,7 @@ const createStyles = (isDarkMode: boolean) => StyleSheet.create({
     gap: 8,
   },
   addButtonText: {
-    color: '#FFFFFF',
+    color: colors.text,
     fontWeight: '600',
   },
   infoCard: {
@@ -638,7 +638,7 @@ const createStyles = (isDarkMode: boolean) => StyleSheet.create({
     borderRadius: 6,
   },
   verifyButtonText: {
-    color: '#FFFFFF',
+    color: colors.text,
     fontWeight: '600',
   },
   setPrimaryButton: {
@@ -720,7 +720,7 @@ const createStyles = (isDarkMode: boolean) => StyleSheet.create({
     fontWeight: '600',
   },
   toggleTextActive: {
-    color: '#FFFFFF',
+    color: colors.text,
   },
   verifyInfo: {
     color: isDarkMode ? '#D1D5DB' : '#6B7280',
@@ -754,7 +754,7 @@ const createStyles = (isDarkMode: boolean) => StyleSheet.create({
     alignItems: 'center',
   },
   submitButtonText: {
-    color: '#FFFFFF',
+    color: colors.text,
     fontWeight: '600',
   },
 });

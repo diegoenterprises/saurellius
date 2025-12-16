@@ -349,7 +349,7 @@ export default function AccountingScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
   },
   header: {
     paddingTop: 50,
@@ -365,7 +365,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   tabBar: {
     flexDirection: 'row',
@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   tabTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   content: {
     flex: 1,
@@ -402,7 +402,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     paddingHorizontal: 14,
     marginBottom: 12,
@@ -412,7 +412,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingLeft: 10,
     fontSize: 16,
-    color: '#FFFFFF',
+    color: colors.text,
   },
   filterContainer: {
     marginBottom: 16,
@@ -421,7 +421,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     marginRight: 8,
     borderWidth: 1,
     borderColor: '#EEE',
@@ -435,13 +435,13 @@ const styles = StyleSheet.create({
     color: '#a0a0a0',
   },
   filterChipTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   accountsList: {
     gap: 12,
   },
   accountCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
   },
@@ -463,12 +463,12 @@ const styles = StyleSheet.create({
   accountBalance: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   accountName: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 4,
   },
   accountType: {
@@ -489,13 +489,13 @@ const styles = StyleSheet.create({
   addButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   entriesList: {
     gap: 12,
   },
   entryCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
   },
@@ -526,7 +526,7 @@ const styles = StyleSheet.create({
   entryDescription: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 12,
   },
   entryFooter: {
@@ -547,7 +547,7 @@ const styles = StyleSheet.create({
   },
   reportCard: {
     width: '48%',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
   },
@@ -555,7 +555,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
@@ -563,7 +563,7 @@ const styles = StyleSheet.create({
   reportTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 4,
   },
   reportDesc: {
@@ -587,7 +587,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 12,
   },
   summaryCards: {
@@ -612,7 +612,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 24,
@@ -627,7 +627,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   modalSubtitle: {
     fontSize: 14,
@@ -640,15 +640,15 @@ const styles = StyleSheet.create({
   formLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 8,
   },
   formInput: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     fontSize: 16,
-    color: '#FFFFFF',
+    color: colors.text,
   },
   modalButton: {
     marginTop: 8,
@@ -661,6 +661,6 @@ const styles = StyleSheet.create({
   modalButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
 });

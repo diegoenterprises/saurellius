@@ -520,7 +520,7 @@ const MessagesScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   header: {
     padding: 16,
@@ -544,7 +544,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#fff',
+    color: colors.text,
   },
   headerActions: {
     flexDirection: 'row',
@@ -556,7 +556,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     margin: 16,
     marginTop: 8,
     padding: 12,
@@ -566,11 +566,11 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#FFFFFF',
+    color: colors.text,
   },
   tabContainer: {
     flexDirection: 'row',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#2a2a4e',
@@ -607,7 +607,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   badgeText: {
-    color: '#fff',
+    color: colors.text,
     fontSize: 10,
     fontWeight: 'bold',
   },
@@ -626,7 +626,7 @@ const styles = StyleSheet.create({
   listItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#2a2a4e',
@@ -641,7 +641,7 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   avatarText: {
-    color: '#fff',
+    color: colors.text,
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -657,7 +657,7 @@ const styles = StyleSheet.create({
   listItemTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   listItemTime: {
     fontSize: 12,
@@ -681,12 +681,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
   },
   unreadBadgeText: {
-    color: '#fff',
+    color: colors.text,
     fontSize: 12,
     fontWeight: 'bold',
   },
   kudosCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 16,
     padding: 16,
     marginBottom: 12,
@@ -719,7 +719,7 @@ const styles = StyleSheet.create({
   kudosBadgeName: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   kudosPoints: {
     fontSize: 14,
@@ -751,7 +751,7 @@ const styles = StyleSheet.create({
   notificationItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#2a2a4e',
@@ -773,7 +773,7 @@ const styles = StyleSheet.create({
   },
   notificationText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 4,
   },
   notificationTextUnread: {
@@ -802,7 +802,7 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginTop: 16,
   },
   emptySubtext: {
@@ -818,7 +818,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 20,
@@ -833,14 +833,14 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   modalInput: {
     backgroundColor: '#2a2a4e',
     borderRadius: 12,
     padding: 14,
     fontSize: 16,
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 12,
   },
   messageInput: {
@@ -859,7 +859,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   sendButtonText: {
-    color: '#FFFFFF',
+    color: colors.text,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -880,7 +880,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   badgeOptionText: {
-    color: '#FFFFFF',
+    color: colors.text,
     fontSize: 14,
   },
 });

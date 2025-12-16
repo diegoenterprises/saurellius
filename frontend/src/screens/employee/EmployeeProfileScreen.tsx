@@ -579,7 +579,7 @@ export default function EmployeeProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   loadingContainer: {
     flex: 1,
@@ -599,7 +599,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   profileHeader: {
     alignItems: 'center',
@@ -629,7 +629,7 @@ const styles = StyleSheet.create({
   avatarInitials: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   cameraButton: {
     position: 'absolute',
@@ -647,7 +647,7 @@ const styles = StyleSheet.create({
   profileName: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   profileTitle: {
     fontSize: 15,
@@ -677,10 +677,10 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   infoCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 4,
     borderWidth: 1,
@@ -697,7 +697,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -712,7 +712,7 @@ const styles = StyleSheet.create({
   },
   infoValue: {
     fontSize: 15,
-    color: '#FFF',
+    color: colors.text,
     lineHeight: 20,
   },
   emptyContact: {
@@ -734,7 +734,7 @@ const styles = StyleSheet.create({
   addContactText: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFF',
+    color: colors.text,
   },
   quickActions: {
     gap: 10,
@@ -743,7 +743,7 @@ const styles = StyleSheet.create({
   quickAction: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     borderWidth: 1,
@@ -760,12 +760,12 @@ const styles = StyleSheet.create({
   quickActionText: {
     flex: 1,
     fontSize: 15,
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   modalHeader: {
     flexDirection: 'row',
@@ -778,7 +778,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   modalCancel: {
     fontSize: 16,
@@ -796,7 +796,7 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 24,
     marginBottom: 12,
   },
@@ -809,11 +809,11 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   input: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     padding: 14,
     fontSize: 16,
-    color: '#FFF',
+    color: colors.text,
     borderWidth: 1,
     borderColor: '#2a2a4e',
   },

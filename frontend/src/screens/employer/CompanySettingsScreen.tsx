@@ -657,7 +657,7 @@ export default function CompanySettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   loadingContainer: {
     flex: 1,
@@ -677,7 +677,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   content: {
     flex: 1,
@@ -702,10 +702,10 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   infoCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     padding: 4,
     borderWidth: 1,
@@ -726,7 +726,7 @@ const styles = StyleSheet.create({
   },
   infoValue: {
     fontSize: 14,
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
     flex: 1.5,
     textAlign: 'right',
@@ -745,7 +745,7 @@ const styles = StyleSheet.create({
   },
   toggleLabel: {
     fontSize: 15,
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
   },
   toggleDesc: {
@@ -760,7 +760,7 @@ const styles = StyleSheet.create({
   quickLink: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     borderWidth: 1,
@@ -777,12 +777,12 @@ const styles = StyleSheet.create({
   quickLinkText: {
     flex: 1,
     fontSize: 15,
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   modalHeader: {
     flexDirection: 'row',
@@ -795,7 +795,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   modalCancel: {
     fontSize: 16,
@@ -813,7 +813,7 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 24,
     marginBottom: 12,
   },
@@ -826,11 +826,11 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   input: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     padding: 14,
     fontSize: 16,
-    color: '#FFF',
+    color: colors.text,
     borderWidth: 1,
     borderColor: '#2a2a4e',
   },
@@ -847,7 +847,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   frequencyOption: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     borderWidth: 2,
@@ -860,7 +860,7 @@ const styles = StyleSheet.create({
   frequencyLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   frequencyDesc: {
     fontSize: 13,
@@ -870,7 +870,7 @@ const styles = StyleSheet.create({
   rateInput: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#2a2a4e',
@@ -880,7 +880,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
     paddingVertical: 14,
   },
   rateSymbol: {

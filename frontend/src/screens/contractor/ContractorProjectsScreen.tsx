@@ -495,7 +495,7 @@ export default function ContractorProjectsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   loadingContainer: {
     flex: 1,
@@ -516,7 +516,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   statsRow: {
     flexDirection: 'row',
@@ -537,7 +537,7 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   statLabel: {
     fontSize: 11,
@@ -554,7 +554,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 16,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     marginRight: 8,
     borderWidth: 1,
     borderColor: '#2a2a4e',
@@ -569,13 +569,13 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   filterChipTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   listContent: {
     padding: 16,
   },
   projectCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 14,
     marginBottom: 12,
     borderWidth: 1,
@@ -615,7 +615,7 @@ const styles = StyleSheet.create({
   projectName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   clientName: {
     fontSize: 13,
@@ -652,7 +652,7 @@ const styles = StyleSheet.create({
   projectStatValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 2,
   },
   budgetProgress: {
@@ -670,7 +670,7 @@ const styles = StyleSheet.create({
   },
   budgetProgressPercent: {
     fontSize: 12,
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
   },
   budgetProgressBar: {
@@ -699,7 +699,7 @@ const styles = StyleSheet.create({
   tasksSectionTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   tasksCount: {
     fontSize: 12,
@@ -708,7 +708,7 @@ const styles = StyleSheet.create({
   taskItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
     borderRadius: 10,
     padding: 12,
     marginBottom: 8,
@@ -721,7 +721,7 @@ const styles = StyleSheet.create({
   },
   taskName: {
     fontSize: 14,
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
   },
   taskNameCompleted: {
@@ -761,7 +761,7 @@ const styles = StyleSheet.create({
   activityTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginBottom: 12,
   },
   activityItem: {
@@ -821,7 +821,7 @@ const styles = StyleSheet.create({
   emptyStateTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 16,
   },
   emptyStateText: {
@@ -832,7 +832,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   modalHeader: {
     flexDirection: 'row',
@@ -845,7 +845,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   modalCancel: {
     fontSize: 16,
@@ -860,7 +860,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   timeEntryContext: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 24,
@@ -868,7 +868,7 @@ const styles = StyleSheet.create({
   timeEntryProject: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   timeEntryTask: {
     fontSize: 14,
@@ -884,21 +884,21 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   input: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     padding: 14,
     fontSize: 16,
-    color: '#FFF',
+    color: colors.text,
     borderWidth: 1,
     borderColor: '#2a2a4e',
   },
   hoursInput: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 10,
     padding: 14,
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
     borderWidth: 1,
     borderColor: '#2a2a4e',
     textAlign: 'center',
@@ -929,6 +929,6 @@ const styles = StyleSheet.create({
   quickHourText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
 });

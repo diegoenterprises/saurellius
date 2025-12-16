@@ -561,7 +561,7 @@ export default function PTOScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
   },
   header: {
     paddingTop: 50,
@@ -577,7 +577,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   tabBar: {
     flexDirection: 'row',
@@ -603,7 +603,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   tabTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   content: {
     flex: 1,
@@ -629,7 +629,7 @@ const styles = StyleSheet.create({
   summaryValue: {
     fontSize: 36,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   summaryDays: {
     fontSize: 16,
@@ -648,7 +648,7 @@ const styles = StyleSheet.create({
   summaryStatValue: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   summaryStatLabel: {
     fontSize: 12,
@@ -661,7 +661,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 12,
   },
   balancesList: {
@@ -669,7 +669,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   balanceCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
   },
@@ -689,7 +689,7 @@ const styles = StyleSheet.create({
   balanceType: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   balanceNumbers: {
     flexDirection: 'row',
@@ -721,7 +721,7 @@ const styles = StyleSheet.create({
   balanceDetailValue: {
     fontSize: 13,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   progressContainer: {},
   progressBar: {
@@ -751,10 +751,10 @@ const styles = StyleSheet.create({
   requestButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   holidaysList: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     gap: 12,
@@ -776,7 +776,7 @@ const styles = StyleSheet.create({
   holidayName: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   holidayDate: {
     fontSize: 12,
@@ -791,7 +791,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
   },
   filterChipActive: {
     backgroundColor: '#1473FF',
@@ -802,14 +802,14 @@ const styles = StyleSheet.create({
   },
   filterChipTextActive: {
     fontSize: 13,
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
   },
   requestsList: {
     gap: 12,
   },
   requestCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
   },
@@ -828,7 +828,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -840,7 +840,7 @@ const styles = StyleSheet.create({
   employeeName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   requestType: {
     fontSize: 13,
@@ -881,7 +881,7 @@ const styles = StyleSheet.create({
   requestHoursText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   requestReason: {
     fontSize: 14,
@@ -914,25 +914,25 @@ const styles = StyleSheet.create({
   requestActionText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   calendarHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
   },
   calendarMonth: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   calendarWeekDays: {
     flexDirection: 'row',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     paddingVertical: 10,
     marginBottom: 8,
@@ -947,7 +947,7 @@ const styles = StyleSheet.create({
   calendarDays: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 8,
     marginBottom: 16,
@@ -960,7 +960,7 @@ const styles = StyleSheet.create({
   },
   calendarDayText: {
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.text,
   },
   dayIndicator: {
     width: 6,
@@ -992,7 +992,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   upcomingItem: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     flexDirection: 'row',
@@ -1003,7 +1003,7 @@ const styles = StyleSheet.create({
   upcomingStartDate: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   upcomingEndDate: {
     fontSize: 12,
@@ -1012,7 +1012,7 @@ const styles = StyleSheet.create({
   upcomingName: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   upcomingType: {
     fontSize: 12,
@@ -1024,7 +1024,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 24,
@@ -1039,7 +1039,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   formGroup: {
     marginBottom: 16,
@@ -1047,7 +1047,7 @@ const styles = StyleSheet.create({
   formLabel: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 8,
   },
   formRow: {
@@ -1055,11 +1055,11 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   formInput: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     fontSize: 16,
-    color: '#FFFFFF',
+    color: colors.text,
   },
   formTextArea: {
     minHeight: 80,
@@ -1073,7 +1073,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 12,
     borderRadius: 8,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     alignItems: 'center',
   },
   leaveTypeText: {
@@ -1091,6 +1091,6 @@ const styles = StyleSheet.create({
   modalButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
 });

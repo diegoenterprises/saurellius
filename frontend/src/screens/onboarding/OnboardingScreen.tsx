@@ -514,7 +514,7 @@ export default function OnboardingScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   header: {
     paddingTop: 50,
@@ -530,7 +530,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
   },
   tabBar: {
     flexDirection: 'row',
@@ -556,7 +556,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   tabTextActive: {
-    color: '#FFF',
+    color: colors.text,
   },
   content: {
     flex: 1,
@@ -578,7 +578,7 @@ const styles = StyleSheet.create({
   newButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   statsRow: {
     flexDirection: 'row',
@@ -587,7 +587,7 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     alignItems: 'center',
@@ -597,7 +597,7 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   statLabel: {
     fontSize: 12,
@@ -607,14 +607,14 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 12,
   },
   workflowList: {
     gap: 12,
   },
   workflowCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
@@ -645,7 +645,7 @@ const styles = StyleSheet.create({
   employeeName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   employeePosition: {
     fontSize: 13,
@@ -688,7 +688,7 @@ const styles = StyleSheet.create({
   progressValue: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   progressBar: {
     height: 8,
@@ -710,7 +710,7 @@ const styles = StyleSheet.create({
   completedCount: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   filterButton: {
     flexDirection: 'row',
@@ -719,7 +719,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderWidth: 1,
     borderColor: '#2a2a4e',
   },
@@ -728,7 +728,7 @@ const styles = StyleSheet.create({
     color: '#a0a0a0',
   },
   completedCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     flexDirection: 'row',
@@ -745,7 +745,7 @@ const styles = StyleSheet.create({
   completedName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   completedPosition: {
     fontSize: 13,
@@ -768,7 +768,7 @@ const styles = StyleSheet.create({
     color: '#1473FF',
   },
   templateCard: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -795,7 +795,7 @@ const styles = StyleSheet.create({
   templateName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   templateDesc: {
     fontSize: 13,
@@ -828,7 +828,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 14,
     borderRadius: 12,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderWidth: 2,
     borderColor: '#1473FF',
     borderStyle: 'dashed',
@@ -845,7 +845,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 24,
@@ -863,7 +863,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   detailPosition: {
     fontSize: 14,
@@ -876,7 +876,7 @@ const styles = StyleSheet.create({
   tasksTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: colors.text,
     marginBottom: 12,
   },
   tasksList: {
@@ -904,7 +904,7 @@ const styles = StyleSheet.create({
   taskName: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: colors.text,
   },
   taskCategory: {
     fontSize: 12,
@@ -975,6 +975,6 @@ const styles = StyleSheet.create({
   modalButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
 });

@@ -330,7 +330,7 @@ export default function AddEmployeeScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   header: {
     paddingTop: 50,
@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: colors.text,
     marginTop: 10,
   },
   progressContainer: {
@@ -368,12 +368,12 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#0f0f23',
+    backgroundColor: colors.background,
   },
   stepTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#fff',
+    color: colors.text,
     marginBottom: 20,
   },
   sectionLabel: {
@@ -394,11 +394,11 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   input: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 14,
     fontSize: 16,
-    color: '#fff',
+    color: colors.text,
     borderWidth: 1,
     borderColor: '#2a2a4e',
   },
@@ -420,7 +420,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 20,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     marginRight: 8,
     borderWidth: 1,
     borderColor: '#2a2a4e',
@@ -434,12 +434,12 @@ const styles = StyleSheet.create({
     color: '#a0a0a0',
   },
   chipTextSelected: {
-    color: '#FFF',
+    color: colors.text,
     fontWeight: '500',
   },
   toggleContainer: {
     flexDirection: 'row',
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderRadius: 12,
     padding: 4,
     borderWidth: 1,
@@ -459,14 +459,14 @@ const styles = StyleSheet.create({
     color: '#a0a0a0',
   },
   toggleTextActive: {
-    color: '#fff',
+    color: colors.text,
     fontWeight: '600',
   },
   footer: {
     flexDirection: 'row',
     padding: 20,
     paddingBottom: 34,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: colors.card,
     borderTopWidth: 1,
     borderTopColor: '#2a2a4e',
     alignItems: 'center',
@@ -497,7 +497,7 @@ const styles = StyleSheet.create({
   nextButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: colors.text,
   },
   buttonDisabled: {
     opacity: 0.6,
