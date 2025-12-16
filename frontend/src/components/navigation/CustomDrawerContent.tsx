@@ -172,7 +172,6 @@ const EMPLOYEE_MENU_SECTIONS: MenuSection[] = [
       { id: 'dashboard', label: 'Dashboard', icon: 'grid-outline', screen: 'EmployeePortal' },
       { id: 'paystubs', label: 'My Paystubs', icon: 'document-text-outline', screen: 'Paystubs' },
       { id: 'wallet', label: 'Wallet', icon: 'wallet-outline', screen: 'Wallet', color: STATIC_COLORS.success },
-      { id: 'profile', label: 'My Profile', icon: 'person-outline', screen: 'Profile' },
     ],
   },
   {
