@@ -206,6 +206,14 @@ def create_app(config_name='default'):
     from routes.api_clients_routes import api_clients_bp
     app.register_blueprint(api_clients_bp)
     
+    # Admin Analytics Routes
+    from routes.admin_analytics_routes import admin_analytics_bp
+    app.register_blueprint(admin_analytics_bp)
+    
+    # Communications Routes (Kudos, Messages)
+    from routes.communications_routes import communications_bp
+    app.register_blueprint(communications_bp)
+    
     # Beta Invitation Routes
     from routes.beta_invite_routes import beta_invite_bp
     app.register_blueprint(beta_invite_bp)

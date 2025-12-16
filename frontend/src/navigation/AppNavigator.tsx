@@ -61,6 +61,7 @@ import AdminRevenueScreen from '../screens/admin/AdminRevenueScreen';
 import AdminAPIScreen from '../screens/admin/AdminAPIScreen';
 import AdminSystemScreen from '../screens/admin/AdminSystemScreen';
 import AdminSubscriptionsScreen from '../screens/admin/AdminSubscriptionsScreen';
+import UsersAnalyticsScreen from '../screens/admin/UsersAnalyticsScreen';
 
 // Additional Enterprise Screens
 import { SwipeScreen } from '../screens/swipe';
@@ -356,6 +357,8 @@ export type RootStackParamList = {
   ContractorNDAs: undefined;
   ContractorSkillCertifications: undefined;
   ContractorReferralProgram: undefined;
+  UsersAnalytics: undefined;
+  AnalyticsUsers: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -432,6 +435,8 @@ function MainStack() {
       <Stack.Screen name="AdminAPI" component={AdminAPIScreen} />
       <Stack.Screen name="AdminSystem" component={AdminSystemScreen} />
       <Stack.Screen name="AdminSubscriptions" component={AdminSubscriptionsScreen} />
+      <Stack.Screen name="UsersAnalytics" component={UsersAnalyticsScreen} />
+      <Stack.Screen name="AnalyticsUsers" component={UsersAnalyticsScreen} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
       <Stack.Screen name="TermsConditions" component={TermsConditionsScreen} />
       <Stack.Screen name="EmployeePortal" component={EmployeePortalDashboard} />
