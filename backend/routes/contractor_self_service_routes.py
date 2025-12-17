@@ -8,6 +8,16 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 from datetime import datetime
 from services.contractor_self_service import contractor_self_service
+import json
+import hashlib
+
+from models import (
+    ContractorAccount,
+    ContractorInvitation,
+    ContractorPaymentMethod,
+    ContractorInvoice,
+    db,
+)
 
 contractor_ss_bp = Blueprint('contractor_self_service', __name__, url_prefix='/api/contractor')
 
@@ -47,6 +57,32 @@ def verify_email():
     return jsonify(result)
 
 
+@contractor_ss_bp.route('/login', methods=['POST'])
+def contractor_login():
+    """Authenticate contractor and return access token."""
+    data = request.get_json() or {}
+    email = (data.get('email') or '').lower().strip()
+    password = data.get('password') or ''
+
+    if not email or not password:
+        return jsonify({'success': False, 'error': 'Email and password are required'}), 400
+
+    contractor = ContractorAccount.query.filter(ContractorAccount.email == email).first()
+    if not contractor:
+        return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
+
+    password_hash = hashlib.sha256(password.encode()).hexdigest()
+    if contractor.password_hash != password_hash:
+        return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
+
+    access_token = create_access_token(identity=contractor.id)
+    return jsonify({
+        'success': True,
+        'access_token': access_token,
+        'contractor': contractor.to_public_profile(),
+    })
+
+
 @contractor_ss_bp.route('/verify/phone', methods=['POST'])
 def verify_phone():
     """Verify phone with SMS code."""
@@ -71,25 +107,20 @@ def verify_phone():
 @contractor_ss_bp.route('/invitation/<token>', methods=['GET'])
 def get_invitation(token):
     """Get invitation details."""
-    invitation = None
-    for inv in contractor_self_service.invitations.values():
-        if inv.get('token') == token:
-            invitation = inv
-            break
-    
+    invitation = ContractorInvitation.query.filter(ContractorInvitation.token == token).first()
     if not invitation:
         return jsonify({'success': False, 'error': 'Invalid invitation'}), 404
-    
+
     return jsonify({
         'success': True,
         'invitation': {
-            'client_id': invitation['client_id'],
-            'contractor_email': invitation['contractor_email'],
-            'contractor_name': invitation.get('contractor_name', ''),
-            'start_date': invitation.get('start_date'),
-            'project_description': invitation.get('project_description'),
-            'personal_message': invitation.get('personal_message'),
-            'expires_at': invitation['expires_at']
+            'client_id': invitation.client_id,
+            'contractor_email': invitation.contractor_email,
+            'contractor_name': invitation.contractor_name or '',
+            'start_date': invitation.start_date,
+            'project_description': invitation.project_description,
+            'personal_message': invitation.personal_message,
+            'expires_at': invitation.expires_at.isoformat() if invitation.expires_at else None
         }
     })
 
@@ -233,22 +264,28 @@ def setup_payment_method():
 def get_payment_method():
     """Get current payment method."""
     contractor_id = get_jwt_identity()
-    contractor = contractor_self_service.contractors.get(contractor_id)
-    
+    contractor = ContractorAccount.query.get(contractor_id)
     if not contractor:
         return jsonify({'success': False, 'error': 'Contractor not found'}), 404
-    
-    payment = contractor.get('payment_method', {})
-    # Mask sensitive data
+
+    pm = (
+        ContractorPaymentMethod.query.filter(ContractorPaymentMethod.contractor_id == contractor_id)
+        .filter(ContractorPaymentMethod.status == 'active')
+        .order_by(ContractorPaymentMethod.created_at.desc())
+        .first()
+    )
+
+    payload = pm.payload() if pm else {}
+
     safe_payment = {
-        'method': payment.get('method'),
-        'bank_name': payment.get('bank_name'),
-        'account_type': payment.get('account_type'),
-        'account_last_four': payment.get('account_last_four'),
-        'routing_number': payment.get('routing_number'),
-        'created_at': payment.get('created_at')
+        'method': payload.get('method') or (pm.method if pm else None),
+        'bank_name': payload.get('bank_name'),
+        'account_type': payload.get('account_type'),
+        'account_last_four': payload.get('account_last_four'),
+        'routing_number': payload.get('routing_number'),
+        'created_at': payload.get('created_at') or (pm.created_at.isoformat() if pm and pm.created_at else None)
     }
-    
+
     return jsonify({'success': True, 'payment_method': safe_payment})
 
 
@@ -315,12 +352,12 @@ def get_invoices():
 def get_invoice(invoice_id):
     """Get specific invoice."""
     contractor_id = get_jwt_identity()
-    
-    invoice = contractor_self_service.invoices.get(invoice_id)
-    if not invoice or invoice['contractor_id'] != contractor_id:
+
+    invoice = ContractorInvoice.query.get(invoice_id)
+    if not invoice or invoice.contractor_id != contractor_id:
         return jsonify({'success': False, 'error': 'Invoice not found'}), 404
-    
-    return jsonify({'success': True, 'invoice': invoice})
+
+    return jsonify({'success': True, 'invoice': invoice.to_dict()})
 
 
 @contractor_ss_bp.route('/invoices/<invoice_id>/send', methods=['POST'])
@@ -582,20 +619,20 @@ def get_dashboard():
 def get_profile():
     """Get contractor profile."""
     contractor_id = get_jwt_identity()
-    contractor = contractor_self_service.contractors.get(contractor_id)
-    
+
+    contractor = ContractorAccount.query.get(contractor_id)
     if not contractor:
         return jsonify({'success': False, 'error': 'Contractor not found'}), 404
-    
-    safe_fields = [
-        'id', 'email', 'phone', 'business_classification', 'legal_name',
-        'business_name', 'dba_name', 'status', 'created_at'
-    ]
-    profile = {k: contractor.get(k) for k in safe_fields}
-    profile['w9_complete'] = contractor.get('w9_complete', False)
-    profile['payment_setup_complete'] = contractor.get('payment_setup_complete', False)
-    
-    return jsonify({'success': True, 'profile': profile})
+
+    profile = contractor.to_public_profile()
+    extra = {}
+    if contractor.profile_json:
+        try:
+            extra = json.loads(contractor.profile_json) or {}
+        except Exception:
+            extra = {}
+
+    return jsonify({'success': True, 'profile': {**profile, **extra}})
 
 
 @contractor_ss_bp.route('/profile', methods=['PUT'])
@@ -604,22 +641,37 @@ def update_profile():
     """Update contractor profile."""
     contractor_id = get_jwt_identity()
     data = request.get_json()
-    
-    contractor = contractor_self_service.contractors.get(contractor_id)
+
+    contractor = ContractorAccount.query.get(contractor_id)
     if not contractor:
         return jsonify({'success': False, 'error': 'Contractor not found'}), 404
-    
-    editable_fields = [
-        'business_name', 'dba_name', 'phone', 'business_address',
-        'mailing_address', 'business_phone', 'business_email', 'website'
-    ]
-    
-    for field in editable_fields:
+
+    editable_direct = ['business_name', 'dba_name', 'phone', 'legal_name']
+    for field in editable_direct:
         if field in data:
-            contractor[field] = data[field]
-    
-    contractor['updated_at'] = datetime.utcnow().isoformat()
-    
+            setattr(contractor, field, data[field])
+
+    editable_extra = [
+        'business_address',
+        'mailing_address',
+        'business_phone',
+        'business_email',
+        'website'
+    ]
+    extra = {}
+    if contractor.profile_json:
+        try:
+            extra = json.loads(contractor.profile_json) or {}
+        except Exception:
+            extra = {}
+
+    for field in editable_extra:
+        if field in data:
+            extra[field] = data[field]
+
+    contractor.profile_json = json.dumps(extra)
+    db.session.commit()
+
     return jsonify({'success': True, 'message': 'Profile updated'})
 
 

@@ -9,9 +9,23 @@ import re
 import uuid
 import hashlib
 import secrets
+import json
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple, Any
 from decimal import Decimal
+
+from models import (
+    ContractorAccount,
+    ContractorInvitation,
+    ContractorPaymentMethod,
+    ContractorInvoice,
+    ContractorInvoicePayment,
+    ContractorW9Form,
+    ContractorExpense,
+    ContractorMileageLog,
+    ContractorForm1099,
+    db,
+)
 
 # Encryption key from environment
 ENCRYPTION_KEY = os.environ.get('SAURELLIUS_ENCRYPTION_KEY', 'default-dev-key-change-in-production')
@@ -99,15 +113,15 @@ class ContractorSelfServiceManager:
     def __init__(self):
         """Initialize contractor self-service manager."""
         # In-memory storage (replace with database in production)
-        self.contractors: Dict[str, Dict] = {}
-        self.invitations: Dict[str, Dict] = {}
-        self.invoices: Dict[str, Dict] = {}
-        self.expenses: Dict[str, List[Dict]] = {}
-        self.mileage_logs: Dict[str, List[Dict]] = {}
-        self.payments: Dict[str, List[Dict]] = {}
-        self.documents: Dict[str, List[Dict]] = {}
-        self.w9_forms: Dict[str, Dict] = {}
-        self.form_1099s: Dict[str, List[Dict]] = {}
+        self.contractors = None
+        self.invitations = None
+        self.invoices = None
+        self.expenses = None
+        self.mileage_logs = None
+        self.payments = None
+        self.documents = None
+        self.w9_forms = None
+        self.form_1099s = None
 
     # =========================================================================
     # ENCRYPTION UTILITIES
@@ -227,10 +241,9 @@ class ContractorSelfServiceManager:
         if not valid:
             return {'success': False, 'error': msg}
 
-        # Check email uniqueness
-        for c in self.contractors.values():
-            if c.get('email') == data['email']:
-                return {'success': False, 'error': 'Email already registered'}
+        existing = ContractorAccount.query.filter(ContractorAccount.email == data['email']).first()
+        if existing:
+            return {'success': False, 'error': 'Email already registered'}
 
         # Validate password
         valid, errors = self.validate_password(data['password'])
@@ -256,44 +269,44 @@ class ContractorSelfServiceManager:
         if not data.get('accept_contractor_acknowledgment'):
             return {'success': False, 'error': 'You must acknowledge independent contractor status'}
 
-        # Create contractor account
         contractor_id = str(uuid.uuid4())
         email_code = self.generate_verification_code()
         phone_code = self.generate_verification_code()
 
-        contractor = {
-            'id': contractor_id,
-            'email': data['email'],
-            'password_hash': hashlib.sha256(data['password'].encode()).hexdigest(),
-            'phone': re.sub(r'\D', '', data['phone']),
-            'business_classification': data['business_classification'],
-            'legal_name': data.get('legal_name', ''),
-            'business_name': data.get('business_name', ''),
-            'dba_name': data.get('dba_name', ''),
-            'date_of_birth': data.get('date_of_birth'),
-            'working_status': data.get('working_status', 'exploring'),
-            'status': 'pending_verification',
-            'email_verified': False,
-            'phone_verified': False,
-            'email_verification_code': email_code,
-            'email_verification_expires': (datetime.utcnow() + timedelta(hours=24)).isoformat(),
-            'phone_verification_code': phone_code,
-            'phone_verification_expires': (datetime.utcnow() + timedelta(minutes=10)).isoformat(),
-            'accept_terms': data.get('accept_terms', False),
-            'accept_privacy': data.get('accept_privacy', False),
-            'accept_electronic_communications': data.get('accept_electronic_communications', False),
-            'accept_contractor_acknowledgment': data.get('accept_contractor_acknowledgment', False),
-            'onboarding': {
-                'started_at': datetime.utcnow().isoformat(),
-                'completed_at': None,
-                'current_section': 1,
-                'sections_completed': 0
-            },
-            'created_at': datetime.utcnow().isoformat(),
-            'updated_at': datetime.utcnow().isoformat()
+        onboarding = {
+            'started_at': datetime.utcnow().isoformat(),
+            'completed_at': None,
+            'current_section': 1,
+            'sections_completed': 0
         }
 
-        self.contractors[contractor_id] = contractor
+        contractor = ContractorAccount(
+            id=contractor_id,
+            email=data['email'],
+            password_hash=hashlib.sha256(data['password'].encode()).hexdigest(),
+            phone=re.sub(r'\D', '', data['phone']),
+            business_classification=data['business_classification'],
+            legal_name=data.get('legal_name') or None,
+            business_name=data.get('business_name') or None,
+            dba_name=data.get('dba_name') or None,
+            date_of_birth=data.get('date_of_birth'),
+            working_status=data.get('working_status', 'exploring'),
+            status='pending_verification',
+            email_verified=False,
+            phone_verified=False,
+            email_verification_code=email_code,
+            email_verification_expires=(datetime.utcnow() + timedelta(hours=24)),
+            phone_verification_code=phone_code,
+            phone_verification_expires=(datetime.utcnow() + timedelta(minutes=10)),
+            accept_terms=bool(data.get('accept_terms', False)),
+            accept_privacy=bool(data.get('accept_privacy', False)),
+            accept_electronic_communications=bool(data.get('accept_electronic_communications', False)),
+            accept_contractor_acknowledgment=bool(data.get('accept_contractor_acknowledgment', False)),
+            onboarding_json=json.dumps(onboarding),
+        )
+
+        db.session.add(contractor)
+        db.session.commit()
 
         # In production: Send verification emails/SMS
         return {
@@ -301,28 +314,28 @@ class ContractorSelfServiceManager:
             'contractor_id': contractor_id,
             'message': 'Account created. Please verify your email and phone.',
             'next_step': 'verify_email',
-            'email_code_expires': contractor['email_verification_expires']
+            'email_code_expires': contractor.email_verification_expires.isoformat() if contractor.email_verification_expires else None
         }
 
     def verify_email(self, contractor_id: str, code: str) -> Dict:
         """Verify contractor email with code."""
-        contractor = self.contractors.get(contractor_id)
+        contractor = ContractorAccount.query.get(contractor_id)
         if not contractor:
             return {'success': False, 'error': 'Contractor not found'}
 
-        if contractor.get('email_verified'):
+        if contractor.email_verified:
             return {'success': True, 'message': 'Email already verified'}
 
-        if contractor.get('email_verification_code') != code:
+        if contractor.email_verification_code != code:
             return {'success': False, 'error': 'Invalid verification code'}
 
-        expires = datetime.fromisoformat(contractor['email_verification_expires'])
-        if datetime.utcnow() > expires:
+        expires = contractor.email_verification_expires
+        if expires and datetime.utcnow() > expires:
             return {'success': False, 'error': 'Verification code expired'}
 
-        contractor['email_verified'] = True
-        contractor['email_verification_code'] = None
-        contractor['updated_at'] = datetime.utcnow().isoformat()
+        contractor.email_verified = True
+        contractor.email_verification_code = None
+        db.session.commit()
 
         self._check_verification_complete(contractor_id)
 
@@ -330,23 +343,23 @@ class ContractorSelfServiceManager:
 
     def verify_phone(self, contractor_id: str, code: str) -> Dict:
         """Verify contractor phone with SMS code."""
-        contractor = self.contractors.get(contractor_id)
+        contractor = ContractorAccount.query.get(contractor_id)
         if not contractor:
             return {'success': False, 'error': 'Contractor not found'}
 
-        if contractor.get('phone_verified'):
+        if contractor.phone_verified:
             return {'success': True, 'message': 'Phone already verified'}
 
-        if contractor.get('phone_verification_code') != code:
+        if contractor.phone_verification_code != code:
             return {'success': False, 'error': 'Invalid verification code'}
 
-        expires = datetime.fromisoformat(contractor['phone_verification_expires'])
-        if datetime.utcnow() > expires:
+        expires = contractor.phone_verification_expires
+        if expires and datetime.utcnow() > expires:
             return {'success': False, 'error': 'Verification code expired'}
 
-        contractor['phone_verified'] = True
-        contractor['phone_verification_code'] = None
-        contractor['updated_at'] = datetime.utcnow().isoformat()
+        contractor.phone_verified = True
+        contractor.phone_verification_code = None
+        db.session.commit()
 
         self._check_verification_complete(contractor_id)
 
@@ -354,248 +367,103 @@ class ContractorSelfServiceManager:
 
     def _check_verification_complete(self, contractor_id: str):
         """Check if all verifications complete and update status."""
-        contractor = self.contractors.get(contractor_id)
-        if contractor and contractor.get('email_verified') and contractor.get('phone_verified'):
-            contractor['status'] = 'pending_client'
-            contractor['updated_at'] = datetime.utcnow().isoformat()
+        contractor = ContractorAccount.query.get(contractor_id)
+        if contractor and contractor.email_verified and contractor.phone_verified:
+            contractor.status = 'pending_client'
+            db.session.commit()
 
-    # =========================================================================
-    # REGISTRATION - CLIENT INVITATION
-    # =========================================================================
+    def _load_onboarding(self, contractor: ContractorAccount) -> Dict[str, Any]:
+        if not contractor or not contractor.onboarding_json:
+            return {}
+        try:
+            return json.loads(contractor.onboarding_json) or {}
+        except Exception:
+            return {}
 
-    def create_client_invitation(self, client_id: str, data: Dict) -> Dict:
-        """Create invitation for contractor from client."""
-        if not data.get('contractor_email'):
-            return {'success': False, 'error': 'Contractor email required'}
-
-        token = secrets.token_urlsafe(32)
-        invitation_id = str(uuid.uuid4())
-
-        invitation = {
-            'id': invitation_id,
-            'token': token,
-            'client_id': client_id,
-            'contractor_email': data['contractor_email'],
-            'contractor_name': data.get('contractor_name', ''),
-            'start_date': data.get('start_date'),
-            'project_description': data.get('project_description', ''),
-            'payment_terms': data.get('payment_terms', 'net_30'),
-            'personal_message': data.get('personal_message', ''),
-            'status': 'pending',
-            'expires_at': (datetime.utcnow() + timedelta(days=14)).isoformat(),
-            'created_at': datetime.utcnow().isoformat()
-        }
-
-        self.invitations[invitation_id] = invitation
-
-        # In production: Send invitation email
-        return {
-            'success': True,
-            'invitation_id': invitation_id,
-            'invitation_url': f"https://app.saurellius.com/contractor/invite/{token}",
-            'expires_at': invitation['expires_at']
-        }
-
-    def accept_invitation(self, token: str, data: Dict) -> Dict:
-        """Accept client invitation."""
-        invitation = None
-        for inv in self.invitations.values():
-            if inv.get('token') == token:
-                invitation = inv
-                break
-
-        if not invitation:
-            return {'success': False, 'error': 'Invalid invitation'}
-
-        if invitation['status'] != 'pending':
-            return {'success': False, 'error': 'Invitation already used'}
-
-        expires = datetime.fromisoformat(invitation['expires_at'])
-        if datetime.utcnow() > expires:
-            return {'success': False, 'error': 'Invitation expired'}
-
-        # Check if connecting existing account or creating new
-        if data.get('existing_account'):
-            # Connect existing contractor to client
-            contractor_id = data.get('contractor_id')
-            contractor = self.contractors.get(contractor_id)
-            if not contractor:
-                return {'success': False, 'error': 'Contractor account not found'}
-
-            # Add client connection
-            if 'clients' not in contractor:
-                contractor['clients'] = []
-            contractor['clients'].append({
-                'client_id': invitation['client_id'],
-                'connected_at': datetime.utcnow().isoformat(),
-                'start_date': invitation.get('start_date'),
-                'project_description': invitation.get('project_description')
-            })
-        else:
-            # Create new contractor account
-            data['email'] = invitation['contractor_email']
-            result = self.self_service_register(data)
-            if not result.get('success'):
-                return result
-            contractor_id = result['contractor_id']
-
-            # Auto-connect to client
-            contractor = self.contractors[contractor_id]
-            contractor['clients'] = [{
-                'client_id': invitation['client_id'],
-                'connected_at': datetime.utcnow().isoformat(),
-                'start_date': invitation.get('start_date'),
-                'project_description': invitation.get('project_description')
-            }]
-
-        invitation['status'] = 'accepted'
-        invitation['accepted_at'] = datetime.utcnow().isoformat()
-        invitation['contractor_id'] = contractor_id
-
-        return {
-            'success': True,
-            'contractor_id': contractor_id,
-            'message': 'Successfully connected to client'
-        }
-
-    # =========================================================================
-    # CLIENT SEARCH & CONNECTION
-    # =========================================================================
-
-    def search_clients(self, query: str) -> List[Dict]:
-        """Search for clients by name."""
-        # In production: Search database
-        results = []
-        # Mock results for now
-        return results
-
-    def request_to_join_client(self, contractor_id: str, client_id: str, message: str = '') -> Dict:
-        """Contractor requests to join a client."""
-        contractor = self.contractors.get(contractor_id)
+    def _save_onboarding(self, contractor: ContractorAccount, onboarding: Dict[str, Any]) -> None:
         if not contractor:
-            return {'success': False, 'error': 'Contractor not found'}
-
-        # In production: Create join request record
-        return {
-            'success': True,
-            'message': 'Join request sent to client',
-            'status': 'pending_approval'
-        }
-
-    # =========================================================================
-    # ONBOARDING - W-9 FORM
-    # =========================================================================
+            return
+        contractor.onboarding_json = json.dumps(onboarding)
+        db.session.commit()
 
     def submit_w9(self, contractor_id: str, data: Dict) -> Dict:
-        """Submit W-9 form data."""
-        contractor = self.contractors.get(contractor_id)
+        contractor = ContractorAccount.query.get(contractor_id)
         if not contractor:
             return {'success': False, 'error': 'Contractor not found'}
 
-        # Validate required fields
         if not data.get('name'):
-            return {'success': False, 'error': 'Name is required (Line 1)'}
+            return {'success': False, 'error': 'Name is required'}
 
         if not data.get('tax_classification'):
             return {'success': False, 'error': 'Tax classification is required'}
 
-        # Validate TIN (SSN or EIN)
-        tin_type = data.get('tin_type', 'ssn')
-        tin = data.get('tin', '')
+        tin_type = data.get('tin_type')
+        tin = data.get('tin') or data.get('taxpayer_id') or ''
+        if not tin_type or not tin:
+            return {'success': False, 'error': 'TIN type and TIN are required'}
 
+        tin_clean = re.sub(r'\D', '', tin)
         if tin_type == 'ssn':
-            valid, msg = self.validate_ssn(tin)
+            valid, msg = self.validate_ssn(tin_clean)
+            if not valid:
+                return {'success': False, 'error': msg}
+        elif tin_type == 'ein':
+            valid, msg = self.validate_ein(tin_clean)
+            if not valid:
+                return {'success': False, 'error': msg}
         else:
-            valid, msg = self.validate_ein(tin)
+            return {'success': False, 'error': 'Invalid TIN type'}
 
-        if not valid:
-            return {'success': False, 'error': msg}
+        encrypted_tin = self._encrypt_sensitive_data(tin_clean)
+        masked = self._mask_ssn(tin_clean) if tin_type == 'ssn' else self._mask_ein(tin_clean)
 
-        # Check certification
-        if not data.get('certify_tin_correct'):
-            return {'success': False, 'error': 'You must certify TIN is correct'}
-        if not data.get('certify_us_person'):
-            return {'success': False, 'error': 'You must certify US person status'}
+        w9 = ContractorW9Form(
+            id=str(uuid.uuid4()),
+            contractor_id=contractor_id,
+            name=data['name'],
+            business_name=data.get('business_name'),
+            tax_classification=data.get('tax_classification'),
+            address=data.get('address'),
+            tin_type=tin_type,
+            tin_masked=masked,
+            tin_encrypted=encrypted_tin,
+            status='submitted',
+            signature_date=data.get('signature_date', datetime.utcnow().date().isoformat()),
+            ip_address=data.get('ip_address'),
+        )
 
-        # Encrypt TIN
-        encrypted_tin = self._encrypt_sensitive_data(tin)
-        masked_tin = self._mask_ssn(tin) if tin_type == 'ssn' else self._mask_ein(tin)
+        db.session.add(w9)
+        contractor.w9_complete = True
+        db.session.commit()
 
-        w9_form = {
-            'id': str(uuid.uuid4()),
-            'contractor_id': contractor_id,
-            'name': data['name'],
-            'business_name': data.get('business_name', ''),
-            'tax_classification': data['tax_classification'],
-            'llc_tax_classification': data.get('llc_tax_classification'),
-            'exempt_payee_code': data.get('exempt_payee_code'),
-            'fatca_exemption_code': data.get('fatca_exemption_code'),
-            'address': {
-                'street': data.get('street_address', ''),
-                'city': data.get('city', ''),
-                'state': data.get('state', ''),
-                'zip_code': data.get('zip_code', '')
-            },
-            'tin_type': tin_type,
-            'tin_encrypted': encrypted_tin,
-            'tin_last_four': tin[-4:] if tin else '',
-            'tin_masked': masked_tin,
-            'subject_to_backup_withholding': data.get('subject_to_backup_withholding', False),
-            'certify_tin_correct': data.get('certify_tin_correct', False),
-            'certify_not_subject_backup': data.get('certify_not_subject_backup', True),
-            'certify_us_person': data.get('certify_us_person', False),
-            'certify_fatca': data.get('certify_fatca', False),
-            'signature': data.get('signature', ''),
-            'signature_date': datetime.utcnow().isoformat(),
-            'signature_ip': data.get('ip_address', ''),
-            'status': 'complete',
-            'created_at': datetime.utcnow().isoformat(),
-            'updated_at': datetime.utcnow().isoformat()
-        }
-
-        self.w9_forms[contractor_id] = w9_form
-
-        # Update contractor onboarding
-        contractor['w9_complete'] = True
-        contractor['tin_on_file'] = True
-        contractor['updated_at'] = datetime.utcnow().isoformat()
-
-        # Update onboarding progress
-        self._update_onboarding_section(contractor_id, 2, w9_form)
+        self._update_onboarding_section(contractor_id, 2, w9.to_safe_dict())
 
         return {
             'success': True,
             'message': 'W-9 submitted successfully',
-            'w9_id': w9_form['id']
+            'w9_id': w9.id
         }
 
     def get_w9(self, contractor_id: str) -> Dict:
-        """Get contractor's W-9 data (masked)."""
-        w9 = self.w9_forms.get(contractor_id)
+        w9 = (
+            ContractorW9Form.query.filter(ContractorW9Form.contractor_id == contractor_id)
+            .order_by(ContractorW9Form.created_at.desc())
+            .first()
+        )
         if not w9:
             return {'error': 'W-9 not found'}
+        return w9.to_safe_dict()
 
-        # Return safe data (no encrypted TIN)
-        return {
-            'id': w9['id'],
-            'name': w9['name'],
-            'business_name': w9['business_name'],
-            'tax_classification': w9['tax_classification'],
-            'address': w9['address'],
-            'tin_type': w9['tin_type'],
-            'tin_masked': w9['tin_masked'],
-            'status': w9['status'],
-            'signature_date': w9['signature_date'],
-            'created_at': w9['created_at']
-        }
-
-    # =========================================================================
-    # ONBOARDING - PAYMENT METHODS
-    # =========================================================================
+    def _payments_for_year(self, contractor_id: str, year: int) -> List[ContractorInvoicePayment]:
+        return (
+            ContractorInvoicePayment.query.filter(ContractorInvoicePayment.contractor_id == contractor_id)
+            .filter(ContractorInvoicePayment.payment_date.like(f"{year}%"))
+            .all()
+        )
 
     def setup_payment_method(self, contractor_id: str, data: Dict) -> Dict:
         """Set up contractor payment method."""
-        contractor = self.contractors.get(contractor_id)
+        contractor = ContractorAccount.query.get(contractor_id)
         if not contractor:
             return {'success': False, 'error': 'Contractor not found'}
 
@@ -603,18 +471,16 @@ class ContractorSelfServiceManager:
 
         if payment_method == 'direct_deposit':
             return self._setup_direct_deposit(contractor_id, data)
-        elif payment_method == 'check':
+        if payment_method == 'check':
             return self._setup_check_payment(contractor_id, data)
-        elif payment_method == 'wire':
+        if payment_method == 'wire':
             return self._setup_wire_transfer(contractor_id, data)
-        elif payment_method == 'wallet':
+        if payment_method == 'wallet':
             return self._setup_digital_wallet(contractor_id, data)
-        else:
-            return {'success': False, 'error': 'Invalid payment method'}
+        return {'success': False, 'error': 'Invalid payment method'}
 
     def _setup_direct_deposit(self, contractor_id: str, data: Dict) -> Dict:
         """Set up direct deposit (ACH)."""
-        # Validate bank info
         if not data.get('bank_name'):
             return {'success': False, 'error': 'Bank name required'}
 
@@ -630,9 +496,6 @@ class ContractorSelfServiceManager:
         if account != data.get('account_number_confirm'):
             return {'success': False, 'error': 'Account numbers do not match'}
 
-        contractor = self.contractors[contractor_id]
-        
-        # Encrypt account number
         encrypted_account = self._encrypt_sensitive_data(account)
 
         payment_info = {
@@ -647,11 +510,18 @@ class ContractorSelfServiceManager:
             'created_at': datetime.utcnow().isoformat()
         }
 
-        contractor['payment_method'] = payment_info
-        contractor['payment_setup_complete'] = True
-        contractor['updated_at'] = datetime.utcnow().isoformat()
-
-        self._update_onboarding_section(contractor_id, 3, payment_info)
+        ContractorPaymentMethod.query.filter(ContractorPaymentMethod.contractor_id == contractor_id).filter(ContractorPaymentMethod.status == 'active').update({'status': 'superseded'})
+        pm = ContractorPaymentMethod(
+            contractor_id=contractor_id,
+            status='active',
+            method='direct_deposit',
+            payload_json=json.dumps(payment_info),
+        )
+        db.session.add(pm)
+        contractor = ContractorAccount.query.get(contractor_id)
+        if contractor:
+            contractor.payment_setup_complete = True
+        db.session.commit()
 
         return {
             'success': True,
@@ -661,8 +531,6 @@ class ContractorSelfServiceManager:
 
     def _setup_check_payment(self, contractor_id: str, data: Dict) -> Dict:
         """Set up paper check payment."""
-        contractor = self.contractors[contractor_id]
-
         payment_info = {
             'method': 'check',
             'mailing_address': {
@@ -675,18 +543,24 @@ class ContractorSelfServiceManager:
             'created_at': datetime.utcnow().isoformat()
         }
 
-        contractor['payment_method'] = payment_info
-        contractor['payment_setup_complete'] = True
-        contractor['updated_at'] = datetime.utcnow().isoformat()
+        ContractorPaymentMethod.query.filter(ContractorPaymentMethod.contractor_id == contractor_id).filter(ContractorPaymentMethod.status == 'active').update({'status': 'superseded'})
+        pm = ContractorPaymentMethod(
+            contractor_id=contractor_id,
+            status='active',
+            method='check',
+            payload_json=json.dumps(payment_info),
+        )
+        db.session.add(pm)
 
-        self._update_onboarding_section(contractor_id, 3, payment_info)
+        contractor = ContractorAccount.query.get(contractor_id)
+        if contractor:
+            contractor.payment_setup_complete = True
+        db.session.commit()
 
         return {'success': True, 'message': 'Check payment set up successfully'}
 
     def _setup_wire_transfer(self, contractor_id: str, data: Dict) -> Dict:
         """Set up wire transfer payment."""
-        contractor = self.contractors[contractor_id]
-
         payment_info = {
             'method': 'wire',
             'bank_name': data.get('bank_name', ''),
@@ -699,17 +573,24 @@ class ContractorSelfServiceManager:
             'created_at': datetime.utcnow().isoformat()
         }
 
-        contractor['payment_method'] = payment_info
-        contractor['payment_setup_complete'] = True
-        contractor['updated_at'] = datetime.utcnow().isoformat()
+        ContractorPaymentMethod.query.filter(ContractorPaymentMethod.contractor_id == contractor_id).filter(ContractorPaymentMethod.status == 'active').update({'status': 'superseded'})
+        pm = ContractorPaymentMethod(
+            contractor_id=contractor_id,
+            status='active',
+            method='wire',
+            payload_json=json.dumps(payment_info),
+        )
+        db.session.add(pm)
 
-        self._update_onboarding_section(contractor_id, 3, payment_info)
+        contractor = ContractorAccount.query.get(contractor_id)
+        if contractor:
+            contractor.payment_setup_complete = True
+        db.session.commit()
 
         return {'success': True, 'message': 'Wire transfer set up successfully'}
 
     def _setup_digital_wallet(self, contractor_id: str, data: Dict) -> Dict:
         """Set up Saurellius digital wallet."""
-        contractor = self.contractors[contractor_id]
 
         # Create wallet
         wallet_id = str(uuid.uuid4())
@@ -723,16 +604,18 @@ class ContractorSelfServiceManager:
             'created_at': datetime.utcnow().isoformat()
         }
 
-        contractor['payment_method'] = payment_info
-        contractor['payment_setup_complete'] = True
-        contractor['wallet'] = {
-            'id': wallet_id,
-            'balance': Decimal('0.00'),
-            'transactions': []
-        }
-        contractor['updated_at'] = datetime.utcnow().isoformat()
-
-        self._update_onboarding_section(contractor_id, 3, payment_info)
+        ContractorPaymentMethod.query.filter(ContractorPaymentMethod.contractor_id == contractor_id).filter(ContractorPaymentMethod.status == 'active').update({'status': 'superseded'})
+        pm = ContractorPaymentMethod(
+            contractor_id=contractor_id,
+            status='active',
+            method='wallet',
+            payload_json=json.dumps({k: (float(v) if isinstance(v, Decimal) else v) for k, v in payment_info.items()}),
+        )
+        db.session.add(pm)
+        contractor = ContractorAccount.query.get(contractor_id)
+        if contractor:
+            contractor.payment_setup_complete = True
+        db.session.commit()
 
         return {
             'success': True,
@@ -746,32 +629,34 @@ class ContractorSelfServiceManager:
 
     def _update_onboarding_section(self, contractor_id: str, section: int, data: Dict):
         """Update onboarding section completion."""
-        contractor = self.contractors.get(contractor_id)
+        contractor = ContractorAccount.query.get(contractor_id)
         if not contractor:
             return
 
-        if 'onboarding' not in contractor:
-            contractor['onboarding'] = {}
-
-        contractor['onboarding'][f'section_{section}'] = {
+        onboarding = self._load_onboarding(contractor)
+        onboarding[f'section_{section}'] = {
             'status': 'complete',
             'data': data,
             'completed_at': datetime.utcnow().isoformat()
         }
 
-        # Count completed sections
-        completed = sum(1 for i in range(1, 10) 
-                       if contractor['onboarding'].get(f'section_{i}', {}).get('status') == 'complete')
-        contractor['onboarding']['sections_completed'] = completed
-        contractor['onboarding']['current_section'] = min(section + 1, 9)
+        completed = sum(
+            1
+            for i in range(1, 10)
+            if onboarding.get(f'section_{i}', {}).get('status') == 'complete'
+        )
+        onboarding['sections_completed'] = completed
+        onboarding['current_section'] = min(section + 1, 9)
+
+        self._save_onboarding(contractor, onboarding)
 
     def get_onboarding_status(self, contractor_id: str) -> Dict:
         """Get contractor onboarding status."""
-        contractor = self.contractors.get(contractor_id)
+        contractor = ContractorAccount.query.get(contractor_id)
         if not contractor:
             return {'error': 'Contractor not found'}
 
-        onboarding = contractor.get('onboarding', {})
+        onboarding = self._load_onboarding(contractor)
         sections_completed = onboarding.get('sections_completed', 0)
         total_required = sum(1 for s in self.ONBOARDING_SECTIONS.values() if s['required'])
 
@@ -787,7 +672,7 @@ class ContractorSelfServiceManager:
 
         return {
             'contractor_id': contractor_id,
-            'overall_status': contractor.get('status', 'pending'),
+            'overall_status': contractor.status or 'pending',
             'progress_percent': int((sections_completed / 9) * 100),
             'sections_completed': sections_completed,
             'total_sections': 9,
@@ -805,7 +690,7 @@ class ContractorSelfServiceManager:
 
     def create_invoice(self, contractor_id: str, data: Dict) -> Dict:
         """Create a new invoice."""
-        contractor = self.contractors.get(contractor_id)
+        contractor = ContractorAccount.query.get(contractor_id)
         if not contractor:
             return {'success': False, 'error': 'Contractor not found'}
 
@@ -816,7 +701,7 @@ class ContractorSelfServiceManager:
             return {'success': False, 'error': 'At least one line item required'}
 
         # Generate invoice number
-        invoice_count = len([i for i in self.invoices.values() if i['contractor_id'] == contractor_id])
+        invoice_count = ContractorInvoice.query.filter(ContractorInvoice.contractor_id == contractor_id).count()
         invoice_number = f"INV-{invoice_count + 1:04d}"
 
         # Calculate totals
@@ -832,113 +717,98 @@ class ContractorSelfServiceManager:
         total = subtotal + tax_amount
 
         invoice_id = str(uuid.uuid4())
-        invoice = {
-            'id': invoice_id,
-            'invoice_number': data.get('invoice_number', invoice_number),
-            'contractor_id': contractor_id,
-            'client_id': data['client_id'],
-            'project_id': data.get('project_id'),
-            'line_items': data['line_items'],
-            'subtotal': float(subtotal),
-            'tax_rate': float(tax_rate * 100),
-            'tax_amount': float(tax_amount),
-            'total': float(total),
-            'currency': data.get('currency', 'USD'),
-            'invoice_date': data.get('invoice_date', datetime.utcnow().date().isoformat()),
-            'due_date': data.get('due_date'),
-            'payment_terms': data.get('payment_terms', 'net_30'),
-            'notes': data.get('notes', ''),
-            'terms': data.get('terms', ''),
-            'status': 'draft',
-            'sent_at': None,
-            'viewed_at': None,
-            'paid_at': None,
-            'amount_paid': 0.00,
-            'created_at': datetime.utcnow().isoformat(),
-            'updated_at': datetime.utcnow().isoformat()
-        }
-
-        self.invoices[invoice_id] = invoice
+        invoice = ContractorInvoice(
+            id=invoice_id,
+            invoice_number=data.get('invoice_number', invoice_number),
+            contractor_id=contractor_id,
+            client_id=str(data['client_id']),
+            project_id=str(data.get('project_id')) if data.get('project_id') else None,
+            line_items_json=json.dumps([{**i, 'amount': float(i.get('amount'))} for i in data['line_items']]),
+            subtotal=float(subtotal),
+            tax_rate=float(tax_rate * 100),
+            tax_amount=float(tax_amount),
+            total=float(total),
+            currency=data.get('currency', 'USD'),
+            invoice_date=data.get('invoice_date', datetime.utcnow().date().isoformat()),
+            due_date=data.get('due_date'),
+            payment_terms=data.get('payment_terms', 'net_30'),
+            notes=data.get('notes', ''),
+            terms=data.get('terms', ''),
+            status='draft',
+            amount_paid=0.0,
+        )
+        db.session.add(invoice)
+        db.session.commit()
 
         return {
             'success': True,
             'invoice_id': invoice_id,
-            'invoice_number': invoice['invoice_number'],
+            'invoice_number': invoice.invoice_number,
             'total': float(total)
         }
 
     def send_invoice(self, contractor_id: str, invoice_id: str) -> Dict:
         """Send invoice to client."""
-        invoice = self.invoices.get(invoice_id)
-        if not invoice:
+        invoice = ContractorInvoice.query.get(invoice_id)
+        if not invoice or invoice.contractor_id != contractor_id:
             return {'success': False, 'error': 'Invoice not found'}
 
-        if invoice['contractor_id'] != contractor_id:
-            return {'success': False, 'error': 'Unauthorized'}
-
-        invoice['status'] = 'sent'
-        invoice['sent_at'] = datetime.utcnow().isoformat()
-        invoice['updated_at'] = datetime.utcnow().isoformat()
+        invoice.status = 'sent'
+        invoice.sent_at = datetime.utcnow()
+        db.session.commit()
 
         # In production: Send email to client
         return {
             'success': True,
             'message': 'Invoice sent successfully',
-            'sent_at': invoice['sent_at']
+            'sent_at': invoice.sent_at.isoformat() if invoice.sent_at else None
         }
 
     def get_invoices(self, contractor_id: str, status: str = None) -> List[Dict]:
         """Get contractor's invoices."""
-        invoices = [i for i in self.invoices.values() if i['contractor_id'] == contractor_id]
+        query = ContractorInvoice.query.filter(ContractorInvoice.contractor_id == contractor_id)
         if status:
-            invoices = [i for i in invoices if i['status'] == status]
-        return sorted(invoices, key=lambda x: x['created_at'], reverse=True)
+            query = query.filter(ContractorInvoice.status == status)
+        invoices = query.order_by(ContractorInvoice.created_at.desc()).all()
+        return [i.to_dict() for i in invoices]
 
     def record_payment(self, contractor_id: str, invoice_id: str, data: Dict) -> Dict:
         """Record payment received for invoice."""
-        invoice = self.invoices.get(invoice_id)
-        if not invoice:
+        invoice = ContractorInvoice.query.get(invoice_id)
+        if not invoice or invoice.contractor_id != contractor_id:
             return {'success': False, 'error': 'Invoice not found'}
-
-        if invoice['contractor_id'] != contractor_id:
-            return {'success': False, 'error': 'Unauthorized'}
 
         amount = Decimal(str(data.get('amount', 0)))
         if amount <= 0:
             return {'success': False, 'error': 'Invalid payment amount'}
 
         payment_id = str(uuid.uuid4())
-        payment = {
-            'id': payment_id,
-            'invoice_id': invoice_id,
-            'contractor_id': contractor_id,
-            'client_id': invoice['client_id'],
-            'amount': float(amount),
-            'payment_method': data.get('payment_method', 'ach'),
-            'payment_date': data.get('payment_date', datetime.utcnow().date().isoformat()),
-            'reference_number': data.get('reference_number', ''),
-            'notes': data.get('notes', ''),
-            'created_at': datetime.utcnow().isoformat()
-        }
+        payment = ContractorInvoicePayment(
+            id=payment_id,
+            invoice_id=invoice_id,
+            contractor_id=contractor_id,
+            client_id=invoice.client_id,
+            amount=float(amount),
+            payment_method=data.get('payment_method', 'ach'),
+            payment_date=data.get('payment_date', datetime.utcnow().date().isoformat()),
+            reference_number=data.get('reference_number', ''),
+            notes=data.get('notes', ''),
+        )
+        db.session.add(payment)
 
-        if contractor_id not in self.payments:
-            self.payments[contractor_id] = []
-        self.payments[contractor_id].append(payment)
-
-        # Update invoice
-        invoice['amount_paid'] = float(Decimal(str(invoice['amount_paid'])) + amount)
-        if invoice['amount_paid'] >= invoice['total']:
-            invoice['status'] = 'paid'
-            invoice['paid_at'] = datetime.utcnow().isoformat()
+        invoice.amount_paid = float(Decimal(str(invoice.amount_paid)) + amount)
+        if invoice.amount_paid >= invoice.total:
+            invoice.status = 'paid'
+            invoice.paid_at = datetime.utcnow()
         else:
-            invoice['status'] = 'partial'
-        invoice['updated_at'] = datetime.utcnow().isoformat()
+            invoice.status = 'partial'
+        db.session.commit()
 
         return {
             'success': True,
             'payment_id': payment_id,
-            'invoice_status': invoice['status'],
-            'amount_remaining': invoice['total'] - invoice['amount_paid']
+            'invoice_status': invoice.status,
+            'amount_remaining': invoice.total - invoice.amount_paid
         }
 
     # =========================================================================
@@ -947,7 +817,7 @@ class ContractorSelfServiceManager:
 
     def add_expense(self, contractor_id: str, data: Dict) -> Dict:
         """Add a business expense."""
-        contractor = self.contractors.get(contractor_id)
+        contractor = ContractorAccount.query.get(contractor_id)
         if not contractor:
             return {'success': False, 'error': 'Contractor not found'}
 
@@ -958,27 +828,25 @@ class ContractorSelfServiceManager:
             return {'success': False, 'error': 'Category required'}
 
         expense_id = str(uuid.uuid4())
-        expense = {
-            'id': expense_id,
-            'contractor_id': contractor_id,
-            'date': data.get('date', datetime.utcnow().date().isoformat()),
-            'category': data['category'],
-            'description': data.get('description', ''),
-            'vendor': data.get('vendor', ''),
-            'amount': float(Decimal(str(data['amount']))),
-            'currency': data.get('currency', 'USD'),
-            'is_billable': data.get('is_billable', False),
-            'client_id': data.get('client_id'),
-            'project_id': data.get('project_id'),
-            'receipt_url': data.get('receipt_url'),
-            'tax_deductible': data.get('tax_deductible', True),
-            'status': 'logged',
-            'created_at': datetime.utcnow().isoformat()
-        }
+        expense = ContractorExpense(
+            id=expense_id,
+            contractor_id=contractor_id,
+            date=data.get('date', datetime.utcnow().date().isoformat()),
+            category=data['category'],
+            description=data.get('description', ''),
+            vendor=data.get('vendor', ''),
+            amount=float(Decimal(str(data['amount']))),
+            currency=data.get('currency', 'USD'),
+            is_billable=bool(data.get('is_billable', False)),
+            client_id=data.get('client_id'),
+            project_id=data.get('project_id'),
+            receipt_url=data.get('receipt_url'),
+            tax_deductible=bool(data.get('tax_deductible', True)),
+            status='logged',
+        )
 
-        if contractor_id not in self.expenses:
-            self.expenses[contractor_id] = []
-        self.expenses[contractor_id].append(expense)
+        db.session.add(expense)
+        db.session.commit()
 
         return {
             'success': True,
@@ -988,23 +856,21 @@ class ContractorSelfServiceManager:
 
     def get_expenses(self, contractor_id: str, year: int = None, category: str = None) -> Dict:
         """Get contractor's expenses with summary."""
-        expenses = self.expenses.get(contractor_id, [])
-
+        query = ContractorExpense.query.filter(ContractorExpense.contractor_id == contractor_id)
         if year:
-            expenses = [e for e in expenses if e['date'].startswith(str(year))]
+            query = query.filter(ContractorExpense.date.like(f"{year}%"))
         if category:
-            expenses = [e for e in expenses if e['category'] == category]
+            query = query.filter(ContractorExpense.category == category)
 
-        total = sum(Decimal(str(e['amount'])) for e in expenses)
-        by_category = {}
+        expenses = query.order_by(ContractorExpense.date.desc()).all()
+
+        total = sum(Decimal(str(e.amount)) for e in expenses)
+        by_category: Dict[str, Decimal] = {}
         for e in expenses:
-            cat = e['category']
-            if cat not in by_category:
-                by_category[cat] = Decimal('0.00')
-            by_category[cat] += Decimal(str(e['amount']))
+            by_category[e.category] = by_category.get(e.category, Decimal('0.00')) + Decimal(str(e.amount))
 
         return {
-            'expenses': sorted(expenses, key=lambda x: x['date'], reverse=True),
+            'expenses': [e.to_dict() for e in expenses],
             'total': float(total),
             'count': len(expenses),
             'by_category': {k: float(v) for k, v in by_category.items()}
@@ -1016,7 +882,7 @@ class ContractorSelfServiceManager:
 
     def log_mileage(self, contractor_id: str, data: Dict) -> Dict:
         """Log business mileage."""
-        contractor = self.contractors.get(contractor_id)
+        contractor = ContractorAccount.query.get(contractor_id)
         if not contractor:
             return {'success': False, 'error': 'Contractor not found'}
 
@@ -1027,25 +893,22 @@ class ContractorSelfServiceManager:
         mileage_id = str(uuid.uuid4())
         deduction = miles * self.IRS_MILEAGE_RATE
 
-        mileage_entry = {
-            'id': mileage_id,
-            'contractor_id': contractor_id,
-            'date': data.get('date', datetime.utcnow().date().isoformat()),
-            'miles': float(miles),
-            'purpose': data.get('purpose', ''),
-            'from_location': data.get('from_location', ''),
-            'to_location': data.get('to_location', ''),
-            'client_id': data.get('client_id'),
-            'project_id': data.get('project_id'),
-            'is_round_trip': data.get('is_round_trip', False),
-            'irs_rate': float(self.IRS_MILEAGE_RATE),
-            'deduction_amount': float(deduction),
-            'created_at': datetime.utcnow().isoformat()
-        }
-
-        if contractor_id not in self.mileage_logs:
-            self.mileage_logs[contractor_id] = []
-        self.mileage_logs[contractor_id].append(mileage_entry)
+        entry = ContractorMileageLog(
+            id=mileage_id,
+            contractor_id=contractor_id,
+            date=data.get('date', datetime.utcnow().date().isoformat()),
+            miles=float(miles),
+            purpose=data.get('purpose', ''),
+            from_location=data.get('from_location', ''),
+            to_location=data.get('to_location', ''),
+            client_id=data.get('client_id'),
+            project_id=data.get('project_id'),
+            is_round_trip=bool(data.get('is_round_trip', False)),
+            irs_rate=float(self.IRS_MILEAGE_RATE),
+            deduction_amount=float(deduction),
+        )
+        db.session.add(entry)
+        db.session.commit()
 
         return {
             'success': True,
@@ -1055,16 +918,16 @@ class ContractorSelfServiceManager:
 
     def get_mileage_summary(self, contractor_id: str, year: int = None) -> Dict:
         """Get mileage summary for tax purposes."""
-        logs = self.mileage_logs.get(contractor_id, [])
-
+        query = ContractorMileageLog.query.filter(ContractorMileageLog.contractor_id == contractor_id)
         if year:
-            logs = [m for m in logs if m['date'].startswith(str(year))]
+            query = query.filter(ContractorMileageLog.date.like(f"{year}%"))
+        logs = query.order_by(ContractorMileageLog.date.desc()).all()
 
-        total_miles = sum(Decimal(str(m['miles'])) for m in logs)
+        total_miles = sum(Decimal(str(m.miles)) for m in logs)
         total_deduction = total_miles * self.IRS_MILEAGE_RATE
 
         return {
-            'logs': sorted(logs, key=lambda x: x['date'], reverse=True),
+            'logs': [m.to_dict() for m in logs],
             'total_miles': float(total_miles),
             'total_deduction': float(total_deduction),
             'irs_rate': float(self.IRS_MILEAGE_RATE),
@@ -1077,10 +940,12 @@ class ContractorSelfServiceManager:
 
     def check_1099_eligibility(self, contractor_id: str, year: int) -> Dict:
         """Check if contractor is eligible for 1099-NEC."""
-        payments = self.payments.get(contractor_id, [])
-        year_payments = [p for p in payments if p['payment_date'].startswith(str(year))]
+        contractor = ContractorAccount.query.get(contractor_id)
+        if not contractor:
+            return {'success': False, 'error': 'Contractor not found'}
 
-        total_paid = sum(Decimal(str(p['amount'])) for p in year_payments)
+        year_payments = self._payments_for_year(contractor_id, year)
+        total_paid = sum(Decimal(str(p.amount)) for p in year_payments)
         eligible = total_paid >= self.THRESHOLD_1099
 
         return {
@@ -1094,19 +959,26 @@ class ContractorSelfServiceManager:
 
     def generate_1099_nec(self, contractor_id: str, year: int, client_id: str) -> Dict:
         """Generate 1099-NEC form data."""
-        contractor = self.contractors.get(contractor_id)
+        contractor = ContractorAccount.query.get(contractor_id)
         if not contractor:
             return {'success': False, 'error': 'Contractor not found'}
 
-        w9 = self.w9_forms.get(contractor_id)
+        w9 = (
+            ContractorW9Form.query.filter(ContractorW9Form.contractor_id == contractor_id)
+            .order_by(ContractorW9Form.created_at.desc())
+            .first()
+        )
         if not w9:
             return {'success': False, 'error': 'W-9 not on file - cannot generate 1099'}
 
         # Calculate total payments from this client
-        payments = self.payments.get(contractor_id, [])
-        client_payments = [p for p in payments 
-                         if p['client_id'] == client_id and p['payment_date'].startswith(str(year))]
-        total_paid = sum(Decimal(str(p['amount'])) for p in client_payments)
+        client_payments = (
+            ContractorInvoicePayment.query.filter(ContractorInvoicePayment.contractor_id == contractor_id)
+            .filter(ContractorInvoicePayment.client_id == client_id)
+            .filter(ContractorInvoicePayment.payment_date.like(f"{year}%"))
+            .all()
+        )
+        total_paid = sum(Decimal(str(p.amount)) for p in client_payments)
 
         if total_paid < self.THRESHOLD_1099:
             return {
@@ -1114,30 +986,27 @@ class ContractorSelfServiceManager:
                 'error': f'Total payments (${total_paid}) below $600 threshold'
             }
 
-        form_1099 = {
-            'id': str(uuid.uuid4()),
-            'tax_year': year,
-            'contractor_id': contractor_id,
-            'client_id': client_id,
-            'recipient_name': w9['name'],
-            'recipient_tin_masked': w9['tin_masked'],
-            'recipient_tin_type': w9['tin_type'],
-            'recipient_address': w9['address'],
-            'box_1_nonemployee_compensation': float(total_paid),
-            'box_4_federal_tax_withheld': 0.00,
-            'status': 'generated',
-            'generated_at': datetime.utcnow().isoformat(),
-            'filed_at': None,
-            'sent_to_contractor_at': None
-        }
-
-        if contractor_id not in self.form_1099s:
-            self.form_1099s[contractor_id] = []
-        self.form_1099s[contractor_id].append(form_1099)
+        form_id = str(uuid.uuid4())
+        form = ContractorForm1099(
+            id=form_id,
+            tax_year=year,
+            contractor_id=contractor_id,
+            client_id=client_id,
+            recipient_name=w9.name,
+            recipient_tin_masked=w9.tin_masked,
+            recipient_tin_type=w9.tin_type,
+            recipient_address=w9.address,
+            box_1_nonemployee_compensation=float(total_paid),
+            box_4_federal_tax_withheld=0.0,
+            status='generated',
+            generated_at=datetime.utcnow(),
+        )
+        db.session.add(form)
+        db.session.commit()
 
         return {
             'success': True,
-            'form_id': form_1099['id'],
+            'form_id': form.id,
             'tax_year': year,
             'total_compensation': float(total_paid)
         }
@@ -1147,44 +1016,44 @@ class ContractorSelfServiceManager:
         File all 1099-NEC forms for a client to IRS FIRE system.
         Automatically collects all contractor 1099s for the year.
         """
+
         from services.regulatory_filing_service import regulatory_filing_service
-        
-        # Collect all 1099 forms for this client
-        forms_to_file = []
-        
-        for contractor_id, forms in self.form_1099s.items():
-            for form in forms:
-                if form['client_id'] == client_id and form['tax_year'] == year:
-                    if form['status'] == 'generated':
-                        forms_to_file.append({
-                            'form_id': form['id'],
-                            'recipient_tin': form.get('recipient_tin_masked', ''),
-                            'recipient_name': form['recipient_name'],
-                            'recipient_address': form['recipient_address'],
-                            'amount': form['box_1_nonemployee_compensation'],
-                            'payer_tin': client_id  # Would be actual EIN
-                        })
-        
+
+        forms = (
+            ContractorForm1099.query.filter(ContractorForm1099.client_id == client_id)
+            .filter(ContractorForm1099.tax_year == year)
+            .filter(ContractorForm1099.status == 'generated')
+            .all()
+        )
+
+        forms_to_file = [
+            {
+                'form_id': f.id,
+                'recipient_tin': f.recipient_tin_masked or '',
+                'recipient_name': f.recipient_name,
+                'recipient_address': f.recipient_address,
+                'amount': f.box_1_nonemployee_compensation,
+                'payer_tin': client_id,
+            }
+            for f in forms
+        ]
+
         if not forms_to_file:
             return {'success': False, 'error': 'No 1099 forms ready for filing'}
-        
-        # Submit to IRS FIRE
+
         result = regulatory_filing_service.submit_1099_fire(
             company_id=client_id,
             forms=forms_to_file,
             tax_year=year,
             is_correction=False
         )
-        
-        # Update form statuses
+
         if result.get('success'):
-            for contractor_id, forms in self.form_1099s.items():
-                for form in forms:
-                    if form['client_id'] == client_id and form['tax_year'] == year:
-                        form['status'] = 'filed'
-                        form['filed_at'] = datetime.utcnow().isoformat()
-                        form['filing_confirmation'] = result.get('confirmation_number')
-        
+            for f in forms:
+                f.status = 'filed'
+                f.filed_at = datetime.utcnow()
+            db.session.commit()
+
         return {
             'success': result.get('success', False),
             'forms_filed': len(forms_to_file),
@@ -1195,10 +1064,11 @@ class ContractorSelfServiceManager:
 
     def get_1099_forms(self, contractor_id: str, year: int = None) -> List[Dict]:
         """Get contractor's 1099 forms."""
-        forms = self.form_1099s.get(contractor_id, [])
+        query = ContractorForm1099.query.filter(ContractorForm1099.contractor_id == contractor_id)
         if year:
-            forms = [f for f in forms if f['tax_year'] == year]
-        return forms
+            query = query.filter(ContractorForm1099.tax_year == year)
+        forms = query.order_by(ContractorForm1099.generated_at.desc()).all()
+        return [f.to_dict() for f in forms]
 
     # =========================================================================
     # TAX CALCULATIONS
@@ -1206,19 +1076,21 @@ class ContractorSelfServiceManager:
 
     def calculate_estimated_taxes(self, contractor_id: str, year: int) -> Dict:
         """Calculate estimated quarterly taxes."""
-        payments = self.payments.get(contractor_id, [])
-        expenses = self.expenses.get(contractor_id, [])
-        mileage = self.mileage_logs.get(contractor_id, [])
+        year_payments = self._payments_for_year(contractor_id, year)
+        year_expenses = (
+            ContractorExpense.query.filter(ContractorExpense.contractor_id == contractor_id)
+            .filter(ContractorExpense.date.like(f"{year}%"))
+            .all()
+        )
+        year_mileage = (
+            ContractorMileageLog.query.filter(ContractorMileageLog.contractor_id == contractor_id)
+            .filter(ContractorMileageLog.date.like(f"{year}%"))
+            .all()
+        )
 
-        # Filter by year
-        year_payments = [p for p in payments if p['payment_date'].startswith(str(year))]
-        year_expenses = [e for e in expenses if e['date'].startswith(str(year))]
-        year_mileage = [m for m in mileage if m['date'].startswith(str(year))]
-
-        # Calculate totals
-        gross_income = sum(Decimal(str(p['amount'])) for p in year_payments)
-        total_expenses = sum(Decimal(str(e['amount'])) for e in year_expenses if e['tax_deductible'])
-        mileage_deduction = sum(Decimal(str(m['deduction_amount'])) for m in year_mileage)
+        gross_income = sum(Decimal(str(p.amount)) for p in year_payments)
+        total_expenses = sum(Decimal(str(e.amount)) for e in year_expenses if e.tax_deductible)
+        mileage_deduction = sum(Decimal(str(m.deduction_amount or 0)) for m in year_mileage)
 
         net_income = gross_income - total_expenses - mileage_deduction
         net_income = max(net_income, Decimal('0'))
@@ -1255,44 +1127,57 @@ class ContractorSelfServiceManager:
 
     def get_dashboard(self, contractor_id: str) -> Dict:
         """Get contractor portal dashboard data."""
-        contractor = self.contractors.get(contractor_id)
+        contractor = ContractorAccount.query.get(contractor_id)
         if not contractor:
             return {'error': 'Contractor not found'}
 
         current_year = datetime.utcnow().year
-        payments = self.payments.get(contractor_id, [])
-        invoices = [i for i in self.invoices.values() if i['contractor_id'] == contractor_id]
+        payments = (
+            ContractorInvoicePayment.query.filter(ContractorInvoicePayment.contractor_id == contractor_id)
+            .order_by(ContractorInvoicePayment.created_at.desc())
+            .all()
+        )
+        invoices = ContractorInvoice.query.filter(ContractorInvoice.contractor_id == contractor_id).all()
 
         # Calculate YTD earnings
-        ytd_payments = [p for p in payments if p['payment_date'].startswith(str(current_year))]
-        ytd_earnings = sum(Decimal(str(p['amount'])) for p in ytd_payments)
+        ytd_payments = [p for p in payments if (p.payment_date or '').startswith(str(current_year))]
+        ytd_invoiced = sum(
+            Decimal(str(i.total))
+            for i in invoices
+            if (i.invoice_date or '').startswith(str(current_year))
+        )
+        ytd_earnings = sum(Decimal(str(p.amount)) for p in ytd_payments)
 
         # Outstanding invoices
-        outstanding = [i for i in invoices if i['status'] in ['sent', 'partial', 'overdue']]
-        outstanding_amount = sum(Decimal(str(i['total'])) - Decimal(str(i['amount_paid'])) for i in outstanding)
+        outstanding = [i for i in invoices if i.status in ['sent', 'partial', 'overdue']]
+        outstanding_amount = sum(Decimal(str(i.total)) - Decimal(str(i.amount_paid)) for i in outstanding)
 
         # Recent activity
-        recent_payments = sorted(payments, key=lambda x: x['created_at'], reverse=True)[:5]
-        recent_invoices = sorted(invoices, key=lambda x: x['created_at'], reverse=True)[:5]
+        recent_payments = sorted(payments, key=lambda x: x.created_at or datetime.min, reverse=True)[:5]
+        recent_invoices = sorted(invoices, key=lambda x: x.created_at or datetime.min, reverse=True)[:5]
 
         return {
             'contractor_id': contractor_id,
-            'business_name': contractor.get('business_name') or contractor.get('legal_name', ''),
-            'status': contractor.get('status', 'active'),
+            'business_name': contractor.business_name or contractor.legal_name or '',
+            'status': contractor.status or 'active',
             'quick_stats': {
                 'ytd_earnings': float(ytd_earnings),
+                'ytd_invoiced': float(ytd_invoiced),
                 'outstanding_invoices': len(outstanding),
                 'outstanding_amount': float(outstanding_amount),
-                'clients_count': len(contractor.get('clients', [])),
-                'pending_invoices': len([i for i in invoices if i['status'] == 'draft'])
+                'invoice_count': len(invoices),
+                'payment_count': len(payments)
             },
-            'recent_payments': recent_payments,
-            'recent_invoices': recent_invoices,
-            'w9_status': 'complete' if contractor.get('w9_complete') else 'incomplete',
-            'payment_method_status': 'complete' if contractor.get('payment_setup_complete') else 'incomplete',
-            'onboarding_complete': contractor.get('onboarding', {}).get('sections_completed', 0) >= 4
+            'recent_activity': {
+                'payments': [p.to_dict() for p in recent_payments],
+                'invoices': [i.to_dict() for i in recent_invoices]
+            },
+            'alerts': [],
+            'tax_summary': {
+                'ytd_income': float(ytd_earnings),
+                'estimated_tax_due': float(ytd_earnings * self.SELF_EMPLOYMENT_TAX_RATE)
+            }
         }
-
 
 # Initialize singleton instance
 contractor_self_service = ContractorSelfServiceManager()

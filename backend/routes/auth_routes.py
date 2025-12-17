@@ -123,7 +123,7 @@ def employee_register():
     user = User(
         email=email,
         phone=phone_number,
-        user_type='employee',
+        role='employee',
         subscription_tier='free',
         subscription_status='active'
     )
@@ -145,7 +145,7 @@ def employee_register():
     }), 201
 
 
-@auth_bp.route('/api/contractor/register', methods=['POST'])
+@auth_bp.route('/api/auth/contractor/register', methods=['POST'])
 def contractor_register():
     """Register a new contractor user (public endpoint)."""
     data = request.get_json()
@@ -184,7 +184,7 @@ def contractor_register():
     user = User(
         email=email,
         phone=phone_number,
-        user_type='contractor',
+        role='contractor',
         subscription_tier='free',
         subscription_status='active'
     )
@@ -246,7 +246,7 @@ def employer_register():
     user = User(
         email=email,
         phone=phone_number,
-        user_type='employer',
+        role='employer',
         subscription_tier='free',
         subscription_status='trial'
     )

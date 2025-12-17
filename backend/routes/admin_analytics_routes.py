@@ -5,7 +5,7 @@ Comprehensive analytics for admin dashboard - ALL REAL DATA
 
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models import db, User, Employer, Employee, Contractor, Payment, APILog
+from models import db, User, Company, Employee, ContractorAccount, Invoice, APILog
 from sqlalchemy import func, extract
 from datetime import datetime, timedelta
 import logging
@@ -32,9 +32,9 @@ def get_user_analytics():
             return jsonify({'success': False, 'error': 'Unauthorized'}), 403
         
         # Total counts by user type (REAL DATA)
-        total_employers = db.session.query(func.count(Employer.id)).scalar() or 0
+        total_employers = db.session.query(func.count(Company.id)).scalar() or 0
         total_employees = db.session.query(func.count(Employee.id)).scalar() or 0
-        total_contractors = db.session.query(func.count(Contractor.id)).scalar() or 0
+        total_contractors = db.session.query(func.count(ContractorAccount.id)).scalar() or 0
         total_users = total_employers + total_employees + total_contractors
         
         # Calculate percentages (handle division by zero)
@@ -44,18 +44,32 @@ def get_user_analytics():
         
         # Active users (last 30 days) - REAL DATA
         thirty_days_ago = datetime.now() - timedelta(days=30)
-        
-        active_employers = db.session.query(func.count(Employer.id)).filter(
-            Employer.last_login > thirty_days_ago
-        ).scalar() or 0
-        
-        active_employees = db.session.query(func.count(Employee.id)).filter(
-            Employee.last_login > thirty_days_ago
-        ).scalar() or 0
-        
-        active_contractors = db.session.query(func.count(Contractor.id)).filter(
-            Contractor.last_login > thirty_days_ago
-        ).scalar() or 0
+
+        # Company/Employee/ContractorAccount do not track last_login; User does.
+        # We approximate "active" employers/employees by user.last_login and role.
+        active_employers = (
+            db.session.query(func.count(User.id))
+            .filter(User.last_login > thirty_days_ago)
+            .filter(User.role.in_(['employer', 'manager']))
+            .scalar()
+            or 0
+        )
+
+        active_employees = (
+            db.session.query(func.count(User.id))
+            .filter(User.last_login > thirty_days_ago)
+            .filter(User.role == 'employee')
+            .scalar()
+            or 0
+        )
+
+        # Contractor accounts are a separate auth system; approximate activity by recent creation.
+        active_contractors = (
+            db.session.query(func.count(ContractorAccount.id))
+            .filter(ContractorAccount.created_at > thirty_days_ago)
+            .scalar()
+            or 0
+        )
         
         active_users_30d = active_employers + active_employees + active_contractors
         
@@ -72,16 +86,16 @@ def get_user_analytics():
                 next_month = (month_start + timedelta(days=32)).replace(day=1)
                 month_end = next_month - timedelta(seconds=1)
             
-            employers_count = db.session.query(func.count(Employer.id)).filter(
-                Employer.created_at <= month_end
+            employers_count = db.session.query(func.count(Company.id)).filter(
+                Company.created_at <= month_end
             ).scalar() or 0
             
             employees_count = db.session.query(func.count(Employee.id)).filter(
                 Employee.created_at <= month_end
             ).scalar() or 0
             
-            contractors_count = db.session.query(func.count(Contractor.id)).filter(
-                Contractor.created_at <= month_end
+            contractors_count = db.session.query(func.count(ContractorAccount.id)).filter(
+                ContractorAccount.created_at <= month_end
             ).scalar() or 0
             
             user_growth.append({
@@ -131,19 +145,19 @@ def get_revenue_analytics():
         # Current month revenue
         current_month_start = datetime.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         
-        monthly_revenue = db.session.query(func.sum(Payment.amount)).filter(
-            Payment.created_at >= current_month_start,
-            Payment.status == 'succeeded'
+        monthly_revenue = db.session.query(func.sum(Invoice.amount)).filter(
+            Invoice.created_at >= current_month_start,
+            Invoice.status == 'paid'
         ).scalar() or 0.0
         
         # Last month revenue for comparison
         last_month_start = (current_month_start - timedelta(days=1)).replace(day=1)
         last_month_end = current_month_start - timedelta(seconds=1)
         
-        last_month_revenue = db.session.query(func.sum(Payment.amount)).filter(
-            Payment.created_at >= last_month_start,
-            Payment.created_at <= last_month_end,
-            Payment.status == 'succeeded'
+        last_month_revenue = db.session.query(func.sum(Invoice.amount)).filter(
+            Invoice.created_at >= last_month_start,
+            Invoice.created_at <= last_month_end,
+            Invoice.status == 'paid'
         ).scalar() or 0.0
         
         # Calculate growth percentage
@@ -164,10 +178,10 @@ def get_revenue_analytics():
                 next_month = (month_start + timedelta(days=32)).replace(day=1)
                 month_end = next_month - timedelta(seconds=1)
             
-            month_revenue = db.session.query(func.sum(Payment.amount)).filter(
-                Payment.created_at >= month_start,
-                Payment.created_at <= month_end,
-                Payment.status == 'succeeded'
+            month_revenue = db.session.query(func.sum(Invoice.amount)).filter(
+                Invoice.created_at >= month_start,
+                Invoice.created_at <= month_end,
+                Invoice.status == 'paid'
             ).scalar() or 0.0
             
             revenue_trend.append({

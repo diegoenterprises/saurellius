@@ -217,6 +217,10 @@ def create_app(config_name='default'):
     # Admin Analytics Routes
     from routes.admin_analytics_routes import admin_analytics_bp
     app.register_blueprint(admin_analytics_bp)
+
+    # Contractor Self-Service Routes
+    from routes.contractor_self_service_routes import contractor_ss_bp
+    app.register_blueprint(contractor_ss_bp, name='contractor_self_service_api')
     
     # Communications Routes (Kudos, Messages)
     from routes.communications_routes import communications_bp

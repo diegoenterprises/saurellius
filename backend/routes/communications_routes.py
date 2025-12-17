@@ -5,7 +5,7 @@ Kudos, Messages, and Notifications - Complete Backend Integration
 
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models import db, User, Kudos, Message, Notification, Employer, Employee, Contractor
+from models import db, User, Kudos, Message, Notification, Company, Employee, ContractorAccount
 from datetime import datetime
 import json
 import logging
@@ -23,11 +23,11 @@ def get_current_user():
 def get_recipient(recipient_type: str, recipient_id: str):
     """Get recipient by type and ID"""
     if recipient_type == 'employer':
-        return Employer.query.get(recipient_id)
+        return Company.query.get(recipient_id)
     elif recipient_type == 'employee':
         return Employee.query.get(recipient_id)
     elif recipient_type == 'contractor':
-        return Contractor.query.get(recipient_id)
+        return ContractorAccount.query.get(recipient_id)
     return None
 
 

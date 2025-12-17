@@ -846,3 +846,464 @@ class Ruleset(db.Model):
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None,
         }
+
+
+class FederalW4Form(db.Model):
+    __tablename__ = 'federal_w4_forms'
+
+    id = db.Column(db.Integer, primary_key=True)
+    employee_id = db.Column(db.Integer, db.ForeignKey('employees.id'), nullable=False, index=True)
+    submitted_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, index=True)
+
+    tax_year = db.Column(db.Integer, nullable=False)
+    status = db.Column(db.String(20), nullable=False, default='active', index=True)
+
+    filing_status = db.Column(db.String(30), nullable=False)
+    step2_checkbox = db.Column(db.Boolean, default=False)
+    step2_additional = db.Column(db.Float, default=0.0)
+    qualifying_children = db.Column(db.Integer, default=0)
+    other_dependents = db.Column(db.Integer, default=0)
+    other_income = db.Column(db.Float, default=0.0)
+    deductions = db.Column(db.Float, default=0.0)
+    extra_withholding = db.Column(db.Float, default=0.0)
+
+    claim_exempt = db.Column(db.Boolean, default=False)
+    exempt_expiration = db.Column(db.Date)
+
+    effective_date = db.Column(db.Date, nullable=False)
+    signature = db.Column(db.String(255))
+    signature_date = db.Column(db.Date)
+
+    submitted_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    superseded_at = db.Column(db.DateTime)
+
+    def to_dict(self):
+        return {
+            'id': f"W4-{self.id}",
+            'employee_id': self.employee_id,
+            'tax_year': self.tax_year,
+            'status': self.status,
+            'filing_status': self.filing_status,
+            'step2_checkbox': self.step2_checkbox,
+            'step2_additional': self.step2_additional,
+            'qualifying_children': self.qualifying_children,
+            'other_dependents': self.other_dependents,
+            'other_income': self.other_income,
+            'deductions': self.deductions,
+            'extra_withholding': self.extra_withholding,
+            'claim_exempt': self.claim_exempt,
+            'exempt_expiration': self.exempt_expiration.isoformat() if self.exempt_expiration else None,
+            'submitted_at': self.submitted_at.isoformat() if self.submitted_at else None,
+            'submitted_by': self.submitted_by,
+            'effective_date': self.effective_date.isoformat() if self.effective_date else None,
+            'signature': self.signature,
+            'signature_date': self.signature_date.isoformat() if self.signature_date else None,
+            'superseded_at': self.superseded_at.isoformat() if self.superseded_at else None,
+        }
+
+
+class StateWithholdingForm(db.Model):
+    __tablename__ = 'state_withholding_forms'
+
+    id = db.Column(db.Integer, primary_key=True)
+    employee_id = db.Column(db.Integer, db.ForeignKey('employees.id'), nullable=False, index=True)
+    submitted_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, index=True)
+
+    state = db.Column(db.String(2), nullable=False, index=True)
+    form_name = db.Column(db.String(100))
+    status = db.Column(db.String(20), nullable=False, default='active', index=True)
+
+    filing_status = db.Column(db.String(30), default='single')
+    allowances = db.Column(db.Integer, default=0)
+    additional_withholding = db.Column(db.Float, default=0.0)
+    claim_exempt = db.Column(db.Boolean, default=False)
+
+    nyc_resident = db.Column(db.Boolean, default=False)
+    yonkers_resident = db.Column(db.Boolean, default=False)
+    local_tax_jurisdiction = db.Column(db.String(100))
+
+    effective_date = db.Column(db.Date, nullable=False)
+    submitted_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    superseded_at = db.Column(db.DateTime)
+
+    def to_dict(self):
+        return {
+            'id': f"STATE-{self.state}-{self.id}",
+            'employee_id': self.employee_id,
+            'state': self.state,
+            'form_name': self.form_name,
+            'status': self.status,
+            'filing_status': self.filing_status,
+            'allowances': self.allowances,
+            'additional_withholding': self.additional_withholding,
+            'claim_exempt': self.claim_exempt,
+            'nyc_resident': self.nyc_resident,
+            'yonkers_resident': self.yonkers_resident,
+            'local_tax_jurisdiction': self.local_tax_jurisdiction,
+            'submitted_at': self.submitted_at.isoformat() if self.submitted_at else None,
+            'submitted_by': self.submitted_by,
+            'effective_date': self.effective_date.isoformat() if self.effective_date else None,
+            'superseded_at': self.superseded_at.isoformat() if self.superseded_at else None,
+        }
+
+
+class ContractorAccount(db.Model):
+    __tablename__ = 'contractor_accounts'
+
+    id = db.Column(db.String(36), primary_key=True)
+    email = db.Column(db.String(255), unique=True, index=True, nullable=False)
+    password_hash = db.Column(db.String(255), nullable=False)
+    phone = db.Column(db.String(20))
+    business_classification = db.Column(db.String(50), nullable=False)
+
+    legal_name = db.Column(db.String(255))
+    business_name = db.Column(db.String(255))
+    dba_name = db.Column(db.String(255))
+    date_of_birth = db.Column(db.String(20))
+    working_status = db.Column(db.String(50))
+
+    status = db.Column(db.String(50), default='pending_verification', index=True)
+    email_verified = db.Column(db.Boolean, default=False)
+    phone_verified = db.Column(db.Boolean, default=False)
+    email_verification_code = db.Column(db.String(20))
+    email_verification_expires = db.Column(db.DateTime)
+    phone_verification_code = db.Column(db.String(20))
+    phone_verification_expires = db.Column(db.DateTime)
+
+    accept_terms = db.Column(db.Boolean, default=False)
+    accept_privacy = db.Column(db.Boolean, default=False)
+    accept_electronic_communications = db.Column(db.Boolean, default=False)
+    accept_contractor_acknowledgment = db.Column(db.Boolean, default=False)
+
+    onboarding_json = db.Column(db.Text)
+    w9_complete = db.Column(db.Boolean, default=False)
+    payment_setup_complete = db.Column(db.Boolean, default=False)
+
+    profile_json = db.Column(db.Text)
+
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def to_public_profile(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+            'phone': self.phone,
+            'business_classification': self.business_classification,
+            'legal_name': self.legal_name,
+            'business_name': self.business_name,
+            'dba_name': self.dba_name,
+            'status': self.status,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'w9_complete': self.w9_complete,
+            'payment_setup_complete': self.payment_setup_complete,
+        }
+
+
+class ContractorInvitation(db.Model):
+    __tablename__ = 'contractor_invitations'
+
+    id = db.Column(db.String(36), primary_key=True)
+    token = db.Column(db.String(128), unique=True, index=True, nullable=False)
+    client_id = db.Column(db.String(36), nullable=False, index=True)
+
+    contractor_email = db.Column(db.String(255), nullable=False)
+    contractor_name = db.Column(db.String(255))
+    start_date = db.Column(db.String(20))
+    project_description = db.Column(db.Text)
+    personal_message = db.Column(db.Text)
+    expires_at = db.Column(db.DateTime)
+
+    status = db.Column(db.String(30), default='pending', index=True)
+
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'token': self.token,
+            'client_id': self.client_id,
+            'contractor_email': self.contractor_email,
+            'contractor_name': self.contractor_name or '',
+            'start_date': self.start_date,
+            'project_description': self.project_description,
+            'personal_message': self.personal_message,
+            'expires_at': self.expires_at.isoformat() if self.expires_at else None,
+            'status': self.status,
+        }
+
+
+class ContractorPaymentMethod(db.Model):
+    __tablename__ = 'contractor_payment_methods'
+
+    id = db.Column(db.Integer, primary_key=True)
+    contractor_id = db.Column(db.String(36), db.ForeignKey('contractor_accounts.id'), nullable=False, index=True)
+    status = db.Column(db.String(20), default='active', index=True)
+
+    method = db.Column(db.String(30), nullable=False)
+    payload_json = db.Column(db.Text)
+
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def payload(self):
+        try:
+            return json.loads(self.payload_json) if self.payload_json else None
+        except Exception:
+            return None
+
+
+class ContractorInvoice(db.Model):
+    __tablename__ = 'contractor_invoices'
+
+    id = db.Column(db.String(36), primary_key=True)
+    contractor_id = db.Column(db.String(36), db.ForeignKey('contractor_accounts.id'), nullable=False, index=True)
+    client_id = db.Column(db.String(36), nullable=False, index=True)
+    project_id = db.Column(db.String(36), nullable=True, index=True)
+
+    invoice_number = db.Column(db.String(50), nullable=False, index=True)
+    line_items_json = db.Column(db.Text, nullable=False)
+
+    subtotal = db.Column(db.Float, default=0.0)
+    tax_rate = db.Column(db.Float, default=0.0)
+    tax_amount = db.Column(db.Float, default=0.0)
+    total = db.Column(db.Float, default=0.0)
+    currency = db.Column(db.String(10), default='USD')
+
+    invoice_date = db.Column(db.String(20))
+    due_date = db.Column(db.String(20))
+    payment_terms = db.Column(db.String(30), default='net_30')
+    notes = db.Column(db.Text)
+    terms = db.Column(db.Text)
+
+    status = db.Column(db.String(20), default='draft', index=True)
+    sent_at = db.Column(db.DateTime)
+    viewed_at = db.Column(db.DateTime)
+    paid_at = db.Column(db.DateTime)
+    amount_paid = db.Column(db.Float, default=0.0)
+
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def line_items(self):
+        try:
+            return json.loads(self.line_items_json) if self.line_items_json else []
+        except Exception:
+            return []
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'invoice_number': self.invoice_number,
+            'contractor_id': self.contractor_id,
+            'client_id': self.client_id,
+            'project_id': self.project_id,
+            'line_items': self.line_items(),
+            'subtotal': self.subtotal,
+            'tax_rate': self.tax_rate,
+            'tax_amount': self.tax_amount,
+            'total': self.total,
+            'currency': self.currency,
+            'invoice_date': self.invoice_date,
+            'due_date': self.due_date,
+            'payment_terms': self.payment_terms,
+            'notes': self.notes,
+            'terms': self.terms,
+            'status': self.status,
+            'sent_at': self.sent_at.isoformat() if self.sent_at else None,
+            'viewed_at': self.viewed_at.isoformat() if self.viewed_at else None,
+            'paid_at': self.paid_at.isoformat() if self.paid_at else None,
+            'amount_paid': self.amount_paid,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
+        }
+
+
+class ContractorInvoicePayment(db.Model):
+    __tablename__ = 'contractor_invoice_payments'
+
+    id = db.Column(db.String(36), primary_key=True)
+    invoice_id = db.Column(db.String(36), db.ForeignKey('contractor_invoices.id'), nullable=False, index=True)
+    contractor_id = db.Column(db.String(36), db.ForeignKey('contractor_accounts.id'), nullable=False, index=True)
+    client_id = db.Column(db.String(36), nullable=False, index=True)
+
+    amount = db.Column(db.Float, nullable=False)
+    payment_method = db.Column(db.String(30), default='ach')
+    payment_date = db.Column(db.String(20))
+    reference_number = db.Column(db.String(100))
+    notes = db.Column(db.Text)
+
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'invoice_id': self.invoice_id,
+            'contractor_id': self.contractor_id,
+            'client_id': self.client_id,
+            'amount': self.amount,
+            'payment_method': self.payment_method,
+            'payment_date': self.payment_date,
+            'reference_number': self.reference_number,
+            'notes': self.notes,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+        }
+
+
+class ContractorW9Form(db.Model):
+    __tablename__ = 'contractor_w9_forms'
+
+    id = db.Column(db.String(36), primary_key=True)
+    contractor_id = db.Column(db.String(36), db.ForeignKey('contractor_accounts.id'), nullable=False, index=True)
+
+    name = db.Column(db.String(255), nullable=False)
+    business_name = db.Column(db.String(255))
+    tax_classification = db.Column(db.String(50))
+    address = db.Column(db.Text)
+
+    tin_type = db.Column(db.String(10))
+    tin_masked = db.Column(db.String(20))
+    tin_encrypted = db.Column(db.String(255))
+
+    status = db.Column(db.String(30), default='submitted', index=True)
+    signature_date = db.Column(db.String(20))
+    ip_address = db.Column(db.String(50))
+
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def to_safe_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'business_name': self.business_name,
+            'tax_classification': self.tax_classification,
+            'address': self.address,
+            'tin_type': self.tin_type,
+            'tin_masked': self.tin_masked,
+            'status': self.status,
+            'signature_date': self.signature_date,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+        }
+
+
+class ContractorExpense(db.Model):
+    __tablename__ = 'contractor_expenses'
+
+    id = db.Column(db.String(36), primary_key=True)
+    contractor_id = db.Column(db.String(36), db.ForeignKey('contractor_accounts.id'), nullable=False, index=True)
+
+    date = db.Column(db.String(20), nullable=False, index=True)
+    category = db.Column(db.String(50), nullable=False, index=True)
+    description = db.Column(db.Text)
+    vendor = db.Column(db.String(255))
+    amount = db.Column(db.Float, nullable=False)
+    currency = db.Column(db.String(10), default='USD')
+
+    is_billable = db.Column(db.Boolean, default=False)
+    client_id = db.Column(db.String(36), index=True)
+    project_id = db.Column(db.String(36), index=True)
+    receipt_url = db.Column(db.String(500))
+    tax_deductible = db.Column(db.Boolean, default=True)
+    status = db.Column(db.String(30), default='logged', index=True)
+
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'contractor_id': self.contractor_id,
+            'date': self.date,
+            'category': self.category,
+            'description': self.description,
+            'vendor': self.vendor,
+            'amount': self.amount,
+            'currency': self.currency,
+            'is_billable': self.is_billable,
+            'client_id': self.client_id,
+            'project_id': self.project_id,
+            'receipt_url': self.receipt_url,
+            'tax_deductible': self.tax_deductible,
+            'status': self.status,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+        }
+
+
+class ContractorMileageLog(db.Model):
+    __tablename__ = 'contractor_mileage_logs'
+
+    id = db.Column(db.String(36), primary_key=True)
+    contractor_id = db.Column(db.String(36), db.ForeignKey('contractor_accounts.id'), nullable=False, index=True)
+
+    date = db.Column(db.String(20), nullable=False, index=True)
+    miles = db.Column(db.Float, nullable=False)
+    purpose = db.Column(db.Text)
+    from_location = db.Column(db.String(255))
+    to_location = db.Column(db.String(255))
+    client_id = db.Column(db.String(36), index=True)
+    project_id = db.Column(db.String(36), index=True)
+    is_round_trip = db.Column(db.Boolean, default=False)
+    irs_rate = db.Column(db.Float)
+    deduction_amount = db.Column(db.Float)
+
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'contractor_id': self.contractor_id,
+            'date': self.date,
+            'miles': self.miles,
+            'purpose': self.purpose,
+            'from_location': self.from_location,
+            'to_location': self.to_location,
+            'client_id': self.client_id,
+            'project_id': self.project_id,
+            'is_round_trip': self.is_round_trip,
+            'irs_rate': self.irs_rate,
+            'deduction_amount': self.deduction_amount,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+        }
+
+
+class ContractorForm1099(db.Model):
+    __tablename__ = 'contractor_1099_forms'
+
+    id = db.Column(db.String(36), primary_key=True)
+    contractor_id = db.Column(db.String(36), db.ForeignKey('contractor_accounts.id'), nullable=False, index=True)
+    client_id = db.Column(db.String(36), nullable=False, index=True)
+    tax_year = db.Column(db.Integer, nullable=False, index=True)
+
+    recipient_name = db.Column(db.String(255))
+    recipient_tin_masked = db.Column(db.String(20))
+    recipient_tin_type = db.Column(db.String(10))
+    recipient_address = db.Column(db.Text)
+
+    box_1_nonemployee_compensation = db.Column(db.Float, default=0.0)
+    box_4_federal_tax_withheld = db.Column(db.Float, default=0.0)
+
+    status = db.Column(db.String(30), default='generated', index=True)
+    generated_at = db.Column(db.DateTime, default=datetime.utcnow)
+    filed_at = db.Column(db.DateTime)
+    sent_to_contractor_at = db.Column(db.DateTime)
+
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'tax_year': self.tax_year,
+            'contractor_id': self.contractor_id,
+            'client_id': self.client_id,
+            'recipient_name': self.recipient_name,
+            'recipient_tin_masked': self.recipient_tin_masked,
+            'recipient_tin_type': self.recipient_tin_type,
+            'recipient_address': self.recipient_address,
+            'box_1_nonemployee_compensation': self.box_1_nonemployee_compensation,
+            'box_4_federal_tax_withheld': self.box_4_federal_tax_withheld,
+            'status': self.status,
+            'generated_at': self.generated_at.isoformat() if self.generated_at else None,
+            'filed_at': self.filed_at.isoformat() if self.filed_at else None,
+            'sent_to_contractor_at': self.sent_to_contractor_at.isoformat() if self.sent_to_contractor_at else None,
+        }
