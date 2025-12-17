@@ -11,7 +11,10 @@ from typing import Dict, Any, List, Optional
 from decimal import Decimal
 from datetime import datetime
 
-import google.generativeai as genai
+try:
+    import google.generativeai as genai
+except Exception:
+    genai = None
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +30,10 @@ class SaurelliusAI:
         self.initialized = False
         self.model = None
         self.vision_model = None
+
+        if genai is None:
+            logger.warning("google.generativeai not available. AI features will be limited.")
+            return
         
         if self.api_key:
             try:
@@ -43,7 +50,7 @@ class SaurelliusAI:
     
     def _safe_generate(self, prompt: str, max_tokens: int = 1000) -> Optional[str]:
         """Safely generate AI response with error handling."""
-        if not self.initialized:
+        if not self.initialized or genai is None:
             return None
         try:
             response = self.model.generate_content(
