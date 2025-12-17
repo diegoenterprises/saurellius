@@ -175,6 +175,12 @@ import EmergencyContactsScreen from '../screens/employer/EmergencyContactsScreen
 import EquipmentCheckoutScreen from '../screens/employer/EquipmentCheckoutScreen';
 import VisitorLogScreen from '../screens/employer/VisitorLogScreen';
 
+// Rulesets (DB-backed rules visibility)
+import AdminRulesetsScreen from '../screens/admin/AdminRulesetsScreen';
+import EmployerPayrollRulesScreen from '../screens/employer/EmployerPayrollRulesScreen';
+import EmployeePayrollRulesScreen from '../screens/employee/EmployeePayrollRulesScreen';
+import ContractorPayrollRulesScreen from '../screens/contractor/ContractorPayrollRulesScreen';
+
 // Legal Screens
 import { PrivacyPolicyScreen, TermsConditionsScreen } from '../screens/legal';
 
@@ -359,6 +365,12 @@ export type RootStackParamList = {
   ContractorReferralProgram: undefined;
   UsersAnalytics: undefined;
   AnalyticsUsers: undefined;
+
+  // Rulesets
+  AdminRulesets: undefined;
+  EmployerPayrollRules: undefined;
+  EmployeePayrollRules: undefined;
+  ContractorPayrollRules: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -538,6 +550,10 @@ function MainStack() {
       <Stack.Screen name="EmergencyContacts" component={EmergencyContactsScreen} />
       <Stack.Screen name="EquipmentCheckout" component={EquipmentCheckoutScreen} />
       <Stack.Screen name="VisitorLog" component={VisitorLogScreen} />
+      <Stack.Screen name="AdminRulesets" component={AdminRulesetsScreen} />
+      <Stack.Screen name="EmployerPayrollRules" component={EmployerPayrollRulesScreen} />
+      <Stack.Screen name="EmployeePayrollRules" component={EmployeePayrollRulesScreen} />
+      <Stack.Screen name="ContractorPayrollRules" component={ContractorPayrollRulesScreen} />
       <Stack.Screen name="NotificationSettings" component={NotificationSettingsScreen} />
       <Stack.Screen name="LanguageSettings" component={LanguageSettingsScreen} />
       <Stack.Screen name="TimezoneSettings" component={TimezoneSettingsScreen} />

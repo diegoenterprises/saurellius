@@ -49,7 +49,7 @@ interface MenuSection {
 }
 
 // ADMIN MENU - Platform owner sees everything
-const ADMIN_MENU_SECTIONS: MenuSection[] = [
+ const ADMIN_MENU_SECTIONS: MenuSection[] = [
   {
     title: 'PLATFORM OVERVIEW',
     items: [
@@ -64,6 +64,12 @@ const ADMIN_MENU_SECTIONS: MenuSection[] = [
       { id: 'customers', label: 'Customers', icon: 'people-outline', screen: 'AdminUsers' },
       { id: 'subscriptions', label: 'Subscriptions', icon: 'card-outline', screen: 'AdminSubscriptions' },
       { id: 'apisubscribers', label: 'API Subscribers', icon: 'code-slash-outline', screen: 'AdminAPI' },
+    ],
+  },
+  {
+    title: 'RULES & TAX',
+    items: [
+      { id: 'rulesets', label: 'Rulesets (2026)', icon: 'library-outline', screen: 'AdminRulesets', color: STATIC_COLORS.accent },
     ],
   },
   {
@@ -127,6 +133,7 @@ const EMPLOYER_MENU_SECTIONS: MenuSection[] = [
     title: 'TAX & COMPLIANCE',
     items: [
       { id: 'taxcenter', label: 'Tax Center', icon: 'calculator-outline', screen: 'TaxCenter' },
+      { id: 'payrollrules', label: 'Payroll Rules (2026)', icon: 'library-outline', screen: 'EmployerPayrollRules', color: STATIC_COLORS.accent },
       { id: 'compliance', label: 'Compliance', icon: 'shield-checkmark-outline', screen: 'ComplianceDashboard' },
       { id: 'reports', label: 'Reports', icon: 'bar-chart-outline', screen: 'ReportsDashboard' },
       { id: 'analytics', label: 'Workforce Analytics', icon: 'analytics-outline', screen: 'WorkforceAnalytics' },
@@ -165,13 +172,19 @@ const EMPLOYER_MENU_SECTIONS: MenuSection[] = [
 ];
 
 // EMPLOYEE MENU - Workers viewing their info (37 screens)
-const EMPLOYEE_MENU_SECTIONS: MenuSection[] = [
+ const EMPLOYEE_MENU_SECTIONS: MenuSection[] = [
   {
     title: 'MY DASHBOARD',
     items: [
       { id: 'dashboard', label: 'Dashboard', icon: 'grid-outline', screen: 'EmployeePortal' },
       { id: 'paystubs', label: 'My Paystubs', icon: 'document-text-outline', screen: 'Paystubs' },
       { id: 'wallet', label: 'Wallet', icon: 'wallet-outline', screen: 'Wallet', color: STATIC_COLORS.success },
+    ],
+  },
+  {
+    title: 'TAX',
+    items: [
+      { id: 'taxrules', label: 'Tax Rules (2026)', icon: 'library-outline', screen: 'EmployeePayrollRules', color: STATIC_COLORS.accent },
     ],
   },
   {
@@ -241,7 +254,7 @@ const EMPLOYEE_MENU_SECTIONS: MenuSection[] = [
 ];
 
 // CONTRACTOR MENU - Independent contractors (35 screens)
-const CONTRACTOR_MENU_SECTIONS: MenuSection[] = [
+ const CONTRACTOR_MENU_SECTIONS: MenuSection[] = [
   {
     title: 'MY DASHBOARD',
     items: [
@@ -273,6 +286,7 @@ const CONTRACTOR_MENU_SECTIONS: MenuSection[] = [
     title: 'TAX & FINANCE',
     items: [
       { id: 'taxplanner', label: 'Tax Planner', icon: 'calculator-outline', screen: 'ContractorTaxPlanner' },
+      { id: 'rules', label: 'Rules (2026)', icon: 'library-outline', screen: 'ContractorPayrollRules', color: STATIC_COLORS.accent },
       { id: 'taxdocs', label: 'DocuGinuity Tax', icon: 'documents-outline', screen: 'ContractorTaxDocuments' },
       { id: 'expenses', label: 'Business Expenses', icon: 'receipt-outline', screen: 'ContractorBusinessExpenses' },
       { id: 'mileage', label: 'Mileage Tracker', icon: 'car-outline', screen: 'ContractorMileageTracker' },
